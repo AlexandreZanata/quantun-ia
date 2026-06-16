@@ -1,27 +1,27 @@
 # Results — EXP 002
 
 **Date:** 2026-06-16  
-**Config:** 300 samples, 30% holdout, seeds [42, 123, 456], 50 epochs
+**Config:** 300 samples, 30% holdout, seeds [42, 123, 456], bootstrap 95% CI
 
 ## What happened
 
-| Architecture | Mean holdout acc | Std |
-|--------------|------------------|-----|
-| hybrid_sandwich | **82.6%** | ±2.8% |
-| classical_first | 82.2% | ±2.4% |
-| quantum_first | 81.5% | ±3.7% |
+| Architecture | Mean holdout | Std | 95% CI |
+|--------------|-------------|-----|--------|
+| hybrid_sandwich | **83.0%** | ±3.7% | [78.9%, 87.8%] |
+| quantum_first | 83.0% | ±2.3% | [80.0%, 85.6%] |
+| classical_first | 81.9% | ±2.9% | [77.8%, 84.4%] |
 
-All three hybrid variants performed similarly on holdout (~82%). No architecture clearly dominated.
+All hybrids within ~1% mean holdout. CIs heavily overlap.
 
 ## Comparison with hypothesis
 
-If the hypothesis was that combining classical + quantum beats pure models, it was **not strongly supported**. Hybrids did not exceed `classical_32` from EXP 001 (85.2%).
+Hybrid architectures do not beat `classical_32` from EXP 001 (85.6%). No architecture dominates.
 
 ## Unexpected finding
 
-`quantum_first` had the highest variance (±3.7%) despite competitive mean — quantum front-end adds seed sensitivity.
+`hybrid_sandwich` has highest variance (±3.7%) despite tied mean with `quantum_first`.
 
 ## Suggested next experiment
 
-- Test hybrids on concentric circles (quantum-friendly geometry)
-- Ablate classical hidden size in `HybridSandwich`
+- Paired Wilcoxon across all three architectures
+- Parameter-count-matched classical baseline

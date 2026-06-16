@@ -12,7 +12,7 @@ defaults:
 
 experiments:
   exp_001_quantum_vs_classical:
-    description: "Quantum vs Classical — holdout eval, 3 seeds"
+    description: "Quantum vs Classical — holdout eval, 3 seeds, bootstrap CI"
     models:
       - classical_8
       - classical_32
@@ -22,6 +22,10 @@ experiments:
       quantum_4q_2l:
         n_qubits: 4
         n_layers: 1
+        learning_rate: 0.02
+      quantum_6q_3l:
+        n_qubits: 6
+        n_layers: 2
         learning_rate: 0.02
 
   exp_002_hybrid_architecture:
@@ -33,34 +37,61 @@ experiments:
 
   exp_003_entanglement_effect:
     description: "Effect of quantum entanglement — holdout eval, 3 seeds"
+    n_qubits: 4
+    n_layers: 2
     entanglement_types:
       - none
       - chain
       - chain_half
       - ring
+    model_configs:
+      entanglement_chain_half:
+        n_layers: 1
+        learning_rate: 0.02
+      entanglement_none:
+        learning_rate: 0.02
 
   exp_004_data_poisoning:
-    description: "Robustness to poisoned data (train poisoned, eval on clean holdout)"
+    description: "Robustness to poisoned data — 3 seeds, clean holdout eval"
     poison_rates: [0.0, 0.05, 0.1, 0.2, 0.3]
     encodings:
       - angle
       - amplitude
+    model_configs:
+      angle:
+        n_qubits: 4
+        n_layers: 1
+        learning_rate: 0.02
+      amplitude:
+        n_qubits: 4
+        n_layers: 2
+        learning_rate: 0.02
 
   exp_005_curriculum_quantum:
-    description: "Quantum curriculum learning"
+    description: "Quantum curriculum — 3 seeds, paired Wilcoxon vs random"
     methods:
       - random
       - margin_batches
     curriculum_stages: 4
     epochs_per_stage: 12
     refine_epochs: 12
+    n_qubits: 4
+    n_layers: 1
+    learning_rate: 0.02
 
   exp_006_barren_plateau:
-    description: "Barren plateau explorer"
+    description: "Barren plateau explorer — 50 gradient samples"
     n_qubits_list: [2, 4, 6, 8, 10]
-    grad_samples: 20
+    grad_samples: 50
 
   exp_007_self_play:
-    description: "Quantum self-play (train pool separate from holdout eval)"
+    description: "Quantum self-play — 3 seeds, capped hard_frac, best checkpoint"
     rounds: 5
     hard_frac: 0.3
+    min_hard: 5
+    fine_tune_epochs: 15
+    revert_threshold: 0.05
+    base_epochs: 50
+    n_qubits: 4
+    n_layers: 1
+    learning_rate: 0.02

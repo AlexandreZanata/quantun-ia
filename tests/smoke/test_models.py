@@ -30,7 +30,7 @@ def test_quantum_models_forward(sample_binary_data):
     models = [
         QuantumNetBasic(n_qubits=4, n_layers=2, input_dim=2),
         QuantumNetEntangled(n_qubits=4, n_layers=2, entanglement="chain"),
-        QuantumNetAmplitude(n_qubits=2, n_layers=2, input_dim=2),
+        QuantumNetAmplitude(n_qubits=4, n_layers=2, input_dim=2),
         HybridSandwich(input_dim=2, n_qubits=4, n_layers=2),
         QuantumFirst(input_dim=2, n_qubits=4, n_layers=2),
         ClassicalFirst(input_dim=2, n_qubits=4, n_layers=2),

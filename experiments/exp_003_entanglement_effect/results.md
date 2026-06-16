@@ -1,28 +1,30 @@
 # Results — EXP 003
 
 **Date:** 2026-06-16  
-**Config:** 300 samples, 30% holdout, seeds [42, 123, 456], 4 qubits, 2 layers
+**Config:** 300 samples, 30% holdout, seeds [42, 123, 456], learnable pre-projection, tuned LR for `chain_half`/`none`  
+**Stats:** Wilcoxon chain vs none
 
 ## What happened
 
-| Entanglement | Mean holdout acc | Std |
-|--------------|------------------|-----|
-| chain | **81.5%** | ±5.2% |
-| ring | 79.6% | ±3.7% |
-| chain_half | 62.6% | ±12.7% |
-| none | 60.7% | ±3.7% |
+| Entanglement | Mean holdout | Std | 95% CI |
+|--------------|-------------|-----|--------|
+| ring | **83.3%** | ±3.3% | [78.9%, 86.7%] |
+| chain_half | 83.0% | ±1.9% | [81.1%, 85.6%] |
+| none | 83.0% | ±2.3% | [80.0%, 85.6%] |
+| chain | 81.9% | ±2.8% | [78.9%, 85.6%] |
 
-Full `chain` entanglement generalized best on average. `none` and `chain_half` underperformed — partial or missing entanglement hurts on this task.
+**Paired test** chain vs none: Δ=−1.1%, p=0.50 → **not significant**.
+
+After adding `input_dim` pre-projection and LR tuning, `chain_half` variance dropped from ±12.7% to ±1.9%.
 
 ## Comparison with hypothesis
 
-More entanglement helps when it is **consistent** (chain, ring). The `chain_half` ablation confirms that partial CNOT patterns create unstable landscapes (±12.7% std).
+Entanglement topology does not produce statistically significant holdout differences on moons with 3 seeds.
 
 ## Unexpected finding
 
-`chain_half` variance remains very high across seeds — worse than `none` on mean holdout in this run.
+`none` (no CNOT) matches `ring` after pre-projection fix — angle embedding + linear head may dominate over entanglement on this task.
 
 ## Suggested next experiment
 
-- Learning rate sweep for `chain_half` only
-- Plot per-seed learning curves to separate barren plateau from bad initialization
+- 10-seed powered comparison on a task requiring entanglement (e.g. parity)

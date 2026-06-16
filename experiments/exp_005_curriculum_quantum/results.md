@@ -1,31 +1,29 @@
 # Results — EXP 005
 
 **Date:** 2026-06-16  
-**Config:** 300 samples, 30% holdout, 4 stages × 12 epochs + 12 refine epochs  
-**Fixes applied:** easy-first margin sort, shared optimizer across stages, final full-data refine
+**Config:** 3 seeds, 4 stages × 12 epochs + 12 refine, QNN 4q/1L LR 0.02  
+**Stats:** Wilcoxon margin_batches vs random
 
 ## What happened
 
-| Method | Holdout test accuracy |
-|--------|----------------------|
-| margin_batches (staged) | **81.1%** |
-| random (shuffled) | 50.0% |
+| Method | Mean holdout | Std | 95% CI |
+|--------|-------------|-----|--------|
+| random | **81.1%** | ±2.7% | [77.8%, 84.4%] |
+| margin_batches | 80.7% | ±5.2% | [73.3%, 84.4%] |
 
-**margin_batches stage holdout:** 50.0% → 50.0% → 63.3% → 76.7% → **81.1%** (after refine)
+**Paired test** margin_batches vs random: Δ=−0.4%, p=1.0 → **not significant**.
 
-The margin sort bug (hard-first) is fixed. Curriculum now improves monotonically across stages. In this run, `random` failed to learn (50% holdout) while `margin_batches` reached 81% — high seed/model variance for QNN on a single split.
-
-Earlier run (same day, pre-full-batch): margin_batches 85.6%, random 68.9%.
+Multi-seed evaluation shows both methods are equivalent on moons — curriculum neither helps nor hurts statistically.
 
 ## Comparison with hypothesis
 
-Curriculum **can** help when random training fails, but results are **not stable** across runs. Easy-first staging + refine is methodologically sound; more seeds needed for a firm conclusion.
+Easy-first curriculum does not significantly improve QNN generalization vs random shuffle with 3 seeds.
 
 ## Unexpected finding
 
-Root cause of prior 53% margin_batches was inverted sort order (hard examples first) plus optimizer reset each stage.
+Single-seed runs were misleading (random 50% vs margin 81%). Multi-seed + Wilcoxon is essential for honest conclusions.
 
 ## Suggested next experiment
 
-- 3-seed comparison: random vs margin_batches
-- Shuffle mini-batches within each curriculum stage
+- 10 seeds for powered comparison
+- Curriculum on harder dataset where training order matters more

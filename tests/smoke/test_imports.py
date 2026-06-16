@@ -13,6 +13,8 @@ MODULES = [
     "src.quantum.qnn_entangled",
     "src.data.splits",
     "src.training.holdout",
+    "src.training.statistics",
+    "src.training.self_play",
     "src.data.augmentation",
     "src.quantum.amplitude_encoding",
     "src.quantum.qnn_basic",

@@ -1,31 +1,29 @@
 # Results — EXP 007
 
 **Date:** 2026-06-16  
-**Config:** 300 samples, 30% holdout, 5 self-play rounds, fine-tune on hard train examples only
+**Config:** 3 seeds, hard_frac=0.3 cap, best-checkpoint tracking, revert on holdout drop >5%  
+**Stats:** Wilcoxon self_play_best vs self_play_base
 
 ## What happened
 
-| Phase | Holdout test accuracy |
-|-------|----------------------|
-| Round 0 (base) | 50.0% |
-| Round 1 | 87.8% |
-| Round 2 | 50.0% |
-| Round 3 | 87.8% |
-| Round 4 (final) | **50.0%** |
+| Phase | Mean holdout | Std | 95% CI |
+|-------|-------------|-----|--------|
+| Base (before self-play) | 83.3% | ±3.3% | [78.9%, 86.7%] |
+| Best checkpoint (after self-play) | 83.3% | ±3.3% | [78.9%, 86.7%] |
 
-Self-play **oscillates** between ~50% and ~88% holdout depending on the hard subset selected each round. No monotonic improvement; final holdout equals the untrained baseline.
+**Paired test** best vs base: Δ=0.0%, p=1.0 → **not significant**.
 
-Train pool is separate from holdout (no leakage). The oscillation pattern suggests overfitting to misclassified train points each round.
+Oscillation eliminated — `hard_frac` cap + best-checkpoint prevents collapse to 50%. Self-play neither improves nor degrades holdout on moons.
 
 ## Comparison with hypothesis
 
-If the hypothesis was that re-training on hard examples improves generalization, it was **not supported** in this run — gains are ephemeral and reverse on alternating rounds.
+Re-training on capped hard examples does not improve generalization beyond a well-trained base model.
 
 ## Unexpected finding
 
-Rounds with large hard sets (n_hard=105) reach 87.8% holdout; rounds with small hard sets (n_hard≈24) collapse to 50%.
+Previous 50%↔88% oscillation was an artifact of uncapped hard sets and no checkpoint revert — methodology fix was more impactful than the algorithm.
 
 ## Suggested next experiment
 
-- Cap hard examples per round (top 20% by loss)
-- Early stopping on holdout each round instead of fixed fine-tune epochs
+- Self-play only when base holdout < 70% (weak base regime)
+- Holdout-guided early stopping per round

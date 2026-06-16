@@ -34,16 +34,21 @@ def make_entangled_circuit(n_qubits: int, n_layers: int, entanglement: str = "ch
 
 
 class QuantumNetEntangled(TrainableMixin, nn.Module):
-    def __init__(self, n_qubits: int = 4, n_layers: int = 2, entanglement: str = "chain"):
+    def __init__(
+        self,
+        n_qubits: int = 4,
+        n_layers: int = 2,
+        entanglement: str = "chain",
+        input_dim: int = 2,
+    ):
         super().__init__()
         self.n_qubits = n_qubits
+        self.pre = nn.Linear(input_dim, n_qubits) if input_dim != n_qubits else nn.Identity()
         self.qlayer = make_entangled_circuit(n_qubits, n_layers, entanglement)
         self.post = nn.Linear(n_qubits, 1)
 
     def forward(self, x):
-        if x.shape[1] < self.n_qubits:
-            pad = torch.zeros(x.shape[0], self.n_qubits - x.shape[1], device=x.device, dtype=x.dtype)
-            x = torch.cat([x, pad], dim=1)
+        x = self.pre(x) if not isinstance(self.pre, nn.Identity) else x
         x = x[:, : self.n_qubits]
         out = self.qlayer(x)
         return torch.sigmoid(self.post(out)).squeeze()

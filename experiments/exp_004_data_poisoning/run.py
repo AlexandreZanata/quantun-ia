@@ -1,7 +1,7 @@
 """
 EXP 004 — Dataset Poisoning
 Train on poisoned labels; evaluate on clean holdout test set.
-Compare angle vs amplitude encoding under label noise.
+Multi-seed robustness comparison across encodings.
 """
 import sys
 from pathlib import Path
@@ -17,68 +17,96 @@ from src.data.splits import split_train_test
 from src.quantum.qnn_amplitude import QuantumNetAmplitude
 from src.quantum.qnn_basic import QuantumNetBasic
 from src.training.config import load_experiment_config
+from src.training.holdout import summarize_multi_seed
 from src.training.structured_log import init_correlation_id, log_event
 
 EXP_KEY = "exp_004_data_poisoning"
 EXP_ID = "exp_004"
 
-QUANTUM_MODELS = {
-    "angle": lambda: QuantumNetBasic(n_qubits=4, n_layers=2, input_dim=2),
-    "amplitude": lambda: QuantumNetAmplitude(n_qubits=2, n_layers=2, input_dim=2),
-}
+
+def build_quantum(encoding: str, cfg: dict):
+    model_cfg = cfg.get("model_configs", {}).get(encoding, {})
+    lr = model_cfg.get("learning_rate", cfg["learning_rate"])
+    n_qubits = model_cfg.get("n_qubits", 4)
+    n_layers = model_cfg.get("n_layers", 2)
+    if encoding == "angle":
+        return QuantumNetBasic(n_qubits=n_qubits, n_layers=n_layers, input_dim=2), lr
+    return QuantumNetAmplitude(n_qubits=n_qubits, n_layers=n_layers, input_dim=2), lr
 
 
 if __name__ == "__main__":
     init_correlation_id()
     cfg = load_experiment_config(EXP_KEY)
-    log_event("info", "experiment run started", exp_id=EXP_ID)
+    seeds = cfg.get("seeds", [cfg["random_state"]])
+    log_event("info", "experiment run started", exp_id=EXP_ID, seeds=seeds)
 
-    X, y, _ = make_binary_classification(
-        n_samples=cfg["n_samples"],
-        dataset=cfg["dataset"],
-        noise=cfg["noise"],
-        random_state=cfg["random_state"],
-    )
-    X_train, X_test, y_train, y_test = split_train_test(
-        X, y, test_size=cfg["test_size"], random_state=cfg["random_state"]
-    )
-    X_test_t = torch.tensor(X_test)
-    y_test_t = torch.tensor(y_test)
+    # results[model_key][poison_rate] = list of holdout acc per seed
+    classical_by_rate: dict[float, list[float]] = {r: [] for r in cfg["poison_rates"]}
+    quantum_by_encoding: dict[str, dict[float, list[float]]] = {
+        enc: {r: [] for r in cfg["poison_rates"]} for enc in cfg["encodings"]
+    }
 
-    classical_results = {}
-    quantum_results = {enc: {} for enc in cfg["encodings"]}
-
-    for rate in cfg["poison_rates"]:
-        _, y_train_poisoned, _ = poison_dataset(X_train, y_train, poison_rate=rate)
-        X_train_t = torch.tensor(X_train)
-        y_train_t = torch.tensor(y_train_poisoned)
-
-        classical = ClassicalNet(hidden=16)
-        classical.train(
-            X_train_t,
-            y_train_t,
-            exp_id=EXP_ID,
-            model_name=f"classical_poison_{int(rate * 100)}",
-            epochs=30,
-            lr=cfg["learning_rate"],
-            X_test=X_test_t,
-            y_test=y_test_t,
+    for seed in seeds:
+        X, y, _ = make_binary_classification(
+            n_samples=cfg["n_samples"],
+            dataset=cfg["dataset"],
+            noise=cfg["noise"],
+            random_state=seed,
         )
-        classical_results[rate] = classical.evaluate(X_test_t, y_test_t)["accuracy"]
+        X_train, X_test, y_train, y_test = split_train_test(
+            X, y, test_size=cfg["test_size"], random_state=seed
+        )
+        X_test_t = torch.tensor(X_test)
+        y_test_t = torch.tensor(y_test)
 
-        for encoding in cfg["encodings"]:
-            quantum = QUANTUM_MODELS[encoding]()
-            quantum.train(
+        for rate in cfg["poison_rates"]:
+            _, y_train_poisoned, _ = poison_dataset(X_train, y_train, poison_rate=rate)
+            X_train_t = torch.tensor(X_train)
+            y_train_t = torch.tensor(y_train_poisoned)
+
+            classical = ClassicalNet(hidden=16)
+            classical.train(
                 X_train_t,
                 y_train_t,
                 exp_id=EXP_ID,
-                model_name=f"quantum_{encoding}_poison_{int(rate * 100)}",
-                epochs=30,
+                model_name=f"classical_poison_{int(rate * 100)}_seed{seed}",
+                epochs=cfg["epochs"],
                 lr=cfg["learning_rate"],
                 X_test=X_test_t,
                 y_test=y_test_t,
             )
-            quantum_results[encoding][rate] = quantum.evaluate(X_test_t, y_test_t)["accuracy"]
+            classical_by_rate[rate].append(classical.evaluate(X_test_t, y_test_t)["accuracy"])
+
+            for encoding in cfg["encodings"]:
+                model, lr = build_quantum(encoding, cfg)
+                model.train(
+                    X_train_t,
+                    y_train_t,
+                    exp_id=EXP_ID,
+                    model_name=f"quantum_{encoding}_poison_{int(rate * 100)}_seed{seed}",
+                    epochs=cfg["epochs"],
+                    lr=lr,
+                    X_test=X_test_t,
+                    y_test=y_test_t,
+                )
+                acc = model.evaluate(X_test_t, y_test_t)["accuracy"]
+                quantum_by_encoding[encoding][rate].append(acc)
+
+    # Summarize at 0% and 30% poison (key comparison points)
+    summary_at_rates = {}
+    for rate in [0.0, 0.3]:
+        summary_at_rates[f"classical_poison_{int(rate * 100)}"] = classical_by_rate[rate]
+        for encoding in cfg["encodings"]:
+            key = f"quantum_{encoding}_poison_{int(rate * 100)}"
+            summary_at_rates[key] = quantum_by_encoding[encoding][rate]
+
+    summarize_multi_seed(EXP_ID, summary_at_rates)
+
+    classical_results = {r: sum(v) / len(v) for r, v in classical_by_rate.items()}
+    quantum_results = {
+        enc: {r: sum(v) / len(v) for r, v in rates.items()}
+        for enc, rates in quantum_by_encoding.items()
+    }
 
     log_event(
         "info",

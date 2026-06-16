@@ -26,20 +26,18 @@ def make_amplitude_circuit(n_qubits: int, n_layers: int):
 
 
 class QuantumNetAmplitude(TrainableMixin, nn.Module):
-    """Variational classifier with amplitude encoding."""
+    """Variational classifier with learnable projection into amplitude space."""
 
-    def __init__(self, n_qubits: int = 2, n_layers: int = 2, input_dim: int = 2):
+    def __init__(self, n_qubits: int = 4, n_layers: int = 2, input_dim: int = 2):
         super().__init__()
         self.n_qubits = n_qubits
         self.amp_dim = 2**n_qubits
+        self.pre = nn.Linear(input_dim, self.amp_dim)
         self.qlayer = make_amplitude_circuit(n_qubits, n_layers)
         self.post = nn.Linear(1, 1)
 
     def forward(self, x):
-        if x.shape[1] < self.amp_dim:
-            pad = torch.zeros(x.shape[0], self.amp_dim - x.shape[1], device=x.device, dtype=x.dtype)
-            x = torch.cat([x, pad], dim=1)
-        x = x[:, : self.amp_dim]
+        x = self.pre(x)
         norm = x.norm(dim=1, keepdim=True).clamp(min=1e-8)
         x = x / norm
         out = self.qlayer(x).unsqueeze(1)
