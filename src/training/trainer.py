@@ -41,7 +41,14 @@ def train_model(
 
         with torch.no_grad():
             acc = ((pred > 0.5) == y.bool()).float().mean().item()
-            log.log(epoch, loss=loss.item(), accuracy=acc)
+            epoch_metrics: dict = {"loss": loss.item(), "accuracy": acc}
+            if X_test is not None and y_test is not None and (
+                epoch % log_every == 0 or epoch == epochs - 1
+            ):
+                holdout = evaluate(model, X_test, y_test)
+                epoch_metrics["holdout_accuracy"] = holdout["accuracy"]
+                epoch_metrics["holdout_loss"] = holdout["loss"]
+            log.log(epoch, **epoch_metrics)
 
         if epoch % log_every == 0:
             log_event(

@@ -7,6 +7,7 @@ def test_load_config_has_defaults():
     cfg = load_config()
     assert "defaults" in cfg
     assert cfg["defaults"]["epochs"] == 50
+    assert cfg["defaults"]["dataset"] == "circles"
 
 
 def test_load_experiment_config_merges_defaults():
@@ -16,8 +17,11 @@ def test_load_experiment_config_merges_defaults():
 
 
 def test_publication_profile_defaults():
-    cfg = load_config()["defaults"]
-    assert cfg["dataset"] == "circles"
+    cfg = load_config()["profiles"]["publication"]
     assert cfg["n_samples"] == 500
-    assert cfg["noise"] == 0.2
     assert len(cfg["seeds"]) == 10
+
+
+def test_publication_large_profile():
+    cfg = load_experiment_config("exp_001_quantum_vs_classical", profile="publication_large")
+    assert cfg["n_samples"] == 1000

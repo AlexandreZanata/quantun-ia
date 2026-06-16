@@ -1,31 +1,51 @@
-"""QNN with configurable entanglement."""
-
 import pennylane as qml
 import torch
 import torch.nn as nn
 
+from src.quantum.circuit_utils import qnode_diff_method
 from src.training.base_model import TrainableMixin
 
 
-def make_entangled_circuit(n_qubits: int, n_layers: int, entanglement: str = "chain"):
-    dev = qml.device("default.qubit", wires=n_qubits)
+def _apply_entanglement(entanglement: str, n_qubits: int) -> None:
+    if entanglement == "chain":
+        for i in range(n_qubits - 1):
+            qml.CNOT(wires=[i, i + 1])
+    elif entanglement == "chain_half":
+        for i in range(0, n_qubits - 1, 2):
+            qml.CNOT(wires=[i, i + 1])
+    elif entanglement == "ring":
+        for i in range(n_qubits):
+            qml.CNOT(wires=[i, (i + 1) % n_qubits])
 
-    @qml.qnode(dev, interface="torch")
+
+def make_entangled_circuit(
+    n_qubits: int,
+    n_layers: int,
+    entanglement: str = "chain",
+    *,
+    reupload: bool = False,
+):
+    dev = qml.device("default.qubit", wires=n_qubits)
+    diff_method = qnode_diff_method(n_layers)
+
+    @qml.qnode(dev, interface="torch", diff_method=diff_method)
     def circuit(inputs, weights):
-        qml.AngleEmbedding(inputs, wires=range(n_qubits))
-        for layer_idx in range(n_layers):
-            for i in range(n_qubits):
-                qml.RY(weights[layer_idx, i, 0], wires=i)
-                qml.RZ(weights[layer_idx, i, 1], wires=i)
-            if entanglement == "chain":
-                for i in range(n_qubits - 1):
-                    qml.CNOT(wires=[i, i + 1])
-            elif entanglement == "chain_half":
-                for i in range(0, n_qubits - 1, 2):
-                    qml.CNOT(wires=[i, i + 1])
-            elif entanglement == "ring":
+        if reupload:
+            for layer_idx in range(n_layers):
+                qml.AngleEmbedding(inputs, wires=range(n_qubits))
                 for i in range(n_qubits):
-                    qml.CNOT(wires=[i, (i + 1) % n_qubits])
+                    qml.RY(weights[layer_idx, i, 0], wires=i)
+                    qml.RZ(weights[layer_idx, i, 1], wires=i)
+                if entanglement != "none":
+                    _apply_entanglement(entanglement, n_qubits)
+        else:
+            qml.AngleEmbedding(inputs, wires=range(n_qubits))
+            for layer_idx in range(n_layers):
+                for i in range(n_qubits):
+                    qml.RY(weights[layer_idx, i, 0], wires=i)
+                    qml.RZ(weights[layer_idx, i, 1], wires=i)
+                if entanglement != "none":
+                    _apply_entanglement(entanglement, n_qubits)
 
         return [qml.expval(qml.PauliZ(i)) for i in range(n_qubits)]
 
@@ -40,11 +60,13 @@ class QuantumNetEntangled(TrainableMixin, nn.Module):
         n_layers: int = 2,
         entanglement: str = "chain",
         input_dim: int = 2,
+        *,
+        reupload: bool = False,
     ):
         super().__init__()
         self.n_qubits = n_qubits
         self.pre = nn.Linear(input_dim, n_qubits) if input_dim != n_qubits else nn.Identity()
-        self.qlayer = make_entangled_circuit(n_qubits, n_layers, entanglement)
+        self.qlayer = make_entangled_circuit(n_qubits, n_layers, entanglement, reupload=reupload)
         self.post = nn.Linear(n_qubits, 1)
 
     def forward(self, x):

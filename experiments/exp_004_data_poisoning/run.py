@@ -1,7 +1,7 @@
 """
 EXP 004 — Dataset Poisoning
 Train on poisoned labels; evaluate on clean holdout test set.
-Multi-seed robustness comparison across encodings.
+Re-upload vs amplitude encoding with Holm-corrected Wilcoxon tests.
 """
 import sys
 from pathlib import Path
@@ -15,10 +15,10 @@ from src.data.generators import make_binary_classification
 from src.data.poisoning import measure_robustness, poison_dataset
 from src.data.splits import split_train_test
 from src.quantum.qnn_amplitude import QuantumNetAmplitude
-from src.quantum.qnn_basic import QuantumNetBasic
+from src.quantum.qnn_factory import build_qnn
 from src.training.config import load_experiment_config
-from src.training.holdout import compare_conditions, summarize_multi_seed
-from src.training.protocol import log_experiment_protocol, task_learnable
+from src.training.holdout import compare_conditions_batch, summarize_multi_seed
+from src.training.protocol import log_experiment_protocol
 from src.training.structured_log import init_correlation_id, log_event
 
 EXP_KEY = "exp_004_data_poisoning"
@@ -28,11 +28,14 @@ EXP_ID = "exp_004"
 def build_quantum(encoding: str, cfg: dict):
     model_cfg = cfg.get("model_configs", {}).get(encoding, {})
     lr = model_cfg.get("learning_rate", cfg["learning_rate"])
-    n_qubits = model_cfg.get("n_qubits", 4)
-    n_layers = model_cfg.get("n_layers", 2)
-    if encoding == "angle":
-        return QuantumNetBasic(n_qubits=n_qubits, n_layers=n_layers, input_dim=2), lr
-    return QuantumNetAmplitude(n_qubits=n_qubits, n_layers=n_layers, input_dim=2), lr
+    if encoding == "reupload":
+        qcfg = {**cfg, **model_cfg, "qnn_type": "reupload"}
+        return build_qnn(qcfg), lr
+    if encoding == "amplitude":
+        n_qubits = model_cfg.get("n_qubits", 4)
+        n_layers = model_cfg.get("n_layers", 2)
+        return QuantumNetAmplitude(n_qubits=n_qubits, n_layers=n_layers, input_dim=2), lr
+    raise ValueError(f"Unknown encoding: {encoding}")
 
 
 if __name__ == "__main__":
@@ -42,7 +45,6 @@ if __name__ == "__main__":
     log_experiment_protocol(EXP_ID, cfg)
     log_event("info", "experiment run started", exp_id=EXP_ID, seeds=seeds)
 
-    # results[model_key][poison_rate] = list of holdout acc per seed
     classical_by_rate: dict[float, list[float]] = {r: [] for r in cfg["poison_rates"]}
     quantum_by_encoding: dict[str, dict[float, list[float]]] = {
         enc: {r: [] for r in cfg["poison_rates"]} for enc in cfg["encodings"]
@@ -94,7 +96,6 @@ if __name__ == "__main__":
                 acc = model.evaluate(X_test_t, y_test_t)["accuracy"]
                 quantum_by_encoding[encoding][rate].append(acc)
 
-    # Summarize at 0% and 30% poison (key comparison points)
     summary_at_rates = {}
     for rate in [0.0, 0.3]:
         summary_at_rates[f"classical_poison_{int(rate * 100)}"] = classical_by_rate[rate]
@@ -104,19 +105,28 @@ if __name__ == "__main__":
 
     summarize_multi_seed(EXP_ID, summary_at_rates)
 
-    compare_conditions(
+    compare_conditions_batch(
         EXP_ID,
-        classical_by_rate[0.0],
-        quantum_by_encoding["amplitude"][0.0],
-        "classical_poison_0",
-        "quantum_amplitude_poison_0",
-    )
-    compare_conditions(
-        EXP_ID,
-        classical_by_rate[0.3],
-        quantum_by_encoding["amplitude"][0.3],
-        "classical_poison_30",
-        "quantum_amplitude_poison_30",
+        [
+            {
+                "label_a": "classical_poison_0",
+                "label_b": "quantum_reupload_poison_0",
+                "condition_a": classical_by_rate[0.0],
+                "condition_b": quantum_by_encoding["reupload"][0.0],
+            },
+            {
+                "label_a": "classical_poison_30",
+                "label_b": "quantum_reupload_poison_30",
+                "condition_a": classical_by_rate[0.3],
+                "condition_b": quantum_by_encoding["reupload"][0.3],
+            },
+            {
+                "label_a": "quantum_amplitude_poison_0",
+                "label_b": "quantum_reupload_poison_0",
+                "condition_a": quantum_by_encoding["amplitude"][0.0],
+                "condition_b": quantum_by_encoding["reupload"][0.0],
+            },
+        ],
     )
 
     classical_results = {r: sum(v) / len(v) for r, v in classical_by_rate.items()}
@@ -130,7 +140,7 @@ if __name__ == "__main__":
         "poisoning robustness summary",
         exp_id=EXP_ID,
         classical=measure_robustness(classical_results),
-        quantum_angle=measure_robustness(quantum_results["angle"]),
+        quantum_reupload=measure_robustness(quantum_results["reupload"]),
         quantum_amplitude=measure_robustness(quantum_results["amplitude"]),
     )
     log_event("info", "experiment run finished", exp_id=EXP_ID)

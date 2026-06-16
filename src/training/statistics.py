@@ -84,3 +84,36 @@ def paired_comparison(
         "n_pairs": len(a),
         "alpha": alpha,
     }
+
+
+def holm_bonferroni(p_values: list[float], alpha: float = 0.05) -> list[dict]:
+    """
+    Holm-Bonferroni step-down correction for multiple paired comparisons.
+    Returns list aligned with input order: p_raw, p_adjusted, significant_holm.
+    """
+    m = len(p_values)
+    if m == 0:
+        return []
+
+    indexed = sorted(enumerate(p_values), key=lambda item: item[1] if item[1] is not None else 1.0)
+    adjusted_by_index: dict[int, dict] = {}
+    prev_adjusted = 0.0
+
+    for rank, (idx, p_raw) in enumerate(indexed):
+        if p_raw is None:
+            adjusted_by_index[idx] = {
+                "p_raw": None,
+                "p_adjusted": None,
+                "significant_holm": None,
+            }
+            continue
+        factor = m - rank
+        adjusted = min(1.0, max(p_raw * factor, prev_adjusted))
+        prev_adjusted = adjusted
+        adjusted_by_index[idx] = {
+            "p_raw": float(p_raw),
+            "p_adjusted": float(adjusted),
+            "significant_holm": bool(adjusted < alpha),
+        }
+
+    return [adjusted_by_index[i] for i in range(m)]

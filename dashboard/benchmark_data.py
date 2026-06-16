@@ -9,7 +9,12 @@ from pathlib import Path
 from src.training.param_match import build_param_match_table
 
 LOGS_PATH = Path(__file__).resolve().parents[1] / "logs" / "experiments.jsonl"
-SKIP_RECORD_TYPES = frozenset({"multi_seed_summary", "paired_comparison", "applicability_gate"})
+SKIP_RECORD_TYPES = frozenset({
+    "multi_seed_summary",
+    "paired_comparison",
+    "paired_comparison_batch",
+    "applicability_gate",
+})
 _SEED_SUFFIX = re.compile(r"_seed\d+$")
 _PUBLICATION_EXP = re.compile(r"^exp_\d{3}$")
 

@@ -4,13 +4,15 @@ import pennylane as qml
 import torch
 import torch.nn as nn
 
+from src.quantum.circuit_utils import qnode_diff_method
 from src.training.base_model import TrainableMixin
 
 
 def make_qnn_reupload(n_qubits: int = 4, n_layers: int = 2):
     dev = qml.device("default.qubit", wires=n_qubits)
+    diff_method = qnode_diff_method(n_layers)
 
-    @qml.qnode(dev, interface="torch")
+    @qml.qnode(dev, interface="torch", diff_method=diff_method)
     def circuit(inputs, weights):
         for layer in range(n_layers):
             qml.AngleEmbedding(inputs, wires=range(n_qubits))

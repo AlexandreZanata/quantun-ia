@@ -4,8 +4,8 @@
 **Author:** Quantum ML Lab
 
 ## What I expect to happen
-On circles, hybrid stacks (QuantumFirst, ClassicalFirst, HybridSandwich) will land
-between pure classical and pure quantum performance. QuantumFirst may edge ahead by
+On circles, hybrid stacks (QuantumFirst, ClassicalFirst, HybridSandwich) use a
+**re-upload QNN baseline** (4 qubits, 3 layers). QuantumFirst may edge ahead by
 letting the quantum layer extract non-linear features before a small classical head.
 
 ## Why I expect this
@@ -19,5 +19,5 @@ task, partial quantum processing may help even when a standalone QNN fails.
 
 ## Metrics I will measure
 - [x] Holdout accuracy per architecture (10 seeds, bootstrap CI)
-- [ ] Paired Wilcoxon across architectures (planned)
+- [x] Paired Wilcoxon across architectures (Holm-Bonferroni corrected)
 - [x] Training time per seed

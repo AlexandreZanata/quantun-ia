@@ -14,7 +14,7 @@ from src.data.splits import split_train_test
 from src.quantum.qnn_basic import QuantumNetBasic
 from src.quantum.qnn_reupload import QuantumNetReupload
 from src.training.config import load_experiment_config
-from src.training.holdout import compare_conditions, summarize_multi_seed, train_with_holdout
+from src.training.holdout import compare_conditions_batch, summarize_multi_seed, train_with_holdout
 from src.training.protocol import log_experiment_protocol
 from src.training.structured_log import init_correlation_id, log_event
 
@@ -98,29 +98,35 @@ if __name__ == "__main__":
 
     summarize_multi_seed(EXP_ID, results_by_model)
 
+    comparisons = []
     if "classical_32" in results_by_model and "quantum_4q_2l" in results_by_model:
-        compare_conditions(
-            EXP_ID,
-            results_by_model["classical_32"],
-            results_by_model["quantum_4q_2l"],
-            "classical_32",
-            "quantum_4q_2l",
+        comparisons.append(
+            {
+                "label_a": "classical_32",
+                "label_b": "quantum_4q_2l",
+                "condition_a": results_by_model["classical_32"],
+                "condition_b": results_by_model["quantum_4q_2l"],
+            }
         )
     if "quantum_reupload_4q_3l" in results_by_model and "quantum_4q_2l" in results_by_model:
-        compare_conditions(
-            EXP_ID,
-            results_by_model["quantum_reupload_4q_3l"],
-            results_by_model["quantum_4q_2l"],
-            "quantum_reupload_4q_3l",
-            "quantum_4q_2l",
+        comparisons.append(
+            {
+                "label_a": "quantum_reupload_4q_3l",
+                "label_b": "quantum_4q_2l",
+                "condition_a": results_by_model["quantum_reupload_4q_3l"],
+                "condition_b": results_by_model["quantum_4q_2l"],
+            }
         )
     if "classical_32" in results_by_model and "quantum_reupload_4q_3l" in results_by_model:
-        compare_conditions(
-            EXP_ID,
-            results_by_model["classical_32"],
-            results_by_model["quantum_reupload_4q_3l"],
-            "classical_32",
-            "quantum_reupload_4q_3l",
+        comparisons.append(
+            {
+                "label_a": "classical_32",
+                "label_b": "quantum_reupload_4q_3l",
+                "condition_a": results_by_model["classical_32"],
+                "condition_b": results_by_model["quantum_reupload_4q_3l"],
+            }
         )
+    if comparisons:
+        compare_conditions_batch(EXP_ID, comparisons)
 
     log_event("info", "experiment run finished", exp_id=EXP_ID)

@@ -33,3 +33,4 @@ def test_train_model_logs_holdout_accuracy(temp_log_file, sample_binary_data):
     assert record["test_accuracy"] is not None
     assert record["eval_set"] == "holdout_test"
     assert 0.0 <= record["test_accuracy"] <= 1.0
+    assert any("holdout_accuracy" in epoch for epoch in record["history"])

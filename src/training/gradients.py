@@ -15,8 +15,12 @@ def measure_gradient_variance(
     n_samples: int = 20,
     batch_size: int = 10,
     input_dim: int = 2,
+    *,
+    use_parameter_shift: bool = False,
 ) -> dict[int, dict]:
     """Gradient variance per qubit count with bootstrap 95% CI across random inits."""
+    if use_parameter_shift:
+        batch_size = 1
     results: dict[int, dict] = {}
     for n_q in n_qubits_list:
         sample_vars: list[float] = []

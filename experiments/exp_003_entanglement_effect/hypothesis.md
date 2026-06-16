@@ -4,9 +4,9 @@
 **Author:** Quantum ML Lab
 
 ## What I expect to happen
-On circles, entanglement (chain, ring) will improve QNN holdout over `none` because
-correlated qubits increase expressivity of the variational circuit. `chain_half` may
-sit between full chain and none as a capacity regularizer.
+On circles, a **re-upload QNN** (4 qubits, 3 layers) with entanglement (chain, ring)
+will improve holdout over `none` because correlated qubits increase expressivity.
+`chain_half` may sit between full chain and none as a capacity regularizer.
 
 ## Why I expect this
 Entanglement is often cited as a quantum advantage for feature learning. More
@@ -19,5 +19,4 @@ connectivity should help model radial decision boundaries.
 
 ## Metrics I will measure
 - [x] Holdout accuracy per entanglement type (10 seeds, bootstrap CI)
-- [x] Paired Wilcoxon: chain vs none
-- [ ] Wilcoxon chain_half vs none (suggested follow-up)
+- [x] Paired Wilcoxon: each topology vs `none` (Holm-Bonferroni corrected)

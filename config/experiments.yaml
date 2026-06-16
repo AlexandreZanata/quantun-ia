@@ -1,7 +1,9 @@
 # Central experiment configuration — Quantum ML Lab
 # Publication profile: circles dataset, noise=0.2, n=500, 10 seeds
+# Use profile publication_large (n=1000) via load_experiment_config(key, profile="publication_large")
 
 defaults:
+  profile: publication
   epochs: 50
   learning_rate: 0.01
   dataset: circles
@@ -10,6 +12,14 @@ defaults:
   random_state: 42
   test_size: 0.3
   seeds: [42, 123, 456, 789, 1024, 1337, 2048, 3001, 4096, 5000]
+
+profiles:
+  publication:
+    n_samples: 500
+    seeds: [42, 123, 456, 789, 1024, 1337, 2048, 3001, 4096, 5000]
+  publication_large:
+    n_samples: 1000
+    seeds: [42, 123, 456, 789, 1024, 1337, 2048, 3001, 4096, 5000]
 
 experiments:
   exp_001_quantum_vs_classical:
@@ -36,7 +46,10 @@ experiments:
         learning_rate: 0.02
 
   exp_002_hybrid_architecture:
-    description: "Hybrid architecture — circles, 10 seeds"
+    description: "Hybrid architecture with re-upload QNN — circles, 10 seeds"
+    qnn_type: reupload
+    n_qubits: 4
+    n_layers: 3
     architectures:
       - HybridSandwich
       - QuantumFirst
@@ -50,9 +63,10 @@ experiments:
         learning_rate: 0.02
 
   exp_003_entanglement_effect:
-    description: "Quantum entanglement — circles, 10 seeds"
+    description: "Entanglement with re-upload QNN — circles, 10 seeds"
+    qnn_type: reupload
     n_qubits: 4
-    n_layers: 2
+    n_layers: 3
     entanglement_types:
       - none
       - chain
@@ -60,21 +74,24 @@ experiments:
       - ring
     model_configs:
       entanglement_chain_half:
-        n_layers: 1
+        n_layers: 2
         learning_rate: 0.02
       entanglement_none:
         learning_rate: 0.02
 
   exp_004_data_poisoning:
-    description: "Poisoning robustness — circles, 10 seeds, clean holdout"
+    description: "Poisoning robustness — re-upload vs amplitude, clean holdout"
     poison_rates: [0.0, 0.05, 0.1, 0.2, 0.3]
     encodings:
-      - angle
+      - reupload
       - amplitude
+    qnn_type: reupload
+    n_qubits: 4
+    n_layers: 3
     model_configs:
-      angle:
+      reupload:
         n_qubits: 4
-        n_layers: 1
+        n_layers: 3
         learning_rate: 0.02
       amplitude:
         n_qubits: 4

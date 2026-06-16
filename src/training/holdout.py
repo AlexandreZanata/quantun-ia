@@ -8,7 +8,7 @@ from datetime import datetime
 import torch
 
 from src.training import metrics as metrics_module
-from src.training.statistics import paired_comparison, seed_summary
+from src.training.statistics import holm_bonferroni, paired_comparison, seed_summary
 from src.training.structured_log import log_event
 from src.training.trainer import train_model
 
@@ -120,3 +120,55 @@ def compare_conditions(
             }
         )
     return comparison
+
+
+def compare_conditions_batch(
+    exp_id: str,
+    comparisons: list[dict],
+    *,
+    alpha: float = 0.05,
+    log_jsonl: bool = True,
+) -> list[dict]:
+    """
+    Run multiple paired Wilcoxon tests and apply Holm-Bonferroni correction.
+    Each item: {label_a, label_b, condition_a, condition_b}.
+    """
+    results: list[dict] = []
+    p_values: list[float | None] = []
+
+    for spec in comparisons:
+        comp = paired_comparison(spec["condition_a"], spec["condition_b"], alpha=alpha)
+        comp.update({"label_a": spec["label_a"], "label_b": spec["label_b"]})
+        results.append(comp)
+        p_values.append(comp.get("p_value"))
+
+    holm = holm_bonferroni([p if p is not None else 1.0 for p in p_values], alpha=alpha)
+    for comp, adj in zip(results, holm):
+        comp["p_value_holm"] = adj["p_adjusted"]
+        comp["significant_holm"] = adj["significant_holm"]
+        log_event(
+            "info",
+            "paired comparison",
+            exp_id=exp_id,
+            label_a=comp["label_a"],
+            label_b=comp["label_b"],
+            mean_diff=comp["mean_diff"],
+            p_value=comp["p_value"],
+            p_value_holm=comp["p_value_holm"],
+            significant=comp["significant"],
+            significant_holm=comp["significant_holm"],
+        )
+
+    if log_jsonl and results:
+        _write_summary_record(
+            {
+                "exp_id": exp_id,
+                "model_name": f"{exp_id}_paired_comparison_batch",
+                "record_type": "paired_comparison_batch",
+                "started_at": datetime.now().isoformat(),
+                "comparisons": results,
+                "correction": "holm_bonferroni",
+                "alpha": alpha,
+            }
+        )
+    return results

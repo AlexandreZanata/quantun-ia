@@ -280,22 +280,36 @@ def learning_curves(records: list[dict], selected: list[str]) -> go.Figure:
         if name not in selected:
             continue
         history = r.get("history", [])
-        if not history or "accuracy" not in history[0]:
+        if not history:
             continue
         epochs = [h["epoch"] for h in history]
-        accs = [h.get("accuracy", 0) * 100 for h in history]
-        fig.add_trace(
-            go.Scatter(
-                x=epochs,
-                y=accs,
-                name=name,
-                mode="lines",
-                line=dict(color=NEON_COLORS[color_idx % len(NEON_COLORS)], width=2),
+        if "accuracy" in history[0]:
+            train_accs = [h.get("accuracy", 0) * 100 for h in history]
+            fig.add_trace(
+                go.Scatter(
+                    x=epochs,
+                    y=train_accs,
+                    name=f"{name} (train)",
+                    mode="lines",
+                    line=dict(color=NEON_COLORS[color_idx % len(NEON_COLORS)], width=2, dash="dot"),
+                )
             )
-        )
+        if any("holdout_accuracy" in h for h in history):
+            holdout_accs = [h.get("holdout_accuracy", 0) * 100 for h in history if "holdout_accuracy" in h]
+            holdout_epochs = [h["epoch"] for h in history if "holdout_accuracy" in h]
+            fig.add_trace(
+                go.Scatter(
+                    x=holdout_epochs,
+                    y=holdout_accs,
+                    name=f"{name} (holdout)",
+                    mode="lines+markers",
+                    line=dict(color=NEON_COLORS[color_idx % len(NEON_COLORS)], width=2),
+                    marker=dict(size=5),
+                )
+            )
         color_idx += 1
     fig.update_layout(
-        title=dict(text=">> LEARNING CURVES (train accuracy)", font=dict(size=16)),
+        title=dict(text=">> LEARNING CURVES (train vs holdout)", font=dict(size=16)),
         xaxis_title="EPOCH",
         yaxis_title="ACC %",
         **PLOT_LAYOUT,

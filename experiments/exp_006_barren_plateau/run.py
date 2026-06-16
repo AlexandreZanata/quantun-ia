@@ -36,6 +36,8 @@ if __name__ == "__main__":
         cfg["n_qubits_list"],
         n_samples=cfg.get("grad_samples", 50),
         input_dim=2,
+        batch_size=1,
+        use_parameter_shift=True,
     )
 
     log = ExperimentLogger(EXP_ID, "barren_plateau_scan")
