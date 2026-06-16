@@ -1,95 +1,309 @@
-import streamlit as st
-import json
-import pandas as pd
-import plotly.express as px
-import plotly.graph_objects as go
+"""Retro 90s benchmark dashboard — Quantum ML Lab."""
+
+from __future__ import annotations
+
+import sys
 from pathlib import Path
 
-st.set_page_config(page_title="Quantum ML Lab", layout="wide")
-st.title("Quantum ML Lab — Progress Dashboard")
+import pandas as pd
+import plotly.graph_objects as go
+import streamlit as st
 
-LOGS = Path("logs/experiments.jsonl")
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+from dashboard.benchmark_data import best_row, load_records, to_benchmark_rows
+from dashboard.terminal_report import print_benchmark_report
 
-@st.cache_data(ttl=5)
-def load_data():
-    records = []
-    if LOGS.exists():
-        with open(LOGS) as f:
-            for line in f:
-                line = line.strip()
-                if line:
-                    records.append(json.loads(line))
-    return records
+RETRO_CSS = """
+@import url('https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap');
 
+html, body, [class*="css"] {
+    font-family: 'Share Tech Mono', 'Courier New', monospace !important;
+    background-color: #050805 !important;
+    color: #33ff66 !important;
+}
 
-records = load_data()
+.stApp {
+    background: radial-gradient(ellipse at center, #0a120a 0%, #020402 100%);
+}
 
-if not records:
-    st.warning("No experiments yet. Run: python experiments/exp_001_quantum_vs_classical/run.py")
-    st.stop()
+/* CRT scanlines */
+.stApp::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    z-index: 9999;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.12) 0px,
+        rgba(0, 0, 0, 0.12) 1px,
+        transparent 1px,
+        transparent 3px
+    );
+}
 
-df = pd.DataFrame([
-    {
-        "Experiment": r["exp_id"],
-        "Model": r["model_name"],
-        "Accuracy": round(r.get("final_acc", 0) * 100, 2),
-        "Final Loss": round(r.get("final_loss", 0), 4),
-        "Time (s)": round(r.get("elapsed_s", 0), 1),
-        "Epochs": r["n_epochs"],
-        "Date": r["started_at"][:16],
-    }
-    for r in records
-])
+h1, h2, h3 {
+    font-family: 'VT323', monospace !important;
+    color: #33ff66 !important;
+    text-shadow: 0 0 8px #33ff6644;
+    letter-spacing: 2px;
+}
 
-col1, col2, col3 = st.columns(3)
-col1.metric("Total Experiments", len(records))
-col2.metric("Best Accuracy", f"{df['Accuracy'].max():.1f}%")
-col3.metric("Top Model", df.loc[df["Accuracy"].idxmax(), "Model"])
+.retro-box {
+    border: 2px solid #33ff66;
+    box-shadow: 0 0 12px #33ff6633, inset 0 0 20px #33ff6608;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1rem;
+    background: #080f08;
+}
 
-st.subheader("Model Comparison")
-fig = px.bar(
-    df,
-    x="Model",
-    y="Accuracy",
-    color="Experiment",
-    title="Accuracy by Model and Experiment",
-    color_discrete_sequence=px.colors.qualitative.Set2,
+.retro-amber { color: #ffb000 !important; }
+.retro-dim   { color: #1a992a !important; }
+.retro-cyan  { color: #00e5ff !important; }
+
+.stat-value {
+    font-family: 'VT323', monospace;
+    font-size: 2.4rem;
+    color: #ffb000;
+    text-shadow: 0 0 10px #ffb00055;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: #1a992a;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+}
+
+div[data-testid="stMetric"] {
+    background: #080f08;
+    border: 1px solid #33ff6644;
+    padding: 0.5rem;
+}
+
+.stButton > button {
+    font-family: 'VT323', monospace !important;
+    font-size: 1.2rem !important;
+    background: #080f08 !important;
+    color: #33ff66 !important;
+    border: 2px solid #33ff66 !important;
+    border-radius: 0 !important;
+    letter-spacing: 2px;
+}
+.stButton > button:hover {
+    background: #33ff66 !important;
+    color: #050805 !important;
+    box-shadow: 0 0 16px #33ff66;
+}
+
+[data-testid="stDataFrame"] {
+    border: 1px solid #33ff6644;
+}
+
+hr { border-color: #33ff6633 !important; }
+"""
+
+PLOT_LAYOUT = dict(
+    paper_bgcolor="#050805",
+    plot_bgcolor="#080f08",
+    font=dict(family="Share Tech Mono, monospace", color="#33ff66", size=12),
+    xaxis=dict(gridcolor="#1a3a1a", zerolinecolor="#1a3a1a"),
+    yaxis=dict(gridcolor="#1a3a1a", zerolinecolor="#1a3a1a"),
+    legend=dict(bgcolor="#080f08", bordercolor="#33ff6644"),
+    margin=dict(l=40, r=20, t=50, b=40),
 )
-st.plotly_chart(fig, use_container_width=True)
 
-st.subheader("Accuracy vs Training Time")
-fig2 = px.scatter(
-    df,
-    x="Time (s)",
-    y="Accuracy",
-    color="Experiment",
-    text="Model",
-    size_max=20,
-    title="Efficiency: best accuracy with lowest training time?",
-)
-st.plotly_chart(fig2, use_container_width=True)
+NEON_COLORS = ["#33ff66", "#ffb000", "#00e5ff", "#ff3366", "#cc66ff", "#ffff33"]
 
-st.subheader("Learning Curves")
-selected = st.multiselect(
-    "Select models:",
-    df["Model"].unique(),
-    default=list(df["Model"].unique()[:4]),
-)
 
-fig3 = go.Figure()
-for r in records:
-    if r["model_name"] in selected:
-        epochs = [h["epoch"] for h in r["history"]]
-        accs = [h.get("accuracy", 0) for h in r["history"]]
-        fig3.add_trace(go.Scatter(x=epochs, y=accs, name=r["model_name"], mode="lines"))
+def retro_header() -> None:
+    st.markdown(
+        """
+<div class="retro-box">
+<pre style="margin:0; font-size:0.85rem; line-height:1.3; color:#33ff66;">
+╔══════════════════════════════════════════════════════════════════════╗
+║  QUANTUN-IA BENCHMARK MONITOR v1.0          dial-up compatible ☎    ║
+║  ──────────────────────────────────────────────────────────────────  ║
+║  &gt; LOAD logs/experiments.jsonl ... OK                                 ║
+║  &gt; RENDER charts .................. OK                                 ║
+╚══════════════════════════════════════════════════════════════════════╝
+</pre>
+</div>
+        """,
+        unsafe_allow_html=True,
+    )
 
-fig3.update_layout(title="Accuracy per Epoch", xaxis_title="Epoch", yaxis_title="Accuracy")
-st.plotly_chart(fig3, use_container_width=True)
 
-st.subheader("All Results")
-st.dataframe(df.sort_values("Accuracy", ascending=False), use_container_width=True)
+def accuracy_bar_chart(df: pd.DataFrame) -> go.Figure:
+    fig = go.Figure()
+    for i, exp in enumerate(df["exp_id"].unique()):
+        sub = df[df["exp_id"] == exp]
+        fig.add_trace(
+            go.Bar(
+                name=exp,
+                x=sub["model"],
+                y=sub["accuracy"],
+                marker_color=NEON_COLORS[i % len(NEON_COLORS)],
+                marker_line=dict(color="#33ff66", width=1),
+            )
+        )
+    fig.update_layout(
+        title=dict(text=">> ACCURACY BENCHMARKS", font=dict(size=16)),
+        barmode="group",
+        yaxis_title="ACC %",
+        **PLOT_LAYOUT,
+    )
+    return fig
 
-if st.button("Refresh data"):
-    st.cache_data.clear()
-    st.rerun()
+
+def efficiency_scatter(df: pd.DataFrame) -> go.Figure:
+    fig = go.Figure()
+    for i, exp in enumerate(df["exp_id"].unique()):
+        sub = df[df["exp_id"] == exp]
+        fig.add_trace(
+            go.Scatter(
+                name=exp,
+                x=sub["elapsed_s"],
+                y=sub["accuracy"],
+                mode="markers+text",
+                text=sub["model"],
+                textposition="top center",
+                textfont=dict(size=9, color="#ffb000"),
+                marker=dict(size=12, color=NEON_COLORS[i % len(NEON_COLORS)], line=dict(width=1, color="#fff")),
+            )
+        )
+    fig.update_layout(
+        title=dict(text=">> EFFICIENCY MAP  (time vs accuracy)", font=dict(size=16)),
+        xaxis_title="TRAINING TIME (s)",
+        yaxis_title="ACC %",
+        **PLOT_LAYOUT,
+    )
+    return fig
+
+
+def learning_curves(records: list[dict], selected: list[str]) -> go.Figure:
+    fig = go.Figure()
+    color_idx = 0
+    for r in records:
+        name = r["model_name"]
+        if name not in selected:
+            continue
+        history = r.get("history", [])
+        if not history or "accuracy" not in history[0]:
+            continue
+        epochs = [h["epoch"] for h in history]
+        accs = [h.get("accuracy", 0) * 100 for h in history]
+        fig.add_trace(
+            go.Scatter(
+                x=epochs,
+                y=accs,
+                name=name,
+                mode="lines",
+                line=dict(color=NEON_COLORS[color_idx % len(NEON_COLORS)], width=2),
+            )
+        )
+        color_idx += 1
+    fig.update_layout(
+        title=dict(text=">> LEARNING CURVES", font=dict(size=16)),
+        xaxis_title="EPOCH",
+        yaxis_title="ACC %",
+        **PLOT_LAYOUT,
+    )
+    return fig
+
+
+def main() -> None:
+    st.set_page_config(
+        page_title="QUANTUN-IA // BENCHMARKS",
+        page_icon="💾",
+        layout="wide",
+        initial_sidebar_state="collapsed",
+    )
+    st.markdown(f"<style>{RETRO_CSS}</style>", unsafe_allow_html=True)
+
+    retro_header()
+    st.markdown("## ◈ BENCHMARK RESULTS")
+
+    records = load_records()
+    rows = to_benchmark_rows(records)
+
+    if not rows:
+        st.markdown(
+            '<p class="retro-amber">&gt; ERROR: no benchmark data found.</p>',
+            unsafe_allow_html=True,
+        )
+        st.code("python experiments/exp_001_quantum_vs_classical/run.py", language="bash")
+        st.stop()
+
+    df = pd.DataFrame(rows)
+    best = best_row(rows)
+
+    c1, c2, c3, c4 = st.columns(4)
+    with c1:
+        st.markdown('<div class="stat-label">runs logged</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="stat-value">{len(rows)}</div>', unsafe_allow_html=True)
+    with c2:
+        st.markdown('<div class="stat-label">best accuracy</div>', unsafe_allow_html=True)
+        st.markdown(
+            f'<div class="stat-value">{best["accuracy"]:.1f}%</div>' if best else '<div class="stat-value">—</div>',
+            unsafe_allow_html=True,
+        )
+    with c3:
+        st.markdown('<div class="stat-label">top model</div>', unsafe_allow_html=True)
+        st.markdown(
+            f'<div class="stat-value" style="font-size:1.4rem">{best["model"]}</div>' if best else "—",
+            unsafe_allow_html=True,
+        )
+    with c4:
+        st.markdown('<div class="stat-label">fastest run</div>', unsafe_allow_html=True)
+        fastest = df.loc[df["elapsed_s"].idxmin()]
+        st.markdown(
+            f'<div class="stat-value" style="font-size:1.4rem">{fastest["elapsed_s"]:.2f}s</div>',
+            unsafe_allow_html=True,
+        )
+
+    st.markdown("---")
+
+    left, right = st.columns(2)
+    with left:
+        st.plotly_chart(accuracy_bar_chart(df), use_container_width=True)
+    with right:
+        st.plotly_chart(efficiency_scatter(df), use_container_width=True)
+
+    st.markdown("### ◈ LEARNING CURVES")
+    selected = st.multiselect(
+        "SELECT MODELS",
+        options=df["model"].unique(),
+        default=list(df["model"].unique()[:6]),
+        label_visibility="collapsed",
+    )
+    st.plotly_chart(learning_curves(records, selected), use_container_width=True)
+
+    st.markdown("### ◈ FULL BENCHMARK TABLE")
+    display_df = df.sort_values("accuracy", ascending=False).rename(
+        columns={
+            "exp_id": "EXPERIMENT",
+            "model": "MODEL",
+            "accuracy": "ACC %",
+            "loss": "LOSS",
+            "elapsed_s": "TIME(s)",
+            "epochs": "EPOCHS",
+            "started_at": "DATE",
+        }
+    )
+    st.dataframe(display_df, use_container_width=True, hide_index=True)
+
+    st.markdown(
+        '<p class="retro-dim">[F5] refresh &nbsp;|&nbsp; logs/experiments.jsonl &nbsp;|&nbsp; quantun-ia v0.1.0</p>',
+        unsafe_allow_html=True,
+    )
+
+    if st.button("[ REFRESH DATA ]"):
+        st.cache_data.clear()
+        st.rerun()
+
+
+if __name__ == "__main__":
+    print_benchmark_report()
+    main()

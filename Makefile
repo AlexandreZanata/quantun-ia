@@ -21,6 +21,10 @@ coverage:
 dashboard:
 	docker compose up dashboard
 
+dashboard-local:
+	@python dashboard/terminal_report.py
+	@streamlit run dashboard/app.py --server.headless true
+
 experiment:
 	docker compose run --rm experiment
 
