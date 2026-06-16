@@ -16,7 +16,7 @@ from src.data.generators import make_binary_classification
 from src.data.splits import split_train_test
 from src.quantum.qnn_factory import build_qnn
 from src.training.config import load_experiment_config
-from src.training.holdout import compare_conditions, summarize_multi_seed
+from src.training.holdout import compare_conditions_batch, summarize_multi_seed
 from src.training.metrics import ExperimentLogger
 from src.training.self_play import self_play_train
 from src.training.protocol import log_applicability_gate, log_experiment_protocol, task_learnable
@@ -126,6 +126,16 @@ if __name__ == "__main__":
         {"self_play_base": base_holdouts, "self_play_best": best_holdouts},
     )
     if applicable:
-        compare_conditions(EXP_ID, best_holdouts, base_holdouts, "self_play_best", "self_play_base")
+        compare_conditions_batch(
+            EXP_ID,
+            [
+                {
+                    "label_a": "self_play_best",
+                    "label_b": "self_play_base",
+                    "condition_a": best_holdouts,
+                    "condition_b": base_holdouts,
+                },
+            ],
+        )
 
     log_event("info", "experiment run finished", exp_id=EXP_ID)

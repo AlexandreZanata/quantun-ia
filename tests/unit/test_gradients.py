@@ -16,3 +16,14 @@ def test_measure_gradient_variance_finite():
         assert not torch.isnan(torch.tensor(stats["mean"]))
         assert stats["mean"] >= 0.0
         assert stats["ci_low"] <= stats["mean"] <= stats["ci_high"]
+
+
+def test_measure_gradient_variance_parameter_shift_batch_one():
+    def factory(n_qubits):
+        return QuantumNetBasic(n_qubits=n_qubits, n_layers=2, input_dim=2)
+
+    variances = measure_gradient_variance(
+        factory, [2], n_samples=2, batch_size=1, use_parameter_shift=True
+    )
+    assert 2 in variances
+    assert variances[2]["n_samples"] >= 0

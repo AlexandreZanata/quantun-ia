@@ -1,4 +1,4 @@
-.PHONY: dev test test-watch lint lint-fix coverage dashboard dashboard-local experiment docker-build docker-test docker-lint clean
+.PHONY: dev test test-watch lint lint-fix coverage dashboard dashboard-local experiment experiment-large docker-build docker-test docker-lint clean
 
 PYTHON ?= $(shell test -x .venv/bin/python && echo .venv/bin/python || echo python3)
 
@@ -29,6 +29,9 @@ dashboard-local:
 
 experiment:
 	docker compose run --rm experiment
+
+experiment-large:
+	QML_PROFILE=publication_large $(PYTHON) scripts/run_publication_large.py
 
 docker-build:
 	docker compose build

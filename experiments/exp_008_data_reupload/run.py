@@ -12,7 +12,7 @@ from src.data.splits import split_train_test
 from src.quantum.qnn_basic import QuantumNetBasic
 from src.quantum.qnn_reupload import QuantumNetReupload
 from src.training.config import load_experiment_config
-from src.training.holdout import compare_conditions, summarize_multi_seed, train_with_holdout
+from src.training.holdout import compare_conditions_batch, summarize_multi_seed, train_with_holdout
 from src.training.param_match import build_param_matched_classical
 from src.training.protocol import log_experiment_protocol
 from src.training.structured_log import init_correlation_id, log_event
@@ -109,22 +109,26 @@ if __name__ == "__main__":
 
     summarize_multi_seed(EXP_ID, results_by_model)
 
+    comparisons = []
     if "quantum_reupload" in results_by_model and "quantum_basic" in results_by_model:
-        compare_conditions(
-            EXP_ID,
-            results_by_model["quantum_reupload"],
-            results_by_model["quantum_basic"],
-            "quantum_reupload",
-            "quantum_basic",
+        comparisons.append(
+            {
+                "label_a": "quantum_reupload",
+                "label_b": "quantum_basic",
+                "condition_a": results_by_model["quantum_reupload"],
+                "condition_b": results_by_model["quantum_basic"],
+            }
         )
-
     if "quantum_reupload" in results_by_model:
-        compare_conditions(
-            EXP_ID,
-            results_by_model[classical_key],
-            results_by_model["quantum_reupload"],
-            classical_key,
-            "quantum_reupload",
+        comparisons.append(
+            {
+                "label_a": classical_key,
+                "label_b": "quantum_reupload",
+                "condition_a": results_by_model[classical_key],
+                "condition_b": results_by_model["quantum_reupload"],
+            }
         )
+    if comparisons:
+        compare_conditions_batch(EXP_ID, comparisons)
 
     log_event("info", "experiment run finished", exp_id=EXP_ID)

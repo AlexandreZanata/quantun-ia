@@ -31,7 +31,8 @@ def measure_gradient_variance(
 
             model.training = True
             model.zero_grad()
-            pred = model(X_dummy)
+            pred = model(X_dummy).reshape(-1)
+            y_dummy = y_dummy.reshape(-1)
             loss = nn.functional.binary_cross_entropy(pred, y_dummy)
             loss.backward()
 

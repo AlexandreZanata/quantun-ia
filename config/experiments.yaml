@@ -148,3 +148,40 @@ experiments:
         learning_rate: 0.02
       classical_matched:
         learning_rate: 0.01
+
+  exp_009_entanglement_basic:
+    description: "Entanglement ablation — basic QNN (no re-upload), circles, 10 seeds"
+    qnn_type: basic
+    n_qubits: 4
+    n_layers: 2
+    entanglement_types:
+      - none
+      - chain
+      - chain_half
+      - ring
+    model_configs:
+      entanglement_chain_half:
+        n_layers: 2
+        learning_rate: 0.02
+      entanglement_none:
+        learning_rate: 0.02
+
+  exp_010_poison_reupload_ablation:
+    description: "Re-upload poisoning ablation — 2 layers vs 3 layers vs lower LR"
+    poison_rates: [0.0, 0.3]
+    reupload_variants:
+      - reupload_3l
+      - reupload_2l
+      - reupload_lr_low
+    baseline_variant: reupload_3l
+    n_qubits: 4
+    model_configs:
+      reupload_3l:
+        n_layers: 3
+        learning_rate: 0.02
+      reupload_2l:
+        n_layers: 2
+        learning_rate: 0.02
+      reupload_lr_low:
+        n_layers: 3
+        learning_rate: 0.01
