@@ -1,0 +1,17 @@
+services:
+  test:
+    build:
+      context: .
+      target: test
+    environment:
+      - PYTHONPATH=/app
+    volumes:
+      - ./logs:/app/logs
+
+  lint:
+    build:
+      context: .
+      target: dev
+    command: ruff check src/ tests/ experiments/
+    environment:
+      - PYTHONPATH=/app

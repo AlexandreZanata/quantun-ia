@@ -1,0 +1,51 @@
+# Central experiment configuration — Quantum ML Lab
+
+defaults:
+  epochs: 50
+  learning_rate: 0.01
+  dataset: moons
+  n_samples: 200
+  noise: 0.1
+  random_state: 42
+
+experiments:
+  exp_001_quantum_vs_classical:
+    description: "Quantum vs Classical — which learns faster?"
+    models:
+      - classical_8
+      - classical_32
+      - quantum_4q_2l
+      - quantum_6q_3l
+
+  exp_002_hybrid_architecture:
+    description: "Hybrid architecture — best of both worlds?"
+    architectures:
+      - HybridSandwich
+      - QuantumFirst
+      - ClassicalFirst
+
+  exp_003_entanglement_effect:
+    description: "Effect of quantum entanglement"
+    entanglement_types:
+      - none
+      - chain
+      - ring
+
+  exp_004_data_poisoning:
+    description: "Robustness to poisoned data"
+    poison_rates: [0.0, 0.05, 0.1, 0.2, 0.3]
+
+  exp_005_curriculum_quantum:
+    description: "Quantum curriculum learning"
+    methods:
+      - margin
+      - random
+
+  exp_006_barren_plateau:
+    description: "Barren plateau explorer"
+    n_qubits_list: [2, 4, 6, 8, 10, 12]
+
+  exp_007_self_play:
+    description: "Quantum self-play"
+    rounds: 5
+    hard_frac: 0.3

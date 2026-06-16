@@ -1,0 +1,60 @@
+---
+description: Enforces the canonical folder structure for both the QML Python lab and any Node/TypeScript backend scaffolded in this repo.
+alwaysApply: true
+---
+
+# Project Structure
+
+## QML Lab (Python)
+
+```
+src/
+├── classical/     # Classical models — Perceptron, TransformerMini, RNNMini
+├── quantum/       # QNN, HybridModel, AmplitudeEncoding
+├── data/          # generators, augmentation, poisoning
+└── training/      # trainer, metrics, curriculum
+
+experiments/
+└── exp_NNN_<name>/
+    ├── hypothesis.md   ← required BEFORE run.py
+    ├── run.py
+    └── results.md      ← filled AFTER running
+
+logs/
+└── experiments.jsonl   ← append-only, never delete
+
+dashboard/
+└── app.py              ← Streamlit
+```
+
+## Node/TypeScript Backend (when scaffolded)
+
+```
+src/
+├── @types/
+├── config/         env.ts, container.ts
+├── domain/         entities, repository interfaces, domain events, value objects
+├── application/    use cases, DTOs
+├── infrastructure/ database, cache, queue, http, outbox, logging
+├── presentation/   http routes + schemas, health endpoints
+└── shared/         Result, AppError, EventBus, pagination, utils
+```
+
+## Naming Conventions
+
+| Artifact | Pattern |
+|---|---|
+| Python modules | `snake_case.py` |
+| TypeScript files | `kebab-case.ts` |
+| TS Classes/Types | `PascalCase` |
+| TS functions/vars | `camelCase` |
+| Constants | `SCREAMING_SNAKE_CASE` |
+| Experiment folders | `exp_NNN_descriptive_name` |
+| Git branches | `feat/`, `fix/`, `exp/` prefixes |
+
+## File Creation Rules
+
+- Never create logic files outside the canonical structure above
+- Never create a `run.py` without a sibling `hypothesis.md`
+- Never create a `results.md` before running the experiment
+- Config values belong in `config/` or `config/experiments.yaml` — never hardcoded

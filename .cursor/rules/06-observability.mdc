@@ -1,0 +1,55 @@
+---
+description: Logging, correlation IDs, health checks, and OpenTelemetry standards.
+alwaysApply: true
+---
+
+# Observability Standards
+
+## Structured Logging (Pino / Python loguru)
+
+Every log entry must be JSON with these fields:
+
+```json
+{
+  "level": "info",
+  "time": "2026-01-01T00:00:00.000Z",
+  "correlationId": "uuid-v4",
+  "tenantId": "string",
+  "userId": "string | null",
+  "service": "service-name",
+  "version": "1.0.0",
+  "msg": "human-readable message",
+  "context": {}
+}
+```
+
+- Never use `console.log` — always use the configured logger instance
+- Never log passwords, tokens, or PII
+
+## Correlation ID
+
+- Generated at the start of every HTTP request
+- Propagated to all logs, queued jobs, and outbound calls via `X-Correlation-ID` header
+- Stored in `AsyncLocalStorage` (Node) or `contextvars` (Python) — never passed as a parameter
+
+## Health Endpoints (mandatory)
+
+```
+GET /health   → 200 always (liveness)
+GET /ready    → checks DB + Redis + critical deps (readiness)
+GET /metrics  → Prometheus format (latency, errors, throughput per route)
+```
+
+## OpenTelemetry
+
+- Configure `@opentelemetry/sdk-node` in bootstrap before server starts
+- Auto-instrument: Fastify, Prisma, Redis, BullMQ
+- Export to OTLP endpoint via env var `OTLP_ENDPOINT`
+- Every span includes `tenantId` and `correlationId` attributes
+
+## Python Experiments
+
+For QML experiment scripts, log at minimum:
+- Experiment start: `exp_id`, `model_name`, `started_at`
+- Each epoch: `epoch`, `loss`, `accuracy`
+- Experiment end: `elapsed_s`, `final_acc`, written to `logs/experiments.jsonl`

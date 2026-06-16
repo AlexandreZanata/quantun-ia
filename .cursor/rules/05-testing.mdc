@@ -1,0 +1,71 @@
+---
+description: TDD discipline, test structure, coverage thresholds, and test anti-patterns.
+alwaysApply: true
+---
+
+# Testing Standards — TDD First
+
+## Workflow (Red → Green → Refactor)
+
+1. **Red** — write the failing test before any implementation
+2. **Green** — implement the minimum to make it pass
+3. **Refactor** — clean up without breaking tests
+
+Never write implementation code without a failing test first.
+
+## Test Hierarchy
+
+```
+tests/
+├── unit/          # Entities, Value Objects, Use Cases (mocked repos)
+├── integration/   # Real repos with Testcontainers (PostgreSQL + Redis)
+├── e2e/           # Full HTTP with real server + real DB
+└── contracts/     # API contracts (Zod schemas exported)
+```
+
+## Required Tests per Use Case
+
+- [ ] Happy path
+- [ ] Each possible domain error
+- [ ] Idempotency (where applicable)
+- [ ] Repository called with correct `tenantId`
+
+## Required Tests per HTTP Route
+
+- [ ] Missing auth → `401`
+- [ ] Insufficient permission → `403`
+- [ ] Invalid payload → `422`
+- [ ] Rate limit exceeded → `429`
+- [ ] Happy path → `2xx`
+
+## Coverage Thresholds (Vitest)
+
+```typescript
+thresholds: {
+  statements: 80,
+  branches: 75,
+  functions: 80,
+  lines: 80,
+}
+```
+
+## Test Rules
+
+```typescript
+// ✅ Always reset state
+beforeEach(async () => {
+  await db.truncate()
+  redis.flushall()
+})
+
+// ❌ Never depend on test execution order
+// ❌ Never share mutable state between tests
+// ❌ Never test implementation details — test behavior
+```
+
+## Python (QML experiments)
+
+For experiment scripts, write at minimum:
+- One smoke test that imports the module and verifies shapes
+- One test that ExperimentLogger writes a valid JSON line
+- One test per utility function in `src/data/` and `src/training/`

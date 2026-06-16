@@ -1,0 +1,47 @@
+services:
+  app:
+    build:
+      context: .
+      target: dev
+    volumes:
+      - .:/app
+      - pip-cache:/root/.cache/pip
+    working_dir: /app
+    environment:
+      - PYTHONPATH=/app
+    stdin_open: true
+    tty: true
+
+  test:
+    build:
+      context: .
+      target: test
+    volumes:
+      - ./logs:/app/logs
+    environment:
+      - PYTHONPATH=/app
+
+  dashboard:
+    build:
+      context: .
+      target: dashboard
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./logs:/app/logs
+    environment:
+      - PYTHONPATH=/app
+    depends_on:
+      - app
+
+  experiment:
+    build:
+      context: .
+      target: experiment
+    volumes:
+      - ./logs:/app/logs
+    environment:
+      - PYTHONPATH=/app
+
+volumes:
+  pip-cache:

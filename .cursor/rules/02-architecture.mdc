@@ -1,0 +1,65 @@
+---
+description: Enterprise architecture patterns — Clean Architecture, Domain-Driven Design, CQRS, and Outbox Pattern.
+alwaysApply: true
+---
+
+# Architecture Patterns
+
+## Layer Boundaries (non-negotiable)
+
+```
+domain/       ← pure business logic, zero infra imports
+application/  ← use cases, DTOs, orchestration
+infrastructure/ ← DB, cache, queue, external services
+presentation/ ← HTTP routes, controllers, schemas
+shared/       ← cross-cutting utilities (Result, errors, events)
+```
+
+Imports flow **inward only**: `presentation → application → domain`.  
+`domain/` must never import from `infrastructure/` or `presentation/`.
+
+## Result Type — No Throws in Use Cases
+
+```typescript
+// ✅ CORRECT
+async execute(dto: CreateOrderDTO): Promise<Result<Order>> {
+  if (!dto.quantity) return fail(new DomainError('INVALID_QUANTITY'))
+  const order = Order.create(dto)
+  await this.repo.save(order)
+  return ok(order)
+}
+
+// ❌ WRONG — never throw in use cases
+async execute(dto) {
+  if (!dto.quantity) throw new Error('invalid')
+}
+```
+
+Controllers inspect `result.ok` and map to HTTP status codes.
+
+## Repository Pattern
+
+```typescript
+// Interface lives in domain/ — returns domain entities, never Prisma models
+interface OrderRepository {
+  findById(id: string, tenantId: string): Promise<Order | null>
+  save(order: Order): Promise<void>
+}
+// Implementation lives in infrastructure/database/repositories/
+```
+
+All repository methods receive `tenantId` explicitly. Queries without `tenantId` must not compile.
+
+## Domain Events + Outbox Pattern
+
+1. Use case persists entity + `OutboxEvent` in the same transaction
+2. `OutboxProcessor` (BullMQ worker) reads `PENDING` events and publishes to EventBus
+3. Marks event as `DONE` or increments `attempts` (max 5, then `FAILED`)
+
+Never publish events directly from a use case — always via Outbox.
+
+## CQRS (lightweight)
+
+- **Commands** → Use Cases → write to DB → emit domain events
+- **Queries** → Query Handlers → read-optimized views, separate DTOs
+- Never reuse write DTOs for read responses.

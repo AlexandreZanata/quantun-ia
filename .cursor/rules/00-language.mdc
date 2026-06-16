@@ -1,0 +1,20 @@
+---
+description: Enforces English as the only language for all code, comments, commits, and documentation in this project.
+alwaysApply: true
+---
+
+# Language Standard — English Only
+
+**All output must be in English**, without exception:
+
+- Code: variable names, function names, class names, type names
+- Comments and docstrings
+- Commit messages
+- File names and folder names
+- Error messages and log messages
+- README, hypothesis.md, results.md, and all markdown docs
+- Git branch names
+
+> The only exception is user-facing strings that are explicitly translated (UI copy in a `locales/` folder).
+
+If the user writes in Portuguese or another language, **respond in that language** but **produce all code and documentation artifacts in English**.

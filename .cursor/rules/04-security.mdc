@@ -1,0 +1,58 @@
+---
+description: Security standards — auth, multitenancy, RBAC, and forbidden patterns.
+alwaysApply: true
+---
+
+# Security Standards
+
+## Authentication
+
+- Access token: JWT RS256, **15-minute expiry**
+- Refresh token: opaque string, `httpOnly` cookie, **7-day expiry**, stored in DB
+- Refresh Token Rotation: issue a new refresh token on every use; revoke the old one
+- Revoked tokens: blacklisted in Redis with TTL = remaining token lifetime
+
+## Multitenancy (mandatory on every request)
+
+- Extract `tenantId` from JWT in `tenant.middleware.ts`
+- Reject any authenticated request without valid `tenantId` with `401`
+- All DB queries filtered by `tenantId` — enforced by repository method signatures
+- Cache keys prefixed: `tenant:{tenantId}:*`
+- BullMQ jobs include `tenantId` in payload
+- Every log line includes `tenantId` as a structured field
+
+## RBAC
+
+Roles: `SUPER_ADMIN | TENANT_ADMIN | MANAGER | OPERATOR | VIEWER`
+
+```typescript
+// ✅ Check permission, not role
+fastify.authorize(['orders:cancel'])
+
+// ❌ Never check role directly in routes
+if (user.role === 'MANAGER') { ... }
+```
+
+Permissions are `{ resource: string, action: string }` pairs.
+
+## Passwords
+
+- Hash with **Argon2id** (`argon2` library)
+- Never log passwords — not even in debug level
+
+## HTTP Security Headers (apply globally)
+
+```
+helmet                   → security headers
+@fastify/rate-limit      → per-IP and per-user rate limiting
+@fastify/csrf-protection → CSRF for cookie routes
+cors                     → origin whitelist, never wildcard in production
+```
+
+## Forbidden
+
+- Wildcard CORS in production
+- Storing plain-text passwords or tokens
+- Logging sensitive fields (password, token, creditCard)
+- Queries without `tenantId` filter
+- Physical record deletion

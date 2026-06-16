@@ -1,0 +1,75 @@
+---
+description: TypeScript strict-mode standards — no-any, error handling, naming conventions, and anti-patterns.
+globs: **/*.ts,**/*.tsx
+alwaysApply: false
+---
+
+# TypeScript Standards
+
+## Strict Rules (ESLint must block these)
+
+```typescript
+// ❌ any is forbidden
+const data: any = fetch()
+
+// ❌ floating promises
+someAsyncFn()
+
+// ❌ console.log — use the Pino logger
+console.log('debug')
+
+// ❌ hardcoded config values
+const port = 3000
+```
+
+## Naming Conventions
+
+| Construct | Convention | Example |
+|---|---|---|
+| Classes / Types / Interfaces | PascalCase | `OrderRepository` |
+| Functions / variables | camelCase | `createOrder` |
+| Constants | SCREAMING_SNAKE | `MAX_RETRY_ATTEMPTS` |
+| Files | kebab-case | `order-repository.ts` |
+| Folders | kebab-case | `use-cases/` |
+
+## Entity Baseline Fields
+
+Every domain entity must have:
+```typescript
+id: string        // ULID
+tenantId: string
+createdAt: Date
+updatedAt: Date
+deletedAt: Date | null   // soft delete only — never hard delete
+version: number          // optimistic locking
+```
+
+## Value Objects
+
+```typescript
+// ✅ Immutable, validates on construction
+class Email {
+  private constructor(readonly value: string) {}
+  static create(raw: string): Result<Email> {
+    if (!raw.includes('@')) return fail(new DomainError('INVALID_EMAIL'))
+    return ok(new Email(raw))
+  }
+}
+```
+
+## Error Handling
+
+```typescript
+// ✅ Structured errors with codes
+throw new AppError('RESOURCE_NOT_FOUND', 'Order not found', 404, { orderId })
+
+// ❌ Raw Error
+throw new Error('not found')
+```
+
+## Forbidden Patterns
+
+- `delete` on DB records — always set `deletedAt`
+- Direct Prisma models returned from repositories — map to domain entities
+- Tests that depend on execution order
+- Tests without `beforeEach`/`afterEach` state cleanup
