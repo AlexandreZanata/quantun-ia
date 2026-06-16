@@ -14,6 +14,7 @@ MODULES = [
     "src.data.splits",
     "src.training.holdout",
     "src.training.statistics",
+    "src.training.protocol",
     "src.training.self_play",
     "src.data.augmentation",
     "src.quantum.amplitude_encoding",

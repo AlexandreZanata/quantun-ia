@@ -19,6 +19,7 @@ from src.training.config import load_experiment_config
 from src.training.holdout import compare_conditions, summarize_multi_seed
 from src.training.metrics import ExperimentLogger
 from src.training.self_play import self_play_train
+from src.training.protocol import log_experiment_protocol, task_learnable
 from src.training.structured_log import init_correlation_id, log_event
 
 EXP_KEY = "exp_007_self_play"
@@ -29,6 +30,7 @@ if __name__ == "__main__":
     init_correlation_id()
     cfg = load_experiment_config(EXP_KEY)
     seeds = cfg.get("seeds", [cfg["random_state"]])
+    log_experiment_protocol(EXP_ID, cfg)
     log_event("info", "experiment run started", exp_id=EXP_ID, seeds=seeds)
 
     base_holdouts: list[float] = []
@@ -97,5 +99,15 @@ if __name__ == "__main__":
         {"self_play_base": base_holdouts, "self_play_best": best_holdouts},
     )
     compare_conditions(EXP_ID, best_holdouts, base_holdouts, "self_play_best", "self_play_base")
+
+    threshold = cfg.get("learnability_threshold", 0.55)
+    log_event(
+        "info",
+        "self-play applicability",
+        exp_id=EXP_ID,
+        base_task_learnable=task_learnable(base_holdouts, threshold),
+        threshold=threshold,
+        self_play_applicable=task_learnable(base_holdouts, threshold),
+    )
 
     log_event("info", "experiment run finished", exp_id=EXP_ID)

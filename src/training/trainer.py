@@ -73,7 +73,7 @@ def train_model(
             test_loss=holdout["loss"],
             eval_set="holdout_test",
         )
-    log.finish(elapsed, **finish_extra)
+    log.finish(elapsed, n_params=n_params, **finish_extra)
     log_event(
         "info",
         "training complete",

@@ -17,7 +17,8 @@ from src.data.splits import split_train_test
 from src.quantum.qnn_amplitude import QuantumNetAmplitude
 from src.quantum.qnn_basic import QuantumNetBasic
 from src.training.config import load_experiment_config
-from src.training.holdout import summarize_multi_seed
+from src.training.holdout import compare_conditions, summarize_multi_seed
+from src.training.protocol import log_experiment_protocol, task_learnable
 from src.training.structured_log import init_correlation_id, log_event
 
 EXP_KEY = "exp_004_data_poisoning"
@@ -38,6 +39,7 @@ if __name__ == "__main__":
     init_correlation_id()
     cfg = load_experiment_config(EXP_KEY)
     seeds = cfg.get("seeds", [cfg["random_state"]])
+    log_experiment_protocol(EXP_ID, cfg)
     log_event("info", "experiment run started", exp_id=EXP_ID, seeds=seeds)
 
     # results[model_key][poison_rate] = list of holdout acc per seed
@@ -101,6 +103,21 @@ if __name__ == "__main__":
             summary_at_rates[key] = quantum_by_encoding[encoding][rate]
 
     summarize_multi_seed(EXP_ID, summary_at_rates)
+
+    compare_conditions(
+        EXP_ID,
+        classical_by_rate[0.0],
+        quantum_by_encoding["amplitude"][0.0],
+        "classical_poison_0",
+        "quantum_amplitude_poison_0",
+    )
+    compare_conditions(
+        EXP_ID,
+        classical_by_rate[0.3],
+        quantum_by_encoding["amplitude"][0.3],
+        "classical_poison_30",
+        "quantum_amplitude_poison_30",
+    )
 
     classical_results = {r: sum(v) / len(v) for r, v in classical_by_rate.items()}
     quantum_results = {

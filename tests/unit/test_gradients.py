@@ -12,6 +12,7 @@ def test_measure_gradient_variance_finite():
 
     variances = measure_gradient_variance(factory, [2, 4], n_samples=3)
     assert 2 in variances and 4 in variances
-    for v in variances.values():
-        assert not torch.isnan(torch.tensor(v))
-        assert v >= 0.0
+    for stats in variances.values():
+        assert not torch.isnan(torch.tensor(stats["mean"]))
+        assert stats["mean"] >= 0.0
+        assert stats["ci_low"] <= stats["mean"] <= stats["ci_high"]

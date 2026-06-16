@@ -15,6 +15,7 @@ from src.quantum.qnn_basic import QuantumNetBasic
 from src.training.config import load_experiment_config
 from src.training.curriculum import sort_by_difficulty, train_curriculum_batched
 from src.training.holdout import compare_conditions, summarize_multi_seed
+from src.training.protocol import log_experiment_protocol, task_learnable
 from src.training.structured_log import init_correlation_id, log_event
 
 EXP_KEY = "exp_005_curriculum_quantum"
@@ -63,6 +64,7 @@ if __name__ == "__main__":
     init_correlation_id()
     cfg = load_experiment_config(EXP_KEY)
     seeds = cfg.get("seeds", [cfg["random_state"]])
+    log_experiment_protocol(EXP_ID, cfg)
     log_event("info", "experiment run started", exp_id=EXP_ID, seeds=seeds)
 
     results_by_method: dict[str, list[float]] = {m: [] for m in cfg["methods"]}
@@ -101,5 +103,16 @@ if __name__ == "__main__":
             "margin_batches",
             "random",
         )
+
+    threshold = cfg.get("learnability_threshold", 0.55)
+    learnable = task_learnable(results_by_method.get("random", []), threshold)
+    log_event(
+        "info",
+        "curriculum learnability gate",
+        exp_id=EXP_ID,
+        task_learnable=learnable,
+        threshold=threshold,
+        random_mean=sum(results_by_method.get("random", [])) / max(len(results_by_method.get("random", [])), 1),
+    )
 
     log_event("info", "experiment run finished", exp_id=EXP_ID)

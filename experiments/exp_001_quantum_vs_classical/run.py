@@ -13,6 +13,7 @@ from src.data.splits import split_train_test
 from src.quantum.qnn_basic import QuantumNetBasic
 from src.training.config import load_experiment_config
 from src.training.holdout import compare_conditions, summarize_multi_seed, train_with_holdout
+from src.training.protocol import log_experiment_protocol
 from src.training.structured_log import init_correlation_id, log_event
 
 EXP_KEY = "exp_001_quantum_vs_classical"
@@ -53,6 +54,7 @@ if __name__ == "__main__":
     cfg = load_experiment_config(EXP_KEY)
     seeds = cfg.get("seeds", [cfg["random_state"]])
     model_names = cfg.get("models", [])
+    log_experiment_protocol(EXP_ID, cfg)
     log_event("info", "experiment run started", exp_id=EXP_ID, seeds=seeds)
 
     results_by_model: dict[str, list[float]] = {name: [] for name in model_names}

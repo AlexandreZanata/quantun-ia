@@ -35,6 +35,13 @@ experiments:
       - HybridSandwich
       - QuantumFirst
       - ClassicalFirst
+    model_configs:
+      hybrid_sandwich:
+        learning_rate: 0.02
+      quantum_first:
+        learning_rate: 0.02
+      classical_first:
+        learning_rate: 0.02
 
   exp_003_entanglement_effect:
     description: "Quantum entanglement — circles, 10 seeds"
@@ -79,6 +86,7 @@ experiments:
     n_qubits: 4
     n_layers: 1
     learning_rate: 0.02
+    learnability_threshold: 0.55
 
   exp_006_barren_plateau:
     description: "Barren plateau — 50 gradient samples per qubit count"
@@ -96,3 +104,4 @@ experiments:
     n_qubits: 4
     n_layers: 1
     learning_rate: 0.02
+    learnability_threshold: 0.55

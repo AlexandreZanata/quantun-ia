@@ -6,6 +6,8 @@ import numpy as np
 import torch
 import torch.nn as nn
 
+from src.training.statistics import bootstrap_ci, seed_summary
+
 
 def measure_gradient_variance(
     model_factory,
@@ -13,13 +15,9 @@ def measure_gradient_variance(
     n_samples: int = 20,
     batch_size: int = 10,
     input_dim: int = 2,
-) -> dict[int, float]:
-    """Mean gradient variance across random initializations.
-
-    Concatenates all parameter gradients into one vector before computing
-    variance — avoids NaN from scalar per-parameter `.var()` calls.
-    """
-    variances: dict[int, float] = {}
+) -> dict[int, dict]:
+    """Gradient variance per qubit count with bootstrap 95% CI across random inits."""
+    results: dict[int, dict] = {}
     for n_q in n_qubits_list:
         sample_vars: list[float] = []
         for _ in range(n_samples):
@@ -40,5 +38,15 @@ def measure_gradient_variance(
             if grad_flat.numel() > 1:
                 sample_vars.append(grad_flat.var().item())
 
-        variances[n_q] = float(np.mean(sample_vars)) if sample_vars else 0.0
-    return variances
+        if sample_vars:
+            stats = seed_summary(sample_vars)
+            results[n_q] = {
+                "mean": stats["mean"],
+                "std": stats["std"],
+                "ci_low": stats["ci_low"],
+                "ci_high": stats["ci_high"],
+                "n_samples": stats["n_seeds"],
+            }
+        else:
+            results[n_q] = {"mean": 0.0, "std": 0.0, "ci_low": 0.0, "ci_high": 0.0, "n_samples": 0}
+    return results

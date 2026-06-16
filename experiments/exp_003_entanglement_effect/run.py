@@ -12,6 +12,7 @@ from src.data.splits import split_train_test
 from src.quantum.qnn_entangled import QuantumNetEntangled
 from src.training.config import load_experiment_config
 from src.training.holdout import compare_conditions, summarize_multi_seed, train_with_holdout
+from src.training.protocol import log_experiment_protocol
 from src.training.structured_log import init_correlation_id, log_event
 
 EXP_KEY = "exp_003_entanglement_effect"
@@ -36,6 +37,7 @@ if __name__ == "__main__":
     init_correlation_id()
     cfg = load_experiment_config(EXP_KEY)
     seeds = cfg.get("seeds", [cfg["random_state"]])
+    log_experiment_protocol(EXP_ID, cfg)
     log_event("info", "experiment run started", exp_id=EXP_ID, seeds=seeds)
 
     results_by_model: dict[str, list[float]] = {
@@ -70,12 +72,12 @@ if __name__ == "__main__":
             results_by_model[name].append(metrics["accuracy"])
 
     summarize_multi_seed(EXP_ID, results_by_model)
-    if "entanglement_chain" in results_by_model and "entanglement_none" in results_by_model:
+    if "entanglement_chain_half" in results_by_model and "entanglement_none" in results_by_model:
         compare_conditions(
             EXP_ID,
-            results_by_model["entanglement_chain"],
+            results_by_model["entanglement_chain_half"],
             results_by_model["entanglement_none"],
-            "entanglement_chain",
+            "entanglement_chain_half",
             "entanglement_none",
         )
     log_event("info", "experiment run finished", exp_id=EXP_ID)
