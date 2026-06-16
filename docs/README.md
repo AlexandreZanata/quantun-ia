@@ -6,9 +6,9 @@ Welcome to the **Quantum-Inspired Micro ML Lab** documentation.
 
 | Document | Description |
 |----------|-------------|
-| [Getting Started](getting-started.md) | Install, Docker setup, run your first experiment |
+| [Getting Started](getting-started.md) | Install, venv, Docker, dashboard, run all experiments |
 | [Architecture](architecture.md) | Code structure, module responsibilities, data flow |
-| [Experiments](experiments.md) | All 7 experiments — goals, metrics, how to run |
+| [Experiments](experiments.md) | All 7 experiments — goals, ablations, known flags |
 | [Hypothesis Workflow](hypothesis-workflow.md) | Mandatory hypothesis-first discipline |
 | [Testing](testing.md) | Test pyramid, coverage thresholds, CI pipeline |
 | [Docker](docker.md) | Container services, Makefile targets, troubleshooting |
@@ -16,11 +16,14 @@ Welcome to the **Quantum-Inspired Micro ML Lab** documentation.
 ## Quick Reference
 
 ```bash
-make docker-build    # Build all images
-make test            # Run full test suite in Docker
-make experiment      # Run EXP 001
-make dashboard       # Start Streamlit on :8501
-make lint            # Run ruff linter
+# Local workflow
+source .venv/bin/activate
+pytest tests/ -v
+python experiments/exp_001_quantum_vs_classical/run.py
+make dashboard-local          # http://localhost:8501
+
+# Docker workflow
+make docker-build && make test && make experiment && make dashboard
 ```
 
 ## Conventions
@@ -29,3 +32,5 @@ make lint            # Run ruff linter
 - **Logs:** `logs/experiments.jsonl` is append-only — never delete entries
 - **Hypothesis:** Write `hypothesis.md` before every `run.py` execution
 - **Results:** Fill `results.md` after every experiment completes
+- **Config:** Hyperparameters in `config/experiments.yaml`, loaded via `src/training/config.py`
+- **Splits:** `src/data/splits.py` — always split before poisoning or curriculum

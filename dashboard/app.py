@@ -50,13 +50,78 @@ h1, h2, h3 {
     letter-spacing: 2px;
 }
 
-.retro-box {
-    border: 2px solid #33ff66;
-    box-shadow: 0 0 12px #33ff6633, inset 0 0 20px #33ff6608;
-    padding: 1rem 1.2rem;
-    margin-bottom: 1rem;
-    background: #080f08;
+.monitor-header {
+    border: 1px solid #33ff66;
+    box-shadow: 0 0 24px rgba(51, 255, 102, 0.15), inset 0 0 40px rgba(51, 255, 102, 0.03);
+    background: linear-gradient(180deg, #0c140c 0%, #060a06 100%);
+    padding: 0;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
 }
+
+.monitor-titlebar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.55rem 1rem;
+    background: #0f1a0f;
+    border-bottom: 1px solid rgba(51, 255, 102, 0.35);
+    font-family: 'VT323', monospace;
+    font-size: 1.05rem;
+    letter-spacing: 1px;
+}
+
+.monitor-titlebar .title {
+    color: #33ff66;
+    text-shadow: 0 0 10px rgba(51, 255, 102, 0.4);
+}
+
+.monitor-titlebar .badge {
+    color: #050805;
+    background: #33ff66;
+    padding: 0.1rem 0.55rem;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+}
+
+.monitor-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0;
+    border-bottom: 1px solid rgba(51, 255, 102, 0.2);
+}
+
+.monitor-stat {
+    padding: 0.9rem 1rem;
+    border-right: 1px solid rgba(51, 255, 102, 0.15);
+}
+.monitor-stat:last-child { border-right: none; }
+
+.monitor-stat .label {
+    font-size: 0.65rem;
+    color: #1a992a;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+}
+
+.monitor-stat .value {
+    font-family: 'VT323', monospace;
+    font-size: 1.35rem;
+    color: #ffb000;
+    text-shadow: 0 0 8px rgba(255, 176, 0, 0.3);
+}
+
+.monitor-console {
+    padding: 0.75rem 1rem 1rem;
+    font-size: 0.78rem;
+    line-height: 1.65;
+    color: #2dcc52;
+}
+
+.monitor-console .line-ok  { color: #33ff66; }
+.monitor-console .line-dim { color: #1a7a28; }
+.monitor-console .prompt  { color: #00e5ff; }
 
 .retro-amber { color: #ffb000 !important; }
 .retro-dim   { color: #1a992a !important; }
@@ -110,25 +175,42 @@ PLOT_LAYOUT = dict(
     font=dict(family="Share Tech Mono, monospace", color="#33ff66", size=12),
     xaxis=dict(gridcolor="#1a3a1a", zerolinecolor="#1a3a1a"),
     yaxis=dict(gridcolor="#1a3a1a", zerolinecolor="#1a3a1a"),
-    legend=dict(bgcolor="#080f08", bordercolor="#33ff6644"),
+    legend=dict(bgcolor="#080f08", bordercolor="rgba(51, 255, 102, 0.27)"),
     margin=dict(l=40, r=20, t=50, b=40),
 )
 
 NEON_COLORS = ["#33ff66", "#ffb000", "#00e5ff", "#ff3366", "#cc66ff", "#ffff33"]
 
 
-def retro_header() -> None:
+def retro_header(*, run_count: int, best_model: str | None, best_acc: float | None) -> None:
+    best_label = f"{best_model} ({best_acc:.1f}%)" if best_model and best_acc is not None else "—"
     st.markdown(
-        """
-<div class="retro-box">
-<pre style="margin:0; font-size:0.85rem; line-height:1.3; color:#33ff66;">
-╔══════════════════════════════════════════════════════════════════════╗
-║  QUANTUN-IA BENCHMARK MONITOR v1.0          dial-up compatible ☎    ║
-║  ──────────────────────────────────────────────────────────────────  ║
-║  &gt; LOAD logs/experiments.jsonl ... OK                                 ║
-║  &gt; RENDER charts .................. OK                                 ║
-╚══════════════════════════════════════════════════════════════════════╝
-</pre>
+        f"""
+<div class="monitor-header">
+  <div class="monitor-titlebar">
+    <span class="title">◈ QUANTUN-IA BENCHMARK MONITOR</span>
+    <span class="badge">v1.0 · ONLINE</span>
+  </div>
+  <div class="monitor-body">
+    <div class="monitor-stat">
+      <div class="label">Data source</div>
+      <div class="value">experiments.jsonl</div>
+    </div>
+    <div class="monitor-stat">
+      <div class="label">Runs loaded</div>
+      <div class="value">{run_count}</div>
+    </div>
+    <div class="monitor-stat">
+      <div class="label">Leader</div>
+      <div class="value" style="font-size:1.05rem">{best_label}</div>
+    </div>
+  </div>
+  <div class="monitor-console">
+    <span class="prompt">quantun@lab:~$</span> load logs/experiments.jsonl<br>
+    <span class="line-ok">  ✓ parsed {run_count} benchmark record{"s" if run_count != 1 else ""}</span><br>
+    <span class="line-ok">  ✓ charts ready</span><br>
+    <span class="line-dim">  ── retro terminal mode · quantum ml lab · 2026</span>
+  </div>
 </div>
         """,
         unsafe_allow_html=True,
@@ -222,11 +304,16 @@ def main() -> None:
     )
     st.markdown(f"<style>{RETRO_CSS}</style>", unsafe_allow_html=True)
 
-    retro_header()
-    st.markdown("## ◈ BENCHMARK RESULTS")
-
     records = load_records()
     rows = to_benchmark_rows(records)
+    best = best_row(rows)
+
+    retro_header(
+        run_count=len(rows),
+        best_model=best["model"] if best else None,
+        best_acc=best["accuracy"] if best else None,
+    )
+    st.markdown("## ◈ BENCHMARK RESULTS")
 
     if not rows:
         st.markdown(
@@ -237,7 +324,6 @@ def main() -> None:
         st.stop()
 
     df = pd.DataFrame(rows)
-    best = best_row(rows)
 
     c1, c2, c3, c4 = st.columns(4)
     with c1:
@@ -281,16 +367,21 @@ def main() -> None:
     st.plotly_chart(learning_curves(records, selected), use_container_width=True)
 
     st.markdown("### ◈ FULL BENCHMARK TABLE")
-    display_df = df.sort_values("accuracy", ascending=False).rename(
-        columns={
-            "exp_id": "EXPERIMENT",
-            "model": "MODEL",
-            "accuracy": "ACC %",
-            "loss": "LOSS",
-            "elapsed_s": "TIME(s)",
-            "epochs": "EPOCHS",
-            "started_at": "DATE",
-        }
+    table_cols = ["exp_id", "model", "accuracy", "loss", "elapsed_s", "epochs", "started_at"]
+    display_df = (
+        df[table_cols]
+        .sort_values("accuracy", ascending=False)
+        .rename(
+            columns={
+                "exp_id": "EXPERIMENT",
+                "model": "MODEL",
+                "accuracy": "ACC %",
+                "loss": "LOSS",
+                "elapsed_s": "TIME(s)",
+                "epochs": "EPOCHS",
+                "started_at": "DATE",
+            }
+        )
     )
     st.dataframe(display_df, use_container_width=True, hide_index=True)
 

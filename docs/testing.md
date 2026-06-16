@@ -45,7 +45,8 @@ Configured in `pyproject.toml`:
 | `unit/test_metrics.py` | ExperimentLogger writes valid JSON |
 | `unit/test_config.py` | Config loader merges defaults |
 | `unit/test_base_model.py` | TrainableMixin contract (train/predict/evaluate) |
-| `unit/test_structured_log.py` | JSON structured logging |
+| `unit/test_splits.py` | Stratified train/test split |
+| `unit/test_gradients.py` | Gradient variance is finite (no NaN) |
 | `smoke/test_models.py` | Forward passes for all model families |
 | `unit/test_poisoning.py` | Label flip + robustness measurement |
 | `unit/test_generators.py` | Dataset shape, dtype, reproducibility |

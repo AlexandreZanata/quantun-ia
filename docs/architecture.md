@@ -31,6 +31,7 @@ dashboard/
 | Module | Purpose |
 |--------|---------|
 | `generators.py` | Synthetic binary classification datasets (moons, circles) |
+| `splits.py` | Stratified train/test split (before preprocessing) |
 | `augmentation.py` | Gaussian noise, label flip augmentation |
 | `poisoning.py` | Intentional label corruption for robustness tests |
 
@@ -48,7 +49,8 @@ dashboard/
 | Module | Purpose |
 |--------|---------|
 | `qnn_basic.py` | Basic variational quantum circuit (VQC) |
-| `qnn_entangled.py` | VQC with configurable entanglement (none/chain/ring) |
+| `qnn_entangled.py` | VQC with configurable entanglement (none/chain/chain_half/ring) |
+| `qnn_amplitude.py` | VQC with amplitude encoding (unit-norm required) |
 | `hybrid_model.py` | Classical-Quantum hybrid architectures |
 | `amplitude_encoding.py` | Data encoding utilities for quantum circuits |
 
@@ -61,7 +63,8 @@ dashboard/
 | `config.py` | Loads `config/experiments.yaml` |
 | `structured_log.py` | JSON structured logging via loguru |
 | `metrics.py` | `ExperimentLogger` — writes to `logs/experiments.jsonl` |
-| `curriculum.py` | Difficulty-based example ordering |
+| `curriculum.py` | Difficulty-based ordering and staged batch training |
+| `gradients.py` | Gradient variance measurement (barren plateau) |
 
 ## Model Interface Contract
 

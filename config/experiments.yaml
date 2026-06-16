@@ -7,6 +7,7 @@ defaults:
   n_samples: 200
   noise: 0.1
   random_state: 42
+  test_size: 0.3
 
 experiments:
   exp_001_quantum_vs_classical:
@@ -29,23 +30,30 @@ experiments:
     entanglement_types:
       - none
       - chain
+      - chain_half
       - ring
 
   exp_004_data_poisoning:
-    description: "Robustness to poisoned data"
+    description: "Robustness to poisoned data (train poisoned, eval on clean holdout)"
     poison_rates: [0.0, 0.05, 0.1, 0.2, 0.3]
+    encodings:
+      - angle
+      - amplitude
 
   exp_005_curriculum_quantum:
     description: "Quantum curriculum learning"
     methods:
-      - margin
       - random
+      - margin_batches
+    curriculum_stages: 4
+    epochs_per_stage: 12
 
   exp_006_barren_plateau:
     description: "Barren plateau explorer"
-    n_qubits_list: [2, 4, 6, 8, 10, 12]
+    n_qubits_list: [2, 4, 6, 8, 10]
+    grad_samples: 20
 
   exp_007_self_play:
-    description: "Quantum self-play"
+    description: "Quantum self-play (train pool separate from holdout eval)"
     rounds: 5
     hard_frac: 0.3

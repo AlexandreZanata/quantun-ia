@@ -1,4 +1,6 @@
-.PHONY: dev test test-watch lint lint-fix coverage dashboard experiment docker-build docker-test docker-lint clean
+.PHONY: dev test test-watch lint lint-fix coverage dashboard dashboard-local experiment docker-build docker-test docker-lint clean
+
+PYTHON ?= $(shell test -x .venv/bin/python && echo .venv/bin/python || echo python3)
 
 dev:
 	docker compose up app
@@ -22,8 +24,8 @@ dashboard:
 	docker compose up dashboard
 
 dashboard-local:
-	@python dashboard/terminal_report.py
-	@streamlit run dashboard/app.py --server.headless true
+	@$(PYTHON) dashboard/terminal_report.py
+	@$(PYTHON) -m streamlit run dashboard/app.py --server.headless true
 
 experiment:
 	docker compose run --rm experiment

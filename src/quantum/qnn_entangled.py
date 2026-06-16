@@ -20,6 +20,9 @@ def make_entangled_circuit(n_qubits: int, n_layers: int, entanglement: str = "ch
             if entanglement == "chain":
                 for i in range(n_qubits - 1):
                     qml.CNOT(wires=[i, i + 1])
+            elif entanglement == "chain_half":
+                for i in range(0, n_qubits - 1, 2):
+                    qml.CNOT(wires=[i, i + 1])
             elif entanglement == "ring":
                 for i in range(n_qubits):
                     qml.CNOT(wires=[i, (i + 1) % n_qubits])
