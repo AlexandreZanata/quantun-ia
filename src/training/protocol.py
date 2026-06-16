@@ -2,6 +2,10 @@
 
 from __future__ import annotations
 
+import json
+from datetime import datetime
+
+from src.training import metrics as metrics_module
 from src.training.structured_log import log_event
 
 
@@ -27,3 +31,45 @@ def task_learnable(holdout_accuracies: list[float], threshold: float = 0.55) -> 
     if not holdout_accuracies:
         return False
     return sum(holdout_accuracies) / len(holdout_accuracies) >= threshold
+
+
+def log_applicability_gate(
+    exp_id: str,
+    technique: str,
+    applicable: bool,
+    *,
+    threshold: float,
+    mean_holdout: float,
+    reason: str = "",
+) -> dict:
+    """Log whether a training technique (curriculum, self-play) is applicable on this task."""
+    status = "applicable" if applicable else "not_applicable"
+    payload = {
+        "exp_id": exp_id,
+        "model_name": f"{exp_id}_{technique}_applicability",
+        "record_type": "applicability_gate",
+        "technique": technique,
+        "status": status,
+        "applicable": applicable,
+        "threshold": threshold,
+        "mean_holdout": mean_holdout,
+        "reason": reason or (
+            f"mean holdout {mean_holdout:.3f} {'>=' if applicable else '<'} threshold {threshold}"
+        ),
+        "started_at": datetime.now().isoformat(),
+    }
+    log_event(
+        "info",
+        "technique applicability gate",
+        exp_id=exp_id,
+        technique=technique,
+        applicable=applicable,
+        status=status,
+        mean_holdout=mean_holdout,
+        threshold=threshold,
+    )
+    log_path = metrics_module.LOGS_PATH
+    log_path.parent.mkdir(exist_ok=True)
+    with open(log_path, "a") as f:
+        f.write(json.dumps(payload) + "\n")
+    return payload

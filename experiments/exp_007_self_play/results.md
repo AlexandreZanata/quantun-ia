@@ -1,29 +1,26 @@
-# Results — EXP 007
+# Results — EXP 007 (Self-Play — re-upload base)
 
-**Date:** 2026-06-16  
-**Publication profile:** circles, n=500, noise=0.2, 10 seeds, hard_frac=0.3, best-checkpoint  
-**Stats:** Wilcoxon self_play_best vs self_play_base
+**Run date:** 2026-06-16  
+**Profile:** circles, n=500, noise=0.2, 10 seeds, QuantumNetReupload (4q, 3 layers)
 
-## What happened
+## Applicability gate
+| Technique | Status | Base holdout | Threshold |
+|-----------|--------|--------------|-----------|
+| self_play | **applicable** | 59.3% | 55% |
 
-| Phase | Mean holdout | Std | 95% CI |
-|-------|-------------|-----|--------|
-| Base | 53.3% | ±4.1% | [50.9%, 56.0%] |
-| Best checkpoint | 53.5% | ±4.0% | [51.3%, 56.1%] |
+## Holdout results
+| Phase | Mean | 95% CI |
+|-------|------|--------|
+| self_play_base | 59.3% | [54.8%, 63.3%] |
+| self_play_best | 60.4% | [57.1%, 63.6%] |
 
-**Paired Wilcoxon:** Δ=+0.2%, p=0.50 → **not significant**.
+## Paired Wilcoxon
+| Comparison | Mean diff | p-value | Significant |
+|------------|-----------|---------|-------------|
+| self_play_best vs base | +1.1 pp | 1.0 | no |
 
-Self-play stable (no oscillation) but provides no measurable gain on circles.
+## Conclusion
+Self-play is now applicable with re-upload base but provides **no significant gain** (+1.1 pp). Checkpoint stabilization works; hard-example mining does not help on circles.
 
-## Comparison with hypothesis
-
-Self-play hypothesis **not supported** when base model is weak (~53%). Hard-example fine-tuning cannot improve what barely learns.
-
-## Unexpected finding
-
-Checkpoint revert fix works (no 50%↔88% swings) but reveals the algorithm has no effect when base accuracy ≈ chance.
-
-## Suggested next experiment
-
-- Self-play only when base holdout > 65%
-- Ensemble of seed checkpoints instead of iterative hard mining
+## Suggested ablation
+- Higher hard_frac or more rounds with re-upload base.

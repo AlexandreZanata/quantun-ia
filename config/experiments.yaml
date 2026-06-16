@@ -19,6 +19,7 @@ experiments:
       - classical_32
       - quantum_4q_2l
       - quantum_6q_3l
+      - quantum_reupload_4q_3l
     model_configs:
       quantum_4q_2l:
         n_qubits: 4
@@ -27,6 +28,11 @@ experiments:
       quantum_6q_3l:
         n_qubits: 6
         n_layers: 2
+        learning_rate: 0.02
+      quantum_reupload_4q_3l:
+        qnn_type: reupload
+        n_qubits: 4
+        n_layers: 3
         learning_rate: 0.02
 
   exp_002_hybrid_architecture:
@@ -76,15 +82,16 @@ experiments:
         learning_rate: 0.02
 
   exp_005_curriculum_quantum:
-    description: "Quantum curriculum — circles, 10 seeds, Wilcoxon vs random"
+    description: "Quantum curriculum on re-upload QNN — circles, 10 seeds, Wilcoxon vs random"
     methods:
       - random
       - margin_batches
     curriculum_stages: 4
     epochs_per_stage: 12
     refine_epochs: 12
+    qnn_type: reupload
     n_qubits: 4
-    n_layers: 1
+    n_layers: 3
     learning_rate: 0.02
     learnability_threshold: 0.55
 
@@ -94,14 +101,33 @@ experiments:
     grad_samples: 50
 
   exp_007_self_play:
-    description: "Self-play — circles, 10 seeds, capped hard_frac, best checkpoint"
+    description: "Self-play on re-upload QNN — circles, 10 seeds, capped hard_frac"
     rounds: 5
     hard_frac: 0.3
     min_hard: 5
     fine_tune_epochs: 15
     revert_threshold: 0.05
     base_epochs: 50
+    qnn_type: reupload
     n_qubits: 4
-    n_layers: 1
+    n_layers: 3
     learning_rate: 0.02
     learnability_threshold: 0.55
+
+  exp_008_data_reupload:
+    description: "Data re-uploading QNN vs basic QNN vs param-matched classical — circles, 10 seeds"
+    models:
+      - quantum_basic
+      - quantum_reupload
+      - classical_matched
+    model_configs:
+      quantum_basic:
+        n_qubits: 4
+        n_layers: 1
+        learning_rate: 0.02
+      quantum_reupload:
+        n_qubits: 4
+        n_layers: 3
+        learning_rate: 0.02
+      classical_matched:
+        learning_rate: 0.01

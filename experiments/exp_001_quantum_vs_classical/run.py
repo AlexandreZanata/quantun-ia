@@ -1,6 +1,7 @@
 """
 EXP 001 — Quantum vs Classical
-Holdout evaluation on 30% test split; repeated across 3 seeds with bootstrap CI.
+Holdout evaluation on 30% test split; repeated across 10 seeds with bootstrap CI.
+Includes data re-uploading QNN (exp_008 follow-up).
 """
 import sys
 from pathlib import Path
@@ -11,6 +12,7 @@ from src.classical.mlp import ClassicalNet
 from src.data.generators import make_binary_classification
 from src.data.splits import split_train_test
 from src.quantum.qnn_basic import QuantumNetBasic
+from src.quantum.qnn_reupload import QuantumNetReupload
 from src.training.config import load_experiment_config
 from src.training.holdout import compare_conditions, summarize_multi_seed, train_with_holdout
 from src.training.protocol import log_experiment_protocol
@@ -41,6 +43,15 @@ def build_model(name: str, cfg: dict):
         return (
             QuantumNetBasic(
                 n_qubits=model_cfg.get("n_qubits", 6),
+                n_layers=model_cfg.get("n_layers", 3),
+                input_dim=2,
+            ),
+            lr,
+        )
+    if name == "quantum_reupload_4q_3l":
+        return (
+            QuantumNetReupload(
+                n_qubits=model_cfg.get("n_qubits", 4),
                 n_layers=model_cfg.get("n_layers", 3),
                 input_dim=2,
             ),
@@ -86,6 +97,7 @@ if __name__ == "__main__":
             results_by_model[name].append(metrics["accuracy"])
 
     summarize_multi_seed(EXP_ID, results_by_model)
+
     if "classical_32" in results_by_model and "quantum_4q_2l" in results_by_model:
         compare_conditions(
             EXP_ID,
@@ -94,4 +106,21 @@ if __name__ == "__main__":
             "classical_32",
             "quantum_4q_2l",
         )
+    if "quantum_reupload_4q_3l" in results_by_model and "quantum_4q_2l" in results_by_model:
+        compare_conditions(
+            EXP_ID,
+            results_by_model["quantum_reupload_4q_3l"],
+            results_by_model["quantum_4q_2l"],
+            "quantum_reupload_4q_3l",
+            "quantum_4q_2l",
+        )
+    if "classical_32" in results_by_model and "quantum_reupload_4q_3l" in results_by_model:
+        compare_conditions(
+            EXP_ID,
+            results_by_model["classical_32"],
+            results_by_model["quantum_reupload_4q_3l"],
+            "classical_32",
+            "quantum_reupload_4q_3l",
+        )
+
     log_event("info", "experiment run finished", exp_id=EXP_ID)

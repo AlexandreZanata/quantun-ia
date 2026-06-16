@@ -11,7 +11,13 @@ import streamlit as st
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from dashboard.benchmark_data import best_row, load_records, to_benchmark_rows
+from dashboard.benchmark_data import (
+    best_row,
+    load_applicability_gates,
+    load_records,
+    param_match_table,
+    to_benchmark_rows,
+)
 from dashboard.terminal_report import print_benchmark_report
 
 RETRO_CSS = """
@@ -388,6 +394,55 @@ def main() -> None:
         )
     )
     st.dataframe(display_df, use_container_width=True, hide_index=True)
+
+    st.markdown("### ◈ PARAMETER-MATCHED BASELINE TABLE")
+    param_rows = param_match_table(records)
+    if param_rows:
+        param_df = (
+            pd.DataFrame(param_rows)
+            .sort_values(["exp_id", "n_params"])
+            .rename(
+                columns={
+                    "exp_id": "EXPERIMENT",
+                    "model": "MODEL",
+                    "n_params": "PARAMS",
+                    "accuracy_pct": "ACC %",
+                    "matched_classical_hidden": "MATCHED H",
+                    "matched_n_params": "MATCHED PARAMS",
+                    "matched_accuracy_pct": "MATCHED ACC %",
+                    "param_delta": "Δ PARAMS",
+                }
+            )
+        )
+        st.dataframe(param_df, use_container_width=True, hide_index=True)
+    else:
+        st.markdown(
+            '<p class="retro-dim">&gt; no n_params records yet — run experiments with holdout logging</p>',
+            unsafe_allow_html=True,
+        )
+
+    gates = load_applicability_gates(records)
+    st.markdown("### ◈ TECHNIQUE APPLICABILITY")
+    if gates:
+        gate_df = (
+            pd.DataFrame(gates)
+            .rename(
+                columns={
+                    "exp_id": "EXPERIMENT",
+                    "technique": "TECHNIQUE",
+                    "status": "STATUS",
+                    "mean_holdout_pct": "BASE ACC %",
+                    "threshold_pct": "THRESHOLD %",
+                    "reason": "REASON",
+                }
+            )
+        )
+        st.dataframe(gate_df, use_container_width=True, hide_index=True)
+    else:
+        st.markdown(
+            '<p class="retro-dim">&gt; no applicability gates logged yet (exp_005 / exp_007)</p>',
+            unsafe_allow_html=True,
+        )
 
     st.markdown(
         '<p class="retro-dim">[F5] refresh &nbsp;|&nbsp; logs/experiments.jsonl &nbsp;|&nbsp; quantun-ia v0.1.0</p>',

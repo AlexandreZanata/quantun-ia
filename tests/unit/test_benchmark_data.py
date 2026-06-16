@@ -1,6 +1,6 @@
 """Unit tests for dashboard benchmark row normalization."""
 
-from dashboard.benchmark_data import to_benchmark_rows
+from dashboard.benchmark_data import load_applicability_gates, param_match_table, to_benchmark_rows
 
 
 def test_to_benchmark_rows_includes_eval_set():
@@ -41,3 +41,34 @@ def test_to_benchmark_rows_skips_research_summaries():
     rows = to_benchmark_rows(records)
     assert len(rows) == 1
     assert rows[0]["model"] == "classical_32_seed42"
+
+
+def test_load_applicability_gates():
+    records = [
+        {
+            "exp_id": "exp_005",
+            "record_type": "applicability_gate",
+            "technique": "curriculum",
+            "status": "not_applicable",
+            "applicable": False,
+            "mean_holdout": 0.52,
+            "threshold": 0.55,
+            "reason": "below threshold",
+        }
+    ]
+    gates = load_applicability_gates(records)
+    assert gates[0]["status"] == "not_applicable"
+    assert gates[0]["mean_holdout_pct"] == 52.0
+
+
+def test_param_match_table_delegates():
+    records = [
+        {
+            "exp_id": "exp_008",
+            "model_name": "quantum_reupload_seed42",
+            "n_params": 30,
+            "test_accuracy": 0.6,
+        }
+    ]
+    rows = param_match_table(records)
+    assert rows[0]["model"] == "quantum_reupload"

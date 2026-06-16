@@ -7,7 +7,7 @@ import torch
 import torch.nn as nn
 
 from src.training.metrics import ExperimentLogger
-from src.training.trainer import evaluate
+from src.training.trainer import count_parameters, evaluate
 
 
 def sort_by_difficulty(X, y, method="margin"):
@@ -132,6 +132,7 @@ def train_curriculum_batched(
         test_accuracy=final["accuracy"],
         test_loss=final["loss"],
         eval_set="holdout_test",
+        n_params=count_parameters(model),
         curriculum_stages=n_stages,
         stage_holdout_metrics=stage_metrics,
     )
