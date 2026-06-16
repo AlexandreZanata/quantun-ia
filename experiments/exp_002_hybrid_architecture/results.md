@@ -1,27 +1,27 @@
 # Results — EXP 002
 
 **Date:** 2026-06-16  
-**Config:** 300 samples, 30% holdout, seeds [42, 123, 456], bootstrap 95% CI
+**Publication profile:** circles, n=500, noise=0.2, 10 seeds, bootstrap 95% CI
 
 ## What happened
 
 | Architecture | Mean holdout | Std | 95% CI |
 |--------------|-------------|-----|--------|
-| hybrid_sandwich | **83.0%** | ±3.7% | [78.9%, 87.8%] |
-| quantum_first | 83.0% | ±2.3% | [80.0%, 85.6%] |
-| classical_first | 81.9% | ±2.9% | [77.8%, 84.4%] |
+| quantum_first | **58.9%** | ±3.8% | [56.5%, 61.4%] |
+| classical_first | 57.6% | ±2.4% | [56.2%, 59.1%] |
+| hybrid_sandwich | 56.3% | ±5.3% | [53.0%, 59.5%] |
 
-All hybrids within ~1% mean holdout. CIs heavily overlap.
+All hybrids ~56–59% — none approach classical_32 from EXP 001 (65.5%).
 
 ## Comparison with hypothesis
 
-Hybrid architectures do not beat `classical_32` from EXP 001 (85.6%). No architecture dominates.
+Hybrid quantum-classical stacks do not overcome circles difficulty. No architecture is statistically compared here but all underperform dedicated classical MLP.
 
 ## Unexpected finding
 
-`hybrid_sandwich` has highest variance (±3.7%) despite tied mean with `quantum_first`.
+`quantum_first` leads slightly — opposite of moons runs where hybrids matched ~83%.
 
 ## Suggested next experiment
 
-- Paired Wilcoxon across all three architectures
-- Parameter-count-matched classical baseline
+- Paired Wilcoxon across three architectures with 10 seeds
+- Deeper classical pre-network in HybridSandwich

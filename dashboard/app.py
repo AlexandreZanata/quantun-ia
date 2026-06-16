@@ -324,6 +324,8 @@ def main() -> None:
         st.stop()
 
     df = pd.DataFrame(rows)
+    if "eval_set" not in df.columns:
+        df["eval_set"] = "train"
 
     c1, c2, c3, c4 = st.columns(4)
     with c1:
@@ -368,15 +370,17 @@ def main() -> None:
 
     st.markdown("### ◈ FULL BENCHMARK TABLE")
     table_cols = ["exp_id", "model", "accuracy", "loss", "eval_set", "elapsed_s", "epochs", "started_at"]
+    display_cols = [c for c in table_cols if c in df.columns]
     display_df = (
-        df[table_cols]
-        .sort_values("accuracy", ascending=False)
+        df[display_cols]
+        .sort_values("accuracy", ascending=False, na_position="last")
         .rename(
             columns={
                 "exp_id": "EXPERIMENT",
                 "model": "MODEL",
                 "accuracy": "ACC %",
                 "loss": "LOSS",
+                "eval_set": "EVAL",
                 "elapsed_s": "TIME(s)",
                 "epochs": "EPOCHS",
                 "started_at": "DATE",

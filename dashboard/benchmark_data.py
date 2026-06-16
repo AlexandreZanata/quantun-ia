@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 
 LOGS_PATH = Path(__file__).resolve().parents[1] / "logs" / "experiments.jsonl"
+SKIP_RECORD_TYPES = frozenset({"multi_seed_summary", "paired_comparison"})
 
 
 def load_records() -> list[dict]:
@@ -22,6 +23,9 @@ def load_records() -> list[dict]:
 def to_benchmark_rows(records: list[dict]) -> list[dict]:
     rows = []
     for r in records:
+        if r.get("record_type") in SKIP_RECORD_TYPES:
+            continue
+
         acc = r.get("test_accuracy")
         if acc is None:
             acc = r.get("final_acc")

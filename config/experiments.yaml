@@ -1,18 +1,19 @@
 # Central experiment configuration — Quantum ML Lab
+# Publication profile: circles dataset, noise=0.2, n=500, 10 seeds
 
 defaults:
   epochs: 50
   learning_rate: 0.01
-  dataset: moons
-  n_samples: 300
-  noise: 0.1
+  dataset: circles
+  n_samples: 500
+  noise: 0.2
   random_state: 42
   test_size: 0.3
-  seeds: [42, 123, 456]
+  seeds: [42, 123, 456, 789, 1024, 1337, 2048, 3001, 4096, 5000]
 
 experiments:
   exp_001_quantum_vs_classical:
-    description: "Quantum vs Classical — holdout eval, 3 seeds, bootstrap CI"
+    description: "Quantum vs Classical — circles, 10 seeds, bootstrap CI"
     models:
       - classical_8
       - classical_32
@@ -29,14 +30,14 @@ experiments:
         learning_rate: 0.02
 
   exp_002_hybrid_architecture:
-    description: "Hybrid architecture — holdout eval, 3 seeds"
+    description: "Hybrid architecture — circles, 10 seeds"
     architectures:
       - HybridSandwich
       - QuantumFirst
       - ClassicalFirst
 
   exp_003_entanglement_effect:
-    description: "Effect of quantum entanglement — holdout eval, 3 seeds"
+    description: "Quantum entanglement — circles, 10 seeds"
     n_qubits: 4
     n_layers: 2
     entanglement_types:
@@ -52,7 +53,7 @@ experiments:
         learning_rate: 0.02
 
   exp_004_data_poisoning:
-    description: "Robustness to poisoned data — 3 seeds, clean holdout eval"
+    description: "Poisoning robustness — circles, 10 seeds, clean holdout"
     poison_rates: [0.0, 0.05, 0.1, 0.2, 0.3]
     encodings:
       - angle
@@ -68,7 +69,7 @@ experiments:
         learning_rate: 0.02
 
   exp_005_curriculum_quantum:
-    description: "Quantum curriculum — 3 seeds, paired Wilcoxon vs random"
+    description: "Quantum curriculum — circles, 10 seeds, Wilcoxon vs random"
     methods:
       - random
       - margin_batches
@@ -80,12 +81,12 @@ experiments:
     learning_rate: 0.02
 
   exp_006_barren_plateau:
-    description: "Barren plateau explorer — 50 gradient samples"
+    description: "Barren plateau — 50 gradient samples per qubit count"
     n_qubits_list: [2, 4, 6, 8, 10]
     grad_samples: 50
 
   exp_007_self_play:
-    description: "Quantum self-play — 3 seeds, capped hard_frac, best checkpoint"
+    description: "Self-play — circles, 10 seeds, capped hard_frac, best checkpoint"
     rounds: 5
     hard_frac: 0.3
     min_hard: 5

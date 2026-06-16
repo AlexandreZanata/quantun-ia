@@ -1,29 +1,29 @@
 # Results — EXP 006
 
 **Date:** 2026-06-16  
-**Config:** 50 random initializations per qubit count (up from 20), concatenated gradient variance
+**Publication profile:** 50 gradient samples per qubit count, circles-compatible circuit
 
 ## What happened
 
 | Qubits | Grad variance |
 |--------|---------------|
-| 2 | 0.00475 |
-| 4 | 0.00170 |
-| 6 | 0.00182 |
-| 8 | 0.00101 |
-| 10 | 0.00107 |
+| 2 | 0.00654 |
+| 4 | 0.00237 |
+| 6 | 0.00201 |
+| 8 | 0.00115 |
+| 10 | **0.00084** |
 
-Monotonic decrease 2 → 8 qubits (~4.7× drop). Variance stabilizes at 8–10 qubits.
+~7.8× decrease 2→10 qubits. Trend robust with n=50 inits.
 
 ## Comparison with hypothesis
 
-Barren plateau trend **supported** with n=50 samples — smoother than n=20 runs.
+Barren plateau **supported** — gradient variance vanishes with circuit width on this architecture.
 
 ## Unexpected finding
 
-6-qubit variance slightly above 4-qubit — within noise band but worth monitoring with more inits.
+Gradient measurement is independent of dataset difficulty — barren plateau is real even when holdout accuracy is at chance.
 
 ## Suggested next experiment
 
-- Parameter-shift rule vs autograd at 8+ qubits
-- Log gradient variance during actual training (not just init)
+- Correlate grad variance at init with final holdout per seed
+- Parameter-shift rule comparison at 8+ qubits

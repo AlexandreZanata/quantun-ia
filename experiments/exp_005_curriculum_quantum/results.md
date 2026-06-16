@@ -1,29 +1,29 @@
 # Results — EXP 005
 
 **Date:** 2026-06-16  
-**Config:** 3 seeds, 4 stages × 12 epochs + 12 refine, QNN 4q/1L LR 0.02  
+**Publication profile:** circles, n=500, noise=0.2, 10 seeds  
 **Stats:** Wilcoxon margin_batches vs random
 
 ## What happened
 
 | Method | Mean holdout | Std | 95% CI |
 |--------|-------------|-----|--------|
-| random | **81.1%** | ±2.7% | [77.8%, 84.4%] |
-| margin_batches | 80.7% | ±5.2% | [73.3%, 84.4%] |
+| margin_batches | 48.9% | ±1.8% | [47.7%, 49.9%] |
+| random | 48.5% | ±4.2% | [46.1%, 51.2%] |
 
-**Paired test** margin_batches vs random: Δ=−0.4%, p=1.0 → **not significant**.
+**Paired Wilcoxon:** Δ=+0.4%, p=0.70 → **not significant**.
 
-Multi-seed evaluation shows both methods are equivalent on moons — curriculum neither helps nor hurts statistically.
+Both methods near chance on circles — curriculum cannot rescue a QNN that fails to learn the task.
 
 ## Comparison with hypothesis
 
-Easy-first curriculum does not significantly improve QNN generalization vs random shuffle with 3 seeds.
+Curriculum hypothesis **not supported** on hard dataset. Methodology is sound; the task exceeds current QNN capacity.
 
 ## Unexpected finding
 
-Single-seed runs were misleading (random 50% vs margin 81%). Multi-seed + Wilcoxon is essential for honest conclusions.
+On moons (prior), curriculum reached ~81%; on circles both methods ~49%. Dataset difficulty dominates training order.
 
 ## Suggested next experiment
 
-- 10 seeds for powered comparison
-- Curriculum on harder dataset where training order matters more
+- Only run curriculum after confirming base QNN > 60% holdout
+- Progressive difficulty on circles with classical warm-start

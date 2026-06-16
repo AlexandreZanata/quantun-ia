@@ -1,30 +1,29 @@
 # Results — EXP 003
 
 **Date:** 2026-06-16  
-**Config:** 300 samples, 30% holdout, seeds [42, 123, 456], learnable pre-projection, tuned LR for `chain_half`/`none`  
+**Publication profile:** circles, n=500, noise=0.2, 10 seeds  
 **Stats:** Wilcoxon chain vs none
 
 ## What happened
 
 | Entanglement | Mean holdout | Std | 95% CI |
 |--------------|-------------|-----|--------|
-| ring | **83.3%** | ±3.3% | [78.9%, 86.7%] |
-| chain_half | 83.0% | ±1.9% | [81.1%, 85.6%] |
-| none | 83.0% | ±2.3% | [80.0%, 85.6%] |
-| chain | 81.9% | ±2.8% | [78.9%, 85.6%] |
+| chain_half | **64.0%** | ±4.5% | [61.2%, 66.9%] |
+| none | 60.7% | ±5.4% | [57.5%, 64.3%] |
+| ring | 58.7% | ±5.5% | [55.7%, 62.6%] |
+| chain | 57.2% | ±4.5% | [54.3%, 59.8%] |
 
-**Paired test** chain vs none: Δ=−1.1%, p=0.50 → **not significant**.
-
-After adding `input_dim` pre-projection and LR tuning, `chain_half` variance dropped from ±12.7% to ±1.9%.
+**Paired Wilcoxon** chain vs none: Δ=−3.5%, **p=0.031 → significant** (chain worse than none).
 
 ## Comparison with hypothesis
 
-Entanglement topology does not produce statistically significant holdout differences on moons with 3 seeds.
+Full chain entanglement does **not** help on circles — significantly worse than no entanglement. `chain_half` leads on mean but was not individually tested vs others.
 
 ## Unexpected finding
 
-`none` (no CNOT) matches `ring` after pre-projection fix — angle embedding + linear head may dominate over entanglement on this task.
+On moons, entanglement helped; on circles, `none` beats `chain`. Topology effects are dataset-dependent.
 
 ## Suggested next experiment
 
-- 10-seed powered comparison on a task requiring entanglement (e.g. parity)
+- Wilcoxon chain_half vs none (likely the meaningful comparison)
+- Task-specific entanglement design (not blind ablation)
