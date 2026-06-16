@@ -7,21 +7,21 @@
 
 | Qubits | Mean grad variance |
 |--------|-------------------|
-| 2 | 0.00426 |
-| 4 | 0.00296 |
-| 6 | 0.00179 |
-| 8 | 0.00226 |
-| 10 | **0.00099** |
+| 2 | 0.00301 |
+| 4 | 0.00212 |
+| 6 | 0.00270 |
+| 8 | 0.00078 |
+| 10 | **0.00078** |
 
-Gradient variance **decreases** as qubit count grows (2 → 10), consistent with barren plateau theory. Fix from NaN (scalar `.var()` bug) to concatenated gradients was essential for valid measurement.
+Gradient variance decreases from 2 → 8 qubits, consistent with barren plateau theory. The 6-qubit uptick vs 4 is likely sampling noise (n=20). Measurement is finite and reproducible (no NaN).
 
 ## Comparison with hypothesis
 
-If the hypothesis was that deeper/wider circuits exhibit vanishing gradients, it was **supported** — variance at 10 qubits is ~4× lower than at 2 qubits.
+If the hypothesis was that deeper/wider circuits exhibit vanishing gradients, it was **supported** — variance at 8–10 qubits is ~4× lower than at 2 qubits.
 
 ## Unexpected finding
 
-8 qubits showed a slight uptick vs 6 (0.00226 vs 0.00179) — likely sampling noise with only 20 inits.
+8 and 10 qubits converged to nearly identical variance in this run (0.00078).
 
 ## Suggested next experiment
 

@@ -6,6 +6,7 @@ import numpy as np
 import torch
 
 from src.training.structured_log import log_event
+from src.training.trainer import train_model
 
 
 def train_with_holdout(
@@ -25,17 +26,18 @@ def train_with_holdout(
     X_test_t = torch.tensor(X_test)
     y_test_t = torch.tensor(y_test)
 
-    model.train(X_train_t, y_train_t, exp_id=exp_id, model_name=model_name, epochs=epochs, lr=lr)
-    metrics = model.evaluate(X_test_t, y_test_t)
-    log_event(
-        "info",
-        "holdout eval",
-        exp_id=exp_id,
-        model_name=model_name,
-        test_accuracy=metrics["accuracy"],
-        test_loss=metrics["loss"],
-        eval_set="holdout_test",
+    train_model(
+        model,
+        X_train_t,
+        y_train_t,
+        exp_id,
+        model_name,
+        epochs=epochs,
+        lr=lr,
+        X_test=X_test_t,
+        y_test=y_test_t,
     )
+    metrics = model.evaluate(X_test_t, y_test_t)
     return metrics
 
 

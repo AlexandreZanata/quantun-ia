@@ -22,14 +22,20 @@ def load_records() -> list[dict]:
 def to_benchmark_rows(records: list[dict]) -> list[dict]:
     rows = []
     for r in records:
-        acc = r.get("final_acc")
-        loss = r.get("final_loss")
+        acc = r.get("test_accuracy")
+        if acc is None:
+            acc = r.get("final_acc")
+        loss = r.get("test_loss")
+        if loss is None:
+            loss = r.get("final_loss")
+        eval_set = r.get("eval_set", "train" if r.get("test_accuracy") is None else "holdout_test")
         rows.append(
             {
                 "exp_id": r.get("exp_id", "?"),
                 "model": r.get("model_name", "?"),
                 "accuracy": round(acc * 100, 1) if acc is not None else None,
                 "loss": round(loss, 4) if loss is not None else None,
+                "eval_set": eval_set,
                 "elapsed_s": round(r.get("elapsed_s", 0), 2),
                 "epochs": r.get("n_epochs", 0),
                 "started_at": (r.get("started_at") or "")[:16],

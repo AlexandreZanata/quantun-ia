@@ -7,21 +7,25 @@
 
 | Phase | Holdout test accuracy |
 |-------|----------------------|
-| Base model (before self-play) | 46.7% |
-| After round 1 | 76.7% |
-| After round 4 (final) | **74.4%** |
+| Round 0 (base) | 50.0% |
+| Round 1 | 87.8% |
+| Round 2 | 50.0% |
+| Round 3 | 87.8% |
+| Round 4 (final) | **50.0%** |
 
-Self-play improved holdout from 46.7% → ~75%, but accuracy **oscillated** (50% at round 2). Previous 96% result was inflated by train/eval leakage — now fixed.
+Self-play **oscillates** between ~50% and ~88% holdout depending on the hard subset selected each round. No monotonic improvement; final holdout equals the untrained baseline.
+
+Train pool is separate from holdout (no leakage). The oscillation pattern suggests overfitting to misclassified train points each round.
 
 ## Comparison with hypothesis
 
-If the hypothesis was that re-training on hard examples improves generalization, it was **partially supported** — holdout improved substantially, but not monotonically.
+If the hypothesis was that re-training on hard examples improves generalization, it was **not supported** in this run — gains are ephemeral and reverse on alternating rounds.
 
 ## Unexpected finding
 
-Fine-tuning only on misclassified train examples sometimes **hurt** holdout (round 2: 50%) — overfitting to the hard subset without stable generalization.
+Rounds with large hard sets (n_hard=105) reach 87.8% holdout; rounds with small hard sets (n_hard≈24) collapse to 50%.
 
 ## Suggested next experiment
 
-- Cap hard examples per round (e.g. top 20% by loss)
-- Evaluate on a second held-out validation set each round to detect overfitting early
+- Cap hard examples per round (top 20% by loss)
+- Early stopping on holdout each round instead of fixed fine-tune epochs

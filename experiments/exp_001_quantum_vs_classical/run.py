@@ -18,21 +18,37 @@ from src.training.structured_log import init_correlation_id, log_event
 EXP_KEY = "exp_001_quantum_vs_classical"
 EXP_ID = "exp_001"
 
-MODEL_BUILDERS = {
-    "classical_8": lambda: ClassicalNet(hidden=8),
-    "classical_32": lambda: ClassicalNet(hidden=32),
-    "quantum_4q_2l": lambda: QuantumNetBasic(n_qubits=4, n_layers=2, input_dim=2),
-    "quantum_6q_3l": lambda: QuantumNetBasic(n_qubits=6, n_layers=3, input_dim=2),
-}
+
+def build_model(name: str, cfg: dict):
+    model_cfg = cfg.get("model_configs", {}).get(name, {})
+    lr = model_cfg.get("learning_rate", cfg["learning_rate"])
+
+    if name == "classical_8":
+        return ClassicalNet(hidden=8), lr
+    if name == "classical_32":
+        return ClassicalNet(hidden=32), lr
+    if name == "quantum_4q_2l":
+        return (
+            QuantumNetBasic(
+                n_qubits=model_cfg.get("n_qubits", 4),
+                n_layers=model_cfg.get("n_layers", 1),
+                input_dim=2,
+            ),
+            lr,
+        )
+    if name == "quantum_6q_3l":
+        return QuantumNetBasic(n_qubits=6, n_layers=3, input_dim=2), lr
+    raise ValueError(f"Unknown model: {name}")
 
 
 if __name__ == "__main__":
     init_correlation_id()
     cfg = load_experiment_config(EXP_KEY)
     seeds = cfg.get("seeds", [cfg["random_state"]])
+    model_names = cfg.get("models", list(cfg.get("model_configs", {}).keys()))
     log_event("info", "experiment run started", exp_id=EXP_ID, seeds=seeds)
 
-    results_by_model: dict[str, list[float]] = {name: [] for name in MODEL_BUILDERS}
+    results_by_model: dict[str, list[float]] = {name: [] for name in model_names}
 
     for seed in seeds:
         X, y, _ = make_binary_classification(
@@ -45,9 +61,10 @@ if __name__ == "__main__":
             X, y, test_size=cfg["test_size"], random_state=seed
         )
 
-        for name, builder in MODEL_BUILDERS.items():
+        for name in model_names:
+            model, lr = build_model(name, cfg)
             metrics = train_with_holdout(
-                builder(),
+                model,
                 X_train,
                 y_train,
                 X_test,
@@ -55,7 +72,7 @@ if __name__ == "__main__":
                 exp_id=EXP_ID,
                 model_name=f"{name}_seed{seed}",
                 epochs=cfg["epochs"],
-                lr=cfg["learning_rate"],
+                lr=lr,
             )
             results_by_model[name].append(metrics["accuracy"])
 

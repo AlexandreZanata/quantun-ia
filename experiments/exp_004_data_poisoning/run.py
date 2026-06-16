@@ -61,6 +61,8 @@ if __name__ == "__main__":
             model_name=f"classical_poison_{int(rate * 100)}",
             epochs=30,
             lr=cfg["learning_rate"],
+            X_test=X_test_t,
+            y_test=y_test_t,
         )
         classical_results[rate] = classical.evaluate(X_test_t, y_test_t)["accuracy"]
 
@@ -73,6 +75,8 @@ if __name__ == "__main__":
                 model_name=f"quantum_{encoding}_poison_{int(rate * 100)}",
                 epochs=30,
                 lr=cfg["learning_rate"],
+                X_test=X_test_t,
+                y_test=y_test_t,
             )
             quantum_results[encoding][rate] = quantum.evaluate(X_test_t, y_test_t)["accuracy"]
 

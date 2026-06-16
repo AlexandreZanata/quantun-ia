@@ -367,7 +367,7 @@ def main() -> None:
     st.plotly_chart(learning_curves(records, selected), use_container_width=True)
 
     st.markdown("### ◈ FULL BENCHMARK TABLE")
-    table_cols = ["exp_id", "model", "accuracy", "loss", "elapsed_s", "epochs", "started_at"]
+    table_cols = ["exp_id", "model", "accuracy", "loss", "eval_set", "elapsed_s", "epochs", "started_at"]
     display_df = (
         df[table_cols]
         .sort_values("accuracy", ascending=False)

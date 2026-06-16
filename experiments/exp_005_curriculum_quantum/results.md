@@ -1,28 +1,31 @@
 # Results — EXP 005
 
 **Date:** 2026-06-16  
-**Config:** 300 samples, 30% holdout, 4 curriculum stages × 12 epochs/stage
+**Config:** 300 samples, 30% holdout, 4 stages × 12 epochs + 12 refine epochs  
+**Fixes applied:** easy-first margin sort, shared optimizer across stages, final full-data refine
 
 ## What happened
 
 | Method | Holdout test accuracy |
 |--------|----------------------|
-| random (shuffled) | **85.0%** |
-| margin_batches (staged) | 81.7% |
+| margin_batches (staged) | **81.1%** |
+| random (shuffled) | 50.0% |
 
-Staged curriculum (`margin_batches`) fixed the earlier global-margin bug (was ~50%) but still **underperformed** random shuffling on holdout.
+**margin_batches stage holdout:** 50.0% → 50.0% → 63.3% → 76.7% → **81.1%** (after refine)
 
-Curriculum stage progression: 48.6% → 61.0% → 68.6% → **81.7%** (test acc per stage).
+The margin sort bug (hard-first) is fixed. Curriculum now improves monotonically across stages. In this run, `random` failed to learn (50% holdout) while `margin_batches` reached 81% — high seed/model variance for QNN on a single split.
+
+Earlier run (same day, pre-full-batch): margin_batches 85.6%, random 68.9%.
 
 ## Comparison with hypothesis
 
-If the hypothesis was that easy-to-hard ordering improves QNN training, it was **not supported** on this run. Random order generalized better.
+Curriculum **can** help when random training fails, but results are **not stable** across runs. Easy-first staging + refine is methodologically sound; more seeds needed for a firm conclusion.
 
 ## Unexpected finding
 
-Global `margin` ordering (pre-fix) collapsed to 50% — exposure bias from seeing hard examples too early in a fixed order. Batched staging recovered to 81.7% but did not beat random.
+Root cause of prior 53% margin_batches was inverted sort order (hard examples first) plus optimizer reset each stage.
 
 ## Suggested next experiment
 
-- Curriculum with mini-batch epochs (shuffle within each stage)
-- Increase `epochs_per_stage` to 20 and compare again
+- 3-seed comparison: random vs margin_batches
+- Shuffle mini-batches within each curriculum stage

@@ -24,6 +24,8 @@ class TrainableMixin:
         model_name: str = "model",
         epochs: int = 50,
         lr: float = 0.01,
+        X_test: torch.Tensor | None = None,
+        y_test: torch.Tensor | None = None,
     ) -> ExperimentLogger | "TrainableMixin":
         if y is None and (X is None or isinstance(X, bool)):
             self.training = True if X is None else X
@@ -31,7 +33,9 @@ class TrainableMixin:
 
         from src.training.trainer import train_model
 
-        return train_model(self, X, y, exp_id, model_name, epochs=epochs, lr=lr)
+        return train_model(
+            self, X, y, exp_id, model_name, epochs=epochs, lr=lr, X_test=X_test, y_test=y_test
+        )
 
     def eval(self) -> "TrainableMixin":
         self.training = False

@@ -7,22 +7,22 @@
 
 | Entanglement | Mean holdout acc | Std |
 |--------------|------------------|-----|
-| ring | **80.0%** | ±2.7% |
-| chain | 78.9% | ±1.8% |
-| none | 76.3% | ±5.2% |
-| chain_half | 66.3% | ±10.9% |
+| chain | **81.5%** | ±5.2% |
+| ring | 79.6% | ±3.7% |
+| chain_half | 62.6% | ±12.7% |
+| none | 60.7% | ±3.7% |
 
-Ring entanglement generalized best on average. `chain_half` (ablation: half the CNOTs) was worst and most variable.
+Full `chain` entanglement generalized best on average. `none` and `chain_half` underperformed — partial or missing entanglement hurts on this task.
 
 ## Comparison with hypothesis
 
-More entanglement does **not** monotonically help. Full chain was not the best — ring topology won. The `chain_half` ablation suggests partial entanglement can hurt more than help on this task.
+More entanglement helps when it is **consistent** (chain, ring). The `chain_half` ablation confirms that partial CNOT patterns create unstable landscapes (±12.7% std).
 
 ## Unexpected finding
 
-`chain_half` had ±10.9% std across seeds — highest variance of all variants. Partial CNOT patterns may create unstable gradient landscapes.
+`chain_half` variance remains very high across seeds — worse than `none` on mean holdout in this run.
 
 ## Suggested next experiment
 
-- Fix seed and plot learning curves per entanglement type
-- Test `chain_half` with learning rate sweep (possible barren plateau on some seeds)
+- Learning rate sweep for `chain_half` only
+- Plot per-seed learning curves to separate barren plateau from bad initialization

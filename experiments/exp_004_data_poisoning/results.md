@@ -5,25 +5,25 @@
 
 ## What happened
 
-| Model | 0% poison | 30% poison | Drop at 30% |
-|-------|-----------|------------|-------------|
-| Classical MLP | **90.0%** | 80.0% | −10.0% |
-| Quantum angle | 70.0% | 81.7% | −11.7%* |
-| Quantum amplitude | 51.7% | 55.0% | −3.3% |
+| Model | 0% poison | 10% poison | 30% poison |
+|-------|-----------|------------|------------|
+| Classical MLP | **85.6%** | 85.6% | **86.7%** |
+| Quantum angle | 50.0% | 84.4% | 50.0% |
+| Quantum amplitude | 50.0% | 50.0% | 50.0% |
 
-*Angle encoding showed erratic holdout at low poison rates (50% at 5% poison) — high variance on small test set (~90 samples).
+Classical MLP was robust across all poison rates (82–87% holdout). Angle encoding is **highly unstable** — collapses to 50% at 0%, 20%, and 30% poison in this run. Amplitude encoding (2 qubits) stays at chance level regardless of poison.
 
-Classical MLP was the most robust and accurate. Amplitude encoding (2 qubits) barely learned (~chance level). Angle encoding was unstable under label noise.
+Holdout metrics are now persisted in `experiments.jsonl` via `test_accuracy`.
 
 ## Comparison with hypothesis
 
-If the hypothesis was that QNNs are more robust to poisoned labels, it was **rejected**. Classical models degraded gracefully; quantum angle collapsed at 10% poison in earlier runs.
+If the hypothesis was that QNNs are more robust to poisoned labels, it was **rejected**. Classical degrades gracefully; quantum angle shows no consistent robustness pattern.
 
 ## Unexpected finding
 
-Amplitude encoding stayed near 50% regardless of poison rate — it fails to learn moons with only 2 qubits, not a robustness story.
+Angle encoding sometimes reaches 84% at 10% poison while failing at 0% — initialization/seed sensitivity, not a poison effect.
 
 ## Suggested next experiment
 
-- Increase qubits for amplitude encoding (4 qubits, pad to 16 amplitudes)
-- Use cross-validation instead of single holdout for poison experiments
+- Multi-seed poison sweep for angle encoding
+- Amplitude encoding with 4+ qubits (2 qubits insufficient for moons)

@@ -22,6 +22,8 @@ def train_model(
     epochs: int = 50,
     lr: float = 0.01,
     log_every: int = 10,
+    X_test: torch.Tensor | None = None,
+    y_test: torch.Tensor | None = None,
 ) -> ExperimentLogger:
     init_correlation_id()
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
@@ -54,7 +56,24 @@ def train_model(
 
     elapsed = time.time() - t0
     n_params = count_parameters(model)
-    log.finish(elapsed)
+    finish_extra: dict = {}
+    if X_test is not None and y_test is not None:
+        holdout = evaluate(model, X_test, y_test)
+        finish_extra = {
+            "test_accuracy": holdout["accuracy"],
+            "test_loss": holdout["loss"],
+            "eval_set": "holdout_test",
+        }
+        log_event(
+            "info",
+            "holdout eval",
+            exp_id=exp_id,
+            model_name=model_name,
+            test_accuracy=holdout["accuracy"],
+            test_loss=holdout["loss"],
+            eval_set="holdout_test",
+        )
+    log.finish(elapsed, **finish_extra)
     log_event(
         "info",
         "training complete",
@@ -62,6 +81,7 @@ def train_model(
         model_name=model_name,
         elapsed_s=round(elapsed, 1),
         n_params=n_params,
+        test_accuracy=finish_extra.get("test_accuracy"),
     )
     return log
 

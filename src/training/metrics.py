@@ -27,13 +27,19 @@ class ExperimentLogger:
         log_event("info", "epoch metrics", exp_id=self.exp_id, model_name=self.model_name, epoch=epoch, **metrics)
 
     def finish(self, elapsed_seconds: float, **extra):
+        train_acc = self.epochs[-1].get("accuracy", None) if self.epochs else None
+        train_loss = self.epochs[-1].get("loss", None) if self.epochs else None
+        test_accuracy = extra.get("test_accuracy")
         record = {
             "exp_id": self.exp_id,
             "model_name": self.model_name,
             "started_at": self.started_at,
             "elapsed_s": elapsed_seconds,
-            "final_acc": self.epochs[-1].get("accuracy", None) if self.epochs else None,
-            "final_loss": self.epochs[-1].get("loss", None) if self.epochs else None,
+            "final_acc": train_acc,
+            "final_loss": train_loss,
+            "test_accuracy": test_accuracy,
+            "test_loss": extra.get("test_loss"),
+            "eval_set": extra.get("eval_set", "holdout_test" if test_accuracy is not None else "train"),
             "n_epochs": len(self.epochs),
             "history": self.epochs,
             **extra,
@@ -46,7 +52,9 @@ class ExperimentLogger:
             exp_id=self.exp_id,
             model_name=self.model_name,
             elapsed_s=elapsed_seconds,
-            final_acc=record["final_acc"],
+            final_acc=train_acc,
+            test_accuracy=test_accuracy,
+            eval_set=record["eval_set"],
         )
         return record
 
