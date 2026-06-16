@@ -12,7 +12,7 @@ MODULES = [
     "src.data.generators",
     "src.quantum.qnn_entangled",
     "src.data.splits",
-    "src.training.gradients",
+    "src.training.holdout",
     "src.data.augmentation",
     "src.quantum.amplitude_encoding",
     "src.quantum.qnn_basic",

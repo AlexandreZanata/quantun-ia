@@ -4,14 +4,15 @@ defaults:
   epochs: 50
   learning_rate: 0.01
   dataset: moons
-  n_samples: 200
+  n_samples: 300
   noise: 0.1
   random_state: 42
   test_size: 0.3
+  seeds: [42, 123, 456]
 
 experiments:
   exp_001_quantum_vs_classical:
-    description: "Quantum vs Classical — which learns faster?"
+    description: "Quantum vs Classical — holdout eval, 3 seeds"
     models:
       - classical_8
       - classical_32
@@ -19,14 +20,14 @@ experiments:
       - quantum_6q_3l
 
   exp_002_hybrid_architecture:
-    description: "Hybrid architecture — best of both worlds?"
+    description: "Hybrid architecture — holdout eval, 3 seeds"
     architectures:
       - HybridSandwich
       - QuantumFirst
       - ClassicalFirst
 
   exp_003_entanglement_effect:
-    description: "Effect of quantum entanglement"
+    description: "Effect of quantum entanglement — holdout eval, 3 seeds"
     entanglement_types:
       - none
       - chain

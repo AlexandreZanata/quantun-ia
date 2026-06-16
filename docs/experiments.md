@@ -36,20 +36,20 @@ vim experiments/exp_003_entanglement_effect/results.md
 ### EXP 001 — Quantum vs Classical
 
 **Models:** `classical_8`, `classical_32`, `quantum_4q_2l`, `quantum_6q_3l`  
-**Dataset:** make_moons (200 samples, noise=0.1)  
-**Metrics:** accuracy per epoch, wall-clock time, parameter count
+**Eval:** 30% holdout, 3 seeds, mean ± std logged  
+**Result:** classical_32 best (84.8% ± 1.9% holdout)
 
 ### EXP 002 — Hybrid Architecture
 
-**Architectures:**
-- `HybridSandwich` — Classical → Quantum → Classical
-- `QuantumFirst` — Quantum → Classical
-- `ClassicalFirst` — Classical → Quantum
+**Architectures:** HybridSandwich, QuantumFirst, ClassicalFirst  
+**Eval:** 30% holdout, 3 seeds  
+**Result:** All ~82–83% holdout, no clear hybrid winner
 
 ### EXP 003 — Entanglement Effect
 
-**Variants:** `none`, `chain`, `chain_half` (ablation: half the CNOTs), `ring`  
-**Key question:** Does more entanglement improve capacity or worsen gradient flow?
+**Variants:** `none`, `chain`, `chain_half`, `ring`  
+**Eval:** 30% holdout, 3 seeds  
+**Result:** ring best (80.0%), chain_half worst (66.3% ± 10.9%)
 
 ### EXP 004 — Data Poisoning
 

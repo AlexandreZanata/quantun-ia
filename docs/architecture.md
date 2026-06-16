@@ -65,6 +65,7 @@ dashboard/
 | `metrics.py` | `ExperimentLogger` — writes to `logs/experiments.jsonl` |
 | `curriculum.py` | Difficulty-based ordering and staged batch training |
 | `gradients.py` | Gradient variance measurement (barren plateau) |
+| `holdout.py` | Train/eval split helper + multi-seed summary |
 
 ## Model Interface Contract
 

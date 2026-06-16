@@ -33,4 +33,6 @@ make docker-build && make test && make experiment && make dashboard
 - **Hypothesis:** Write `hypothesis.md` before every `run.py` execution
 - **Results:** Fill `results.md` after every experiment completes
 - **Config:** Hyperparameters in `config/experiments.yaml`, loaded via `src/training/config.py`
-- **Splits:** `src/data/splits.py` — always split before poisoning or curriculum
+- **Splits:** `src/data/splits.py` — stratified train/test before any preprocessing
+- **Holdout:** `src/training/holdout.py` — train on train, eval on test, multi-seed summary
+- **Results:** Each `experiments/exp_*/results.md` documents holdout findings after running

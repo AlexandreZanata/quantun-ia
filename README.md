@@ -74,9 +74,10 @@ quantun-ia/
 ## Key Conventions
 
 - Write `hypothesis.md` **before** running any experiment
-- Fill `results.md` **after** each run
+- Fill `results.md` **after** each run with holdout metrics and conclusions
 - All metrics go through `ExperimentLogger` → `logs/experiments.jsonl`
-- Train/test splits happen **before** poisoning or curriculum ordering (no leakage)
+- **Holdout eval:** 30% test split before training (exp_001–007)
+- **Multi-seed:** seeds `[42, 123, 456]` in `config/experiments.yaml` for exp_001–003
 - Config overrides live in `config/experiments.yaml`, not hardcoded in `run.py`
 
 ## CI

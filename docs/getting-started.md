@@ -46,6 +46,25 @@ make dashboard-local
 
 4. **Document** findings in `experiments/exp_001_quantum_vs_classical/results.md`
 
+## Experiment Workflow (all 7)
+
+Every experiment follows the same rigor:
+
+1. Write `hypothesis.md` (before running)
+2. Run `python experiments/exp_NNN_<name>/run.py`
+3. Check `logs/experiments.jsonl` or `make dashboard-local`
+4. Fill `results.md` with holdout metrics and conclusions
+
+**Evaluation defaults** (`config/experiments.yaml`):
+
+| Setting | Value |
+|---------|-------|
+| `n_samples` | 300 |
+| `test_size` | 0.3 (30% holdout) |
+| `seeds` | [42, 123, 456] for exp_001–003 |
+
+Holdout accuracy is logged as `holdout eval` / `multi-seed summary` in structured logs.
+
 ## Run All Experiments
 
 ```bash

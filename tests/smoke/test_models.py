@@ -8,6 +8,7 @@ from src.classical.transformer_mini import TransformerMini
 from src.data.augmentation import add_gaussian_noise, random_flip_labels
 from src.data.generators import make_binary_classification
 from src.quantum.hybrid_model import ClassicalFirst, HybridSandwich, QuantumFirst
+from src.quantum.qnn_amplitude import QuantumNetAmplitude
 from src.quantum.qnn_basic import QuantumNetBasic
 from src.quantum.qnn_entangled import QuantumNetEntangled
 from src.training.trainer import evaluate, fine_tune, predict
@@ -29,6 +30,7 @@ def test_quantum_models_forward(sample_binary_data):
     models = [
         QuantumNetBasic(n_qubits=4, n_layers=2, input_dim=2),
         QuantumNetEntangled(n_qubits=4, n_layers=2, entanglement="chain"),
+        QuantumNetAmplitude(n_qubits=2, n_layers=2, input_dim=2),
         HybridSandwich(input_dim=2, n_qubits=4, n_layers=2),
         QuantumFirst(input_dim=2, n_qubits=4, n_layers=2),
         ClassicalFirst(input_dim=2, n_qubits=4, n_layers=2),

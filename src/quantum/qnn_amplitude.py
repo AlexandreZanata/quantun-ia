@@ -12,7 +12,7 @@ def make_amplitude_circuit(n_qubits: int, n_layers: int):
 
     @qml.qnode(dev, interface="torch")
     def circuit(inputs, weights):
-        qml.AmplitudeEmbedding(inputs, wires=range(n_qubits), normalize=True, pad=True)
+        qml.AmplitudeEmbedding(inputs, wires=range(n_qubits), normalize=True)
         for layer in range(n_layers):
             for i in range(n_qubits):
                 qml.RY(weights[layer, i, 0], wires=i)
