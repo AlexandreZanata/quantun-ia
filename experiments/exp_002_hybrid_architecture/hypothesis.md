@@ -1,18 +1,23 @@
-# Hypothesis — EXP 002
+# Hypothesis — EXP 002: Hybrid Architecture
 
-**Date:** ____
-**Author:** ____
+**Date:** 2026-06-16  
+**Author:** Quantum ML Lab
 
 ## What I expect to happen
-[Write in clear English, no jargon]
+On circles, hybrid stacks (QuantumFirst, ClassicalFirst, HybridSandwich) will land
+between pure classical and pure quantum performance. QuantumFirst may edge ahead by
+letting the quantum layer extract non-linear features before a small classical head.
 
 ## Why I expect this
-[Reasoning behind the hypothesis]
+Hybrids combine classical capacity with quantum feature maps. On a hard non-linear
+task, partial quantum processing may help even when a standalone QNN fails.
 
 ## What would prove me wrong
-[Be specific: "if accuracy is X% lower than Y..."]
+- Any hybrid beats classical_32 from exp_001 (≥ 65% holdout mean)
+- All hybrids stay at chance (~50%) like basic QNN
+- HybridSandwich significantly outperforms QuantumFirst (opposite of expectation)
 
 ## Metrics I will measure
-- [ ] Final accuracy
-- [ ] Convergence epoch
-- [ ] Training time
+- [x] Holdout accuracy per architecture (10 seeds, bootstrap CI)
+- [ ] Paired Wilcoxon across architectures (planned)
+- [x] Training time per seed

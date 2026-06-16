@@ -7,7 +7,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from dashboard.benchmark_data import best_row, load_records, to_benchmark_rows
+from dashboard.benchmark_data import best_row, load_records, to_leaderboard_rows
 
 GREEN = "\033[32m"
 AMBER = "\033[33m"
@@ -24,7 +24,7 @@ def _bar(value: float, width: int = 20) -> str:
 
 def print_benchmark_report() -> None:
     records = load_records()
-    rows = to_benchmark_rows(records)
+    rows = to_leaderboard_rows(records)
 
     print()
     print(f"{GREEN}{BOLD}╔══════════════════════════════════════════════════════════════════╗{RESET}")
@@ -40,15 +40,16 @@ def print_benchmark_report() -> None:
         print()
         return
 
-    header = f"  {'EXP':<12} {'MODEL':<20} {'ACC%':>6} {'LOSS':>8} {'TIME':>6} {'EP':>4}"
+    header = f"  {'EXP':<12} {'MODEL':<24} {'ACC%':>6} {'LOSS':>8} {'TIME':>6} {'EP':>4}"
     print(f"{CYAN}{header}{RESET}")
-    print(f"{DIM}  {'-' * 12} {'-' * 20} {'-' * 6} {'-' * 8} {'-' * 6} {'-' * 4}{RESET}")
+    print(f"{DIM}  {'-' * 12} {'-' * 24} {'-' * 6} {'-' * 8} {'-' * 6} {'-' * 4}{RESET}")
+    print(f"{DIM}  (holdout test · latest run per model){RESET}")
 
     for r in sorted(rows, key=lambda x: x["accuracy"] or 0, reverse=True):
         acc = f"{r['accuracy']:>5.1f}" if r["accuracy"] is not None else "   n/a"
         loss = f"{r['loss']:>8.4f}" if r["loss"] is not None else "     n/a"
         print(
-            f"  {r['exp_id']:<12} {r['model']:<20} {acc} {loss} "
+            f"  {r['exp_id']:<12} {r['model']:<24} {acc} {loss} "
             f"{r['elapsed_s']:>5.2f}s {r['epochs']:>4}"
         )
 

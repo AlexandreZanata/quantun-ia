@@ -12,11 +12,13 @@ import streamlit as st
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from dashboard.benchmark_data import (
+    base_model_label,
     best_row,
+    latest_holdout_records,
     load_applicability_gates,
     load_records,
     param_match_table,
-    to_benchmark_rows,
+    to_leaderboard_rows,
 )
 from dashboard.terminal_report import print_benchmark_report
 
@@ -274,7 +276,7 @@ def learning_curves(records: list[dict], selected: list[str]) -> go.Figure:
     fig = go.Figure()
     color_idx = 0
     for r in records:
-        name = r["model_name"]
+        name = base_model_label(r.get("model_name", "?"))
         if name not in selected:
             continue
         history = r.get("history", [])
@@ -311,7 +313,8 @@ def main() -> None:
     st.markdown(f"<style>{RETRO_CSS}</style>", unsafe_allow_html=True)
 
     records = load_records()
-    rows = to_benchmark_rows(records)
+    holdout_records = latest_holdout_records(records)
+    rows = to_leaderboard_rows(records)
     best = best_row(rows)
 
     retro_header(
@@ -335,7 +338,7 @@ def main() -> None:
 
     c1, c2, c3, c4 = st.columns(4)
     with c1:
-        st.markdown('<div class="stat-label">runs logged</div>', unsafe_allow_html=True)
+        st.markdown('<div class="stat-label">models (holdout)</div>', unsafe_allow_html=True)
         st.markdown(f'<div class="stat-value">{len(rows)}</div>', unsafe_allow_html=True)
     with c2:
         st.markdown('<div class="stat-label">best accuracy</div>', unsafe_allow_html=True)
@@ -372,7 +375,7 @@ def main() -> None:
         default=list(df["model"].unique()[:6]),
         label_visibility="collapsed",
     )
-    st.plotly_chart(learning_curves(records, selected), use_container_width=True)
+    st.plotly_chart(learning_curves(holdout_records, selected), use_container_width=True)
 
     st.markdown("### ◈ FULL BENCHMARK TABLE")
     table_cols = ["exp_id", "model", "accuracy", "loss", "eval_set", "elapsed_s", "epochs", "started_at"]

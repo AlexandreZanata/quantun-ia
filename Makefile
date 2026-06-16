@@ -25,7 +25,7 @@ dashboard:
 
 dashboard-local:
 	@$(PYTHON) dashboard/terminal_report.py
-	@$(PYTHON) -m streamlit run dashboard/app.py --server.headless true
+	@$(PYTHON) -m streamlit run dashboard/app.py --server.headless true --server.port 8501
 
 experiment:
 	docker compose run --rm experiment

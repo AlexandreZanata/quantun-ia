@@ -1,18 +1,23 @@
-# Hypothesis — EXP 003
+# Hypothesis — EXP 003: Entanglement Effect
 
-**Date:** ____
-**Author:** ____
+**Date:** 2026-06-16  
+**Author:** Quantum ML Lab
 
 ## What I expect to happen
-[Write in clear English, no jargon]
+On circles, entanglement (chain, ring) will improve QNN holdout over `none` because
+correlated qubits increase expressivity of the variational circuit. `chain_half` may
+sit between full chain and none as a capacity regularizer.
 
 ## Why I expect this
-[Reasoning behind the hypothesis]
+Entanglement is often cited as a quantum advantage for feature learning. More
+connectivity should help model radial decision boundaries.
 
 ## What would prove me wrong
-[Be specific: "if accuracy is X% lower than Y..."]
+- `none` beats `chain` significantly (Wilcoxon p < 0.05) — entanglement hurts
+- All topologies within noise of each other (no topology effect)
+- chain_half is best by > 5 pp over all others
 
 ## Metrics I will measure
-- [ ] Final accuracy
-- [ ] Convergence epoch
-- [ ] Training time
+- [x] Holdout accuracy per entanglement type (10 seeds, bootstrap CI)
+- [x] Paired Wilcoxon: chain vs none
+- [ ] Wilcoxon chain_half vs none (suggested follow-up)
