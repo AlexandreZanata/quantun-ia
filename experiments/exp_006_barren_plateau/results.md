@@ -1,29 +1,16 @@
-# Results — EXP 006
+# Results — EXP 006 (Barren Plateau)
 
-**Date:** 2026-06-16  
-**Publication profile:** 50 gradient samples per qubit count, circles-compatible circuit
+**Run date:** 2026-06-16  
+**Profile:** 50 gradient inits per qubit count
 
-## What happened
+## Gradient variance (bootstrap 95% CI)
+| Qubits | Mean var | 95% CI |
+|--------|----------|--------|
+| 2 | 0.00465 | [0.0034, 0.0061] |
+| 4 | 0.00237 | [0.0016, 0.0032] |
+| 6 | 0.00193 | [0.0015, 0.0024] |
+| 8 | 0.00114 | [0.0008, 0.0015] |
+| 10 | 0.00098 | [0.0007, 0.0013] |
 
-| Qubits | Grad variance |
-|--------|---------------|
-| 2 | 0.00654 |
-| 4 | 0.00237 |
-| 6 | 0.00201 |
-| 8 | 0.00115 |
-| 10 | **0.00084** |
-
-~7.8× decrease 2→10 qubits. Trend robust with n=50 inits.
-
-## Comparison with hypothesis
-
-Barren plateau **supported** — gradient variance vanishes with circuit width on this architecture.
-
-## Unexpected finding
-
-Gradient measurement is independent of dataset difficulty — barren plateau is real even when holdout accuracy is at chance.
-
-## Suggested next experiment
-
-- Correlate grad variance at init with final holdout per seed
-- Parameter-shift rule comparison at 8+ qubits
+## Conclusion
+~4.8× decrease 2q→10q; CIs do not overlap between 2q and 10q. Barren plateau **supported** independent of task learnability.

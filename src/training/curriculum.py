@@ -10,6 +10,14 @@ from src.training.metrics import ExperimentLogger
 from src.training.trainer import count_parameters, evaluate
 
 
+def curriculum_total_epochs(cfg: dict) -> int:
+    """Total training epochs in batched curriculum (stages + refine)."""
+    return (
+        cfg["curriculum_stages"] * cfg["epochs_per_stage"]
+        + cfg.get("refine_epochs", 12)
+    )
+
+
 def sort_by_difficulty(X, y, method="margin"):
     """
     method='margin': distance to class centroid (easy-first)

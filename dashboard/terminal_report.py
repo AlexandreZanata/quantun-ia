@@ -43,7 +43,7 @@ def print_benchmark_report() -> None:
     header = f"  {'EXP':<12} {'MODEL':<24} {'ACC%':>6} {'LOSS':>8} {'TIME':>6} {'EP':>4}"
     print(f"{CYAN}{header}{RESET}")
     print(f"{DIM}  {'-' * 12} {'-' * 24} {'-' * 6} {'-' * 8} {'-' * 6} {'-' * 4}{RESET}")
-    print(f"{DIM}  (holdout test · latest run per model){RESET}")
+    print(f"{DIM}  (multi-seed holdout mean · bootstrap 95% CI when available){RESET}")
 
     for r in sorted(rows, key=lambda x: x["accuracy"] or 0, reverse=True):
         acc = f"{r['accuracy']:>5.1f}" if r["accuracy"] is not None else "   n/a"

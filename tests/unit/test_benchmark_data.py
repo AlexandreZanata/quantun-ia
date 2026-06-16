@@ -116,6 +116,40 @@ def test_latest_holdout_records_keeps_newest_per_model():
     assert latest[0]["test_accuracy"] == 0.65
 
 
+def test_to_leaderboard_rows_prefers_multi_seed_mean():
+    records = [
+        {
+            "exp_id": "exp_001",
+            "record_type": "multi_seed_summary",
+            "started_at": "2026-06-16T12:00:00",
+            "summary": {
+                "classical_32": {
+                    "mean": 0.65,
+                    "std": 0.04,
+                    "ci_low": 0.62,
+                    "ci_high": 0.68,
+                    "n_seeds": 10,
+                    "values": [0.65],
+                }
+            },
+        },
+        {
+            "exp_id": "exp_001",
+            "model_name": "classical_32_seed42",
+            "test_accuracy": 0.50,
+            "eval_set": "holdout_test",
+            "started_at": "2026-06-16T13:00:00",
+            "elapsed_s": 1.0,
+            "n_epochs": 50,
+        },
+    ]
+    rows = to_leaderboard_rows(records)
+    assert len(rows) == 1
+    assert rows[0]["accuracy"] == 65.0
+    assert rows[0]["ci_low"] == 62.0
+    assert rows[0]["source"] == "multi_seed_summary"
+
+
 def test_to_leaderboard_rows_dedupes_seed_suffix():
     records = [
         {
@@ -141,6 +175,7 @@ def test_to_leaderboard_rows_dedupes_seed_suffix():
     assert len(rows) == 1
     assert rows[0]["model"] == "classical_32"
     assert rows[0]["accuracy"] == 65.0
+    assert rows[0]["source"] == "single_seed"
 
 
 def test_load_applicability_gates_keeps_latest():
@@ -171,3 +206,23 @@ def test_load_applicability_gates_keeps_latest():
     gates = load_applicability_gates(records)
     assert len(gates) == 1
     assert gates[0]["status"] == "applicable"
+
+
+def test_leaderboard_excludes_test_experiments():
+    records = [
+        {
+            "exp_id": "exp_test",
+            "record_type": "multi_seed_summary",
+            "started_at": "2026-06-16T12:00:00",
+            "summary": {"model_a": {"mean": 0.9, "std": 0, "ci_low": 0.9, "ci_high": 0.9, "n_seeds": 1}},
+        },
+        {
+            "exp_id": "exp_001",
+            "record_type": "multi_seed_summary",
+            "started_at": "2026-06-16T12:00:00",
+            "summary": {"classical_32": {"mean": 0.65, "std": 0, "ci_low": 0.65, "ci_high": 0.65, "n_seeds": 10}},
+        },
+    ]
+    rows = to_leaderboard_rows(records)
+    assert len(rows) == 1
+    assert rows[0]["exp_id"] == "exp_001"

@@ -1,27 +1,19 @@
-# Results — EXP 004
+# Results — EXP 004 (Data Poisoning)
 
-**Date:** 2026-06-16  
-**Publication profile:** circles, n=500, noise=0.2, 10 seeds, poison on train / clean holdout
+**Run date:** 2026-06-16  
+**Profile:** circles, n=500, noise=0.2, 10 seeds, clean holdout
 
-## What happened
+## Holdout results
+| Model | 0% poison | 30% poison |
+|-------|-----------|------------|
+| quantum_amplitude | **62.0%** | 58.7% |
+| classical | 61.2% | 56.8% |
+| quantum_angle | 51.3% | 52.5% |
 
-| Model | 0% poison | 30% poison | Drop @30% | 95% CI @30% |
-|-------|-----------|------------|-----------|-------------|
-| Classical MLP | 62.6% | 58.7% | −3.9% | [56.0%, 61.1%] |
-| Quantum amplitude | 62.1% | 54.9% | −7.2% | [50.3%, 59.0%] |
-| Quantum angle | 52.1% | 53.1% | +1.0% | [49.4%, 56.7%] |
+## Paired Wilcoxon
+| Comparison | Mean diff @0% | p @0% | @30% diff | p @30% |
+|------------|---------------|-------|-----------|--------|
+| classical vs amplitude | −0.8 pp | 0.488 | −1.9 pp | 0.125 |
 
-Classical most robust. Amplitude learns (62% clean) but degrades more under poison. Angle stuck ~52% (near chance on circles).
-
-## Comparison with hypothesis
-
-Poison robustness: classical wins. Amplitude viable but less robust than classical at 30% poison. Angle encoding insufficient for circles regardless of poison.
-
-## Unexpected finding
-
-Angle "improves" at 30% poison (+1%) because it never learned — noise is not the signal.
-
-## Suggested next experiment
-
-- Multi-seed Wilcoxon classical vs amplitude at 30% poison
-- Amplitude with data re-uploading on circles
+## Conclusion
+Amplitude competitive with classical at clean holdout; neither significantly wins. Angle stuck near chance. Classical slightly more robust at 30% poison (non-significant).

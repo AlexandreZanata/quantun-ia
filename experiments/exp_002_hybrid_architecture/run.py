@@ -87,4 +87,12 @@ if __name__ == "__main__":
             "hybrid_sandwich",
             "classical_first",
         )
+    if "quantum_first" in results_by_model and "classical_first" in results_by_model:
+        compare_conditions(
+            EXP_ID,
+            results_by_model["quantum_first"],
+            results_by_model["classical_first"],
+            "quantum_first",
+            "classical_first",
+        )
     log_event("info", "experiment run finished", exp_id=EXP_ID)

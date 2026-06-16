@@ -295,7 +295,7 @@ def learning_curves(records: list[dict], selected: list[str]) -> go.Figure:
         )
         color_idx += 1
     fig.update_layout(
-        title=dict(text=">> LEARNING CURVES", font=dict(size=16)),
+        title=dict(text=">> LEARNING CURVES (train accuracy)", font=dict(size=16)),
         xaxis_title="EPOCH",
         yaxis_title="ACC %",
         **PLOT_LAYOUT,
@@ -378,7 +378,19 @@ def main() -> None:
     st.plotly_chart(learning_curves(holdout_records, selected), use_container_width=True)
 
     st.markdown("### ◈ FULL BENCHMARK TABLE")
-    table_cols = ["exp_id", "model", "accuracy", "loss", "eval_set", "elapsed_s", "epochs", "started_at"]
+    table_cols = [
+        "exp_id",
+        "model",
+        "accuracy",
+        "ci_low",
+        "ci_high",
+        "n_seeds",
+        "loss",
+        "eval_set",
+        "elapsed_s",
+        "epochs",
+        "source",
+    ]
     display_cols = [c for c in table_cols if c in df.columns]
     display_df = (
         df[display_cols]
@@ -387,12 +399,15 @@ def main() -> None:
             columns={
                 "exp_id": "EXPERIMENT",
                 "model": "MODEL",
-                "accuracy": "ACC %",
+                "accuracy": "MEAN ACC %",
+                "ci_low": "CI LOW %",
+                "ci_high": "CI HIGH %",
+                "n_seeds": "SEEDS",
                 "loss": "LOSS",
                 "eval_set": "EVAL",
                 "elapsed_s": "TIME(s)",
                 "epochs": "EPOCHS",
-                "started_at": "DATE",
+                "source": "SOURCE",
             }
         )
     )
