@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.13] - 2026-06-17
+
+### Added
+
+- Phase 19b: **arXiv submission pipeline** — `paper/arxiv_metadata.yaml`, `make arxiv-bundle`, `docs/arxiv.md`
+- Publication-frozen holdout tables for exp\_021 and exp\_022 in `paper/tables/`
+- `scripts/prepare_arxiv_submission.py` with `00README.txt` and tarball export
+- Contract tests: `tests/contracts/test_arxiv_metadata.py`
+- Unit tests: `tests/unit/test_prepare_arxiv_submission.py`
+
+### Changed
+
+- Paper `results.tex` embeds headline tables and figures (cross-experiment, exp\_011)
+- `paper-build` CI job also runs `arxiv-bundle-sources`
+- Experiment suite table extended with exp\_021 and exp\_022
+
 ## [0.9.12] - 2026-06-17
 
 ### Added

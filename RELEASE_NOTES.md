@@ -1,17 +1,17 @@
-# Release v0.9.12 — Zenodo Citation Loop (Phases 0–22b)
+# Release v0.9.13 — arXiv Submission Pipeline (Phases 0–22b + 19b)
 
 **Date:** 2026-06-17  
-**Codename:** 5-star lab — publication verdicts, MicroQML Bench, Nano Parity Bench
+**Codename:** 5-star lab — paper bundle ready for arXiv upload
 
 ## Highlights
 
-- **22 experiments** with hypothesis-first workflow and uniform `results.md` (exp_011–018, exp_021, exp_022)
-- **MicroQML Bench v1** — versioned JSON schema, `make microqml-bench`, REST export
-- **Nano Parity Bench** — `qml-bench-parity`, exp_022 publication (honest inconclusive verdict)
+- **arXiv pipeline** — `make arxiv-bundle`, `paper/arxiv_metadata.yaml`, `docs/arxiv.md`
+- **Paper draft** — exp_021/022 frozen holdout tables, embedded figures, CI `paper-build`
+- **22 experiments** with hypothesis-first workflow and uniform `results.md`
+- **MicroQML Bench v1** — versioned JSON schema, `make microqml-bench`
+- **Nano Parity Bench** — exp_022 publication (honest inconclusive verdict)
 - **exp_021** — PennyLane backend parity accepted (Δ=−0.4 pp, 10 seeds)
-- **Platform:** JWT auth, async GPU job queue, e2e in CI, benchmark PWA
-- **Compliance:** ORCID, OSF prereg contracts, `docs/ethics.md`, `docs/compute_environment.md`
-- **Engineering:** 230+ tests, 80% coverage, `golden_publication.json`, weekly smoke cron
+- **Engineering:** 245+ tests, 80% coverage, e2e in CI, weekly smoke cron
 
 ## Install
 
@@ -23,19 +23,19 @@ make check
 
 ## Citation
 
-See [CITATION.cff](CITATION.cff). After Zenodo sync for `v0.9.12`:
+See [CITATION.cff](CITATION.cff). After Zenodo sync:
 
 1. Copy DOI from [zenodo.org](https://zenodo.org) → uncomment `doi:` in `CITATION.cff`
 2. Run `pytest tests/contracts/test_citation_cff.py -v`
 
-Full guide: [docs/zenodo.md](docs/zenodo.md).
+Guides: [docs/zenodo.md](docs/zenodo.md), [docs/arxiv.md](docs/arxiv.md).
 
-## Artifact bundle
+## Artifact bundles
 
 ```bash
 make release        # → dist/release/ with MANIFEST.txt checksums
-make release-check  # verify an existing bundle
-git tag v0.9.12 && git push origin v0.9.12   # triggers .github/workflows/release.yml
+make arxiv-bundle   # → dist/arxiv/quantun-ia-paper.tar.gz
+git tag v0.9.13 && git push origin v0.9.13   # triggers .github/workflows/release.yml
 ```
 
 ## Full changelog

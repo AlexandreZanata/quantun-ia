@@ -1,0 +1,33 @@
+# arXiv submission metadata — validated by tests/contracts/test_arxiv_metadata.py
+# After upload, set arxiv_id (e.g. "2606.12345") and commit.
+
+title: "Quantum-Inspired Machine Learning: A Reproducible Benchmark Suite on Synthetic and Real Data"
+software_version: "0.9.13"
+
+abstract: >
+  We present quantun-ia, an open-source benchmark suite comparing variational quantum
+  circuits against parameter-matched classical baselines on synthetic and real datasets.
+  All experiments follow hypothesis-first discipline with multi-seed holdout evaluation,
+  bootstrap confidence intervals, and Holm-Bonferroni corrected Wilcoxon tests.
+  Publication-profile runs on UCI tabular data show backend parity between PennyLane
+  simulators (exp_021) and inconclusive quantum-vs-classical gaps at matched parameter
+  budgets (exp_022). The repository ships a reproducible pipeline exporting figures,
+  LaTeX tables, Zenodo release bundles, and MicroQML Bench v1 for external replication.
+
+authors:
+  - name: "Alexandre Zanata"
+    affiliation: "Independent Researcher"
+    orcid: "https://orcid.org/0009-0000-0000-0000"
+
+categories:
+  - cs.LG
+  - quant-ph
+
+comments: >
+  8 pages, 3 figures. Code and data pipeline:
+  https://github.com/AlexandreZanata/quantun-ia
+
+# Set after arXiv moderation (Phase 19b manual step):
+arxiv_id: null
+
+journal_ref: null

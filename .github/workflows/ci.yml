@@ -255,3 +255,4 @@ jobs:
           mkdir -p logs
           cp tests/contracts/fixtures/sample_experiments.jsonl logs/experiments.jsonl
           make paper-build
+          make arxiv-bundle-sources
