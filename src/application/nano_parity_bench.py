@@ -14,6 +14,14 @@ from src.application.parity_config import (
     profile_settings,
 )
 from src.application.parity_datasets import ensure_datasets_available
+
+__all__ = [
+    "NanoParityBenchError",
+    "build_parity_pair",
+    "ensure_datasets_available",
+    "execute",
+    "run_suite",
+]
 from src.classical.mlp import ClassicalNet
 from src.data.dataset_registry import prepare_dataset
 from src.shared.result import Fail, Ok, fail, ok

@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.8] - 2026-06-17
+
+### Added
+
+- Phase 22: **Nano Parity Bench** + **exp_022** — fair quantum nanomodel vs parameter-matched classical MLP
+- `qml-bench-parity` CLI — dataset download, multi-seed holdout, Wilcoxon + Cohen's d verdict
+- `config/nano_parity_bench.yaml` — CI/publication profiles, suite, primary claim
+- `src/application/nano_parity_bench.py`, `parity_datasets.py`, `parity_config.py`
+- `experiments/exp_022_nano_quantum_parity/` — hypothesis + `run.py`
+- `make nano-parity-bench`, `make nano-parity-download`
+- `run_exp_022_ci` + `tests/integration/test_exp_022_smoke.py` + `tests/unit/test_nano_parity_bench.py`
+- `golden_ci.json` bounds for `exp_022.hybrid_sandwich_breast_cancer`
+
 ## [0.9.7] - 2026-06-17
 
 ### Added

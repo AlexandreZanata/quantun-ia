@@ -60,7 +60,7 @@
     }
   },
   "exp_022": {
-    "hybrid_sandwich_wine_binary": {
+    "hybrid_sandwich_breast_cancer": {
       "quantum_mean_min": 0.85,
       "quantum_mean_max": 1.0,
       "classical_mean_min": 0.70,

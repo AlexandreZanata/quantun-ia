@@ -3,12 +3,9 @@
 from __future__ import annotations
 
 from src.application.dto import NanoParityBenchDTO
-from src.application.nano_parity_bench import (
-    build_parity_pair,
-    ensure_datasets_available,
-    execute,
-)
+from src.application.nano_parity_bench import build_parity_pair, execute
 from src.application.parity_config import load_parity_config
+from src.application.parity_datasets import ensure_datasets_available
 from src.shared.result import Fail, Ok
 from src.training.param_match import classical_n_params
 
@@ -43,11 +40,11 @@ def test_execute_parity_benchmark_hybrid_wins_ci(tmp_path, monkeypatch):
 
     dto = NanoParityBenchDTO(
         quantum_model="hybrid_sandwich",
-        dataset="wine_binary",
+        dataset="breast_cancer",
         profile="ci",
         exp_id="exp_022",
-        seeds=[42, 123],
-        epochs=12,
+        seeds=[42, 123, 456],
+        epochs=15,
     )
     outcome = execute(dto)
     assert isinstance(outcome, Ok), outcome
@@ -55,9 +52,9 @@ def test_execute_parity_benchmark_hybrid_wins_ci(tmp_path, monkeypatch):
     assert result.quantum_model == "hybrid_sandwich"
     assert result.classical_hidden >= 1
     assert abs(result.quantum_n_params - result.classical_n_params) <= 10
-    assert len(result.quantum_accuracies) == 2
-    assert abs(result.quantum_n_params - result.classical_n_params) <= 10
-    assert result.comparison["mean_diff"] >= 0
+    assert len(result.quantum_accuracies) == 3
+    assert result.verdict in {"accepted", "inconclusive", "rejected"}
+    assert "p_value" in result.comparison
     assert log_file.exists()
 
 

@@ -381,3 +381,51 @@ def run_exp_021_ci(*, log_path: Path | None = None) -> dict[str, list[float]]:
         build_model=build_model,
         log_path=log_path,
     )
+
+
+EXP_022_ID = "exp_022"
+EXP_022_CI_DATASET = "breast_cancer"
+EXP_022_CI_MODEL = "hybrid_sandwich"
+
+
+def run_exp_022_ci(*, log_path: Path | None = None, epochs: int = 15) -> dict[str, object]:
+    """Fast CI smoke: hybrid_sandwich vs parameter-matched classical on breast cancer."""
+    from src.application.dto import NanoParityBenchDTO
+    from src.application.nano_parity_bench import execute
+    from src.application.parity_config import load_parity_config, profile_settings
+    from src.shared.result import Fail, Ok
+    from src.training import metrics as metrics_module
+
+    original_log_path = metrics_module.LOGS_PATH
+    if log_path is not None:
+        metrics_module.LOGS_PATH = log_path
+        log_path.parent.mkdir(parents=True, exist_ok=True)
+
+    try:
+        cfg = load_parity_config()
+        prof = profile_settings(cfg, "ci")
+        seeds = list(prof.get("seeds", [42, 123, 456]))[:3]
+
+        dto = NanoParityBenchDTO(
+            quantum_model=EXP_022_CI_MODEL,
+            dataset=EXP_022_CI_DATASET,
+            profile="ci",
+            exp_id=EXP_022_ID,
+            seeds=seeds,
+            epochs=epochs,
+        )
+        outcome = execute(dto)
+        if isinstance(outcome, Fail):
+            raise RuntimeError(outcome.error.message)
+        assert isinstance(outcome, Ok)
+        result = outcome.value
+        return {
+            EXP_022_CI_MODEL: result.quantum_accuracies,
+            result.classical_label: result.classical_accuracies,
+            "quantum_mean": result.quantum_mean,
+            "classical_mean": result.classical_mean,
+            "mean_diff": result.comparison["mean_diff"],
+            "param_delta": result.param_delta,
+        }
+    finally:
+        metrics_module.LOGS_PATH = original_log_path
