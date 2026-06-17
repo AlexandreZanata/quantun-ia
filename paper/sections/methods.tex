@@ -1,0 +1,31 @@
+\section{Methods}
+\label{sec:methods}
+
+\subsection{Architecture}
+
+The codebase follows a layered structure (see \texttt{docs/architecture.md}):
+\texttt{src/data} for dataset loading and leakage-safe preprocessing,
+\texttt{src/quantum} for variational circuits (PennyLane),
+\texttt{src/classical} for matched baselines, and
+\texttt{src/training} for the universal trainer, statistics, and logging.
+
+\subsection{Model contract}
+
+All models implement \texttt{train}, \texttt{predict}, and \texttt{evaluate}.
+Metrics are logged exclusively through \texttt{ExperimentLogger} to
+\texttt{logs/experiments.jsonl}.
+
+\subsection{Evaluation protocol}
+
+\begin{enumerate}
+  \item Stratified 70/30 train--test split \emph{before} scaling or augmentation.
+  \item Training on train set only; holdout accuracy on test set.
+  \item Ten random seeds per publication profile; bootstrap 95\% CIs on mean accuracy.
+  \item Paired Wilcoxon signed-rank tests with Holm-Bonferroni correction.
+\end{enumerate}
+
+\subsection{Hyperparameters}
+
+Default hyperparameters live in \texttt{config/experiments.yaml}.
+Profiles: \texttt{publication} ($n{=}500$, 10 seeds), \texttt{publication\_large} ($n{=}1000$),
+and \texttt{ci} (fast smoke, 1 seed).

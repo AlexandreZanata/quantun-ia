@@ -86,6 +86,7 @@ dashboard/
 | `checkpoints.py` | Model artifact persistence under `artifacts/` |
 | `device.py` | Auto-detect CPU/CUDA for PyTorch training |
 | `hpo.py` | Optuna hyperparameter optimization wrapper |
+| `plot_style.py` | Matplotlib/seaborn publication figure style |
 | `ci_smoke.py` | Fast CI profile runner for regression bounds |
 
 ## Model Interface Contract

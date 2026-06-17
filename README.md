@@ -68,12 +68,18 @@ Results append to `logs/experiments.jsonl` (never delete — append only).
 
 See [Experiments](docs/experiments.md) for full details.
 
-## Reproducibility & HPO
+## Reproducibility, HPO & Publication
 
 ```bash
-make repro          # CI smoke profile + golden bounds
-make hpo EXP=exp_011 TRIALS=20   # Optuna hyperparameter search
+make repro              # CI smoke profile + golden bounds
+make hpo                # Optuna hyperparameter search (exp_011 default)
+make figures            # PDF figures from logs/experiments.jsonl
+make latex-tables       # LaTeX tables for paper/
+make release            # Bundle artifacts for Zenodo v0.2.0
 ```
+
+See [Reproducibility](docs/reproducibility.md), [Negative Results](docs/negative_results.md), and [Zenodo guide](docs/zenodo.md).
+Paper draft skeleton: `paper/main.tex`.
 
 ## Documentation
 
@@ -82,6 +88,8 @@ make hpo EXP=exp_011 TRIALS=20   # Optuna hyperparameter search
 | [Getting Started](docs/getting-started.md) | Full setup, Makefile, workflow |
 | [Experiments](docs/experiments.md) | All 14 experiments + ablations |
 | [Baselines](docs/baselines.md) | Literature comparison table |
+| [Negative Results](docs/negative_results.md) | Honest failures (curriculum, self-play, entanglement) |
+| [Reproducibility](docs/reproducibility.md) | NeurIPS-style checklist |
 | [Hypothesis Workflow](docs/hypothesis-workflow.md) | Mandatory hypothesis-first discipline |
 | [Architecture](docs/architecture.md) | Code structure and data flow |
 | [Testing](docs/testing.md) | pytest, coverage, CI |

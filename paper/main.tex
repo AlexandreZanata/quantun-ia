@@ -1,0 +1,34 @@
+% quantun-ia paper draft skeleton
+% Compile: pdflatex main.tex (requires booktabs, graphicx, hyperref)
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{amsmath}
+
+\title{Quantum-Inspired Machine Learning:\\
+A Reproducible Benchmark Suite on Synthetic and Real Data}
+\author{Alexandre Zanata}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We present quantun-ia, an open-source benchmark suite comparing variational quantum
+circuits against parameter-matched classical baselines on synthetic and real datasets.
+All experiments follow hypothesis-first discipline with multi-seed holdout evaluation,
+bootstrap confidence intervals, and Holm-Bonferroni corrected comparisons.
+\end{abstract}
+
+\input{sections/introduction}
+\input{sections/methods}
+\input{sections/experiments}
+\input{sections/results}
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}

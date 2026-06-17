@@ -10,6 +10,9 @@ Welcome to the **Quantum-Inspired Micro ML Lab** documentation.
 | [Architecture](architecture.md) | Code structure, module responsibilities, data flow |
 | [Experiments](experiments.md) | All 14 experiments — goals, ablations, known flags |
 | [Baselines](baselines.md) | Literature comparison for real-data experiments |
+| [Negative Results](negative_results.md) | Documented honest failures (exp_005, 007, 003, 009) |
+| [Reproducibility](reproducibility.md) | NeurIPS-style reproducibility checklist |
+| [Zenodo Release](zenodo.md) | DOI archival guide for v0.2.0+ |
 | [Hypothesis Workflow](hypothesis-workflow.md) | Mandatory hypothesis-first discipline |
 | [Testing](testing.md) | Test pyramid, coverage thresholds, CI pipeline |
 | [Docker](docker.md) | Container services, Makefile targets, troubleshooting |

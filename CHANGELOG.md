@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-06-17
+
+### Added
+
+- Phase 3 publication and open science pipeline
+- `src/training/plot_style.py` — consistent matplotlib/seaborn style
+- `scripts/generate_figures.py` — PDF figures from JSONL logs (`make figures`)
+- `scripts/export_latex_tables.py` — LaTeX holdout tables (`make latex-tables`)
+- `scripts/prepare_release.py` — Zenodo release bundle (`make release`)
+- `docs/negative_results.md` — documented failures (exp_005, 007, 003, 009)
+- `docs/reproducibility.md` — NeurIPS-style reproducibility checklist
+- `docs/zenodo.md` — GitHub/Zenodo DOI integration guide
+- `paper/` — LaTeX draft skeleton (main.tex + sections)
+- DVC stages for figures and LaTeX tables
+- Rewritten `notebooks/analysis.ipynb` with publication leaderboard
+
+### Changed
+
+- `CITATION.cff` bumped to v0.2.0 (DOI placeholder for Zenodo)
+- `.gitignore` adds `figures/` and `dist/`
+
 ### Added
 
 - Phase 2 scientific scope expansion

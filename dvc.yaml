@@ -6,3 +6,22 @@ stages:
       - logs/experiments.jsonl
     outs:
       - data/exports/results.csv
+
+  figures:
+    cmd: python scripts/generate_figures.py
+    deps:
+      - scripts/generate_figures.py
+      - logs/experiments.jsonl
+      - src/training/plot_style.py
+      - dashboard/benchmark_data.py
+    outs:
+      - figures/
+
+  latex_tables:
+    cmd: python scripts/export_latex_tables.py
+    deps:
+      - scripts/export_latex_tables.py
+      - logs/experiments.jsonl
+      - dashboard/benchmark_data.py
+    outs:
+      - paper/tables/

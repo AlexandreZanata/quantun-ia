@@ -1,0 +1,32 @@
+\section{Results}
+\label{sec:results}
+
+% Auto-generated tables from: make latex-tables
+% Requires \usepackage{booktabs} in main.tex
+\input{tables/all_experiments_summary.tex}
+
+\subsection{Key findings}
+
+On synthetic 2D tasks, parameter-matched classical MLPs remain competitive with
+variational quantum circuits (exp\_001, exp\_008).
+Entanglement topology shows no Holm-significant benefit on circles (exp\_003, exp\_009).
+Curriculum staging and self-play provide no significant holdout gain (exp\_005, exp\_007).
+
+Real-data experiments (exp\_011--exp\_014) require first publication runs;
+see individual \texttt{results.md} files after execution.
+
+\subsection{Figures}
+
+Publication figures are generated via \texttt{make figures} from
+\texttt{logs/experiments.jsonl}:
+\begin{itemize}
+  \item Per-experiment leaderboard bar charts with bootstrap CIs.
+  \item Cross-experiment best-model summary.
+  \item Learning curves from training history.
+\end{itemize}
+
+Copy PDFs from \texttt{figures/} into \texttt{paper/figures/} for inclusion, e.g.:
+
+\begin{verbatim}
+\includegraphics[width=\linewidth]{figures/exp_001_leaderboard.pdf}
+\end{verbatim}

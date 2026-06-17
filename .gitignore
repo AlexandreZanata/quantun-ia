@@ -13,5 +13,7 @@ mlruns/
 artifacts/
 data/exports/
 data/raw/
+figures/
+dist/
 .DS_Store
 *.log

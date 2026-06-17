@@ -17,6 +17,7 @@ MODULES = [
     "src.training.ci_smoke",
     "src.training.device",
     "src.training.hpo",
+    "src.training.plot_style",
     "src.data.generators",
     "src.data.poisoning",
     "src.data.scaling",

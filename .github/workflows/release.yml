@@ -1,0 +1,43 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  prepare:
+    name: Prepare release artifacts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+          pip install -r requirements-dev.txt
+
+      - name: Prepare release bundle
+        env:
+          MLFLOW_DISABLE: "1"
+        run: |
+          mkdir -p logs
+          python scripts/prepare_release.py
+
+      - name: Upload release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-bundle
+          path: dist/release/
+
+  # Attach artifacts to GitHub Release manually or via gh CLI after Zenodo sync.
+  # See docs/zenodo.md for DOI update steps.

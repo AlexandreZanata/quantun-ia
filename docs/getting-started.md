@@ -46,7 +46,7 @@ make dashboard-local
 
 4. **Document** findings in `experiments/exp_001_quantum_vs_classical/results.md`
 
-## Experiment Workflow (all 10)
+## Experiment Workflow (all 14)
 
 Every experiment follows the same rigor:
 
@@ -136,6 +136,9 @@ make dashboard    # http://localhost:8501
 | `make repro` | CI-profile integration smoke (exp_001) |
 | `make export-results` | Export JSONL logs to CSV |
 | `make hpo` | Run Optuna HPO (default: exp_011, 5 trials) |
+| `make figures` | Generate publication PDF figures from logs |
+| `make latex-tables` | Export LaTeX holdout summary tables |
+| `make release` | Bundle CSV, figures, tables for Zenodo |
 | `make docker-build` | Build all images |
 | `make clean` | Remove `__pycache__`, `.pytest_cache` |
 

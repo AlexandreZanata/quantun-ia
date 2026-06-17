@@ -2,10 +2,13 @@ cff-version: 1.2.0
 title: "quantun-ia: Quantum-Inspired ML Research Lab"
 message: "If you use this software, please cite it as below."
 type: software
+version: 0.2.0
+date-released: 2026-06-17
 authors:
   - family-names: Zanata
     given-names: Alexandre
 repository-code: "https://github.com/AlexandreZanata/quantun-ia"
+url: "https://github.com/AlexandreZanata/quantun-ia"
 license: MIT
 keywords:
   - quantum-machine-learning
@@ -13,3 +16,5 @@ keywords:
   - reproducible-research
   - pennylane
   - pytorch
+# After Zenodo-GitHub release v0.2.0, add:
+# doi: 10.5281/zenodo.XXXXXXX

@@ -1,0 +1,36 @@
+\section{Experiments}
+\label{sec:experiments}
+
+Table~\ref{tab:experiments} summarizes the benchmark suite.
+Experiments \texttt{exp\_001}--\texttt{exp\_010} use 2D synthetic data (moons, circles).
+Experiments \texttt{exp\_011}--\texttt{exp\_014} extend to UCI tabular, MNIST PCA subsets,
+augmentation robustness, and sequential baselines.
+
+\begin{table}[ht]
+\centering
+\caption{Experiment suite overview.}
+\label{tab:experiments}
+\begin{tabular}{cll}
+\toprule
+ID & Name & Dataset \\
+\midrule
+001 & Quantum vs Classical & Synthetic moons \\
+002 & Hybrid Architecture & Synthetic moons \\
+003 & Entanglement Effect & Circles (re-upload) \\
+004 & Data Poisoning & Circles \\
+005 & Curriculum Quantum & Circles \\
+006 & Barren Plateau & Synthetic (gradient diag.) \\
+007 & Self-Play Quantum & Circles \\
+008 & Data Re-upload & Circles \\
+009 & Entanglement Basic & Circles (basic QNN) \\
+010 & Poison Re-upload Ablation & Circles \\
+011 & UCI Tabular QML & Breast cancer \\
+012 & MNIST PCA QML & MNIST 0 vs 1 \\
+013 & Augmentation Robustness & Noisy circles \\
+014 & Sequence Baselines & Sequential synthetic \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Detailed hypotheses are in each \texttt{experiments/exp\_NNN\_*/hypothesis.md}.
+Literature baselines are referenced in \texttt{docs/baselines.md}.

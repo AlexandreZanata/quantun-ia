@@ -1,0 +1,18 @@
+\section{Introduction}
+\label{sec:introduction}
+
+Quantum machine learning (QML) promises expressivity advantages for certain data regimes,
+yet reproducible benchmarks with rigorous statistical testing remain scarce.
+We introduce \texttt{quantun-ia}, a modular research lab spanning 14 experiments
+from 2D synthetic classification to UCI tabular and MNIST-subset tasks.
+
+Our contributions:
+\begin{itemize}
+  \item Hypothesis-first experiment workflow with append-only logging.
+  \item Parameter-matched classical baselines for fair quantum comparisons.
+  \item Multi-seed holdout evaluation with bootstrap CIs and Holm-corrected Wilcoxon tests.
+  \item Open publication pipeline: figures, LaTeX tables, and Zenodo-archived releases.
+\end{itemize}
+
+Negative results (curriculum, self-play, entanglement ablations) are documented
+in \texttt{docs/negative\_results.md} and strengthen the credibility of positive findings.
