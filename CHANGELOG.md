@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.9] - 2026-06-17
+
+### Added
+
+- Phase 20: **e2e in CI** + **`golden_publication.json`** publication-profile regression
+- `src/training/publication_smoke.py` — fast 2-seed publication smokes for exp_011 + exp_021
+- `tests/regression/golden_publication.json` — narrow holdout bounds for publication drift detection
+- `tests/integration/test_publication_golden.py` + `tests/unit/test_publication_smoke.py`
+- Dedicated `e2e` job in `.github/workflows/ci.yml` + `make e2e`
+
 ## [0.9.8] - 2026-06-17
 
 ### Added

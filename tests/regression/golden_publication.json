@@ -1,0 +1,27 @@
+{
+  "profile": "publication",
+  "smoke_seeds": [42, 123],
+  "smoke_epochs": 15,
+  "exp_011": {
+    "perceptron": {
+      "mean_min": 0.88,
+      "mean_max": 1.0,
+      "per_seed_min": 0.75,
+      "per_seed_max": 1.0
+    }
+  },
+  "exp_021": {
+    "quantum_default": {
+      "mean_min": 0.65,
+      "mean_max": 1.0,
+      "per_seed_min": 0.55,
+      "per_seed_max": 1.0
+    },
+    "quantum_lightning": {
+      "mean_min": 0.60,
+      "mean_max": 1.0,
+      "per_seed_min": 0.50,
+      "per_seed_max": 1.0
+    }
+  }
+}

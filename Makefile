@@ -1,4 +1,4 @@
-.PHONY: dev test test-watch lint lint-fix typecheck coverage dashboard dashboard-local experiment experiment-large repro export-results hpo figures latex-tables release release-check paper-sync paper-build replay-publication replay-publication-artifacts power-analysis microqml-bench check health docker-build docker-test docker-lint clean install train-demo nano-parity-bench nano-parity-download api api-demo
+.PHONY: dev test test-watch lint lint-fix typecheck coverage dashboard dashboard-local experiment experiment-large repro export-results hpo figures latex-tables release release-check paper-sync paper-build replay-publication replay-publication-artifacts power-analysis microqml-bench check health docker-build docker-test docker-lint clean install train-demo nano-parity-bench nano-parity-download api api-demo e2e
 
 PYTHON ?= $(shell test -x .venv/bin/python && echo .venv/bin/python || echo python3)
 
@@ -11,6 +11,10 @@ health:
 check: lint-local typecheck
 	MLFLOW_DISABLE=1 $(PYTHON) -m pytest tests/ --cov=src --cov-fail-under=80 -q
 	MLFLOW_DISABLE=1 $(PYTHON) -m pytest tests/integration/ tests/contracts/ -q
+	MLFLOW_DISABLE=1 $(PYTHON) -m pytest tests/e2e/ -q
+
+e2e:
+	MLFLOW_DISABLE=1 $(PYTHON) -m pytest tests/e2e/ -v
 
 typecheck:
 	$(PYTHON) -m mypy src/training src/quantum
