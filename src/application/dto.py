@@ -30,3 +30,54 @@ class TrainNanomodelResult:
     n_params: int
     n_epochs: int
     record_source: str = field(default="nanotrainer")
+
+
+@dataclass(frozen=True)
+class NanoParityBenchDTO:
+    """Run quantum nanomodel vs parameter-matched classical on one dataset."""
+
+    quantum_model: str
+    dataset: str
+    profile: str = "ci"
+    exp_id: str = "exp_022"
+    seeds: list[int] | None = None
+    epochs: int | None = None
+    test_size: float = 0.3
+    classical_learning_rate: float = 0.01
+    save_checkpoints: bool = False
+
+
+@dataclass(frozen=True)
+class ParityPairMeta:
+    quantum_model: str
+    classical_label: str
+    quantum_n_params: int
+    classical_n_params: int
+    classical_hidden: int
+    param_delta: int
+    quantum_learning_rate: float
+    classical_learning_rate: float
+
+
+@dataclass(frozen=True)
+class NanoParityBenchResult:
+    exp_id: str
+    quantum_model: str
+    dataset: str
+    profile: str
+    classical_label: str
+    quantum_n_params: int
+    classical_n_params: int
+    classical_hidden: int
+    param_delta: int
+    quantum_accuracies: list[float]
+    classical_accuracies: list[float]
+    quantum_mean: float
+    classical_mean: float
+    quantum_summary: dict
+    classical_summary: dict
+    comparison: dict
+    quantum_wins: bool
+    verdict: str
+    datasets_status: dict[str, str]
+    record_source: str = field(default="nano_parity_bench")

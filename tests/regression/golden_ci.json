@@ -59,6 +59,14 @@
       "per_seed_max": 1.0
     }
   },
+  "exp_022": {
+    "hybrid_sandwich_wine_binary": {
+      "quantum_mean_min": 0.85,
+      "quantum_mean_max": 1.0,
+      "classical_mean_min": 0.70,
+      "classical_mean_max": 1.0
+    }
+  },
   "nano_train": {
     "perceptron": {
       "mean_min": 0.35,

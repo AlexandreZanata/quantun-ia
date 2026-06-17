@@ -1,0 +1,55 @@
+# Nano Parity Bench — fair quantum vs parameter-matched classical comparison
+# CLI: qml-bench-parity  |  experiment: exp_022_nano_quantum_parity
+
+defaults:
+  exp_id: exp_022
+  profile: ci
+  test_size: 0.3
+  classical_learning_rate: 0.01
+
+profiles:
+  ci:
+    seeds: [42, 123, 456, 789, 1024]
+    epochs: 15
+  publication:
+    seeds: [42, 123, 456, 789, 1024, 1337, 2048, 3001, 4096, 5000]
+    epochs: 50
+
+# Tabular quantum nanomodels eligible for parameter-matched classical baselines
+quantum_models:
+  - hybrid_sandwich
+  - quantum_angle
+  - quantum_amplitude
+
+datasets:
+  breast_cancer:
+    kind: tabular
+    source: sklearn
+  wine_binary:
+    kind: tabular
+    source: sklearn
+  iris_binary:
+    kind: tabular
+    source: sklearn
+  mnist_binary:
+    kind: tabular
+    source: torchvision
+    n_samples: 300
+    n_components: 8
+
+# Headline claim for exp_022 — hybrid sandwich vs matched MLP on UCI tabular
+primary_claim:
+  model: hybrid_sandwich
+  datasets:
+    - breast_cancer
+    - wine_binary
+  min_mean_diff_pp: 2.0
+  significance: holm_bonferroni
+
+suite:
+  - model: hybrid_sandwich
+    dataset: breast_cancer
+  - model: hybrid_sandwich
+    dataset: wine_binary
+  - model: quantum_angle
+    dataset: breast_cancer

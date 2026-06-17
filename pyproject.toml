@@ -36,6 +36,7 @@ dependencies = [
 [project.scripts]
 qml-run = "scripts.cli:main"
 qml-train = "scripts.nano_train:main"
+qml-bench-parity = "scripts.nano_parity_bench:main"
 qml-api = "scripts.api_server:main"
 
 [tool.hatch.build.targets.wheel]

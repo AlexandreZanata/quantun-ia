@@ -405,3 +405,14 @@ experiments:
       quantum_lightning:
         qml_device: lightning.qubit
         learning_rate: 0.02
+
+  exp_022_nano_quantum_parity:
+    description: "Hybrid sandwich quantum nanomodel vs parameter-matched classical on UCI tabular"
+    exp_id: exp_022
+    quantum_model: hybrid_sandwich
+    datasets:
+      - breast_cancer
+      - wine_binary
+    min_mean_diff_pp: 2.0
+    learning_rate: 0.02
+    classical_learning_rate: 0.01
