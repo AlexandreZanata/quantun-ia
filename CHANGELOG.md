@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.17] - 2026-06-17
+
+### Added
+
+- Phase 26: **Post-tag citation closure** — `make finalize-citation`, `docs/releases/v0.9.16.md`
+- `scripts/finalize_citation.py` — apply Zenodo DOI + arXiv ID to CITATION, bib, metadata
+- Contract tests: `tests/contracts/test_release_record.py`
+- Unit tests: `tests/unit/test_finalize_citation.py`
+
+### Changed
+
+- `docs/citation_loop.md` — documents `finalize-citation` after tag `v0.9.16` push
+- Release bundle includes `docs/releases/v0.9.16.md`
+
 ## [0.9.16] - 2026-06-17
 
 ### Added

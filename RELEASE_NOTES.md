@@ -1,17 +1,17 @@
-# Release v0.9.16 — Citation Loop Readiness (Phase 25)
+# Release v0.9.17 — Citation Finalizer (Phase 26)
 
 **Date:** 2026-06-17
 
 ## Highlights
 
-- **`make citation-ready`** — validates version alignment before Zenodo tag
-- **`docs/citation_loop.md`** — unified DOI + arXiv closure checklist
-- **`docs/paper_narrative.md`** — Option C narrative locked with contract tests
+- **`make finalize-citation`** — paste Zenodo DOI (+ optional arXiv ID) in one command
+- **Release record** — `docs/releases/v0.9.16.md` documents pushed tag evidence
+- Tag `v0.9.16` already on `origin`; DOI paste is the remaining manual step
 
-## Preflight
+## After Zenodo sync
 
 ```bash
-make check
+make finalize-citation DOI=10.5281/zenodo.XXXXXXX ARXIV_ID=2606.XXXXX
 make citation-ready
 ```
 

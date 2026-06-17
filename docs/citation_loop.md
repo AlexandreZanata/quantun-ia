@@ -22,6 +22,8 @@ for missing `doi:` and `arxiv_id` are expected until manual upload completes.
 
 ## Step 1 — GitHub release tag
 
+**Status:** `v0.9.16` tagged and pushed (see [releases/v0.9.16.md](releases/v0.9.16.md)).
+
 ```bash
 git tag v0.9.16
 git push origin v0.9.16
@@ -35,20 +37,26 @@ See [zenodo.md](zenodo.md) for bundle contents.
 ## Step 2 — Zenodo DOI
 
 1. Enable Zenodo-GitHub integration for this repository.
-2. Wait for Zenodo to archive the tagged release.
+2. Wait for Zenodo to archive tag `v0.9.16`.
 3. Copy the version DOI (e.g. `10.5281/zenodo.XXXXXXX`).
-4. Uncomment and set in `CITATION.cff`:
+4. Apply with one command (updates `CITATION.cff` and `paper/references.bib`):
 
-```yaml
-version: 0.9.16
-doi: 10.5281/zenodo.XXXXXXX
+```bash
+make finalize-citation DOI=10.5281/zenodo.XXXXXXX
+```
+
+Or with arXiv ID at the same time:
+
+```bash
+make finalize-citation DOI=10.5281/zenodo.XXXXXXX ARXIV_ID=2606.12345
 ```
 
 5. Validate:
 
 ```bash
-pytest tests/contracts/test_citation_cff.py -v
+pytest tests/contracts/test_citation_cff.py tests/contracts/test_arxiv_metadata.py -v
 make citation-ready
+git commit -am "chore(citation): add Zenodo DOI for v0.9.16"
 ```
 
 ---
@@ -57,10 +65,10 @@ make citation-ready
 
 1. `make paper-build && make arxiv-bundle` (requires TeX Live for PDF).
 2. Upload `dist/arxiv/quantun-ia-paper.tar.gz` per [arxiv.md](arxiv.md).
-3. Set moderated ID in `paper/arxiv_metadata.yaml`:
+3. If not set in step 2, add moderated ID:
 
-```yaml
-arxiv_id: "2606.12345"
+```bash
+make finalize-citation DOI=10.5281/zenodo.XXXXXXX ARXIV_ID=2606.12345
 ```
 
 4. Validate:
@@ -71,11 +79,10 @@ pytest tests/contracts/test_arxiv_metadata.py -v
 
 ---
 
-## Step 4 — Cross-link paper and README
+## Step 4 — Cross-link README
 
-- Add DOI to `paper/references.bib` (`quantunia2026` entry).
-- Re-run `make paper-build` if bibliography changed.
-- Update root `README.md` citation section with live DOI and arXiv link.
+- Re-run `make paper-build` if `references.bib` changed.
+- Update root `README.md` citation section with live DOI and arXiv link when available.
 
 ---
 

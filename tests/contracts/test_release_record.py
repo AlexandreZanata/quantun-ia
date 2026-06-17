@@ -1,0 +1,39 @@
+"""Contract tests for release tag evidence records (Phase 26)."""
+
+from __future__ import annotations
+
+from pathlib import Path
+
+import yaml
+
+RELEASE_RECORD = Path("docs/releases/v0.9.16.md")
+CITATION_LOOP = Path("docs/citation_loop.md")
+
+
+def test_release_record_v0916_exists():
+    assert RELEASE_RECORD.is_file(), "missing docs/releases/v0.9.16.md"
+
+
+def test_release_record_documents_tag_and_bundle():
+    text = RELEASE_RECORD.read_text(encoding="utf-8")
+    assert "v0.9.16" in text
+    assert "git tag" in text
+    assert "citation-ready-full" in text or "make release" in text
+    assert "65 artifacts" in text or "release bundle" in text.lower()
+
+
+def test_citation_loop_documents_finalize_command():
+    text = CITATION_LOOP.read_text(encoding="utf-8")
+    assert "finalize-citation" in text
+
+
+def test_arxiv_metadata_matches_released_version():
+    data = yaml.safe_load(Path("paper/arxiv_metadata.yaml").read_text(encoding="utf-8"))
+    pyproject = Path("pyproject.toml").read_text(encoding="utf-8")
+    for line in pyproject.splitlines():
+        if line.startswith("version = "):
+            version = line.split("=", 1)[1].strip().strip('"')
+            break
+    else:
+        raise AssertionError("pyproject version missing")
+    assert data["software_version"] == version
