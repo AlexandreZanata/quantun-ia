@@ -9,5 +9,8 @@ build/
 .ipynb_checkpoints/
 logs/experiments.jsonl
 .local/
+mlruns/
+artifacts/
+data/exports/
 .DS_Store
 *.log

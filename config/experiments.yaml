@@ -20,6 +20,10 @@ profiles:
   publication_large:
     n_samples: 1000
     seeds: [42, 123, 456, 789, 1024, 1337, 2048, 3001, 4096, 5000]
+  ci:
+    n_samples: 50
+    seeds: [42, 123]
+    epochs: 5
 
 experiments:
   exp_001_quantum_vs_classical:

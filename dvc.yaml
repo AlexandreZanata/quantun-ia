@@ -1,0 +1,8 @@
+stages:
+  export_results:
+    cmd: python scripts/export_results.py
+    deps:
+      - scripts/export_results.py
+      - logs/experiments.jsonl
+    outs:
+      - data/exports/results.csv

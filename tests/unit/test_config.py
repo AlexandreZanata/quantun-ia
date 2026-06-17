@@ -34,6 +34,14 @@ def test_publication_large_from_env(monkeypatch):
     assert cfg["profile"] == "publication_large"
 
 
+def test_ci_profile_fast_settings():
+    cfg = load_experiment_config("exp_001_quantum_vs_classical", profile="ci")
+    assert cfg["n_samples"] == 50
+    assert cfg["seeds"] == [42, 123]
+    assert cfg["epochs"] == 5
+    assert cfg["profile"] == "ci"
+
+
 def test_exp_009_and_010_config():
     cfg9 = load_experiment_config("exp_009_entanglement_basic")
     assert cfg9["qnn_type"] == "basic"

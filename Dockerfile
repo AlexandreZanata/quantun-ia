@@ -17,11 +17,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # ── Dependencies ──────────────────────────────────────────────────────────────
 FROM base AS deps
 
-COPY requirements.txt requirements-dev.txt ./
+COPY requirements.txt requirements-dev.txt requirements.lock ./
 
 # Install CPU-only PyTorch to keep the image lean
 RUN pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu \
-    && pip install -r requirements.txt \
+    && pip install -r requirements.lock \
     && pip install -r requirements-dev.txt
 
 # ── Development ───────────────────────────────────────────────────────────────

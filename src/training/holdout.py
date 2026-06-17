@@ -23,6 +23,9 @@ def train_with_holdout(
     model_name: str,
     epochs: int = 50,
     lr: float = 0.01,
+    seed: int | None = None,
+    profile: str | None = None,
+    save_checkpoints: bool = True,
 ) -> dict:
     """Train on train split; log and return metrics on held-out test split."""
     X_train_t = torch.tensor(X_train)
@@ -40,6 +43,9 @@ def train_with_holdout(
         lr=lr,
         X_test=X_test_t,
         y_test=y_test_t,
+        seed=seed,
+        profile=profile,
+        save_checkpoints=save_checkpoints,
     )
     return model.evaluate(X_test_t, y_test_t)
 

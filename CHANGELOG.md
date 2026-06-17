@@ -9,6 +9,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Phase 1 reproducibility infrastructure
+- `requirements.lock` for pinned runtime dependencies
+- `src/training/reproducibility.py` — global seed utility
+- `src/training/tracking.py` — optional MLflow dual-write
+- `src/training/checkpoints.py` — model checkpoint persistence
+- `src/training/ci_smoke.py` — fast exp_001 CI profile runner
+- `scripts/export_results.py` — JSONL to CSV export for DVC
+- `dvc.yaml` export pipeline and DVC project initialization
+- `ci` profile in `config/experiments.yaml` (n=50, 2 seeds, 5 epochs)
+- Integration test `tests/integration/test_exp_001_smoke.py` with golden bounds
+- CI job `experiment-smoke`
+- Makefile targets: `repro`, `export-results`
+- `.env.example` for MLflow and profile configuration
+
+### Changed
+
+- `ExperimentLogger` logs `seed`, `profile`, and dual-writes to MLflow when enabled
+- `trainer.py` and `holdout.py` accept `seed`, `profile`, and checkpoint saving
+- Holdout experiments pass seed/profile through all `run.py` scripts
+- Docker and CI install from `requirements.lock`
+- `requirements.txt` adds `mlflow`; `requirements-dev.txt` adds `dvc`
+
+### Added (Phase 0)
+
 - `LICENSE` (MIT)
 - `CITATION.cff` for software citation
 - `CONTRIBUTING.md` with hypothesis-first PR checklist

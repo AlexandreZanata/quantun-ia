@@ -1,4 +1,4 @@
-.PHONY: dev test test-watch lint lint-fix coverage dashboard dashboard-local experiment experiment-large docker-build docker-test docker-lint clean
+.PHONY: dev test test-watch lint lint-fix coverage dashboard dashboard-local experiment experiment-large repro export-results docker-build docker-test docker-lint clean
 
 PYTHON ?= $(shell test -x .venv/bin/python && echo .venv/bin/python || echo python3)
 
@@ -32,6 +32,12 @@ experiment:
 
 experiment-large:
 	QML_PROFILE=publication_large $(PYTHON) scripts/run_publication_large.py
+
+repro:
+	MLFLOW_DISABLE=1 $(PYTHON) -m pytest tests/integration/test_exp_001_smoke.py -v
+
+export-results:
+	$(PYTHON) scripts/export_results.py
 
 docker-build:
 	docker compose build

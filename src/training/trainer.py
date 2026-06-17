@@ -5,7 +5,9 @@ import time
 import torch
 import torch.nn as nn
 
+from src.training.checkpoints import save_best_checkpoint
 from src.training.metrics import ExperimentLogger
+from src.training.reproducibility import set_global_seed
 from src.training.structured_log import init_correlation_id, log_event
 
 
@@ -24,12 +26,25 @@ def train_model(
     log_every: int = 10,
     X_test: torch.Tensor | None = None,
     y_test: torch.Tensor | None = None,
+    seed: int | None = None,
+    profile: str | None = None,
+    save_checkpoints: bool = True,
 ) -> ExperimentLogger:
+    if seed is not None:
+        set_global_seed(seed)
+
     init_correlation_id()
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     criterion = nn.BCELoss()
-    log = ExperimentLogger(exp_id, model_name)
+    log = ExperimentLogger(exp_id, model_name, seed=seed, profile=profile)
+    params: dict = {"epochs": epochs, "lr": lr}
+    if seed is not None:
+        params["seed"] = seed
+    if profile is not None:
+        params["profile"] = profile
+    log._tracker.log_params(params)
 
+    best_holdout: float | None = None
     t0 = time.time()
     for epoch in range(epochs):
         model.training = True
@@ -48,6 +63,28 @@ def train_model(
                 holdout = evaluate(model, X_test, y_test)
                 epoch_metrics["holdout_accuracy"] = holdout["accuracy"]
                 epoch_metrics["holdout_loss"] = holdout["loss"]
+                if save_checkpoints:
+                    best_holdout, ckpt_path = save_best_checkpoint(
+                        model,
+                        exp_id,
+                        model_name,
+                        seed,
+                        holdout["accuracy"],
+                        best_metric=best_holdout,
+                        higher_is_better=True,
+                        config={"epochs": epochs, "lr": lr, "seed": seed, "profile": profile},
+                        metadata={"holdout_accuracy": holdout["accuracy"], "epoch": epoch},
+                    )
+                    if ckpt_path is not None:
+                        log_event(
+                            "info",
+                            "checkpoint saved",
+                            exp_id=exp_id,
+                            model_name=model_name,
+                            seed=seed,
+                            path=str(ckpt_path),
+                            holdout_accuracy=holdout["accuracy"],
+                        )
             log.log(epoch, **epoch_metrics)
 
         if epoch % log_every == 0:
@@ -56,6 +93,7 @@ def train_model(
                 "training progress",
                 exp_id=exp_id,
                 model_name=model_name,
+                seed=seed,
                 epoch=epoch,
                 loss=round(loss.item(), 4),
                 accuracy=round(acc, 3),
@@ -76,6 +114,7 @@ def train_model(
             "holdout eval",
             exp_id=exp_id,
             model_name=model_name,
+            seed=seed,
             test_accuracy=holdout["accuracy"],
             test_loss=holdout["loss"],
             eval_set="holdout_test",
@@ -86,6 +125,7 @@ def train_model(
         "training complete",
         exp_id=exp_id,
         model_name=model_name,
+        seed=seed,
         elapsed_s=round(elapsed, 1),
         n_params=n_params,
         test_accuracy=finish_extra.get("test_accuracy"),
@@ -114,7 +154,11 @@ def fine_tune(
     y: torch.Tensor,
     epochs: int = 20,
     lr: float = 0.01,
+    seed: int | None = None,
 ) -> float:
+    if seed is not None:
+        set_global_seed(seed)
+
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     criterion = nn.BCELoss()
 

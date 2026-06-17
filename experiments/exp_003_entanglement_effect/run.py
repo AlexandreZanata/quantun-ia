@@ -70,6 +70,8 @@ if __name__ == "__main__":
                 model_name=f"{name}_seed{seed}",
                 epochs=cfg["epochs"],
                 lr=lr,
+                seed=seed,
+                profile=cfg.get("profile"),
             )
             results_by_model[name].append(metrics["accuracy"])
 
