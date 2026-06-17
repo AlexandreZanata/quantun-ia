@@ -14,6 +14,7 @@ Welcome to the **Quantum-Inspired Micro ML Lab** documentation.
 | [Negative Results](negative_results.md) | Documented honest failures (exp_005, 007, 003, 009) |
 | [Reproducibility](reproducibility.md) | NeurIPS-style reproducibility checklist |
 | [Zenodo Release](zenodo.md) | DOI archival guide for v0.9.1+ |
+| [DVC Remote](dvc_remote.md) | Artifact remote setup and `dvc push` |
 | [Hypothesis Workflow](hypothesis-workflow.md) | Mandatory hypothesis-first discipline |
 | [Testing](testing.md) | Test pyramid, coverage thresholds, CI pipeline |
 | [Docker](docker.md) | Container services, Makefile targets, troubleshooting |

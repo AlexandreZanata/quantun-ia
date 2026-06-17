@@ -1,0 +1,20 @@
+# DVC remote configuration example.
+# Copy relevant sections to .dvc/config after creating storage.
+#
+# Local filesystem remote (recommended for solo lab):
+#
+#   dvc remote add -d localstore ../quantun-ia-dvc-storage
+#   dvc push
+#
+# S3-compatible remote:
+#
+#   dvc remote add -d s3store s3://your-bucket/quantun-ia
+#   dvc remote modify s3store region us-east-1
+#
+# See docs/dvc_remote.md for full setup.
+
+[core]
+    remote = localstore
+
+['remote "localstore"']
+    url = ../quantun-ia-dvc-storage

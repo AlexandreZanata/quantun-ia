@@ -33,20 +33,21 @@ def build_paper(paper_dir: Path = PAPER_DIR, latex_cmd: str = "pdflatex") -> Pat
     if not main_tex.is_file():
         raise FileNotFoundError(f"missing paper entry point: {main_tex}")
 
-    for _ in range(2):
+    def _run_pdflatex() -> None:
         subprocess.run(
             [latex_cmd, "-interaction=nonstopmode", "main.tex"],
-            check=True,
             cwd=paper_dir,
+            check=False,
         )
+
+    for _ in range(2):
+        _run_pdflatex()
+
     bib = paper_dir / "main.bbl"
     if not bib.exists():
-        subprocess.run(["bibtex", "main"], check=False, cwd=paper_dir)
-    subprocess.run(
-        [latex_cmd, "-interaction=nonstopmode", "main.tex"],
-        check=True,
-        cwd=paper_dir,
-    )
+        subprocess.run(["bibtex", "main"], cwd=paper_dir, check=False)
+    _run_pdflatex()
+
     pdf = paper_dir / "main.pdf"
     if not pdf.is_file():
         raise RuntimeError("pdflatex did not produce main.pdf")

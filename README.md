@@ -118,6 +118,8 @@ make results-new        # generate results.md from JSONL summaries
 make release            # Bundle artifacts for Zenodo v0.9.1 (SHA-256 manifest)
 make release-check      # Verify dist/release MANIFEST.txt checksums
 make paper-build        # LaTeX paper draft (figures + tables + PDF)
+make replay-publication-artifacts  # export CSV, figures, LaTeX from logs
+make replay-publication            # publication_large + full export pipeline
 ```
 
 See [Reproducibility](docs/reproducibility.md), [Negative Results](docs/negative_results.md), and [Zenodo guide](docs/zenodo.md).
@@ -135,6 +137,7 @@ Paper draft skeleton: `paper/main.tex`.
 | [Baselines](docs/baselines.md) | Literature comparison table |
 | [Negative Results](docs/negative_results.md) | Honest failures (curriculum, self-play, entanglement) |
 | [Reproducibility](docs/reproducibility.md) | NeurIPS-style checklist |
+| [DVC Remote](docs/dvc_remote.md) | Artifact storage and `dvc push` setup |
 | [Hypothesis Workflow](docs/hypothesis-workflow.md) | Mandatory hypothesis-first discipline |
 | [Architecture](docs/architecture.md) | Code structure and data flow |
 | [Testing](docs/testing.md) | pytest, coverage, CI |

@@ -56,12 +56,15 @@ Default publication seeds: `42, 123, 456, 789, 1000, 2000, 3000, 4000, 4242, 500
 | `ci` | 50 | 1 | 5 | CPU | ~3 s (exp_001 smoke) |
 | `publication` | 500 | 10 | 50 | CPU | ~5–15 min per experiment |
 | `publication_large` | 1000 | 10 | 50 | CPU | ~15–45 min per experiment |
+| Full replay | 1000 | 10 | 50 | CPU | ~2–8 h (all experiments) |
 
 **Commands:**
 
 ```bash
-make repro                    # CI profile smoke + golden bounds
-make experiment-large         # publication_large for all experiments
+make repro                         # CI profile smoke + golden bounds
+make experiment-large              # publication_large for all experiments
+make replay-publication-artifacts  # export CSV, figures, LaTeX from existing logs
+make replay-publication            # publication_large runs + full export pipeline
 MLFLOW_DISABLE=1 python experiments/exp_001_quantum_vs_classical/run.py
 ```
 
@@ -110,9 +113,18 @@ make experiment-large
 make export-results
 make figures
 make latex-tables
+# Or in one step from existing logs:
+make replay-publication-artifacts
 
 # 5. Release bundle (for Zenodo)
 make release
+```
+
+**Full publication replay** (long — runs `publication_large` on every experiment first):
+
+```bash
+make replay-publication
+dvc push    # after configuring remote — see docs/dvc_remote.md
 ```
 
 Expected outcome: `make repro` passes; metrics within golden bounds in `tests/regression/golden_ci.json`.

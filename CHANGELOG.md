@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.3] - 2026-06-17
+
+### Added
+
+- Phase 13: **`make replay-publication`** and **`make replay-publication-artifacts`**
+- `scripts/replay_publication.py` — orchestrates publication_large + export pipeline
+- `docs/dvc_remote.md` + `.dvc/config.example` — DVC remote setup guide
+- `tests/unit/test_replay_publication.py`
+
+### Fixed
+
+- Paper build tolerates pdflatex warnings; CI installs `texlive-bibtex-extra`
+
+### Changed
+
+- `docs/reproducibility.md` documents replay runtime and DVC workflow
+
 ## [0.9.2] - 2026-06-17
 
 ### Added
