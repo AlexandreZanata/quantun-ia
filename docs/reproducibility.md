@@ -124,7 +124,7 @@ Expected outcome: `make repro` passes; metrics within golden bounds in `tests/re
 - Fresh clone has empty `logs/experiments.jsonl` — run experiments or `dvc pull` for dashboard data.
 - exp_011–014 have `hypothesis.md` but `results.md` pending first publication runs.
 - MLflow tracking is optional (`MLFLOW_DISABLE=1` in CI).
-- Zenodo DOI: enable via `docs/zenodo.md` after GitHub release `v0.2.0`.
+- Zenodo DOI: enable via [docs/zenodo.md](zenodo.md) after GitHub release `v0.9.1`.
 
 ---
 

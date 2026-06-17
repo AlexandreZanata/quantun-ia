@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.1] - 2026-06-17
+
+### Added
+
+- Phase 11: **Zenodo release bundle** — SHA-256 `MANIFEST.txt`, static artifacts, verification CLI
+- `make release-check` — verify checksums in `dist/release/`
+- `tests/unit/test_prepare_release.py` — manifest and checksum contract tests
+- `tests/contracts/test_citation_cff.py` — CITATION.cff version and DOI format validation
+- GitHub Actions release workflow publishes bundle assets on tag push
+
+### Changed
+
+- `docs/zenodo.md`, `RELEASE_NOTES.md` updated for v0.9.0 (REST API + PWA)
+- Release bundle includes `CITATION.cff`, `CHANGELOG.md`, `docs/api.md`
+
 ## [0.9.0] - 2026-06-17
 
 ### Added

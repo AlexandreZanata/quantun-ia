@@ -115,7 +115,8 @@ make api                  # REST API server (exp_020 path)
 make api-demo             # API smoke test
 make experiments-new    # publication runs exp_011–015
 make results-new        # generate results.md from JSONL summaries
-make release            # Bundle artifacts for Zenodo v0.4.0
+make release            # Bundle artifacts for Zenodo v0.9.1 (SHA-256 manifest)
+make release-check      # Verify dist/release MANIFEST.txt checksums
 ```
 
 See [Reproducibility](docs/reproducibility.md), [Negative Results](docs/negative_results.md), and [Zenodo guide](docs/zenodo.md).
@@ -164,6 +165,7 @@ quantun-ia/
 ## Citation
 
 If you use this software in research, please cite it using [CITATION.cff](CITATION.cff).
+After the [Zenodo release](docs/zenodo.md) for `v0.9.1`, the DOI will appear in `CITATION.cff`.
 
 ## CI
 

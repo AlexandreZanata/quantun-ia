@@ -32,6 +32,7 @@ jobs:
         run: |
           mkdir -p logs
           python scripts/prepare_release.py
+          python scripts/prepare_release.py --verify-only dist/release
 
       - name: Upload release artifacts
         uses: actions/upload-artifact@v4
@@ -39,5 +40,27 @@ jobs:
           name: release-bundle
           path: dist/release/
 
-  # Attach artifacts to GitHub Release manually or via gh CLI after Zenodo sync.
+  publish:
+    name: Publish GitHub release
+    needs: prepare
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download release bundle
+        uses: actions/download-artifact@v4
+        with:
+          name: release-bundle
+          path: dist/release/
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/release/**
+          generate_release_notes: true
+          body_path: RELEASE_NOTES.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # After publish: enable Zenodo-GitHub integration and copy DOI to CITATION.cff.
   # See docs/zenodo.md for DOI update steps.

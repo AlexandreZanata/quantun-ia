@@ -2,7 +2,7 @@ cff-version: 1.2.0
 title: "quantun-ia: Quantum-Inspired ML Research Lab"
 message: "If you use this software, please cite it as below."
 type: software
-version: 0.9.0
+version: 0.9.1
 date-released: 2026-06-17
 authors:
   - family-names: Zanata
@@ -16,5 +16,5 @@ keywords:
   - reproducible-research
   - pennylane
   - pytorch
-# After Zenodo-GitHub release v0.2.0, add:
+# After Zenodo-GitHub release v0.9.1, uncomment and set the DOI from zenodo.org:
 # doi: 10.5281/zenodo.XXXXXXX

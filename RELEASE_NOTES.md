@@ -1,16 +1,17 @@
-# Release v0.4.0 — 5-Star Lab Closure
+# Release v0.9.1 — Zenodo Release Bundle
 
 **Date:** 2026-06-17  
-**Codename:** Full lab maturity — Phases 0–5 complete
+**Codename:** Phase 10 platform layer — Phases 0–10 complete
 
 ## Highlights
 
-- **15 experiments** with hypothesis-first workflow (`exp_001`–`exp_015`)
-- **Publication pipeline:** figures, LaTeX tables, paper skeleton, Zenodo guide
-- **Innovation:** exp_015 gradient-variance adaptive LR + literature review
-- **Engineering:** `make check`, 80% coverage, mypy CI, JSONL contracts, `qml-run` CLI
-- **Real benchmarks:** UCI breast cancer, MNIST PCA, sequence baselines
-- **results.md** for exp_011–exp_015 (publication profile)
+- **20 experiments** with hypothesis-first workflow (`exp_001`–`exp_020`)
+- **REST API** — FastAPI service with SQLite-backed training jobs and multitenancy headers
+- **Benchmark PWA** — mobile leaderboard at `/pwa/`
+- **Publication pipeline:** figures, LaTeX tables, paper skeleton, Zenodo release bundle with SHA-256 manifest
+- **Innovation track:** adaptive LR (015), hybrid NAS (016), poison × topology (017), feature fusion (018)
+- **Nano Trainer:** CLI + Streamlit mini training app (019)
+- **Engineering:** `make check`, 80% coverage, mypy CI, JSONL contracts, e2e API tests
 
 ## Install
 
@@ -22,12 +23,13 @@ make check
 
 ## Citation
 
-See [CITATION.cff](CITATION.cff). After Zenodo sync, add DOI per [docs/zenodo.md](docs/zenodo.md).
+See [CITATION.cff](CITATION.cff). After Zenodo sync for `v0.9.1`, add the DOI per [docs/zenodo.md](docs/zenodo.md).
 
 ## Artifact bundle
 
 ```bash
-make release   # → dist/release/
+make release        # → dist/release/ with MANIFEST.txt checksums
+make release-check  # verify an existing bundle
 ```
 
 ## Full changelog
