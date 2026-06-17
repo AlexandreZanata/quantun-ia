@@ -8,5 +8,6 @@ build/
 .mypy_cache/
 .ipynb_checkpoints/
 logs/experiments.jsonl
+.local/
 .DS_Store
 *.log

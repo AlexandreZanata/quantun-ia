@@ -46,7 +46,7 @@ make dashboard-local
 
 4. **Document** findings in `experiments/exp_001_quantum_vs_classical/results.md`
 
-## Experiment Workflow (all 7)
+## Experiment Workflow (all 10)
 
 Every experiment follows the same rigor:
 
@@ -55,13 +55,15 @@ Every experiment follows the same rigor:
 3. Check `logs/experiments.jsonl` or `make dashboard-local`
 4. Fill `results.md` with holdout metrics and conclusions
 
-**Evaluation defaults** (`config/experiments.yaml`):
+**Evaluation defaults** (`config/experiments.yaml`, `publication` profile):
 
 | Setting | Value |
 |---------|-------|
-| `n_samples` | 300 |
+| `dataset` | circles |
+| `noise` | 0.2 |
+| `n_samples` | 500 |
 | `test_size` | 0.3 (30% holdout) |
-| `seeds` | [42, 123, 456] for exp_001–003 |
+| `seeds` | 10 seeds (42, 123, 456, 789, 1024, 1337, 2048, 3001, 4096, 5000) |
 
 Holdout accuracy is logged as `holdout eval` / `multi-seed summary` in structured logs.
 
@@ -76,12 +78,25 @@ python experiments/exp_004_data_poisoning/run.py
 python experiments/exp_005_curriculum_quantum/run.py
 python experiments/exp_006_barren_plateau/run.py
 python experiments/exp_007_self_play/run.py
+python experiments/exp_008_data_reupload/run.py
+python experiments/exp_009_entanglement_basic/run.py
+python experiments/exp_010_poison_reupload_ablation/run.py
 ```
 
 Or in one line:
 
 ```bash
 for f in experiments/exp_*/run.py; do python "$f"; done
+```
+
+### Publication Large Profile
+
+For narrower confidence intervals (n=1000):
+
+```bash
+QML_PROFILE=publication_large python experiments/exp_001_quantum_vs_classical/run.py
+# or
+make experiment-large
 ```
 
 ## Dashboard
@@ -117,6 +132,7 @@ make dashboard    # http://localhost:8501
 | `make dashboard` | Streamlit via Docker |
 | `make dashboard-local` | Terminal report + Streamlit (local venv) |
 | `make experiment` | Run EXP 001 in Docker |
+| `make experiment-large` | Run all experiments with `publication_large` profile |
 | `make docker-build` | Build all images |
 | `make clean` | Remove `__pycache__`, `.pytest_cache` |
 
@@ -141,3 +157,4 @@ cfg = load_experiment_config("exp_004_data_poisoning")
 - [Experiments](experiments.md) — goals, ablations, and flags
 - [Hypothesis Workflow](hypothesis-workflow.md) — rigorous experiment discipline
 - [Architecture](architecture.md) — module map and data flow
+- [Contributing](../CONTRIBUTING.md) — PR checklist

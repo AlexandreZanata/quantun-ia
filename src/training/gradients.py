@@ -2,11 +2,10 @@
 
 from __future__ import annotations
 
-import numpy as np
 import torch
 import torch.nn as nn
 
-from src.training.statistics import bootstrap_ci, seed_summary
+from src.training.statistics import seed_summary
 
 
 def measure_gradient_variance(

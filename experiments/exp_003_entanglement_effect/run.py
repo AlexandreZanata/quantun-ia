@@ -1,6 +1,6 @@
 """
 EXP 003 — Quantum Entanglement Effect
-Holdout evaluation on 30% test split; repeated across 3 seeds.
+Holdout evaluation on 30% test split; repeated across 10 seeds (publication profile).
 """
 import sys
 from pathlib import Path

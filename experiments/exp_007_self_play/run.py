@@ -18,8 +18,8 @@ from src.quantum.qnn_factory import build_qnn
 from src.training.config import load_experiment_config
 from src.training.holdout import compare_conditions_batch, summarize_multi_seed
 from src.training.metrics import ExperimentLogger
-from src.training.self_play import self_play_train
 from src.training.protocol import log_applicability_gate, log_experiment_protocol, task_learnable
+from src.training.self_play import self_play_train
 from src.training.structured_log import init_correlation_id, log_event
 
 EXP_KEY = "exp_007_self_play"

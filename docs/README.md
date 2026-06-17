@@ -8,7 +8,7 @@ Welcome to the **Quantum-Inspired Micro ML Lab** documentation.
 |----------|-------------|
 | [Getting Started](getting-started.md) | Install, venv, Docker, dashboard, run all experiments |
 | [Architecture](architecture.md) | Code structure, module responsibilities, data flow |
-| [Experiments](experiments.md) | All 7 experiments — goals, ablations, known flags |
+| [Experiments](experiments.md) | All 10 experiments — goals, ablations, known flags |
 | [Hypothesis Workflow](hypothesis-workflow.md) | Mandatory hypothesis-first discipline |
 | [Testing](testing.md) | Test pyramid, coverage thresholds, CI pipeline |
 | [Docker](docker.md) | Container services, Makefile targets, troubleshooting |
@@ -35,4 +35,5 @@ make docker-build && make test && make experiment && make dashboard
 - **Config:** Hyperparameters in `config/experiments.yaml`, loaded via `src/training/config.py`
 - **Splits:** `src/data/splits.py` — stratified train/test before any preprocessing
 - **Holdout:** `src/training/holdout.py` — train on train, eval on test, multi-seed summary
-- **Results:** Each `experiments/exp_*/results.md` documents holdout findings after running
+- **Seeds:** 10 seeds in `publication` profile for statistical rigor
+- **Citation:** Use [CITATION.cff](../CITATION.cff) when referencing this software

@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+title: "quantun-ia: Quantum-Inspired ML Research Lab"
+message: "If you use this software, please cite it as below."
+type: software
+authors:
+  - family-names: Zanata
+    given-names: Alexandre
+repository-code: "https://github.com/AlexandreZanata/quantun-ia"
+license: MIT
+keywords:
+  - quantum-machine-learning
+  - variational-quantum-circuits
+  - reproducible-research
+  - pennylane
+  - pytorch

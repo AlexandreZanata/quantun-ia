@@ -1,6 +1,5 @@
 """Unit tests for research statistics module."""
 
-import numpy as np
 
 from src.training.statistics import bootstrap_ci, paired_comparison, seed_summary
 

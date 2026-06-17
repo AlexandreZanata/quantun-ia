@@ -6,22 +6,27 @@ The project follows a layered structure separating data, models, training, and e
 
 ```
 src/
-├── classical/     # Classical ML models (Perceptron, TransformerMini, RNNMini)
-├── quantum/       # Quantum models (QNN, HybridModel, AmplitudeEncoding)
-├── data/          # Dataset generators, augmentation, poisoning
-└── training/      # Universal trainer, metrics logger, curriculum learning
+├── classical/     # Classical ML models (Perceptron, MLP, TransformerMini, RNNMini)
+├── quantum/       # Quantum models (QNN variants, HybridModel, encoding utilities)
+├── data/          # Dataset generators, augmentation, poisoning, splits
+└── training/      # Trainer, metrics, statistics, protocol, curriculum, self-play
 
 experiments/
 └── exp_NNN_<name>/
     ├── hypothesis.md   # Written BEFORE running
-    ├── run.py          # Experiment entry point
+    ├── run.py          # Experiment entry point (thin orchestrator)
     └── results.md      # Filled AFTER running
+
+config/
+└── experiments.yaml    # Central hyperparameters and profiles
 
 logs/
 └── experiments.jsonl   # Append-only central log
 
 dashboard/
-└── app.py              # Streamlit visualization
+├── app.py              # Streamlit visualization
+├── benchmark_data.py   # JSONL loader and leaderboard normalization
+└── terminal_report.py  # ASCII terminal leaderboard
 ```
 
 ## Module Responsibilities
@@ -48,11 +53,14 @@ dashboard/
 
 | Module | Purpose |
 |--------|---------|
-| `qnn_basic.py` | Basic variational quantum circuit (VQC) |
+| `qnn_basic.py` | Basic variational quantum circuit (angle encoding) |
+| `qnn_reupload.py` | Data re-uploading VQC (layer-wise feature re-embedding) |
 | `qnn_entangled.py` | VQC with configurable entanglement (none/chain/chain_half/ring) |
 | `qnn_amplitude.py` | VQC with amplitude encoding (unit-norm required) |
+| `qnn_factory.py` | Config-driven QNN builder (`basic`, `reupload`, `entangled`) |
 | `hybrid_model.py` | Classical-Quantum hybrid architectures |
-| `amplitude_encoding.py` | Data encoding utilities for quantum circuits |
+| `amplitude_encoding.py` | Data encoding utilities (normalize, pad, angle encode) |
+| `circuit_utils.py` | Backprop vs parameter-shift gradient policy |
 
 ### `src/training/`
 
@@ -60,12 +68,16 @@ dashboard/
 |--------|---------|
 | `trainer.py` | Universal training loop with Adam + BCELoss |
 | `base_model.py` | `TrainableMixin` — enforces train/predict/evaluate contract |
-| `config.py` | Loads `config/experiments.yaml` |
+| `config.py` | Loads `config/experiments.yaml` with profile merging |
 | `structured_log.py` | JSON structured logging via loguru |
 | `metrics.py` | `ExperimentLogger` — writes to `logs/experiments.jsonl` |
+| `holdout.py` | Multi-seed holdout runner and summary aggregation |
+| `statistics.py` | Bootstrap CI, paired Wilcoxon, Holm-Bonferroni correction |
+| `protocol.py` | Experiment protocol logging and applicability gates |
+| `param_match.py` | Parameter-matched classical baselines for fair comparison |
 | `curriculum.py` | Difficulty-based ordering and staged batch training |
-| `gradients.py` | Gradient variance measurement (barren plateau) |
-| `holdout.py` | Train/eval split helper + multi-seed summary |
+| `self_play.py` | Capped hard-example self-play fine-tuning loop |
+| `gradients.py` | Gradient variance measurement (barren plateau diagnostics) |
 
 ## Model Interface Contract
 
@@ -77,20 +89,75 @@ def predict(self, X): ...
 def evaluate(self, X, y) -> dict: ...
 ```
 
-## Data Flow
+## Data Flow — Single Experiment
 
 ```
-generators.py → run.py → trainer.py → metrics.py → experiments.jsonl → dashboard/app.py
+config/experiments.yaml
+        │
+        ▼
+generators.py ──► splits.py (stratified holdout BEFORE preprocessing)
+        │
+        ▼
+   run.py (orchestrator)
+        │
+        ▼
+   trainer.py ──► model.train() ──► model.evaluate(holdout)
+        │
+        ▼
+   metrics.py (ExperimentLogger) ──► logs/experiments.jsonl
+        │
+        ▼
+   dashboard/app.py
+```
+
+## Data Flow — Multi-Seed Holdout Pipeline
+
+```
+config/experiments.yaml  (seeds: [42, 123, ..., 5000])
+        │
+        ▼
+   holdout.py
+        │
+        ├── seed=42  ──► split ──► train ──► holdout eval ──► log per-seed
+        ├── seed=123 ──► split ──► train ──► holdout eval ──► log per-seed
+        └── ...      (10 seeds)
+        │
+        ▼
+   statistics.py
+        ├── bootstrap_ci()        → mean ± 95% CI per model
+        ├── paired_wilcoxon()     → effect vs baseline per seed
+        └── holm_bonferroni()     → multiple-comparison correction
+        │
+        ▼
+   metrics.py  →  multi_seed_summary / paired_comparison records in JSONL
+        │
+        ▼
+   dashboard/benchmark_data.py  →  leaderboard table + charts
 ```
 
 ## Configuration
 
-`config/experiments.yaml` centralizes default hyperparameters and experiment metadata. All `run.py` scripts load settings via `src/training/config.py`.
+`config/experiments.yaml` centralizes default hyperparameters, experiment metadata, and profiles:
+
+| Profile | `n_samples` | Seeds |
+|---------|-------------|-------|
+| `publication` | 500 | 10 |
+| `publication_large` | 1000 | 10 |
+
+All `run.py` scripts load settings via `src/training/config.py`:
+
+```python
+from src.training.config import load_experiment_config
+cfg = load_experiment_config("exp_008_data_reupload", profile="publication")
+```
 
 ## Design Principles
 
 1. **Hypothesis-first** — no experiment runs without a written hypothesis
 2. **Append-only logs** — experiment history is never deleted
 3. **Comparable metrics** — all experiments use the same `ExperimentLogger` format
-4. **English-only** — all identifiers, comments, and docs in English
-5. **Testable units** — data utilities and metrics are pure functions, easy to unit test
+4. **No data leakage** — stratified split before poisoning, curriculum, or scaling
+5. **Fair baselines** — parameter-matched classical models where applicable
+6. **Statistical rigor** — multi-seed runs with corrected multiple comparisons
+7. **English-only** — all identifiers, comments, and docs in English
+8. **Testable units** — data utilities and metrics are pure functions, easy to unit test

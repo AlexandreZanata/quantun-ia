@@ -47,23 +47,41 @@ make dashboard-local                  # interactive charts
 
 Results append to `logs/experiments.jsonl` (never delete — append only).
 
+## Experiments
+
+| ID | Name | Focus |
+|----|------|-------|
+| 001 | Quantum vs Classical | QNN vs MLP baselines |
+| 002 | Hybrid Architecture | Sandwich / QuantumFirst / ClassicalFirst |
+| 003 | Entanglement Effect | Topology ablation (re-upload QNN) |
+| 004 | Data Poisoning | Angle vs amplitude encoding under label noise |
+| 005 | Curriculum Quantum | Staged easy→hard vs random order |
+| 006 | Barren Plateau | Gradient variance vs qubit count |
+| 007 | Self-Play Quantum | Hard-example fine-tuning loop |
+| 008 | Data Re-upload | Re-upload vs basic QNN vs param-matched classical |
+| 009 | Entanglement Basic | Topology ablation (basic QNN, no re-upload) |
+| 010 | Poison Re-upload Ablation | Layer depth and LR under poisoning |
+
+See [Experiments](docs/experiments.md) for full details.
+
 ## Documentation
 
 | Doc | Description |
 |-----|-------------|
 | [Getting Started](docs/getting-started.md) | Full setup, Makefile, workflow |
-| [Experiments](docs/experiments.md) | All 7 experiments + ablations |
+| [Experiments](docs/experiments.md) | All 10 experiments + ablations |
 | [Hypothesis Workflow](docs/hypothesis-workflow.md) | Mandatory hypothesis-first discipline |
 | [Architecture](docs/architecture.md) | Code structure and data flow |
 | [Testing](docs/testing.md) | pytest, coverage, CI |
 | [Docker](docs/docker.md) | Container reference |
+| [Contributing](CONTRIBUTING.md) | PR checklist and conventions |
 
 ## Project Structure
 
 ```
 quantun-ia/
 ├── src/              # Models, data, training utilities
-├── experiments/      # exp_001 – exp_007 + template
+├── experiments/      # exp_001 – exp_010 + template
 ├── config/           # experiments.yaml (central hyperparameters)
 ├── dashboard/        # Retro Streamlit benchmark monitor
 ├── logs/             # experiments.jsonl (append-only)
@@ -76,9 +94,13 @@ quantun-ia/
 - Write `hypothesis.md` **before** running any experiment
 - Fill `results.md` **after** each run with holdout metrics and conclusions
 - All metrics go through `ExperimentLogger` → `logs/experiments.jsonl`
-- **Holdout eval:** 30% test split before training (exp_001–007)
-- **Multi-seed:** seeds `[42, 123, 456]` in `config/experiments.yaml` for exp_001–003
+- **Holdout eval:** 30% test split before training (all classification experiments)
+- **Multi-seed:** 10 seeds in `config/experiments.yaml` (`publication` profile)
 - Config overrides live in `config/experiments.yaml`, not hardcoded in `run.py`
+
+## Citation
+
+If you use this software in research, please cite it using [CITATION.cff](CITATION.cff).
 
 ## CI
 
@@ -86,4 +108,4 @@ GitHub Actions: ruff lint, pytest (coverage ≥ 70%), Docker test suite, smoke i
 
 ## License
 
-MIT
+MIT — see [LICENSE](LICENSE).

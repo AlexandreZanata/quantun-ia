@@ -14,7 +14,11 @@ from src.data.generators import make_binary_classification
 from src.data.splits import split_train_test
 from src.quantum.qnn_factory import build_qnn
 from src.training.config import load_experiment_config
-from src.training.curriculum import curriculum_total_epochs, sort_by_difficulty, train_curriculum_batched
+from src.training.curriculum import (
+    curriculum_total_epochs,
+    sort_by_difficulty,
+    train_curriculum_batched,
+)
 from src.training.holdout import compare_conditions_batch, summarize_multi_seed
 from src.training.protocol import log_applicability_gate, log_experiment_protocol, task_learnable
 from src.training.structured_log import init_correlation_id, log_event
