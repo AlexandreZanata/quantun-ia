@@ -17,6 +17,7 @@ profiles:
   publication:
     n_samples: 500
     seeds: [42, 123, 456, 789, 1024, 1337, 2048, 3001, 4096, 5000]
+    hpo_trials: 20
   publication_large:
     n_samples: 1000
     seeds: [42, 123, 456, 789, 1024, 1337, 2048, 3001, 4096, 5000]
@@ -24,6 +25,7 @@ profiles:
     n_samples: 50
     seeds: [42, 123]
     epochs: 5
+    hpo_trials: 3
 
 experiments:
   exp_001_quantum_vs_classical:
@@ -285,3 +287,39 @@ experiments:
         learning_rate: 0.02
       classical_matched:
         learning_rate: 0.01
+
+  exp_016_hybrid_nas:
+    description: "Optuna NAS over hybrid layouts vs fixed EXP 002 baselines"
+    exp_id: exp_016
+    dataset: circles
+    noise: 0.2
+    qnn_type: reupload
+    hpo_seeds: [42, 123, 456]
+    baselines:
+      - hybrid_sandwich
+      - quantum_first
+      - classical_first
+    search_space:
+      architectures: [hybrid_sandwich, quantum_first, classical_first]
+      n_qubits_min: 3
+      n_qubits_max: 6
+      n_layers_min: 1
+      n_layers_max: 3
+      learning_rate_min: 0.005
+      learning_rate_max: 0.05
+    model_configs:
+      hybrid_sandwich:
+        n_qubits: 4
+        n_layers: 3
+        learning_rate: 0.02
+        reupload: true
+      quantum_first:
+        n_qubits: 4
+        n_layers: 3
+        learning_rate: 0.02
+        reupload: true
+      classical_first:
+        n_qubits: 4
+        n_layers: 3
+        learning_rate: 0.02
+        reupload: true

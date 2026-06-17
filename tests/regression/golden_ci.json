@@ -14,5 +14,19 @@
       "per_seed_min": 0.60,
       "per_seed_max": 1.0
     }
+  },
+  "exp_016": {
+    "nas_best": {
+      "mean_min": 0.35,
+      "mean_max": 1.0,
+      "per_seed_min": 0.2,
+      "per_seed_max": 1.0
+    },
+    "hybrid_sandwich": {
+      "mean_min": 0.35,
+      "mean_max": 1.0,
+      "per_seed_min": 0.2,
+      "per_seed_max": 1.0
+    }
   }
 }

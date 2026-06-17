@@ -58,6 +58,9 @@ export-results:
 hpo:
 	MLFLOW_DISABLE=1 $(PYTHON) scripts/run_hpo.py --exp exp_011_uci_tabular_qml --trials 5 --model perceptron
 
+nas:
+	MLFLOW_DISABLE=1 $(PYTHON) experiments/exp_016_hybrid_nas/run.py
+
 figures:
 	$(PYTHON) scripts/generate_figures.py
 

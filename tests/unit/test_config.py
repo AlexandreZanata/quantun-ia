@@ -50,7 +50,8 @@ def test_exp_009_and_010_config():
     assert "reupload_2l" in cfg10["reupload_variants"]
 
 
-def test_exp_011_through_014_config():
+def test_exp_011_through_014_config(monkeypatch):
+    monkeypatch.delenv("QML_PROFILE", raising=False)
     cfg11 = load_experiment_config("exp_011_uci_tabular_qml")
     assert cfg11["dataset"] == "breast_cancer"
     cfg12 = load_experiment_config("exp_012_mnist_pca_qml")
@@ -62,3 +63,8 @@ def test_exp_011_through_014_config():
     cfg15 = load_experiment_config("exp_015_adaptive_qnn")
     assert cfg15["adaptive_lr"]["var_target"] == 0.015
     assert "quantum_6q_3l_adaptive" in cfg15["models"]
+    cfg16 = load_experiment_config("exp_016_hybrid_nas")
+    assert cfg16["exp_id"] == "exp_016"
+    assert cfg16["hpo_trials"] == 20
+    cfg16_ci = load_experiment_config("exp_016_hybrid_nas", profile="ci")
+    assert cfg16_ci["hpo_trials"] == 3

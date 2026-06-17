@@ -52,6 +52,14 @@ EXP_META: dict[str, dict[str, str]] = {
             "Primary test: adaptive vs fixed LR at 6q×3l. See `docs/literature_review.md`."
         ),
     },
+    "exp_016": {
+        "dir": "exp_016_hybrid_nas",
+        "title": "EXP 016 (Hybrid NAS)",
+        "dataset": "circles, noise=0.2, Optuna over hybrid layouts",
+        "conclusion": (
+            "NAS-best hybrid vs fixed EXP 002 baselines. See `docs/literature_review.md` §5."
+        ),
+    },
 }
 
 

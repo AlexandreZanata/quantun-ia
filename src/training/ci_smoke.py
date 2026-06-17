@@ -132,3 +132,57 @@ def run_exp_011_ci(*, log_path: Path | None = None) -> dict[str, list[float]]:
         build_model=build_model,
         log_path=log_path,
     )
+
+
+EXP_016_KEY = "exp_016_hybrid_nas"
+EXP_016_ID = "exp_016"
+
+
+def run_exp_016_ci(*, log_path: Path | None = None) -> dict[str, list[float]]:
+    """Fast CI smoke: 3 Optuna trials + nas_best vs hybrid_sandwich on ci profile."""
+    from src.quantum.hybrid_model import HybridSandwich
+    from src.training.hpo import build_exp_016_objective, build_hybrid_from_params, run_optuna_study
+
+    cfg = load_experiment_config(EXP_016_KEY, profile="ci")
+    model_names = ["nas_best", "hybrid_sandwich"]
+    n_trials = int(cfg.get("hpo_trials", 3))
+
+    objective = build_exp_016_objective(EXP_016_KEY, "ci")
+    best = run_optuna_study(EXP_016_KEY, objective, n_trials=n_trials, profile="ci")
+    best_params = best["best_params"]
+
+    def build_model(seed: int) -> dict:
+        X, y, _ = make_binary_classification(
+            n_samples=cfg["n_samples"],
+            dataset=cfg["dataset"],
+            noise=cfg["noise"],
+            random_state=seed,
+        )
+        X_train, X_test, y_train, y_test = split_train_test(
+            X, y, test_size=cfg["test_size"], random_state=seed
+        )
+        nas_model, nas_lr = build_hybrid_from_params(best_params, input_dim=2)
+        mc = cfg.get("model_configs", {}).get("hybrid_sandwich", {})
+        baseline = HybridSandwich(
+            input_dim=2,
+            n_qubits=mc.get("n_qubits", 4),
+            n_layers=mc.get("n_layers", 3),
+            reupload=mc.get("reupload", True),
+        )
+        baseline_lr = mc.get("learning_rate", cfg["learning_rate"])
+        return {
+            "splits": (X_train, X_test, y_train, y_test),
+            "models": {
+                "nas_best": (nas_model, nas_lr),
+                "hybrid_sandwich": (baseline, baseline_lr),
+            },
+        }
+
+    return _run_holdout_loop(
+        exp_key=EXP_016_KEY,
+        exp_id=EXP_016_ID,
+        cfg=cfg,
+        model_names=model_names,
+        build_model=build_model,
+        log_path=log_path,
+    )

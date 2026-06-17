@@ -131,3 +131,109 @@ def build_exp_011_objective(exp_key: str, profile: str | None, model_name: str):
         return value
 
     return objective
+
+
+def build_hybrid_from_params(
+    params: dict[str, Any],
+    *,
+    input_dim: int = 2,
+) -> tuple[Any, float]:
+    """Instantiate a hybrid model from NAS parameter dict."""
+    from src.quantum.hybrid_model import ClassicalFirst, HybridSandwich, QuantumFirst
+
+    arch_map = {
+        "hybrid_sandwich": HybridSandwich,
+        "quantum_first": QuantumFirst,
+        "classical_first": ClassicalFirst,
+    }
+    arch = str(params.get("architecture", "hybrid_sandwich"))
+    cls = arch_map.get(arch)
+    if cls is None:
+        raise ValueError(f"Unknown hybrid architecture: {arch}")
+    n_qubits = int(params.get("n_qubits", 4))
+    n_layers = int(params.get("n_layers", 2))
+    reupload = bool(params.get("reupload", False))
+    lr = float(params.get("learning_rate", 0.02))
+    model = cls(input_dim=input_dim, n_qubits=n_qubits, n_layers=n_layers, reupload=reupload)
+    return model, lr
+
+
+def evaluate_hybrid_trial(
+    exp_key: str,
+    params: dict[str, Any],
+    *,
+    profile: str | None = None,
+) -> float:
+    """Objective helper: mean holdout accuracy over HPO seeds for exp_016."""
+    from src.data.generators import make_binary_classification
+    from src.data.splits import split_train_test
+    from src.training.holdout import train_with_holdout
+
+    cfg = load_experiment_config(exp_key, profile=profile)
+    seeds = cfg.get("hpo_seeds", cfg.get("seeds", [42])[:3])
+
+    accs: list[float] = []
+    for seed in seeds:
+        X, y, _ = make_binary_classification(
+            n_samples=cfg["n_samples"],
+            dataset=cfg.get("dataset", "circles"),
+            noise=cfg.get("noise", 0.2),
+            random_state=seed,
+        )
+        X_train, X_test, y_train, y_test = split_train_test(
+            X, y, test_size=cfg["test_size"], random_state=seed
+        )
+        model, lr = build_hybrid_from_params(params, input_dim=2)
+        metrics = train_with_holdout(
+            model,
+            X_train,
+            y_train,
+            X_test,
+            y_test,
+            exp_id=cfg.get("exp_id", "exp_016"),
+            model_name=f"hpo_hybrid_seed{seed}",
+            epochs=cfg["epochs"],
+            lr=lr,
+            seed=seed,
+            profile=cfg.get("profile"),
+            save_checkpoints=False,
+        )
+        accs.append(metrics["accuracy"])
+    return float(np.mean(accs))
+
+
+def build_exp_016_objective(exp_key: str, profile: str | None):
+    def objective(trial) -> float:
+        cfg = load_experiment_config(exp_key, profile=profile)
+        space = cfg.get("search_space", {})
+        arch_choices = space.get(
+            "architectures", ["hybrid_sandwich", "quantum_first", "classical_first"]
+        )
+        params = {
+            "architecture": trial.suggest_categorical("architecture", arch_choices),
+            "n_qubits": trial.suggest_int(
+                "n_qubits",
+                int(space.get("n_qubits_min", 3)),
+                int(space.get("n_qubits_max", 6)),
+            ),
+            "n_layers": trial.suggest_int(
+                "n_layers",
+                int(space.get("n_layers_min", 1)),
+                int(space.get("n_layers_max", 3)),
+            ),
+            "learning_rate": trial.suggest_float(
+                "learning_rate",
+                float(space.get("learning_rate_min", 0.005)),
+                float(space.get("learning_rate_max", 0.05)),
+                log=True,
+            ),
+            "reupload": trial.suggest_categorical("reupload", [True, False]),
+        }
+        tracker = RunTracker(exp_key, "hpo_hybrid_nas", profile=profile)
+        tracker.log_params(params)
+        value = evaluate_hybrid_trial(exp_key, params, profile=profile)
+        tracker.log_metrics({"mean_holdout_accuracy": value})
+        tracker.end()
+        return value
+
+    return objective

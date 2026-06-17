@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-06-17
+
+### Added
+
+- Phase 6: `exp_016_hybrid_nas` — Optuna NAS over hybrid classical–quantum layouts
+- `evaluate_hybrid_trial`, `build_hybrid_from_params`, `build_exp_016_objective` in `hpo.py`
+- CI smoke `test_exp_016_smoke.py` + golden bounds
+- `make nas` target; `run_hpo.py` supports exp_016
+- `hpo_trials: 3` in ci profile for fast NAS smoke
+
+### Changed
+
+- Documentation updated to 16 experiments
+- `docs/literature_review.md` marks exp_016 complete
+
 ## [0.4.1] - 2026-06-17
 
 ### Added

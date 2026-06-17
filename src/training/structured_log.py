@@ -16,7 +16,7 @@ _seed: ContextVar[int | None] = ContextVar("seed", default=None)
 _profile: ContextVar[str | None] = ContextVar("profile", default=None)
 
 SERVICE_NAME = "quantun-ia"
-SERVICE_VERSION = "0.4.1"
+SERVICE_VERSION = "0.5.0"
 
 
 def init_correlation_id() -> str:
