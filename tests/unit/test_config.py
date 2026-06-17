@@ -68,3 +68,7 @@ def test_exp_011_through_014_config(monkeypatch):
     assert cfg16["hpo_trials"] == 20
     cfg16_ci = load_experiment_config("exp_016_hybrid_nas", profile="ci")
     assert cfg16_ci["hpo_trials"] == 3
+    cfg17 = load_experiment_config("exp_017_poison_topology")
+    assert cfg17["exp_id"] == "exp_017"
+    assert "nas_preset" in cfg17["topologies"]
+    assert 0.3 in cfg17["poison_rates"]

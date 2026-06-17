@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-06-17
+
+### Added
+
+- Phase 7: `exp_017_poison_topology` — hybrid topology × label poisoning robustness
+- Four arms: sandwich, quantum-first, classical-first, EXP 016 NAS preset
+- CI smoke `test_exp_017_smoke.py` + golden bounds
+- `make poison-topology` target
+
+### Changed
+
+- Documentation updated to 17 experiments
+- `docs/literature_review.md` marks exp_017 complete
+
 ## [0.5.0] - 2026-06-17
 
 ### Added

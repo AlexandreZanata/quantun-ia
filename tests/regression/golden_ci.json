@@ -28,5 +28,15 @@
       "per_seed_min": 0.2,
       "per_seed_max": 1.0
     }
+  },
+  "exp_017": {
+    "hybrid_sandwich_poison_0": {
+      "mean_min": 0.35,
+      "mean_max": 1.0
+    },
+    "hybrid_sandwich_poison_30": {
+      "mean_min": 0.25,
+      "mean_max": 1.0
+    }
   }
 }

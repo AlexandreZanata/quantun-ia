@@ -60,6 +60,14 @@ EXP_META: dict[str, dict[str, str]] = {
             "NAS-best hybrid vs fixed EXP 002 baselines. See `docs/literature_review.md` §5."
         ),
     },
+    "exp_017": {
+        "dir": "exp_017_poison_topology",
+        "title": "EXP 017 (Poison × Topology)",
+        "dataset": "circles, label poisoning 0–30%, hybrid topologies + NAS preset",
+        "conclusion": (
+            "Topology-driven poisoning robustness on clean holdout. Builds on exp_004/010/016."
+        ),
+    },
 }
 
 

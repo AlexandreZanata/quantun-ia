@@ -186,3 +186,67 @@ def run_exp_016_ci(*, log_path: Path | None = None) -> dict[str, list[float]]:
         build_model=build_model,
         log_path=log_path,
     )
+
+
+EXP_017_KEY = "exp_017_poison_topology"
+EXP_017_ID = "exp_017"
+
+
+def run_exp_017_ci(*, log_path: Path | None = None) -> dict[str, list[float]]:
+    """Fast CI smoke: hybrid_sandwich at 0% and 30% poison, ci profile."""
+    import torch
+
+    from src.data.poisoning import poison_dataset
+    from src.quantum.hybrid_model import HybridSandwich
+    from src.training import metrics as metrics_module
+
+    cfg = load_experiment_config(EXP_017_KEY, profile="ci")
+    rates = [0.0, 0.3]
+    model_names = [f"hybrid_sandwich_poison_{int(r * 100)}" for r in rates]
+    results: dict[str, list[float]] = {name: [] for name in model_names}
+
+    original_log_path = metrics_module.LOGS_PATH
+    if log_path is not None:
+        metrics_module.LOGS_PATH = log_path
+        log_path.parent.mkdir(parents=True, exist_ok=True)
+
+    try:
+        mc = cfg.get("model_configs", {}).get("hybrid_sandwich", {})
+        for seed in cfg["seeds"]:
+            X, y, _ = make_binary_classification(
+                n_samples=cfg["n_samples"],
+                dataset=cfg["dataset"],
+                noise=cfg["noise"],
+                random_state=seed,
+            )
+            X_train, X_test, y_train, y_test = split_train_test(
+                X, y, test_size=cfg["test_size"], random_state=seed
+            )
+            X_test_t = torch.tensor(X_test)
+            y_test_t = torch.tensor(y_test)
+            lr = mc.get("learning_rate", cfg["learning_rate"])
+
+            for rate in rates:
+                _, y_poisoned, _ = poison_dataset(X_train, y_train, poison_rate=rate, seed=seed)
+                model = HybridSandwich(
+                    input_dim=2,
+                    n_qubits=mc.get("n_qubits", 4),
+                    n_layers=mc.get("n_layers", 3),
+                    reupload=mc.get("reupload", True),
+                )
+                model.train(
+                    torch.tensor(X_train),
+                    torch.tensor(y_poisoned),
+                    exp_id=EXP_017_ID,
+                    model_name=f"hybrid_sandwich_poison_{int(rate * 100)}_seed{seed}",
+                    epochs=cfg["epochs"],
+                    lr=lr,
+                    X_test=X_test_t,
+                    y_test=y_test_t,
+                )
+                acc = model.evaluate(X_test_t, y_test_t)["accuracy"]
+                results[f"hybrid_sandwich_poison_{int(rate * 100)}"].append(acc)
+    finally:
+        metrics_module.LOGS_PATH = original_log_path
+
+    return results

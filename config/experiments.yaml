@@ -323,3 +323,73 @@ experiments:
         n_layers: 3
         learning_rate: 0.02
         reupload: true
+
+  exp_017_poison_topology:
+    description: "Hybrid topology × label poisoning — clean holdout eval"
+    exp_id: exp_017
+    dataset: circles
+    noise: 0.2
+    poison_rates: [0.0, 0.1, 0.2, 0.3]
+    qnn_type: reupload
+    topologies:
+      - hybrid_sandwich
+      - quantum_first
+      - classical_first
+      - nas_preset
+    nas_preset:
+      architecture: quantum_first
+      n_qubits: 5
+      n_layers: 2
+      learning_rate: 0.015817490011652512
+      reupload: true
+    model_configs:
+      hybrid_sandwich:
+        n_qubits: 4
+        n_layers: 3
+        learning_rate: 0.02
+        reupload: true
+      quantum_first:
+        n_qubits: 4
+        n_layers: 3
+        learning_rate: 0.02
+        reupload: true
+      classical_first:
+        n_qubits: 4
+        n_layers: 3
+        learning_rate: 0.02
+        reupload: true
+
+  exp_017_poison_topology:
+    description: "Hybrid topology × label poisoning — clean holdout eval"
+    exp_id: exp_017
+    dataset: circles
+    noise: 0.2
+    poison_rates: [0.0, 0.1, 0.2, 0.3]
+    qnn_type: reupload
+    topologies:
+      - hybrid_sandwich
+      - quantum_first
+      - classical_first
+      - nas_preset
+    nas_preset:
+      architecture: quantum_first
+      n_qubits: 5
+      n_layers: 2
+      learning_rate: 0.015817490011652512
+      reupload: true
+    model_configs:
+      hybrid_sandwich:
+        n_qubits: 4
+        n_layers: 3
+        learning_rate: 0.02
+        reupload: true
+      quantum_first:
+        n_qubits: 4
+        n_layers: 3
+        learning_rate: 0.02
+        reupload: true
+      classical_first:
+        n_qubits: 4
+        n_layers: 3
+        learning_rate: 0.02
+        reupload: true

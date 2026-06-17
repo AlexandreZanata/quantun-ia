@@ -61,6 +61,9 @@ hpo:
 nas:
 	MLFLOW_DISABLE=1 $(PYTHON) experiments/exp_016_hybrid_nas/run.py
 
+poison-topology:
+	MLFLOW_DISABLE=1 $(PYTHON) experiments/exp_017_poison_topology/run.py
+
 figures:
 	$(PYTHON) scripts/generate_figures.py
 

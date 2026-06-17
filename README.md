@@ -67,6 +67,7 @@ Results append to `logs/experiments.jsonl` (never delete — append only).
 | 014 | Sequence Baselines | RNN, Transformer-mini vs flattened QNN |
 | 015 | Adaptive QNN | Gradient-variance LR vs fixed LR (Phase 4) |
 | 016 | Hybrid NAS | Optuna search over hybrid layouts (Phase 6) |
+| 017 | Poison × Topology | Hybrid layout vs label poisoning (Phase 7) |
 
 See [Experiments](docs/experiments.md) for full details.
 
@@ -81,6 +82,7 @@ make hpo                # Optuna hyperparameter search (exp_011 default)
 make figures            # PDF figures from logs/experiments.jsonl
 make latex-tables       # LaTeX tables for paper/
 make nas                  # Optuna NAS + holdout (exp_016)
+make poison-topology      # hybrid × poisoning (exp_017)
 make experiments-new    # publication runs exp_011–015
 make results-new        # generate results.md from JSONL summaries
 make release            # Bundle artifacts for Zenodo v0.4.0
@@ -94,7 +96,7 @@ Paper draft skeleton: `paper/main.tex`.
 | Doc | Description |
 |-----|-------------|
 | [Getting Started](docs/getting-started.md) | Full setup, Makefile, workflow |
-| [Experiments](docs/experiments.md) | All 16 experiments + ablations |
+| [Experiments](docs/experiments.md) | All 17 experiments + ablations |
 | [Literature Review](docs/literature_review.md) | Phase 4 research context |
 | [Baselines](docs/baselines.md) | Literature comparison table |
 | [Negative Results](docs/negative_results.md) | Honest failures (curriculum, self-play, entanglement) |
@@ -110,7 +112,7 @@ Paper draft skeleton: `paper/main.tex`.
 ```
 quantun-ia/
 ├── src/              # Models, data, training utilities
-├── experiments/      # exp_001 – exp_016 + template
+├── experiments/      # exp_001 – exp_017 + template
 ├── config/           # experiments.yaml (central hyperparameters)
 ├── dashboard/        # Retro Streamlit benchmark monitor
 ├── logs/             # experiments.jsonl (append-only)

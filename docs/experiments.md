@@ -2,7 +2,7 @@
 
 ## Overview
 
-Sixteen experiments compare classical and quantum ML on synthetic and real-world tasks.
+Seventeen experiments compare classical and quantum ML on synthetic and real-world tasks.
 Configuration is centralized in `config/experiments.yaml`.
 
 | ID | Name | Question |
@@ -23,6 +23,7 @@ Configuration is centralized in `config/experiments.yaml`.
 | 014 | Sequence Baselines | Do RNN/Transformer beat flattened QNN on sequential data? |
 | 015 | Adaptive QNN | Does gradient-variance LR beat fixed LR on plateau-prone 6q QNN? |
 | 016 | Hybrid NAS | Does Optuna NAS beat fixed EXP 002 hybrid presets? |
+| 017 | Poison × Topology | Does hybrid layout affect label-poison robustness? |
 
 **Publication profile defaults:** `circles`, `noise=0.2`, `n_samples=500`, **10 seeds**, 30% holdout.
 
@@ -159,6 +160,13 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Search:** architecture × qubits × layers × LR × re-upload (`src/training/hpo.py`)  
 **Trials:** 20 (publication), 3 (ci) — `make nas` or `python experiments/exp_016_hybrid_nas/run.py`  
 **Stats:** Paired Wilcoxon vs each baseline + Holm-Bonferroni  
+
+### EXP 017 — Poison × Topology (Phase 7)
+
+**Models:** `hybrid_sandwich`, `quantum_first`, `classical_first`, `nas_preset` (EXP 016 best)  
+**Poison:** train on flipped labels (0–30%); evaluate on clean 30% holdout  
+**Stats:** `measure_robustness` per topology + Wilcoxon at 0% and 30% poison  
+**Command:** `make poison-topology` or `python experiments/exp_017_poison_topology/run.py`  
 
 ## Publication Profiles
 
