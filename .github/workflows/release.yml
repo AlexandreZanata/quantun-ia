@@ -25,12 +25,14 @@ jobs:
         run: |
           pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
           pip install -r requirements-dev.txt
+          pip install -e .
 
       - name: Prepare release bundle
         env:
           MLFLOW_DISABLE: "1"
         run: |
           mkdir -p logs
+          cp tests/contracts/fixtures/sample_experiments.jsonl logs/experiments.jsonl
           python scripts/prepare_release.py
           python scripts/prepare_release.py --verify-only dist/release
 
@@ -57,7 +59,6 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: dist/release/**
-          generate_release_notes: true
           body_path: RELEASE_NOTES.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
