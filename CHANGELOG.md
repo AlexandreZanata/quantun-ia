@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.6] - 2026-06-17
+
+### Added
+
+- Phase 16: **JWT RS256 auth** — `/api/v1/auth/token` and `/api/v1/auth/refresh` with rotation
+- **Async training job queue** — `async_mode` returns `202 PENDING`; background `TrainingJobWorker`
+- `device` field on training jobs (`auto` | `cpu` | `cuda`)
+- `refresh_tokens` SQLite table + `src/infrastructure/auth/` module
+- `tests/e2e/test_api_auth_async.py` — JWT + async job e2e coverage
+- `pyjwt[crypto]` dependency
+
+### Changed
+
+- `create_training_job` delegates execution to `process_training_job`
+- Protected routes accept Bearer JWT; `X-Tenant-ID` fallback when `API_AUTH_REQUIRED=0`
+- `docs/api.md` documents auth env vars and async polling
+
 ## [0.9.5] - 2026-06-17
 
 ### Added

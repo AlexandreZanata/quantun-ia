@@ -14,6 +14,25 @@ class CreateTrainingJobRequest(BaseModel):
     epochs: int | None = Field(default=None, ge=1)
     seed: int | None = Field(default=None, ge=0)
     exp_id: str = "nano_train"
+    device: str = Field(default="auto", pattern="^(auto|cpu|cuda)$")
+    async_mode: bool = False
+
+
+class IssueTokenRequest(BaseModel):
+    tenant_id: str = Field(..., min_length=1)
+    api_key: str = Field(..., min_length=1)
+    user_id: str = "api-client"
+
+
+class RefreshTokenRequest(BaseModel):
+    refresh_token: str = Field(..., min_length=1)
+
+
+class TokenPairResponse(BaseModel):
+    access_token: str
+    refresh_token: str
+    token_type: str = "Bearer"
+    expires_in: int = 900
 
 
 class TrainingJobResponse(BaseModel):
@@ -26,6 +45,7 @@ class TrainingJobResponse(BaseModel):
     exp_id: str
     seed: int | None
     epochs: int | None
+    device: str
     result: dict[str, Any] | None
     error_code: str | None
     error_message: str | None

@@ -46,7 +46,7 @@ This document is the **public** research roadmap. Every listed experiment has (o
 
 | Phase | Scope | Falsifiable claim |
 |-------|--------|-------------------|
-| 16 | JWT auth + async GPU job queue | Authenticated job completes with same holdout accuracy as local `nano_train` |
+| 16 | JWT auth + async GPU job queue | ✅ Authenticated async job completes with same holdout accuracy as local `nano_train` |
 | — | Tenant-scoped SQLite → PostgreSQL migration path | Every repository query includes `tenantId` in contract tests |
 
 Platform work runs **in parallel** with the paper track; it must not change split order or preprocessing invariants.

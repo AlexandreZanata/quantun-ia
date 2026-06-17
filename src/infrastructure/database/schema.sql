@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS training_jobs (
     exp_id TEXT NOT NULL DEFAULT 'nano_train',
     seed INTEGER,
     epochs INTEGER,
+    device TEXT NOT NULL DEFAULT 'cpu',
     status TEXT NOT NULL,
     result_json TEXT,
     error_code TEXT,
@@ -22,3 +23,23 @@ CREATE INDEX IF NOT EXISTS idx_training_jobs_tenant_id
 
 CREATE INDEX IF NOT EXISTS idx_training_jobs_tenant_status
     ON training_jobs (tenant_id, status);
+
+CREATE INDEX IF NOT EXISTS idx_training_jobs_pending
+    ON training_jobs (status, created_at)
+    WHERE deleted_at IS NULL;
+
+CREATE TABLE IF NOT EXISTS refresh_tokens (
+    id TEXT PRIMARY KEY,
+    tenant_id TEXT NOT NULL,
+    user_id TEXT NOT NULL,
+    token_hash TEXT NOT NULL UNIQUE,
+    expires_at TEXT NOT NULL,
+    revoked_at TEXT,
+    created_at TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_refresh_tokens_tenant
+    ON refresh_tokens (tenant_id);
+
+CREATE INDEX IF NOT EXISTS idx_refresh_tokens_hash
+    ON refresh_tokens (token_hash);

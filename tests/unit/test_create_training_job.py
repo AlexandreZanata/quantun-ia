@@ -20,6 +20,19 @@ class InMemoryRepo:
             return None
         return job
 
+    def claim_next_pending(self) -> TrainingJob | None:
+        pending = [
+            job
+            for job in self.jobs.values()
+            if job.status == TrainingJobStatus.PENDING and job.deleted_at is None
+        ]
+        if not pending:
+            return None
+        job = sorted(pending, key=lambda item: item.created_at)[0]
+        job.status = TrainingJobStatus.RUNNING
+        job.version += 1
+        return job
+
 
 def test_execute_invalid_tenant_returns_fail():
     repo = InMemoryRepo()
@@ -51,6 +64,22 @@ def test_execute_success_persists_completed_job(tmp_path, monkeypatch):
     assert job.result is not None
     assert 0.5 <= job.result["accuracy"] <= 1.0
     assert repo.find_by_id(job.id, "local") is not None
+
+
+def test_execute_async_mode_leaves_pending():
+    repo = InMemoryRepo()
+    dto = CreateTrainingJobDTO(
+        tenant_id="local",
+        model_name="perceptron",
+        dataset="breast_cancer",
+        profile="ci",
+        epochs=3,
+        async_mode=True,
+    )
+    result = execute(dto, repo)
+    assert isinstance(result, Ok)
+    job = result.value
+    assert job.status == TrainingJobStatus.PENDING
 
 
 def test_execute_invalid_pair_persists_failed_job():

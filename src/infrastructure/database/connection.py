@@ -20,4 +20,14 @@ def connect(db_path: Path | None = None) -> sqlite3.Connection:
 
 def init_schema(conn: sqlite3.Connection) -> None:
     conn.executescript(SCHEMA_PATH.read_text(encoding="utf-8"))
+    _migrate_schema(conn)
     conn.commit()
+
+
+def _migrate_schema(conn: sqlite3.Connection) -> None:
+    """Apply additive migrations for existing SQLite databases."""
+    columns = {row[1] for row in conn.execute("PRAGMA table_info(training_jobs)").fetchall()}
+    if "device" not in columns:
+        conn.execute(
+            "ALTER TABLE training_jobs ADD COLUMN device TEXT NOT NULL DEFAULT 'cpu'"
+        )

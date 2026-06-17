@@ -29,6 +29,7 @@ class TrainingJob:
     seed: int | None = None
     epochs: int | None = None
     exp_id: str = "nano_train"
+    device: str = "auto"
     result: dict[str, Any] | None = None
     error_code: str | None = None
     error_message: str | None = None
