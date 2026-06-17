@@ -75,7 +75,9 @@ def export_latex_tables(
     if created:
         combined_lines = ["% Auto-generated holdout summary tables", ""]
         for path in created:
-            combined_lines.append(f"\\input{{{path.name}}}")
+            if path.name == "all_experiments_summary.tex":
+                continue
+            combined_lines.append(f"\\input{{tables/{path.stem}}}")
             combined_lines.append("")
         combined_path.write_text("\n".join(combined_lines), encoding="utf-8")
         created.append(combined_path)

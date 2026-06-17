@@ -43,3 +43,5 @@ def test_export_latex_tables_writes_files(tmp_path):
     holdout = out_dir / "exp_001_holdout.tex"
     assert holdout.exists()
     assert "classical_32" in holdout.read_text()
+    combined = (out_dir / "all_experiments_summary.tex").read_text()
+    assert "\\input{tables/exp_001_holdout}" in combined

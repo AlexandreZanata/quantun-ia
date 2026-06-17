@@ -166,14 +166,16 @@ jobs:
         run: pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
 
       - name: Install dependencies
-        run: pip install -r requirements.lock
+        run: |
+          pip install -r requirements.lock
+          pip install pytest
 
       - name: Verify core imports
         run: |
           python -c "import pennylane; print('PennyLane:', pennylane.__version__)"
           python -c "import torch; print('PyTorch:', torch.__version__)"
           python -c "import streamlit; print('Streamlit OK')"
-          pytest tests/smoke/ -v
+          python -m pytest tests/smoke/ -v
 
   packaging:
     name: Editable Install

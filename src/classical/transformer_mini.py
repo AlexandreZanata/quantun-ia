@@ -1,6 +1,7 @@
 """Track 3: Nano transformer for short-sequence binary classification."""
 
 import math
+from typing import cast
 
 import torch
 import torch.nn as nn
@@ -18,8 +19,9 @@ class PositionalEncoding(nn.Module):
         pe[:, 1::2] = torch.cos(position * div_term)
         self.register_buffer("pe", pe.unsqueeze(0))
 
-    def forward(self, x):
-        return x + self.pe[:, : x.size(1)]
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        pe = cast(torch.Tensor, self.pe)
+        return x + pe[:, : x.size(1)]
 
 
 class TransformerMini(TrainableMixin, nn.Module):
