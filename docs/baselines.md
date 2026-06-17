@@ -53,6 +53,7 @@ Implemented as `QuantumNetBasic(n_qubits=4, n_layers=2)` in exp_001 and exp_011.
 | Grant et al. (2019) | Initialization strategies | Compared via fixed vs adaptive LR |
 
 exp_015 implements variance-scaled Adam (`src/training/adaptive_lr.py`) with Cohen's d reporting.
+Full method specification: [method_adaptive_lr.md](method_adaptive_lr.md).
 
 ## How to compare results
 

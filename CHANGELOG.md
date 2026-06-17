@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.15] - 2026-06-17
+
+### Added
+
+- Phase 24: **Method documentation** — `docs/method_adaptive_lr.md` (GV-ALR algorithm, pseudocode, exp_015 linkage)
+- Contract tests: `tests/contracts/test_method_docs.py`
+
+### Changed
+
+- `docs/baselines.md`, `docs/architecture.md`, root `README.md` link to method doc
+- Release bundle includes `method_adaptive_lr.md`
+
 ## [0.9.14] - 2026-06-17
 
 ### Added

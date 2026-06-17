@@ -13,13 +13,14 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_DIST = ROOT / "dist" / "release"
-RELEASE_VERSION = "0.9.14"
+RELEASE_VERSION = "0.9.15"
 STATIC_ARTIFACTS = ("CITATION.cff", "RELEASE_NOTES.md", "CHANGELOG.md", "SECURITY.md")
 RELEASE_DOCS = (
     "docs/api.md",
     "docs/arxiv.md",
     "docs/compute_environment.md",
     "docs/ethics.md",
+    "docs/method_adaptive_lr.md",
     "docs/microqml_bench.md",
     "docs/reviewer_guide.md",
     "docs/reproducibility.md",

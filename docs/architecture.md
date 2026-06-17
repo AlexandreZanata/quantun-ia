@@ -87,7 +87,7 @@ dashboard/
 | `device.py` | Auto-detect CPU/CUDA for PyTorch training |
 | `hpo.py` | Optuna hyperparameter optimization wrapper |
 | `plot_style.py` | Matplotlib/seaborn publication figure style |
-| `adaptive_lr.py` | Gradient-variance adaptive learning rate (exp_015) |
+| `adaptive_lr.py` | Gradient-variance adaptive learning rate (exp_015) — see [method_adaptive_lr.md](../docs/method_adaptive_lr.md) |
 | `ci_smoke.py` | Fast CI profile runner for regression bounds |
 
 ## Model Interface Contract

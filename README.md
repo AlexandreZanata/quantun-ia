@@ -140,7 +140,7 @@ Paper draft skeleton: `paper/main.tex`.
 | [Nano Trainer](docs/nanotrainer.md) | CLI + Streamlit mini training app |
 | [API](docs/api.md) | REST API + benchmark PWA |
 | [Literature Review](docs/literature_review.md) | Phase 4 research context |
-| [Baselines](docs/baselines.md) | Literature comparison table |
+| [Method: Adaptive LR](docs/method_adaptive_lr.md) | GV-ALR algorithm, config, exp_015 linkage |
 | [Negative Results](docs/negative_results.md) | Honest failures (curriculum, self-play, entanglement) |
 | [Reproducibility](docs/reproducibility.md) | NeurIPS-style checklist |
 | [DVC Remote](docs/dvc_remote.md) | Artifact storage and `dvc push` setup |
