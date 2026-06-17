@@ -9,11 +9,13 @@ replication and Zenodo-adjacent archival.
 ## Prerequisites
 
 ```bash
-pip install dvc
-dvc --version
-make health          # confirms .dvc/ is initialized
-make dvc-check       # validates dvc.yaml stages and scripts (Phase 27)
+pip install -r requirements-dev.txt   # includes dvc
+make dvc-setup                        # install + configure ../quantun-ia-dvc-storage
+make health                           # confirms .dvc/ is initialized
+make dvc-check                        # validates dvc.yaml stages and scripts (Phase 27)
 ```
+
+Use `python -m dvc` via the project venv — no system-wide `dvc` binary required.
 
 ---
 
@@ -22,15 +24,18 @@ make dvc-check       # validates dvc.yaml stages and scripts (Phase 27)
 Best for single-machine replay before pushing to cloud storage.
 
 ```bash
-mkdir -p ../quantun-ia-dvc-storage
-dvc remote add -d localstore ../quantun-ia-dvc-storage
-dvc remote list
+make dvc-setup
+# equivalent manual steps:
+# mkdir -p ../quantun-ia-dvc-storage
+# python -m dvc remote add -d localstore ../quantun-ia-dvc-storage
 ```
 
 Push tracked artifacts:
 
 ```bash
-dvc push
+make dvc-push
+# or regenerate exports first:
+make dvc-push-full
 ```
 
 Pull on a fresh clone:
@@ -68,8 +73,7 @@ Run pipeline after experiments:
 make replay-publication        # full publication_large + exports
 # or, from existing logs:
 make replay-publication-artifacts
-dvc repro                      # equivalent DVC stages for exports only
-dvc push
+make dvc-push-full             # replay + push
 ```
 
 ---

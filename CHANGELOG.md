@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.20] - 2026-06-17
+
+### Added
+
+- Phase 29: **DVC remote bootstrap** — `make dvc-setup`, `make dvc-push`, `make dvc-push-full`
+- `scripts/dvc_remote_setup.py` — idempotent local filesystem remote (`../quantun-ia-dvc-storage`)
+- `scripts/dvc_push.py` — venv `python -m dvc push` wrapper
+- Unit tests: `tests/unit/test_dvc_remote_setup.py`
+- `dvc>=3.0.0` in `requirements-dev.txt`
+
+### Changed
+
+- `scripts/validate_dvc.py` — detects `python -m dvc` in venv
+- `docs/dvc_remote.md` — documents Make targets (no system `dvc` required)
+
 ## [0.9.19] - 2026-06-17
 
 ### Added

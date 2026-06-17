@@ -40,6 +40,12 @@ def test_dvc_remote_doc_mentions_dvc_check():
     assert "dvc-check" in text or "make dvc-check" in text
 
 
+def test_dvc_remote_doc_mentions_make_targets():
+    text = DVC_REMOTE_DOC.read_text(encoding="utf-8")
+    assert "make dvc-setup" in text
+    assert "make dvc-push" in text
+
+
 def test_dvc_stage_outputs_match_release_pipeline():
     data = yaml.safe_load(DVC_YAML.read_text(encoding="utf-8"))
     export_outs = data["stages"]["export_results"]["outs"]

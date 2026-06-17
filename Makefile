@@ -1,4 +1,4 @@
-.PHONY: dev test test-watch lint lint-fix typecheck coverage dashboard dashboard-local experiment experiment-large repro export-results hpo figures latex-tables release release-check paper-sync paper-build arxiv-bundle replay-publication replay-publication-artifacts power-analysis microqml-bench check health docker-build docker-test docker-lint clean install train-demo nano-parity-bench nano-parity-download nano-parity-publication api api-demo e2e reviewer-repro citation-ready citation-ready-full finalize-citation dvc-check
+.PHONY: dev test test-watch lint lint-fix typecheck coverage dashboard dashboard-local experiment experiment-large repro export-results hpo figures latex-tables release release-check paper-sync paper-build arxiv-bundle replay-publication replay-publication-artifacts power-analysis microqml-bench check health docker-build docker-test docker-lint clean install train-demo nano-parity-bench nano-parity-download nano-parity-publication api api-demo e2e reviewer-repro citation-ready citation-ready-full finalize-citation dvc-check dvc-setup dvc-push
 
 PYTHON ?= $(shell test -x .venv/bin/python && echo .venv/bin/python || echo python3)
 
@@ -128,6 +128,16 @@ finalize-citation:
 
 dvc-check:
 	$(PYTHON) scripts/validate_dvc.py
+
+dvc-setup:
+	$(PYTHON) -m pip install -q dvc
+	$(PYTHON) scripts/dvc_remote_setup.py
+
+dvc-push:
+	$(PYTHON) scripts/dvc_push.py --setup-remote
+
+dvc-push-full:
+	$(PYTHON) scripts/dvc_push.py --setup-remote --replay
 
 replay-publication:
 	MLFLOW_DISABLE=1 $(PYTHON) scripts/replay_publication.py

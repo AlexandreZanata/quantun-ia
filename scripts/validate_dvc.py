@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import configparser
 import shutil
+import subprocess
 import sys
 from pathlib import Path
 
@@ -24,6 +25,20 @@ STAGE_SCRIPTS = {
     "figures": "scripts/generate_figures.py",
     "latex_tables": "scripts/export_latex_tables.py",
 }
+
+
+def dvc_cli_available() -> bool:
+    if shutil.which("dvc"):
+        return True
+    try:
+        subprocess.run(
+            [sys.executable, "-m", "dvc", "--version"],
+            capture_output=True,
+            check=True,
+        )
+        return True
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return False
 
 
 def _load_stages(root: Path) -> dict:
@@ -62,26 +77,26 @@ def collect_dvc_issues(root: Path = ROOT) -> list[str]:
         if stage_name in stages and not (root / script_rel).is_file():
             issues.append(f"missing script for {stage_name}: {script_rel}")
 
-    if shutil.which("dvc") is None:
-        issues.append("dvc CLI not on PATH (install via requirements-dev.txt) — informational")
+    if not dvc_cli_available():
+        issues.append(
+            "dvc CLI not available — run make dvc-setup (installs via requirements-dev.txt) — informational"
+        )
 
     if DVC_CONFIG.is_file():
+        from scripts.dvc_remote_setup import read_remote_url, remote_configured
+
         parser = configparser.ConfigParser()
         parser.read(DVC_CONFIG)
         remote = parser.get("core", "remote", fallback="").strip()
         if remote:
-            section = f'remote "{remote}"'
-            if parser.has_section(section):
-                url = parser.get(section, "url", fallback="").strip()
-                if url:
-                    issues.append(f"dvc remote configured: {remote} → {url}")
-                else:
-                    issues.append(f"dvc remote {remote} missing url")
+            if remote_configured(root, remote):
+                url = read_remote_url(root, remote) or ""
+                issues.append(f"dvc remote configured: {remote} → {url} — informational")
             else:
                 issues.append(f"dvc core.remote={remote} but section not found")
         else:
             issues.append(
-                "dvc remote not configured — follow docs/dvc_remote.md (informational)"
+                "dvc remote not configured — run make dvc-setup (informational)"
             )
     else:
         issues.append("dvc config missing — copy from .dvc/config.example (informational)")
@@ -107,7 +122,7 @@ def main() -> int:
 
     if ok:
         print("DVC pipeline validation passed.")
-        print("Next: configure remote per docs/dvc_remote.md, then dvc push")
+        print("Next: make dvc-setup && make dvc-push")
         return 0
 
     print("DVC validation failed.", file=sys.stderr)

@@ -1,19 +1,20 @@
-# Release v0.9.19 — Encoding × Backend Interaction (Phase 28)
+# Release v0.9.20 — DVC Remote Bootstrap (Phase 29)
 
 ## Highlights
 
-- **exp_023** — 2×2 factorial on PCA-MNIST: angle vs amplitude encoding × `default.qubit` vs `lightning.qubit`
-- CI smoke + golden bounds guard wiring without publication-profile verdict yet
-- `QuantumNetAmplitude` accepts `qml_device` (parity with `QuantumNetBasic`)
+- **`make dvc-setup`** — installs DVC in venv + configures `../quantun-ia-dvc-storage`
+- **`make dvc-push`** / **`make dvc-push-full`** — push artifacts without system-wide `dvc` binary
+- Fixes `Command 'dvc' not found` when following `docs/dvc_remote.md`
 
 ## Validation
 
 ```bash
 make check
-MLFLOW_DISABLE=1 pytest tests/integration/test_exp_023_smoke.py -v
+make dvc-setup
+make dvc-push
 ```
 
 ## Manual follow-ups
 
-- OSF pre-registration before publication-profile runs
-- Fill `results.md` after 10-seed publication execution
+- Zenodo DOI: `make finalize-citation DOI=...`
+- arXiv ID after upload
