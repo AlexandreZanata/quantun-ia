@@ -1,4 +1,4 @@
-.PHONY: dev test test-watch lint lint-fix typecheck coverage dashboard dashboard-local experiment experiment-large repro export-results hpo figures latex-tables release release-check paper-sync paper-build arxiv-bundle replay-publication replay-publication-artifacts power-analysis microqml-bench check health docker-build docker-test docker-lint clean install train-demo nano-parity-bench nano-parity-download nano-parity-publication api api-demo e2e reviewer-repro
+.PHONY: dev test test-watch lint lint-fix typecheck coverage dashboard dashboard-local experiment experiment-large repro export-results hpo figures latex-tables release release-check paper-sync paper-build arxiv-bundle replay-publication replay-publication-artifacts power-analysis microqml-bench check health docker-build docker-test docker-lint clean install train-demo nano-parity-bench nano-parity-download nano-parity-publication api api-demo e2e reviewer-repro citation-ready citation-ready-full
 
 PYTHON ?= $(shell test -x .venv/bin/python && echo .venv/bin/python || echo python3)
 
@@ -115,6 +115,12 @@ arxiv-bundle-sources:
 
 reviewer-repro:
 	MLFLOW_DISABLE=1 bash scripts/reviewer_repro.sh
+
+citation-ready:
+	$(PYTHON) scripts/validate_citation_ready.py --skip-release
+
+citation-ready-full: release release-check
+	$(PYTHON) scripts/validate_citation_ready.py
 
 replay-publication:
 	MLFLOW_DISABLE=1 $(PYTHON) scripts/replay_publication.py

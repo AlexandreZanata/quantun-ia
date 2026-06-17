@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.16] - 2026-06-17
+
+### Added
+
+- Phase 25: **Citation loop readiness** — `make citation-ready`, `docs/citation_loop.md`
+- `scripts/validate_citation_ready.py` — version alignment across CITATION, arXiv, release
+- `docs/paper_narrative.md` — locked Option C scope for v1 paper
+- Contract tests: `test_citation_loop.py`, `test_paper_narrative.py`
+- Unit tests: `test_validate_citation_ready.py`
+
+### Changed
+
+- P0 narrative locked — paper contracts enforce headline vs deferred experiments
+- Release bundle includes citation loop and narrative docs
+
 ## [0.9.15] - 2026-06-17
 
 ### Added

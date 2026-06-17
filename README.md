@@ -120,8 +120,9 @@ make api-demo             # API smoke test
 make experiments-new    # publication runs exp_011–015
 make results-new        # generate results.md from JSONL summaries (exp_011–018)
 make power-analysis     # minimum detectable Cohen's d table by seed count
-make release            # Bundle artifacts for Zenodo v0.9.12 (SHA-256 manifest)
+make release            # Bundle artifacts for Zenodo (SHA-256 manifest)
 make release-check      # Verify dist/release MANIFEST.txt checksums
+make citation-ready     # Version alignment before Zenodo tag
 make paper-build        # LaTeX paper draft (figures + tables + PDF)
 make arxiv-bundle       # arXiv upload tarball (see docs/arxiv.md)
 make replay-publication-artifacts  # export CSV, figures, LaTeX from logs
@@ -178,8 +179,10 @@ If you use this software in research, please cite it using [CITATION.cff](CITATI
 
 **Zenodo DOI (after release):**
 
-1. Run `make release` and tag `v0.9.12` per [docs/zenodo.md](docs/zenodo.md)
-2. Copy the DOI from Zenodo into `CITATION.cff`
+See [docs/citation_loop.md](docs/citation_loop.md) for the unified checklist.
+
+1. `make citation-ready && make release`
+2. Tag and push; copy DOI into `CITATION.cff`
 3. Validate: `pytest tests/contracts/test_citation_cff.py -v`
 
 ## CI

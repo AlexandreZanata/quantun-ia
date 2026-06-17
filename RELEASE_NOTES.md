@@ -1,12 +1,19 @@
-# Release v0.9.15 — Method Documentation (Phase 24)
+# Release v0.9.16 — Citation Loop Readiness (Phase 25)
 
 **Date:** 2026-06-17
 
 ## Highlights
 
-- **GV-ALR method doc** — `docs/method_adaptive_lr.md` with algorithm, pseudocode, exp_015 results
-- **Citable secondary track** — adaptive LR documented honestly as inconclusive at 6q×3l
-- **255+ tests** green via `make check`
+- **`make citation-ready`** — validates version alignment before Zenodo tag
+- **`docs/citation_loop.md`** — unified DOI + arXiv closure checklist
+- **`docs/paper_narrative.md`** — Option C narrative locked with contract tests
+
+## Preflight
+
+```bash
+make check
+make citation-ready
+```
 
 ## Full changelog
 
