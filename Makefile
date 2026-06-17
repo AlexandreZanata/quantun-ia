@@ -1,4 +1,4 @@
-.PHONY: dev test test-watch lint lint-fix typecheck coverage dashboard dashboard-local experiment experiment-large repro export-results hpo figures latex-tables release release-check paper-sync paper-build arxiv-bundle replay-publication replay-publication-artifacts power-analysis microqml-bench check health docker-build docker-test docker-lint clean install train-demo nano-parity-bench nano-parity-download nano-parity-publication api api-demo e2e reviewer-repro citation-ready citation-ready-full finalize-citation
+.PHONY: dev test test-watch lint lint-fix typecheck coverage dashboard dashboard-local experiment experiment-large repro export-results hpo figures latex-tables release release-check paper-sync paper-build arxiv-bundle replay-publication replay-publication-artifacts power-analysis microqml-bench check health docker-build docker-test docker-lint clean install train-demo nano-parity-bench nano-parity-download nano-parity-publication api api-demo e2e reviewer-repro citation-ready citation-ready-full finalize-citation dvc-check
 
 PYTHON ?= $(shell test -x .venv/bin/python && echo .venv/bin/python || echo python3)
 
@@ -125,6 +125,9 @@ citation-ready-full: release release-check
 finalize-citation:
 	@test -n "$(DOI)" || (echo "Usage: make finalize-citation DOI=10.5281/zenodo.XXXXXXX [ARXIV_ID=2606.XXXXX]" && exit 1)
 	$(PYTHON) scripts/finalize_citation.py --doi "$(DOI)" $(if $(ARXIV_ID),--arxiv-id "$(ARXIV_ID)",)
+
+dvc-check:
+	$(PYTHON) scripts/validate_dvc.py
 
 replay-publication:
 	MLFLOW_DISABLE=1 $(PYTHON) scripts/replay_publication.py

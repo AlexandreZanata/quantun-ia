@@ -44,13 +44,16 @@ def _check_mlflow() -> tuple[bool, str]:
 
 
 def _check_dvc() -> tuple[bool, str]:
-    dvc_dir = ROOT / ".dvc"
-    if not dvc_dir.exists():
-        return True, "dvc: not initialized (optional)"
-    config = ROOT / ".dvc" / "config"
-    if config.exists():
-        return True, "dvc: project initialized"
-    return True, "dvc: .dvc present without config"
+    from scripts.validate_dvc import validate_dvc
+
+    ok, issues = validate_dvc()
+    infos = [i for i in issues if "informational" in i]
+    errors = [i for i in issues if "informational" not in i]
+    if errors:
+        return False, f"dvc: {errors[0]}"
+    if infos:
+        return True, f"dvc: pipeline OK ({infos[0].split(' — ')[0]})"
+    return True, "dvc: pipeline OK"
 
 
 def run_health_check(strict: bool = False) -> int:

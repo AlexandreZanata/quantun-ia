@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.18] - 2026-06-17
+
+### Added
+
+- Phase 27: **DVC artifact validation** — `make dvc-check`, `scripts/validate_dvc.py`
+- Contract tests: `tests/contracts/test_dvc_pipeline.py`
+- Unit tests: `tests/unit/test_validate_dvc.py`
+
+### Changed
+
+- `scripts/health_check.py` — DVC check uses pipeline validator
+- `docs/dvc_remote.md` — documents `make dvc-check`
+
 ## [0.9.17] - 2026-06-17
 
 ### Added

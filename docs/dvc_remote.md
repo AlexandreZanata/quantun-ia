@@ -11,7 +11,8 @@ replication and Zenodo-adjacent archival.
 ```bash
 pip install dvc
 dvc --version
-make health   # confirms .dvc/ is initialized
+make health          # confirms .dvc/ is initialized
+make dvc-check       # validates dvc.yaml stages and scripts (Phase 27)
 ```
 
 ---

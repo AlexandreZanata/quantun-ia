@@ -1,18 +1,18 @@
-# Release v0.9.17 — Citation Finalizer (Phase 26)
+# Release v0.9.18 — DVC Artifact Validation (Phase 27)
 
 **Date:** 2026-06-17
 
 ## Highlights
 
-- **`make finalize-citation`** — paste Zenodo DOI (+ optional arXiv ID) in one command
-- **Release record** — `docs/releases/v0.9.16.md` documents pushed tag evidence
-- Tag `v0.9.16` already on `origin`; DOI paste is the remaining manual step
+- **`make dvc-check`** — validates `dvc.yaml` stages align with release pipeline
+- Remote setup remains manual per `docs/dvc_remote.md`
+- **290+ tests** green via `make check`
 
-## After Zenodo sync
+## Preflight
 
 ```bash
-make finalize-citation DOI=10.5281/zenodo.XXXXXXX ARXIV_ID=2606.XXXXX
-make citation-ready
+make dvc-check
+make health
 ```
 
 ## Full changelog

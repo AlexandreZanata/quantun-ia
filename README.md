@@ -122,7 +122,7 @@ make results-new        # generate results.md from JSONL summaries (exp_011–01
 make power-analysis     # minimum detectable Cohen's d table by seed count
 make release            # Bundle artifacts for Zenodo (SHA-256 manifest)
 make release-check      # Verify dist/release MANIFEST.txt checksums
-make citation-ready     # Version alignment before Zenodo tag
+make dvc-check            # Validate DVC pipeline stages
 make finalize-citation DOI=10.5281/zenodo.XXXXXXX   # After Zenodo moderation
 make paper-build        # LaTeX paper draft (figures + tables + PDF)
 make arxiv-bundle       # arXiv upload tarball (see docs/arxiv.md)
