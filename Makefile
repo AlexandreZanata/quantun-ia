@@ -1,4 +1,4 @@
-.PHONY: dev test test-watch lint lint-fix typecheck coverage dashboard dashboard-local experiment experiment-large repro export-results hpo figures latex-tables release release-check paper-sync paper-build replay-publication replay-publication-artifacts power-analysis check health docker-build docker-test docker-lint clean install train-demo api api-demo
+.PHONY: dev test test-watch lint lint-fix typecheck coverage dashboard dashboard-local experiment experiment-large repro export-results hpo figures latex-tables release release-check paper-sync paper-build replay-publication replay-publication-artifacts power-analysis microqml-bench check health docker-build docker-test docker-lint clean install train-demo api api-demo
 
 PYTHON ?= $(shell test -x .venv/bin/python && echo .venv/bin/python || echo python3)
 
@@ -102,6 +102,9 @@ replay-publication-artifacts:
 
 power-analysis:
 	$(PYTHON) scripts/power_analysis.py --table
+
+microqml-bench:
+	MLFLOW_DISABLE=1 $(PYTHON) scripts/export_microqml_bench.py
 
 experiments-new:
 	MLFLOW_DISABLE=1 $(PYTHON) scripts/run_exp_011_015.py --profile publication

@@ -1,0 +1,49 @@
+bench_id: microqml_bench
+version: "1.0.0"
+schema_version: "1"
+display_name: MicroQML Bench
+description: >
+  Holdout-fair quantum vs classical benchmark suite covering synthetic, tabular,
+  PCA-reduced image, and sequence tasks. Protocol aligned with quantun-ia publication profile.
+
+protocol:
+  holdout_fraction: 0.3
+  seeds: 10
+  profile: publication
+  significance: holm_bonferroni
+  eval_set: holdout_test
+  preprocessing: fit_on_train_only
+  max_qubits_default: 8
+
+tasks:
+  - task_id: synthetic_circles
+    category: synthetic
+    exp_id: exp_001
+    dataset: circles
+    description: Binary circles — quantum vs classical baselines
+    primary: true
+
+  - task_id: tabular_breast_cancer
+    category: tabular
+    exp_id: exp_011
+    dataset: breast_cancer
+    description: UCI breast cancer — angle QNN vs parameter-matched MLP
+    primary: true
+
+  - task_id: pca_mnist_binary
+    category: image_tabular
+    exp_id: exp_012
+    dataset: mnist_binary
+    description: MNIST 0 vs 1 with PCA-8 — angle vs amplitude encoding
+    primary: true
+
+  - task_id: sequence_phase
+    category: sequence
+    exp_id: exp_014
+    dataset: sequential_phase
+    description: Phase-sensitive sequences — RNN/Transformer vs flattened QNN
+    primary: true
+
+citation: >
+  MicroQML Bench v1.0.0 — quantun-ia Quantum-Inspired Micro ML Lab.
+  https://github.com/AlexandreZanata/quantun-ia

@@ -34,7 +34,7 @@ This document is the **public** research roadmap. Every listed experiment has (o
 
 | ID | Experiment / deliverable | Falsifiable claim | Status |
 |----|--------------------------|-------------------|--------|
-| 024 | MicroQML Bench contract v0.1 (planned) | External replicator runs `make repro` + exp_011/021 in &lt;1 h CPU | Planned |
+| 024 | MicroQML Bench contract v1 | ✅ `make microqml-bench`, schema v1 API | **Shipped** |
 | — | Leaderboard JSON schema | Contract tests in `tests/contracts/` pass on sample exports | Planned |
 | — | `docs/compute_environment.md` | Publication numbers traceable to hardware profile | Planned |
 
@@ -58,7 +58,7 @@ Platform work runs **in parallel** with the paper track; it must not change spli
 | Deliverable | Target |
 |-------------|--------|
 | Paper submission | Primary narrative (exp_011, 012, 017 + negative results) |
-| MicroQML Bench v1 | Public release with DOI (Phase 17) |
+| MicroQML Bench v1 | ✅ Public release (`docs/microqml_bench.md`, schema v1) | Phase 17 |
 | Replication challenge | GitHub issue template + `CONTRIBUTING.md` reproduction section |
 
 ---

@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.7] - 2026-06-17
+
+### Added
+
+- Phase 17: **MicroQML Bench v1** — versioned external benchmark release
+- `config/microqml_bench/v1.yaml` — four primary tasks (synthetic, tabular, PCA-MNIST, sequence)
+- `src/benchmark/microqml_bench.py` + `scripts/export_microqml_bench.py` + `make microqml-bench`
+- `GET /api/v1/benchmarks/microqml/v1` — schema v1 JSON export
+- `tests/contracts/microqml_bench_schema.py` + contract tests
+- `docs/microqml_bench.md` — citation, reproduction, versioning policy
+
 ## [0.9.6] - 2026-06-17
 
 ### Added

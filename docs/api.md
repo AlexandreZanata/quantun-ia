@@ -63,6 +63,7 @@ When `API_AUTH_REQUIRED=0` (default), `X-Tenant-ID` header fallback remains for 
 | POST | `/api/v1/training-jobs` | Create job (sync 201 or async 202) |
 | GET | `/api/v1/training-jobs/{id}` | Fetch job by id (tenant-scoped) |
 | GET | `/api/v1/benchmarks/leaderboard` | Publication leaderboard JSON |
+| GET | `/api/v1/benchmarks/microqml/v1` | MicroQML Bench v1 export (schema v1) |
 | GET | `/pwa/` | Static PWA benchmark viewer |
 
 ## Training job request

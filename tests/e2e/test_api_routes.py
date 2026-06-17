@@ -96,6 +96,19 @@ def test_leaderboard_endpoint_returns_json(client):
     assert "rows" in res.json()
 
 
+def test_microqml_bench_v1_endpoint_returns_valid_contract(client):
+    import jsonschema
+
+    from tests.contracts.microqml_bench_schema import MICROQML_BENCH_V1_SCHEMA
+
+    res = client.get("/api/v1/benchmarks/microqml/v1")
+    assert res.status_code == 200
+    body = res.json()
+    assert body["bench_id"] == "microqml_bench"
+    assert body["schema_version"] == "1"
+    jsonschema.validate(instance=body, schema=MICROQML_BENCH_V1_SCHEMA)
+
+
 def test_pwa_index_served(client):
     res = client.get("/pwa/")
     assert res.status_code == 200

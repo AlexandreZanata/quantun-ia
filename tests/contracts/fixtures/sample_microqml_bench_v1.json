@@ -1,0 +1,46 @@
+{
+  "bench_id": "microqml_bench",
+  "version": "1.0.0",
+  "schema_version": "1",
+  "display_name": "MicroQML Bench",
+  "description": "Holdout-fair QML benchmark suite (fixture)",
+  "protocol": {
+    "holdout_fraction": 0.3,
+    "seeds": 10,
+    "profile": "publication",
+    "significance": "holm_bonferroni",
+    "eval_set": "holdout_test",
+    "preprocessing": "fit_on_train_only",
+    "max_qubits_default": 8
+  },
+  "tasks": [
+    {
+      "task_id": "tabular_breast_cancer",
+      "category": "tabular",
+      "exp_id": "exp_011",
+      "dataset": "breast_cancer",
+      "description": "UCI breast cancer",
+      "primary": true
+    }
+  ],
+  "leaderboard": [
+    {
+      "task_id": "tabular_breast_cancer",
+      "exp_id": "exp_011",
+      "model": "quantum_angle",
+      "accuracy_pct": 85.2,
+      "ci_low_pct": 82.1,
+      "ci_high_pct": 88.0,
+      "std_pct": 2.1,
+      "n_seeds": 10,
+      "n_params": 142,
+      "elapsed_s": 1.2,
+      "epochs": 50,
+      "eval_set": "holdout_test",
+      "source": "multi_seed_summary"
+    }
+  ],
+  "generated_at": "2026-06-17T12:00:00+00:00",
+  "software_version": "0.9.7",
+  "citation": "MicroQML Bench v1.0.0 — quantun-ia"
+}

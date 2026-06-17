@@ -22,6 +22,7 @@ from src.application.issue_tokens import execute as issue_tokens
 from src.application.nanotrainer_config import load_nanotrainer_config
 from src.application.refresh_tokens import RefreshTokensDTO
 from src.application.refresh_tokens import execute as refresh_tokens_execute
+from src.benchmark.microqml_bench import build_bench_export
 from src.infrastructure.database.connection import connect, init_schema
 from src.infrastructure.database.repositories.sqlite_refresh_token_repository import (
     SqliteRefreshTokenRepository,
@@ -89,7 +90,7 @@ async def lifespan(app: FastAPI):
 def create_app() -> FastAPI:
     app = FastAPI(
         title="quantun-ia API",
-        version="0.9.6",
+        version="0.9.7",
         description="REST API for Nano Trainer and benchmark viewing",
         lifespan=lifespan,
     )
@@ -250,6 +251,11 @@ def create_app() -> FastAPI:
                 for r in rows
             ]
         )
+
+    @app.get("/api/v1/benchmarks/microqml/v1")
+    def get_microqml_bench_v1() -> dict[str, Any]:
+        """Versioned MicroQML Bench export (schema v1)."""
+        return build_bench_export()
 
     return app
 
