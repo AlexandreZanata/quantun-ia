@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-06-17
+
+### Added
+
+- Phase 8: `exp_018_feature_fusion` — Transformer-mini → QNN fusion pipeline
+- `sequential_phase` dataset (phase-sensitive, PCA-insufficient temporal task)
+- `src/quantum/transformer_qnn_fusion.py` — `TransformerQNNFusion` model
+- CI smoke `test_exp_018_smoke.py` + unit tests for dataset and model
+- `make fusion` target
+
+### Fixed
+
+- Removed duplicate `exp_017_poison_topology` block in `config/experiments.yaml`
+
+### Changed
+
+- Documentation updated to 18 experiments
+- Roadmap complete (all phases 0–8)
+
 ## [0.6.0] - 2026-06-17
 
 ### Added

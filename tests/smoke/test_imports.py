@@ -39,6 +39,7 @@ MODULES = [
     "src.quantum.qnn_basic",
     "src.quantum.qnn_amplitude",
     "src.quantum.hybrid_model",
+    "src.quantum.transformer_qnn_fusion",
     "src.classical.perceptron",
     "src.classical.mlp",
     "src.classical.transformer_mini",

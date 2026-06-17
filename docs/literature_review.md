@@ -63,7 +63,7 @@ See `docs/negative_results.md`.
 |--------|------------|--------|
 | B — Hybrid NAS | exp_016_hybrid_nas | **Complete** — Optuna search vs EXP 002 baselines (Phase 6) |
 | C — Poisoning × topology | exp_017_poison_topology | **Complete** — hybrid layouts under label poison (Phase 7) |
-| D — Feature fusion | exp_018 transformer → QNN | Requires PCA-insufficient task design |
+| D — Feature fusion | exp_018_feature_fusion | **Complete** — Transformer → QNN on phase sequences (Phase 8) |
 
 **Selected direction:** Option A (`exp_015`) — highest leverage from existing exp_006 infrastructure.
 

@@ -250,3 +250,70 @@ def run_exp_017_ci(*, log_path: Path | None = None) -> dict[str, list[float]]:
         metrics_module.LOGS_PATH = original_log_path
 
     return results
+
+
+EXP_018_KEY = "exp_018_feature_fusion"
+EXP_018_ID = "exp_018"
+
+
+def run_exp_018_ci(*, log_path: Path | None = None) -> dict[str, list[float]]:
+    """Fast CI smoke: transformer_qnn_fusion on sequential_phase, ci profile."""
+    import torch
+
+    from src.data.dataset_registry import prepare_dataset
+    from src.quantum.transformer_qnn_fusion import TransformerQNNFusion
+    from src.training import metrics as metrics_module
+    from src.training.trainer import train_model
+
+    cfg = load_experiment_config(EXP_018_KEY, profile="ci")
+    model_name = "transformer_qnn_fusion"
+    results: dict[str, list[float]] = {model_name: []}
+
+    original_log_path = metrics_module.LOGS_PATH
+    if log_path is not None:
+        metrics_module.LOGS_PATH = log_path
+        log_path.parent.mkdir(parents=True, exist_ok=True)
+
+    try:
+        mc = cfg.get("model_configs", {}).get(model_name, {})
+        d_model = mc.get("d_model", 16)
+        lr = mc.get("learning_rate", cfg["learning_rate"])
+        for seed in cfg["seeds"]:
+            X_train, X_test, y_train, y_test, _ = prepare_dataset(
+                cfg.get("dataset", "sequential_phase"),
+                random_state=seed,
+                test_size=cfg["test_size"],
+                n_samples=cfg["n_samples"],
+                seq_len=cfg.get("seq_len", 12),
+                input_dim=cfg.get("input_dim", 4),
+                noise=cfg.get("noise", 0.15),
+            )
+            model = TransformerQNNFusion(
+                input_dim=cfg.get("input_dim", 4),
+                d_model=d_model,
+                n_qubits=cfg.get("n_qubits", 4),
+                n_layers=cfg.get("n_layers", 2),
+            )
+            X_train_t = torch.tensor(X_train)
+            y_train_t = torch.tensor(y_train)
+            X_test_t = torch.tensor(X_test)
+            y_test_t = torch.tensor(y_test)
+            train_model(
+                model,
+                X_train_t,
+                y_train_t,
+                EXP_018_ID,
+                f"{model_name}_seed{seed}",
+                epochs=cfg["epochs"],
+                lr=lr,
+                X_test=X_test_t,
+                y_test=y_test_t,
+                seed=seed,
+                profile=cfg.get("profile"),
+            )
+            acc = model.evaluate(X_test_t, y_test_t)["accuracy"]
+            results[model_name].append(acc)
+    finally:
+        metrics_module.LOGS_PATH = original_log_path
+
+    return results

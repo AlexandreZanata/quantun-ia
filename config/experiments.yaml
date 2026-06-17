@@ -324,40 +324,32 @@ experiments:
         learning_rate: 0.02
         reupload: true
 
-  exp_017_poison_topology:
-    description: "Hybrid topology × label poisoning — clean holdout eval"
-    exp_id: exp_017
-    dataset: circles
-    noise: 0.2
-    poison_rates: [0.0, 0.1, 0.2, 0.3]
-    qnn_type: reupload
-    topologies:
-      - hybrid_sandwich
-      - quantum_first
-      - classical_first
-      - nas_preset
-    nas_preset:
-      architecture: quantum_first
-      n_qubits: 5
-      n_layers: 2
-      learning_rate: 0.015817490011652512
-      reupload: true
+  exp_018_feature_fusion:
+    description: "Transformer-mini → QNN fusion on phase-sensitive sequences"
+    exp_id: exp_018
+    dataset: sequential_phase
+    seq_len: 12
+    input_dim: 4
+    noise: 0.15
+    n_qubits: 4
+    n_layers: 2
+    pca_components: 4
+    models:
+      - transformer_qnn_fusion
+      - transformer_mini
+      - quantum_pca
+      - quantum_flat
     model_configs:
-      hybrid_sandwich:
-        n_qubits: 4
-        n_layers: 3
+      transformer_qnn_fusion:
+        d_model: 16
+        learning_rate: 0.01
+      transformer_mini:
+        d_model: 16
+        learning_rate: 0.01
+      quantum_pca:
         learning_rate: 0.02
-        reupload: true
-      quantum_first:
-        n_qubits: 4
-        n_layers: 3
+      quantum_flat:
         learning_rate: 0.02
-        reupload: true
-      classical_first:
-        n_qubits: 4
-        n_layers: 3
-        learning_rate: 0.02
-        reupload: true
 
   exp_017_poison_topology:
     description: "Hybrid topology × label poisoning — clean holdout eval"

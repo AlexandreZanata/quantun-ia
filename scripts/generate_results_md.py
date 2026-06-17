@@ -68,6 +68,14 @@ EXP_META: dict[str, dict[str, str]] = {
             "Topology-driven poisoning robustness on clean holdout. Builds on exp_004/010/016."
         ),
     },
+    "exp_018": {
+        "dir": "exp_018_feature_fusion",
+        "title": "EXP 018 (Feature Fusion)",
+        "dataset": "sequential_phase 12×4, PCA-insufficient temporal task",
+        "conclusion": (
+            "Transformer → QNN fusion vs PCA-QNN and flat QNN on phase-sensitive sequences."
+        ),
+    },
 }
 
 

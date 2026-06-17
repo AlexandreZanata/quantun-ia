@@ -2,7 +2,7 @@
 
 ## Overview
 
-Seventeen experiments compare classical and quantum ML on synthetic and real-world tasks.
+Eighteen experiments compare classical and quantum ML on synthetic and real-world tasks.
 Configuration is centralized in `config/experiments.yaml`.
 
 | ID | Name | Question |
@@ -24,6 +24,7 @@ Configuration is centralized in `config/experiments.yaml`.
 | 015 | Adaptive QNN | Does gradient-variance LR beat fixed LR on plateau-prone 6q QNN? |
 | 016 | Hybrid NAS | Does Optuna NAS beat fixed EXP 002 hybrid presets? |
 | 017 | Poison × Topology | Does hybrid layout affect label-poison robustness? |
+| 018 | Feature Fusion | Does Transformer → QNN beat PCA/flat QNN on phase sequences? |
 
 **Publication profile defaults:** `circles`, `noise=0.2`, `n_samples=500`, **10 seeds**, 30% holdout.
 
@@ -167,6 +168,13 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Poison:** train on flipped labels (0–30%); evaluate on clean 30% holdout  
 **Stats:** `measure_robustness` per topology + Wilcoxon at 0% and 30% poison  
 **Command:** `make poison-topology` or `python experiments/exp_017_poison_topology/run.py`  
+
+### EXP 018 — Feature Fusion (Phase 8)
+
+**Models:** `transformer_qnn_fusion`, `transformer_mini`, `quantum_pca`, `quantum_flat`  
+**Dataset:** `sequential_phase` (12×4, phase-sensitive; PCA on flat windows insufficient)  
+**Novelty:** `src/quantum/transformer_qnn_fusion.py` — encoder pools sequence → QNN  
+**Command:** `make fusion` or `python experiments/exp_018_feature_fusion/run.py`  
 
 ## Publication Profiles
 

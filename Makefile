@@ -64,6 +64,9 @@ nas:
 poison-topology:
 	MLFLOW_DISABLE=1 $(PYTHON) experiments/exp_017_poison_topology/run.py
 
+fusion:
+	MLFLOW_DISABLE=1 $(PYTHON) experiments/exp_018_feature_fusion/run.py
+
 figures:
 	$(PYTHON) scripts/generate_figures.py
 

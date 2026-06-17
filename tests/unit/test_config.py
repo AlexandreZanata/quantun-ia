@@ -72,3 +72,6 @@ def test_exp_011_through_014_config(monkeypatch):
     assert cfg17["exp_id"] == "exp_017"
     assert "nas_preset" in cfg17["topologies"]
     assert 0.3 in cfg17["poison_rates"]
+    cfg18 = load_experiment_config("exp_018_feature_fusion")
+    assert cfg18["dataset"] == "sequential_phase"
+    assert "transformer_qnn_fusion" in cfg18["models"]

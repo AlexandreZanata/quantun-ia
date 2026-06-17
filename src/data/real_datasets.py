@@ -85,6 +85,43 @@ def make_sequential_binary(
     }
 
 
+def make_sequential_phase(
+    n_samples: int = 200,
+    seq_len: int = 12,
+    input_dim: int = 4,
+    noise: float = 0.15,
+    random_state: int = 42,
+) -> tuple[np.ndarray, np.ndarray, dict[str, Any]]:
+    """
+    Phase-sensitive sequence task — label depends on temporal ordering.
+
+    PCA on flattened windows loses phase progression; transformers / fusion should help.
+    """
+    rng = np.random.default_rng(random_state)
+    t = np.linspace(0, 2 * np.pi, seq_len, dtype=np.float32)
+    X = np.zeros((n_samples, seq_len, input_dim), dtype=np.float32)
+    y = np.zeros(n_samples, dtype=np.float32)
+
+    for i in range(n_samples):
+        freq = rng.uniform(0.8, 1.6)
+        phase0 = rng.uniform(0, 2 * np.pi)
+        for d in range(input_dim):
+            offset = d * np.pi / max(input_dim, 1)
+            X[i, :, d] = np.sin(freq * t + phase0 + offset).astype(np.float32)
+        if noise > 0:
+            X[i] += rng.normal(0, noise, (seq_len, input_dim)).astype(np.float32)
+        first_half = X[i, : seq_len // 2, :].sum()
+        second_half = X[i, seq_len // 2 :, :].sum()
+        y[i] = float(second_half > first_half)
+
+    return X, y, {
+        "name": "sequential_phase",
+        "seq_len": seq_len,
+        "input_dim": input_dim,
+        "source": "synthetic_phase",
+    }
+
+
 def prepare_mnist_pca_splits(
     n_samples: int,
     n_components: int,

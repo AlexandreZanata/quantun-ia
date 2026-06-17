@@ -8,6 +8,7 @@ import numpy as np
 
 from src.data import real_datasets
 from src.data.generators import load_synthetic_raw
+from src.data.splits import split_train_test
 
 REAL_LOADERS = {
     "breast_cancer": real_datasets.load_breast_cancer_raw,
@@ -47,6 +48,14 @@ def get_dataset(name: str, random_state: int = 42, **kwargs: Any) -> tuple[np.nd
             noise=kwargs.get("noise", 0.1),
             random_state=random_state,
         )
+    if name == "sequential_phase":
+        return real_datasets.make_sequential_phase(
+            n_samples=kwargs.get("n_samples", 200),
+            seq_len=kwargs.get("seq_len", 12),
+            input_dim=kwargs.get("input_dim", 4),
+            noise=kwargs.get("noise", 0.15),
+            random_state=random_state,
+        )
     if name not in REAL_LOADERS:
         raise ValueError(f"Unknown dataset: {name}")
     return REAL_LOADERS[name]()
@@ -80,6 +89,24 @@ def prepare_dataset(
             test_size=test_size,
             random_state=random_state,
         )
+
+    if name == "sequential_phase":
+        X, y, meta = real_datasets.make_sequential_phase(
+            n_samples=kwargs.get("n_samples", 200),
+            seq_len=kwargs.get("seq_len", 12),
+            input_dim=kwargs.get("input_dim", 4),
+            noise=kwargs.get("noise", 0.15),
+            random_state=random_state,
+        )
+        X_train, X_test, y_train, y_test = split_train_test(
+            X, y, test_size=test_size, random_state=random_state
+        )
+        mean = X_train.mean(axis=(0, 1), keepdims=True)
+        std = X_train.std(axis=(0, 1), keepdims=True).clip(min=1e-6)
+        X_train = ((X_train - mean) / std).astype(np.float32)
+        X_test = ((X_test - mean) / std).astype(np.float32)
+        meta.update({"seq_len": kwargs.get("seq_len", 12), "input_dim": kwargs.get("input_dim", 4)})
+        return X_train, X_test, y_train, y_test, meta
 
     X, y, meta = get_dataset(name, random_state=random_state, **kwargs)
     X_train, X_test, y_train, y_test, split_meta = real_datasets.prepare_tabular_splits(
