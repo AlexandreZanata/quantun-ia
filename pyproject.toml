@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "quantun-ia"
-version = "0.7.0"
+version = "0.8.0"
 description = "Quantum-Inspired Micro ML Lab"
 requires-python = ">=3.11"
 readme = "README.md"
@@ -31,6 +31,7 @@ dependencies = [
 
 [project.scripts]
 qml-run = "scripts.cli:main"
+qml-train = "scripts.nano_train:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src", "scripts"]

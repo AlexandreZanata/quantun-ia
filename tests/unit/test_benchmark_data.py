@@ -208,6 +208,27 @@ def test_load_applicability_gates_keeps_latest():
     assert gates[0]["status"] == "applicable"
 
 
+def test_leaderboard_excludes_nano_train():
+    records = [
+        {
+            "exp_id": "nano_train",
+            "model_name": "perceptron_breast_cancer",
+            "test_accuracy": 0.99,
+            "eval_set": "holdout_test",
+            "started_at": "2026-06-17T12:00:00",
+        },
+        {
+            "exp_id": "exp_001",
+            "record_type": "multi_seed_summary",
+            "started_at": "2026-06-16T12:00:00",
+            "summary": {"classical_32": {"mean": 0.65, "std": 0, "ci_low": 0.65, "ci_high": 0.65, "n_seeds": 10}},
+        },
+    ]
+    rows = to_leaderboard_rows(records)
+    assert len(rows) == 1
+    assert rows[0]["exp_id"] == "exp_001"
+
+
 def test_leaderboard_excludes_test_experiments():
     records = [
         {

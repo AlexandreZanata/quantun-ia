@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-06-17
+
+### Added
+
+- Phase 9: **Nano Trainer** — productized mini training on real datasets
+- `src/application/model_registry.py`, `train_nanomodel.py`, `nanotrainer_config.py`
+- `src/shared/result.py` — lightweight `Ok`/`Fail` Result type
+- `config/nanotrainer.yaml` — model × dataset pairs and `mini`/`ci` profiles
+- CLI `qml-train` (`scripts/nano_train.py`) + `make train-demo`
+- Streamlit page `dashboard/pages/01_nano_trainer.py`
+- `experiments/exp_019_nanotrainer_smoke` — validates all registry models via app path
+- `docs/nanotrainer.md` — usage and architecture
+- Golden CI bounds for `nano_train` exp_id; leaderboard excludes app runs
+
+### Changed
+
+- Documentation updated to 19 experiments
+- Default Nano Trainer profile: `mini` (100 samples, 8 epochs)
+
 ## [0.7.0] - 2026-06-17
 
 ### Added

@@ -69,8 +69,22 @@ Results append to `logs/experiments.jsonl` (never delete — append only).
 | 016 | Hybrid NAS | Optuna search over hybrid layouts (Phase 6) |
 | 017 | Poison × Topology | Hybrid layout vs label poisoning (Phase 7) |
 | 018 | Feature Fusion | Transformer → QNN on phase sequences (Phase 8) |
+| 019 | Nano Trainer Smoke | Validates app path for all registry models (Phase 9) |
 
 See [Experiments](docs/experiments.md) for full details.
+
+## Nano Trainer
+
+Run mini training on real data without editing experiment folders:
+
+```bash
+make install
+qml-train --model perceptron --dataset breast_cancer --profile mini
+make train-demo    # CI-profile demo run
+make dashboard-local   # Streamlit → Nano Trainer page
+```
+
+See [Nano Trainer](docs/nanotrainer.md) for supported model × dataset pairs.
 
 ## Reproducibility, HPO & Publication
 
@@ -85,6 +99,7 @@ make latex-tables       # LaTeX tables for paper/
 make nas                  # Optuna NAS + holdout (exp_016)
 make poison-topology      # hybrid × poisoning (exp_017)
 make fusion               # Transformer → QNN (exp_018)
+make train-demo           # Nano Trainer CI demo (exp_019 path)
 make experiments-new    # publication runs exp_011–015
 make results-new        # generate results.md from JSONL summaries
 make release            # Bundle artifacts for Zenodo v0.4.0
@@ -98,7 +113,8 @@ Paper draft skeleton: `paper/main.tex`.
 | Doc | Description |
 |-----|-------------|
 | [Getting Started](docs/getting-started.md) | Full setup, Makefile, workflow |
-| [Experiments](docs/experiments.md) | All 18 experiments + ablations |
+| [Experiments](docs/experiments.md) | All 19 experiments + ablations |
+| [Nano Trainer](docs/nanotrainer.md) | CLI + Streamlit mini training app |
 | [Literature Review](docs/literature_review.md) | Phase 4 research context |
 | [Baselines](docs/baselines.md) | Literature comparison table |
 | [Negative Results](docs/negative_results.md) | Honest failures (curriculum, self-play, entanglement) |
@@ -114,9 +130,9 @@ Paper draft skeleton: `paper/main.tex`.
 ```
 quantun-ia/
 ├── src/              # Models, data, training utilities
-├── experiments/      # exp_001 – exp_018 + template
-├── config/           # experiments.yaml (central hyperparameters)
-├── dashboard/        # Retro Streamlit benchmark monitor
+├── experiments/      # exp_001 – exp_019 + template
+├── config/           # experiments.yaml, nanotrainer.yaml
+├── dashboard/        # Retro Streamlit benchmark monitor + Nano Trainer page
 ├── logs/             # experiments.jsonl (append-only)
 ├── tests/            # Unit + smoke tests
 └── docs/             # Full documentation

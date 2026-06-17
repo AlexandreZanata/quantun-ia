@@ -1,0 +1,100 @@
+# Nano Trainer — model × dataset pairs and defaults for qml-train / dashboard UI
+
+defaults:
+  profile: mini
+  exp_id: nano_train
+  test_size: 0.3
+  learning_rate: 0.01
+
+profiles:
+  mini:
+    n_samples: 100
+    epochs: 8
+    seed: 42
+  ci:
+    n_samples: 50
+    epochs: 5
+    seed: 42
+
+datasets:
+  breast_cancer:
+    kind: tabular
+  wine_binary:
+    kind: tabular
+  iris_binary:
+    kind: tabular
+  mnist_binary:
+    kind: tabular
+    n_samples: 200
+    n_components: 8
+  sequential_binary:
+    kind: sequence
+    seq_len: 8
+    input_dim: 2
+    noise: 0.1
+  sequential_phase:
+    kind: sequence
+    seq_len: 12
+    input_dim: 4
+    noise: 0.15
+
+models:
+  perceptron:
+    kind: tabular
+    learning_rate: 0.02
+  classical_mlp:
+    kind: tabular
+    learning_rate: 0.01
+    hidden: 16
+  quantum_angle:
+    kind: tabular
+    learning_rate: 0.02
+    n_qubits: 4
+    n_layers: 2
+  quantum_amplitude:
+    kind: tabular
+    learning_rate: 0.02
+    n_qubits: 4
+    n_layers: 2
+  hybrid_sandwich:
+    kind: tabular
+    learning_rate: 0.02
+    n_qubits: 4
+    n_layers: 2
+    reupload: true
+  transformer_mini:
+    kind: sequence
+    learning_rate: 0.01
+    d_model: 16
+  transformer_qnn_fusion:
+    kind: sequence
+    learning_rate: 0.01
+    d_model: 16
+    n_qubits: 4
+    n_layers: 2
+
+pairs:
+  - model: perceptron
+    dataset: breast_cancer
+  - model: perceptron
+    dataset: wine_binary
+  - model: perceptron
+    dataset: iris_binary
+  - model: classical_mlp
+    dataset: breast_cancer
+  - model: quantum_angle
+    dataset: breast_cancer
+  - model: quantum_angle
+    dataset: mnist_binary
+  - model: quantum_amplitude
+    dataset: mnist_binary
+  - model: hybrid_sandwich
+    dataset: breast_cancer
+  - model: transformer_mini
+    dataset: sequential_binary
+  - model: transformer_mini
+    dataset: sequential_phase
+  - model: transformer_qnn_fusion
+    dataset: sequential_phase
+  - model: transformer_qnn_fusion
+    dataset: sequential_binary

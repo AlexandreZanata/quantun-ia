@@ -26,6 +26,10 @@ profiles:
     seeds: [42, 123]
     epochs: 5
     hpo_trials: 3
+  mini:
+    n_samples: 100
+    seeds: [42]
+    epochs: 8
 
 experiments:
   exp_001_quantum_vs_classical:

@@ -30,6 +30,8 @@ def base_model_label(model_name: str) -> str:
 
 def is_publication_experiment(exp_id: str) -> bool:
     """Only numbered lab experiments belong on the publication leaderboard."""
+    if exp_id in {"nano_train"}:
+        return False
     return _PUBLICATION_EXP.match(exp_id) is not None
 
 

@@ -1,4 +1,4 @@
-.PHONY: dev test test-watch lint lint-fix typecheck coverage dashboard dashboard-local experiment experiment-large repro export-results hpo figures latex-tables release check health docker-build docker-test docker-lint clean install
+.PHONY: dev test test-watch lint lint-fix typecheck coverage dashboard dashboard-local experiment experiment-large repro export-results hpo figures latex-tables release check health docker-build docker-test docker-lint clean install train-demo
 
 PYTHON ?= $(shell test -x .venv/bin/python && echo .venv/bin/python || echo python3)
 
@@ -66,6 +66,9 @@ poison-topology:
 
 fusion:
 	MLFLOW_DISABLE=1 $(PYTHON) experiments/exp_018_feature_fusion/run.py
+
+train-demo:
+	MLFLOW_DISABLE=1 $(PYTHON) -m scripts.nano_train --model perceptron --dataset breast_cancer --profile ci
 
 figures:
 	$(PYTHON) scripts/generate_figures.py

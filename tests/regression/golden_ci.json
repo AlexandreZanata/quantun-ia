@@ -44,5 +44,15 @@
       "mean_min": 0.45,
       "mean_max": 1.0
     }
+  },
+  "nano_train": {
+    "perceptron": {
+      "mean_min": 0.35,
+      "mean_max": 1.0
+    },
+    "transformer_qnn_fusion": {
+      "mean_min": 0.35,
+      "mean_max": 1.0
+    }
   }
 }
