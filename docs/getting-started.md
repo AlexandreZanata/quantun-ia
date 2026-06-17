@@ -133,6 +133,9 @@ make dashboard    # http://localhost:8501
 | `make dashboard-local` | Terminal report + Streamlit (local venv) |
 | `make experiment` | Run EXP 001 in Docker |
 | `make experiment-large` | Run all experiments with `publication_large` profile |
+| `make repro` | CI-profile integration smoke (exp_001) |
+| `make export-results` | Export JSONL logs to CSV |
+| `make hpo` | Run Optuna HPO (default: exp_011, 5 trials) |
 | `make docker-build` | Build all images |
 | `make clean` | Remove `__pycache__`, `.pytest_cache` |
 
@@ -151,6 +154,20 @@ cfg = load_experiment_config("exp_004_data_poisoning")
 - **Append-only logs** — never delete `logs/experiments.jsonl`
 - **No data leakage** — train/test split before poisoning, curriculum, or self-play
 - **English only** — all code, comments, docs, and commit messages
+
+## GPU (optional)
+
+Classical models auto-detect CUDA when available (`QML_DEVICE=auto` default).
+Quantum PennyLane simulators may remain CPU-bound depending on backend.
+
+```bash
+# Local: use GPU if available
+export QML_DEVICE=cuda
+python experiments/exp_011_uci_tabular_qml/run.py
+
+# Docker with NVIDIA runtime
+docker compose -f docker-compose.gpu.yml run --rm experiment-gpu
+```
 
 ## Next Steps
 

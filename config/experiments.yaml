@@ -189,3 +189,69 @@ experiments:
       reupload_lr_low:
         n_layers: 3
         learning_rate: 0.01
+
+  exp_011_uci_tabular_qml:
+    description: "UCI breast cancer — perceptron vs param-matched MLP vs angle QNN"
+    exp_id: exp_011
+    dataset: breast_cancer
+    n_qubits: 4
+    n_layers: 2
+    hpo_seeds: [42, 123, 456]
+    models:
+      - perceptron
+      - classical_matched
+      - quantum_angle
+    model_configs:
+      perceptron:
+        learning_rate: 0.02
+      quantum_angle:
+        learning_rate: 0.02
+      classical_matched:
+        learning_rate: 0.01
+
+  exp_012_mnist_pca_qml:
+    description: "MNIST 0 vs 1 with PCA — angle vs amplitude encoding"
+    exp_id: exp_012
+    dataset: mnist_binary
+    n_samples: 500
+    n_components: 8
+    n_qubits: 4
+    n_layers: 2
+    model_configs:
+      quantum_angle:
+        learning_rate: 0.02
+      quantum_amplitude:
+        learning_rate: 0.02
+
+  exp_013_augmentation_robustness:
+    description: "Gaussian augmentation on noisy circles — QNN baseline vs augmented"
+    exp_id: exp_013
+    dataset: circles
+    noise: 0.2
+    augment_sigma: 0.15
+    n_qubits: 4
+    n_layers: 2
+    model_configs:
+      quantum_baseline:
+        n_qubits: 4
+        n_layers: 2
+        learning_rate: 0.02
+
+  exp_014_sequence_baselines:
+    description: "Sequential synthetic task — RNN vs Transformer vs flattened QNN"
+    exp_id: exp_014
+    dataset: sequential_binary
+    seq_len: 8
+    input_dim: 2
+    noise: 0.1
+    n_qubits: 4
+    n_layers: 2
+    model_configs:
+      rnn_mini:
+        hidden_dim: 16
+        learning_rate: 0.01
+      transformer_mini:
+        d_model: 16
+        learning_rate: 0.01
+      quantum_flat:
+        learning_rate: 0.02

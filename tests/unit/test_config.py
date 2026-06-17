@@ -47,3 +47,14 @@ def test_exp_009_and_010_config():
     assert cfg9["qnn_type"] == "basic"
     cfg10 = load_experiment_config("exp_010_poison_reupload_ablation")
     assert "reupload_2l" in cfg10["reupload_variants"]
+
+
+def test_exp_011_through_014_config():
+    cfg11 = load_experiment_config("exp_011_uci_tabular_qml")
+    assert cfg11["dataset"] == "breast_cancer"
+    cfg12 = load_experiment_config("exp_012_mnist_pca_qml")
+    assert cfg12["n_components"] == 8
+    cfg13 = load_experiment_config("exp_013_augmentation_robustness")
+    assert cfg13["augment_sigma"] == 0.15
+    cfg14 = load_experiment_config("exp_014_sequence_baselines")
+    assert cfg14["seq_len"] == 8

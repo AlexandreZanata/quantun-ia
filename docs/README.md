@@ -8,7 +8,8 @@ Welcome to the **Quantum-Inspired Micro ML Lab** documentation.
 |----------|-------------|
 | [Getting Started](getting-started.md) | Install, venv, Docker, dashboard, run all experiments |
 | [Architecture](architecture.md) | Code structure, module responsibilities, data flow |
-| [Experiments](experiments.md) | All 10 experiments — goals, ablations, known flags |
+| [Experiments](experiments.md) | All 14 experiments — goals, ablations, known flags |
+| [Baselines](baselines.md) | Literature comparison for real-data experiments |
 | [Hypothesis Workflow](hypothesis-workflow.md) | Mandatory hypothesis-first discipline |
 | [Testing](testing.md) | Test pyramid, coverage thresholds, CI pipeline |
 | [Docker](docker.md) | Container services, Makefile targets, troubleshooting |

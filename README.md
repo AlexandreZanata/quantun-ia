@@ -61,15 +61,27 @@ Results append to `logs/experiments.jsonl` (never delete — append only).
 | 008 | Data Re-upload | Re-upload vs basic QNN vs param-matched classical |
 | 009 | Entanglement Basic | Topology ablation (basic QNN, no re-upload) |
 | 010 | Poison Re-upload Ablation | Layer depth and LR under poisoning |
+| 011 | UCI Tabular QML | Perceptron, MLP, QNN on breast cancer |
+| 012 | MNIST PCA QML | Angle vs amplitude on PCA-reduced MNIST |
+| 013 | Augmentation Robustness | Gaussian augmentation on noisy circles |
+| 014 | Sequence Baselines | RNN, Transformer-mini vs flattened QNN |
 
 See [Experiments](docs/experiments.md) for full details.
+
+## Reproducibility & HPO
+
+```bash
+make repro          # CI smoke profile + golden bounds
+make hpo EXP=exp_011 TRIALS=20   # Optuna hyperparameter search
+```
 
 ## Documentation
 
 | Doc | Description |
 |-----|-------------|
 | [Getting Started](docs/getting-started.md) | Full setup, Makefile, workflow |
-| [Experiments](docs/experiments.md) | All 10 experiments + ablations |
+| [Experiments](docs/experiments.md) | All 14 experiments + ablations |
+| [Baselines](docs/baselines.md) | Literature comparison table |
 | [Hypothesis Workflow](docs/hypothesis-workflow.md) | Mandatory hypothesis-first discipline |
 | [Architecture](docs/architecture.md) | Code structure and data flow |
 | [Testing](docs/testing.md) | pytest, coverage, CI |
@@ -81,7 +93,7 @@ See [Experiments](docs/experiments.md) for full details.
 ```
 quantun-ia/
 ├── src/              # Models, data, training utilities
-├── experiments/      # exp_001 – exp_010 + template
+├── experiments/      # exp_001 – exp_014 + template
 ├── config/           # experiments.yaml (central hyperparameters)
 ├── dashboard/        # Retro Streamlit benchmark monitor
 ├── logs/             # experiments.jsonl (append-only)

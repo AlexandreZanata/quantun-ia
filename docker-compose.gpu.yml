@@ -1,0 +1,21 @@
+# GPU-enabled experiment runner (requires NVIDIA Container Toolkit)
+services:
+  experiment-gpu:
+    build:
+      context: .
+      target: experiment
+    environment:
+      QML_DEVICE: cuda
+      MLFLOW_DISABLE: "1"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    volumes:
+      - .:/app
+      - ./logs:/app/logs
+    entrypoint: ["python"]
+    command: ["experiments/exp_001_quantum_vs_classical/run.py"]

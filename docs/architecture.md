@@ -8,7 +8,7 @@ The project follows a layered structure separating data, models, training, and e
 src/
 ├── classical/     # Classical ML models (Perceptron, MLP, TransformerMini, RNNMini)
 ├── quantum/       # Quantum models (QNN variants, HybridModel, encoding utilities)
-├── data/          # Dataset generators, augmentation, poisoning, splits
+├── data/          # Dataset generators, real loaders, registry, scaling, augmentation, poisoning, splits
 └── training/      # Trainer, metrics, statistics, protocol, curriculum, self-play
 
 experiments/
@@ -36,6 +36,9 @@ dashboard/
 | Module | Purpose |
 |--------|---------|
 | `generators.py` | Synthetic binary classification datasets (moons, circles) |
+| `real_datasets.py` | UCI tabular (breast cancer, wine, iris) and MNIST binary loaders |
+| `dataset_registry.py` | Unified `get_dataset()` / `prepare_dataset()` API |
+| `scaling.py` | Leakage-safe StandardScaler and PCA (fit on train only) |
 | `splits.py` | Stratified train/test split (before preprocessing) |
 | `augmentation.py` | Gaussian noise, label flip augmentation |
 | `poisoning.py` | Intentional label corruption for robustness tests |
@@ -78,6 +81,12 @@ dashboard/
 | `curriculum.py` | Difficulty-based ordering and staged batch training |
 | `self_play.py` | Capped hard-example self-play fine-tuning loop |
 | `gradients.py` | Gradient variance measurement (barren plateau diagnostics) |
+| `reproducibility.py` | Global seed control for numpy, torch, sklearn |
+| `tracking.py` | MLflow dual-write alongside JSONL |
+| `checkpoints.py` | Model artifact persistence under `artifacts/` |
+| `device.py` | Auto-detect CPU/CUDA for PyTorch training |
+| `hpo.py` | Optuna hyperparameter optimization wrapper |
+| `ci_smoke.py` | Fast CI profile runner for regression bounds |
 
 ## Model Interface Contract
 
@@ -95,7 +104,7 @@ def evaluate(self, X, y) -> dict: ...
 config/experiments.yaml
         │
         ▼
-generators.py ──► splits.py (stratified holdout BEFORE preprocessing)
+dataset_registry.py / generators.py ──► splits.py ──► scaling.py (train-fit only)
         │
         ▼
    run.py (orchestrator)
@@ -143,6 +152,7 @@ config/experiments.yaml  (seeds: [42, 123, ..., 5000])
 |---------|-------------|-------|
 | `publication` | 500 | 10 |
 | `publication_large` | 1000 | 10 |
+| `ci` | 200 | 1 |
 
 All `run.py` scripts load settings via `src/training/config.py`:
 

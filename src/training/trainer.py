@@ -6,6 +6,7 @@ import torch
 import torch.nn as nn
 
 from src.training.checkpoints import save_best_checkpoint
+from src.training.device import resolve_device
 from src.training.metrics import ExperimentLogger
 from src.training.reproducibility import set_global_seed
 from src.training.structured_log import init_correlation_id, log_event
@@ -29,9 +30,19 @@ def train_model(
     seed: int | None = None,
     profile: str | None = None,
     save_checkpoints: bool = True,
+    device: str | None = None,
 ) -> ExperimentLogger:
     if seed is not None:
         set_global_seed(seed)
+
+    dev = resolve_device(device)
+    model = model.to(dev)
+    X = X.to(dev)
+    y = y.to(dev)
+    if X_test is not None:
+        X_test = X_test.to(dev)
+    if y_test is not None:
+        y_test = y_test.to(dev)
 
     init_correlation_id()
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
@@ -42,6 +53,7 @@ def train_model(
         params["seed"] = seed
     if profile is not None:
         params["profile"] = profile
+    params["device"] = str(dev)
     log._tracker.log_params(params)
 
     best_holdout: float | None = None
@@ -155,9 +167,14 @@ def fine_tune(
     epochs: int = 20,
     lr: float = 0.01,
     seed: int | None = None,
+    device: str | None = None,
 ) -> float:
     if seed is not None:
         set_global_seed(seed)
+
+    dev = resolve_device(device)
+    model = model.to(dev)
+    X, y = X.to(dev), y.to(dev)
 
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     criterion = nn.BCELoss()

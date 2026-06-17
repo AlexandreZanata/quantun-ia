@@ -2,7 +2,7 @@
 
 ## Overview
 
-Ten experiments compare classical and quantum ML approaches on controlled synthetic tasks.
+Fourteen experiments compare classical and quantum ML on synthetic and real-world tasks.
 Configuration is centralized in `config/experiments.yaml`.
 
 | ID | Name | Question |
@@ -17,6 +17,10 @@ Configuration is centralized in `config/experiments.yaml`.
 | 008 | Data Re-upload | Does re-uploading beat basic QNN at matched qubits? |
 | 009 | Entanglement Basic | Does entanglement help without re-upload? |
 | 010 | Poison Re-upload Ablation | Do fewer layers or lower LR improve poison robustness? |
+| 011 | UCI Tabular QML | Does QNN beat parameter-matched MLP on breast cancer? |
+| 012 | MNIST PCA QML | Does amplitude encoding beat angle on PCA-reduced MNIST? |
+| 013 | Augmentation Robustness | Does Gaussian augmentation improve QNN on noisy circles? |
+| 014 | Sequence Baselines | Do RNN/Transformer beat flattened QNN on sequential data? |
 
 **Publication profile defaults:** `circles`, `noise=0.2`, `n_samples=500`, **10 seeds**, 30% holdout.
 
@@ -125,6 +129,19 @@ vim experiments/exp_003_entanglement_effect/results.md
 | EXP 008 | Vary `n_layers` for re-upload (see exp_010) |
 | EXP 009 | Compare with exp_003 (re-upload vs basic entanglement) |
 | EXP 010 | Add amplitude encoding baseline under same poison rates |
+| EXP 011 | Run Optuna HPO (`make hpo`) before publication_large |
+| EXP 012 | Compare PCA components 4 vs 8 vs 16 |
+| EXP 013 | Vary `augment_sigma` |
+| EXP 014 | Increase `seq_len` to test long-range dependencies |
+
+## Real-Data Experiments (011–014)
+
+| ID | Dataset | Models | Notes |
+|----|---------|--------|-------|
+| 011 | breast_cancer (UCI) | perceptron, classical_matched, quantum_angle | See `docs/baselines.md` |
+| 012 | MNIST 0 vs 1 + PCA | quantum_angle, quantum_amplitude | 8 PCA components, 4 qubits |
+| 013 | circles + noise | baseline vs augmented QNN | Uses `augmentation.py` |
+| 014 | sequential_binary | RNNMini, TransformerMini, flattened QNN | Uses `rnn_mini.py`, `transformer_mini.py` |
 
 ## Publication Profiles
 

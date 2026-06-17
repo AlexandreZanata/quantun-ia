@@ -1,4 +1,4 @@
-.PHONY: dev test test-watch lint lint-fix coverage dashboard dashboard-local experiment experiment-large repro export-results docker-build docker-test docker-lint clean
+.PHONY: dev test test-watch lint lint-fix coverage dashboard dashboard-local experiment experiment-large repro export-results hpo docker-build docker-test docker-lint clean
 
 PYTHON ?= $(shell test -x .venv/bin/python && echo .venv/bin/python || echo python3)
 
@@ -38,6 +38,9 @@ repro:
 
 export-results:
 	$(PYTHON) scripts/export_results.py
+
+hpo:
+	MLFLOW_DISABLE=1 $(PYTHON) scripts/run_hpo.py --exp exp_011_uci_tabular_qml --trials 5 --model perceptron
 
 docker-build:
 	docker compose build

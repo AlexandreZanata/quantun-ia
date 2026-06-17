@@ -9,6 +9,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Phase 2 scientific scope expansion
+- `src/data/real_datasets.py`, `src/data/dataset_registry.py`, `src/data/scaling.py`
+- `load_synthetic_raw()` in generators for split-then-scale workflows
+- Experiments exp_011–exp_014 (UCI, MNIST PCA, augmentation, sequence baselines)
+- `src/training/hpo.py` and `scripts/run_hpo.py` (Optuna)
+- `src/training/device.py` — CUDA/CPU auto-detect in trainer
+- `docs/baselines.md` — literature comparison reference
+- `docker-compose.gpu.yml` for NVIDIA GPU runs
+- Makefile target: `make hpo`
+
+### Changed
+
+- `ClassicalNet` and holdout pipeline support variable `input_dim`
+- `trainer.py` moves tensors to resolved device (`QML_DEVICE` env)
+- `requirements.txt` adds `optuna`
+
+### Added
+
 - Phase 1 reproducibility infrastructure
 - `requirements.lock` for pinned runtime dependencies
 - `src/training/reproducibility.py` — global seed utility

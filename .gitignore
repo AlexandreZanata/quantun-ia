@@ -12,5 +12,6 @@ logs/experiments.jsonl
 mlruns/
 artifacts/
 data/exports/
+data/raw/
 .DS_Store
 *.log

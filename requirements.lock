@@ -17,3 +17,4 @@ PyYAML==6.0.3
 tqdm==4.68.2
 loguru==0.7.3
 mlflow==3.14.0
+optuna==4.9.0
