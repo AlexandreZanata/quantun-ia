@@ -3,13 +3,16 @@
 This guide describes how to obtain a citable DOI for quantun-ia releases via the
 [Zenodo–GitHub integration](https://docs.github.com/en/repositories/archiving-a-github-repository/referencing-and-citing-content).
 
+**Current target version:** `v0.9.12` (Phases 0–22b complete).
+
 ---
 
 ## Prerequisites
 
 - Admin access to the GitHub repository
 - Zenodo account linked to GitHub
-- Local experiment logs (`logs/experiments.jsonl`) — run `make experiments-new` if missing exp_011–015 summaries
+- Local `make check` green
+- Publication `results.md` for headline experiments (exp_021, exp_022 included in bundle)
 
 ---
 
@@ -18,8 +21,7 @@ This guide describes how to obtain a citable DOI for quantun-ia releases via the
 ```bash
 source .venv/bin/activate
 make health
-make experiments-new    # optional: publication runs for exp_011–015
-make results-new        # write results.md from JSONL summaries
+make check
 make release
 make release-check      # verify SHA-256 checksums in MANIFEST.txt
 ```
@@ -29,11 +31,14 @@ This creates `dist/release/` containing:
 - `results.csv` — aggregated experiment export
 - `figures/*.pdf` — publication figures
 - `tables/*.tex` — LaTeX holdout summary tables
-- `publication_large_summary.md`
+- `microqml_bench/v1.json` — MicroQML Bench export
+- `experiments/exp_021_qml_backend_parity/results.md`
+- `experiments/exp_022_nano_quantum_parity/results.md`
+- `docs/api.md`, `compute_environment.md`, `ethics.md`, `microqml_bench.md`, `zenodo.md`
+- `publication_large_summary.md` (if present)
 - `requirements.lock`
-- `CITATION.cff`, `RELEASE_NOTES.md`, `CHANGELOG.md`
-- `docs/api.md` — REST API reference (v0.9.0+)
-- `MANIFEST.txt` — relative paths with SHA-256 checksums for every file
+- `CITATION.cff`, `RELEASE_NOTES.md`, `CHANGELOG.md`, `SECURITY.md`
+- `MANIFEST.txt` — relative paths with SHA-256 checksums
 
 ---
 
@@ -45,21 +50,17 @@ This creates `dist/release/` containing:
 
 ---
 
-## Step 3 — Create GitHub release v0.9.1
+## Step 3 — Create GitHub release v0.9.12
 
 ```bash
-git tag v0.9.1
-git push origin v0.9.1
+git tag v0.9.12
+git push origin v0.9.12
 ```
 
-On GitHub (or via CI on tag push):
+GitHub Actions (`.github/workflows/release.yml`) will:
 
-1. **Releases → Draft a new release**
-2. Tag: `v0.9.1`
-3. Title: `v0.9.1 — Zenodo Release Bundle (Phases 0–11)`
-4. Attach files from `dist/release/` (CI uploads the bundle automatically)
-5. Paste summary from [RELEASE_NOTES.md](../RELEASE_NOTES.md)
-6. Publish release
+1. Build `dist/release/` with manifest verification
+2. Attach artifacts to the GitHub release using `RELEASE_NOTES.md`
 
 Zenodo will create an archive within a few minutes.
 
@@ -70,23 +71,26 @@ Zenodo will create an archive within a few minutes.
 Copy the DOI from the Zenodo record page and add to `CITATION.cff`:
 
 ```yaml
-version: 0.9.1
+version: 0.9.12
 date-released: 2026-06-17
 doi: 10.5281/zenodo.XXXXXXX
 ```
 
 Commit and push the DOI update. Contract tests validate the DOI format when present.
 
+```bash
+pytest tests/contracts/test_citation_cff.py -v
+```
+
 ---
 
 ## Step 5 — Verify
 
 - [ ] Zenodo record shows correct version and files
-- [ ] `CITATION.cff` includes DOI
+- [ ] `CITATION.cff` includes live DOI (test no longer skipped)
 - [ ] README citation section references DOI
 - [ ] Paper draft (`paper/main.tex`) cites the Zenodo archive
 - [ ] `make release-check` passes on the published bundle
-- [ ] `experiments/exp_011`–`exp_015/results.md` present after `make results-new`
 
 ---
 
@@ -94,5 +98,4 @@ Commit and push the DOI update. Contract tests validate the DOI format when pres
 
 - Zenodo archives the **full repository snapshot** at release time plus uploaded assets.
 - The DOI is version-specific; each new release gets a new DOI (with a concept DOI for all versions).
-- Run `make experiment-large` before release for richer `publication_large` summaries in the bundle.
-- v0.9.1 adds SHA-256 manifest verification and REST API docs; see [api.md](api.md).
+- Weekly CI cron runs integration smoke on Mondays to catch dependency drift.

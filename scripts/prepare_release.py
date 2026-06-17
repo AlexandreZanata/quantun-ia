@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import os
 import shutil
 import subprocess
 import sys
@@ -12,8 +13,19 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_DIST = ROOT / "dist" / "release"
-RELEASE_VERSION = "0.9.11"
-STATIC_ARTIFACTS = ("CITATION.cff", "RELEASE_NOTES.md", "CHANGELOG.md")
+RELEASE_VERSION = "0.9.12"
+STATIC_ARTIFACTS = ("CITATION.cff", "RELEASE_NOTES.md", "CHANGELOG.md", "SECURITY.md")
+RELEASE_DOCS = (
+    "docs/api.md",
+    "docs/compute_environment.md",
+    "docs/ethics.md",
+    "docs/microqml_bench.md",
+    "docs/zenodo.md",
+)
+RELEASE_RESULTS = (
+    "experiments/exp_021_qml_backend_parity/results.md",
+    "experiments/exp_022_nano_quantum_parity/results.md",
+)
 
 
 def sha256_file(path: Path) -> str:
@@ -114,13 +126,43 @@ def prepare_release(dist_dir: Path = DEFAULT_DIST) -> list[Path]:
         shutil.copy2(lock, dest)
         artifacts.append(dest)
 
-    api_doc = ROOT / "docs" / "api.md"
-    if api_doc.exists():
-        docs_dir = dist_dir / "docs"
-        docs_dir.mkdir(parents=True, exist_ok=True)
-        dest = docs_dir / "api.md"
-        shutil.copy2(api_doc, dest)
-        artifacts.append(dest)
+    docs_dir = dist_dir / "docs"
+    docs_dir.mkdir(parents=True, exist_ok=True)
+    for rel in RELEASE_DOCS:
+        src = ROOT / rel
+        if src.exists():
+            dest = docs_dir / src.name
+            shutil.copy2(src, dest)
+            artifacts.append(dest)
+
+    results_dir = dist_dir / "experiments"
+    results_dir.mkdir(parents=True, exist_ok=True)
+    for rel in RELEASE_RESULTS:
+        src = ROOT / rel
+        if src.exists():
+            dest = results_dir / src.parent.name / "results.md"
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(src, dest)
+            artifacts.append(dest)
+
+    microqml_script = ROOT / "scripts" / "export_microqml_bench.py"
+    if microqml_script.exists():
+        bench_dir = dist_dir / "microqml_bench"
+        bench_dir.mkdir(parents=True, exist_ok=True)
+        bench_json = bench_dir / "v1.json"
+        subprocess.run(
+            [
+                sys.executable,
+                str(microqml_script),
+                "--output",
+                str(bench_json),
+            ],
+            check=True,
+            cwd=ROOT,
+            env={**os.environ, "MLFLOW_DISABLE": "1"},
+        )
+        if bench_json.exists():
+            artifacts.append(bench_json)
 
     artifacts.extend(_copy_static_artifacts(dist_dir))
 

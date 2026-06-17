@@ -5,6 +5,9 @@ on:
     branches: [main, master, develop]
   pull_request:
     branches: [main, master, develop]
+  schedule:
+    # Weekly integration smoke — catch dependency drift (Phase 18b ops)
+    - cron: "0 6 * * 1"
 
 concurrency:
   group: ci-${{ github.ref }}

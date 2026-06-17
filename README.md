@@ -116,7 +116,7 @@ make api-demo             # API smoke test
 make experiments-new    # publication runs exp_011–015
 make results-new        # generate results.md from JSONL summaries (exp_011–018)
 make power-analysis     # minimum detectable Cohen's d table by seed count
-make release            # Bundle artifacts for Zenodo v0.9.1 (SHA-256 manifest)
+make release            # Bundle artifacts for Zenodo v0.9.12 (SHA-256 manifest)
 make release-check      # Verify dist/release MANIFEST.txt checksums
 make paper-build        # LaTeX paper draft (figures + tables + PDF)
 make replay-publication-artifacts  # export CSV, figures, LaTeX from logs
@@ -170,11 +170,16 @@ quantun-ia/
 ## Citation
 
 If you use this software in research, please cite it using [CITATION.cff](CITATION.cff).
-After the [Zenodo release](docs/zenodo.md) for `v0.9.1`, the DOI will appear in `CITATION.cff`.
+
+**Zenodo DOI (after release):**
+
+1. Run `make release` and tag `v0.9.12` per [docs/zenodo.md](docs/zenodo.md)
+2. Copy the DOI from Zenodo into `CITATION.cff`
+3. Validate: `pytest tests/contracts/test_citation_cff.py -v`
 
 ## CI
 
-GitHub Actions: ruff lint, pytest (coverage ≥ 70%), Docker test suite, smoke imports.
+GitHub Actions: ruff lint, mypy, pytest (coverage ≥ 80%), integration/contracts smoke, e2e API tests, weekly cron, paper-build (optional).
 
 ## License
 

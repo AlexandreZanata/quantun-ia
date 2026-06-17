@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.12] - 2026-06-17
+
+### Added
+
+- Phase 18b: **Zenodo citation loop ready** — release bundle v0.9.12, `SECURITY.md`, weekly CI cron
+- Release bundle now includes compliance docs, exp_021/022 `results.md`, MicroQML Bench JSON
+- `RELEASE_NOTES.md` updated for Phases 0–22b
+
+### Changed
+
+- `docs/zenodo.md` and root `README.md` citation section aligned to v0.9.12 tag workflow
+- `prepare_release.py` ships `SECURITY.md`, ethics/compute docs, publication results
+
 ## [0.9.11] - 2026-06-17
 
 ### Added

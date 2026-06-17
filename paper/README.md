@@ -28,7 +28,8 @@ Headline narrative: holdout-fair QML benchmark (Option C in `.local/README.md`).
 
 ## Submission checklist
 
-- [ ] Run `make paper-build` with publication-profile logs
-- [ ] Embed holdout tables from `paper/tables/`
-- [ ] Cite Zenodo DOI from `CITATION.cff`
-- [ ] Upload to arXiv (cs.LG + quant-ph) or workshop portal
+- [x] Run `make paper-build` with publication-profile logs (CI `paper-build` job)
+- [x] exp_021 + exp_022 `results.md` with uniform statistical sections
+- [ ] Embed holdout tables from `paper/tables/` (run `make latex-tables`)
+- [ ] Cite Zenodo DOI from `CITATION.cff` (after `v0.9.12` tag — see [docs/zenodo.md](../docs/zenodo.md))
+- [ ] Upload to arXiv (cs.LG + quant-ph) — Phase 19b

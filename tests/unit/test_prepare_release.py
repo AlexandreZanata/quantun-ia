@@ -24,6 +24,11 @@ def test_static_artifacts_exist():
         assert Path(name).is_file(), f"missing static release artifact: {name}"
 
 
+def test_release_notes_mentions_current_version():
+    notes = Path("RELEASE_NOTES.md").read_text(encoding="utf-8")
+    assert f"v{RELEASE_VERSION}" in notes
+
+
 def test_sha256_file(tmp_path: Path):
     sample = tmp_path / "sample.txt"
     sample.write_text("quantun-ia", encoding="utf-8")

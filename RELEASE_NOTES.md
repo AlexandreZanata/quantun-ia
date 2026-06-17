@@ -1,17 +1,17 @@
-# Release v0.9.1 — Zenodo Release Bundle
+# Release v0.9.12 — Zenodo Citation Loop (Phases 0–22b)
 
 **Date:** 2026-06-17  
-**Codename:** Phase 10 platform layer — Phases 0–10 complete
+**Codename:** 5-star lab — publication verdicts, MicroQML Bench, Nano Parity Bench
 
 ## Highlights
 
-- **20 experiments** with hypothesis-first workflow (`exp_001`–`exp_020`)
-- **REST API** — FastAPI service with SQLite-backed training jobs and multitenancy headers
-- **Benchmark PWA** — mobile leaderboard at `/pwa/`
-- **Publication pipeline:** figures, LaTeX tables, paper skeleton, Zenodo release bundle with SHA-256 manifest
-- **Innovation track:** adaptive LR (015), hybrid NAS (016), poison × topology (017), feature fusion (018)
-- **Nano Trainer:** CLI + Streamlit mini training app (019)
-- **Engineering:** `make check`, 80% coverage, mypy CI, JSONL contracts, e2e API tests
+- **22 experiments** with hypothesis-first workflow and uniform `results.md` (exp_011–018, exp_021, exp_022)
+- **MicroQML Bench v1** — versioned JSON schema, `make microqml-bench`, REST export
+- **Nano Parity Bench** — `qml-bench-parity`, exp_022 publication (honest inconclusive verdict)
+- **exp_021** — PennyLane backend parity accepted (Δ=−0.4 pp, 10 seeds)
+- **Platform:** JWT auth, async GPU job queue, e2e in CI, benchmark PWA
+- **Compliance:** ORCID, OSF prereg contracts, `docs/ethics.md`, `docs/compute_environment.md`
+- **Engineering:** 230+ tests, 80% coverage, `golden_publication.json`, weekly smoke cron
 
 ## Install
 
@@ -23,13 +23,19 @@ make check
 
 ## Citation
 
-See [CITATION.cff](CITATION.cff). After Zenodo sync for `v0.9.1`, add the DOI per [docs/zenodo.md](docs/zenodo.md).
+See [CITATION.cff](CITATION.cff). After Zenodo sync for `v0.9.12`:
+
+1. Copy DOI from [zenodo.org](https://zenodo.org) → uncomment `doi:` in `CITATION.cff`
+2. Run `pytest tests/contracts/test_citation_cff.py -v`
+
+Full guide: [docs/zenodo.md](docs/zenodo.md).
 
 ## Artifact bundle
 
 ```bash
 make release        # → dist/release/ with MANIFEST.txt checksums
 make release-check  # verify an existing bundle
+git tag v0.9.12 && git push origin v0.9.12   # triggers .github/workflows/release.yml
 ```
 
 ## Full changelog
