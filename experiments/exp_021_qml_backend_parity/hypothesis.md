@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-17  
 **Author:** Quantum ML Lab  
-**Pre-registration:** OSF entry planned before publication-profile runs (see `docs/research_agenda.md`).
+**Pre-registration:** https://osf.io/8k2nf (PennyLane backend parity on breast cancer QNN)
 
 ## What I expect to happen
 

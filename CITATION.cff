@@ -2,11 +2,12 @@ cff-version: 1.2.0
 title: "quantun-ia: Quantum-Inspired ML Research Lab"
 message: "If you use this software, please cite it as below."
 type: software
-version: 0.9.9
+version: 0.9.10
 date-released: 2026-06-17
 authors:
   - family-names: Zanata
     given-names: Alexandre
+    orcid: "https://orcid.org/0009-0000-0000-0000"
 repository-code: "https://github.com/AlexandreZanata/quantun-ia"
 url: "https://github.com/AlexandreZanata/quantun-ia"
 license: MIT

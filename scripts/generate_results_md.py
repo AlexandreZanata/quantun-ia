@@ -76,6 +76,15 @@ EXP_META: dict[str, dict[str, str]] = {
             "Transformer → QNN fusion vs PCA-QNN and flat QNN on phase-sensitive sequences."
         ),
     },
+    "exp_021": {
+        "dir": "exp_021_qml_backend_parity",
+        "title": "EXP 021 (QML Backend Parity)",
+        "dataset": "breast_cancer (UCI), angle QNN, 30% holdout",
+        "conclusion": (
+            "PennyLane default.qubit vs lightning.qubit holdout parity on breast cancer QNN. "
+            "See `docs/compute_environment.md` for hardware profile."
+        ),
+    },
 }
 
 

@@ -48,6 +48,14 @@ def test_citation_authors_have_names():
         assert author.get("family-names") or author.get("given-names")
 
 
+def test_citation_authors_have_orcid_when_present():
+    data = _load_citation()
+    for author in data.get("authors", []):
+        orcid = author.get("orcid")
+        if orcid:
+            assert str(orcid).startswith("https://orcid.org/"), f"invalid ORCID URL: {orcid}"
+
+
 def test_citation_doi_format_when_present():
     data = _load_citation()
     doi = data.get("doi")

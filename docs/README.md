@@ -15,6 +15,8 @@ Welcome to the **Quantum-Inspired Micro ML Lab** documentation.
 | [Reproducibility](reproducibility.md) | NeurIPS-style reproducibility checklist |
 | [Research Agenda](research_agenda.md) | 12-month falsifiable experiment roadmap |
 | [MicroQML Bench](microqml_bench.md) | Versioned benchmark suite v1 (Phase 17) |
+| [Compute Environment](compute_environment.md) | Hardware/software profile for publication numbers |
+| [Ethics & Data Use](ethics.md) | UCI/MNIST data statement and responsible use |
 | [Zenodo Release](zenodo.md) | DOI archival guide for v0.9.1+ |
 | [DVC Remote](dvc_remote.md) | Artifact remote setup and `dvc push` |
 | [Hypothesis Workflow](hypothesis-workflow.md) | Mandatory hypothesis-first discipline |

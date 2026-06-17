@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "quantun-ia"
-version = "0.9.9"
+version = "0.9.10"
 description = "Quantum-Inspired Micro ML Lab"
 requires-python = ">=3.11"
 readme = "README.md"

@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.10] - 2026-06-17
+
+### Added
+
+- Phase 18 (partial): **citation & compliance** — `docs/compute_environment.md`, `docs/ethics.md`, ORCID in `CITATION.cff`
+- OSF pre-registration contract — `tests/contracts/test_osf_prereg.py` for exp_021 + exp_022
+- Phase 19: **exp_021 publication verdict** — 10-seed `publication` profile run + `results.md`
+- `exp_021` in `generate_results_md.py` and `test_results_md_uniform.py`
+
+### Changed
+
+- `hypothesis.md` for exp_021 and exp_022 now include OSF pre-registration URLs
+
 ## [0.9.9] - 2026-06-17
 
 ### Added

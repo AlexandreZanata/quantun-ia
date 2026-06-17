@@ -1,5 +1,7 @@
 # Hypothesis — exp_022_nano_quantum_parity
 
+**Pre-registration:** https://osf.io/7m4pd (hybrid sandwich vs parameter-matched classical on UCI tabular)
+
 ## Question
 
 Does the **hybrid sandwich** quantum nanomodel (`Classical → Quantum → Classical` with data re-upload) significantly outperform a **parameter-matched classical MLP** on UCI tabular tasks at an equal trainable-parameter budget?
