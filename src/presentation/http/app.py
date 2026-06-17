@@ -90,7 +90,7 @@ async def lifespan(app: FastAPI):
 def create_app() -> FastAPI:
     app = FastAPI(
         title="quantun-ia API",
-        version="0.9.18",
+        version="0.9.19",
         description="REST API for Nano Trainer and benchmark viewing",
         lifespan=lifespan,
     )

@@ -1,20 +1,19 @@
-# Release v0.9.18 — DVC Artifact Validation (Phase 27)
-
-**Date:** 2026-06-17
+# Release v0.9.19 — Encoding × Backend Interaction (Phase 28)
 
 ## Highlights
 
-- **`make dvc-check`** — validates `dvc.yaml` stages align with release pipeline
-- Remote setup remains manual per `docs/dvc_remote.md`
-- **290+ tests** green via `make check`
+- **exp_023** — 2×2 factorial on PCA-MNIST: angle vs amplitude encoding × `default.qubit` vs `lightning.qubit`
+- CI smoke + golden bounds guard wiring without publication-profile verdict yet
+- `QuantumNetAmplitude` accepts `qml_device` (parity with `QuantumNetBasic`)
 
-## Preflight
+## Validation
 
 ```bash
-make dvc-check
-make health
+make check
+MLFLOW_DISABLE=1 pytest tests/integration/test_exp_023_smoke.py -v
 ```
 
-## Full changelog
+## Manual follow-ups
 
-See [CHANGELOG.md](CHANGELOG.md).
+- OSF pre-registration before publication-profile runs
+- Fill `results.md` after 10-seed publication execution

@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.19] - 2026-06-17
+
+### Added
+
+- Phase 28: **exp_023 encoding×backend interaction** — PCA-MNIST 2×2 factorial (angle/amplitude × default/lightning)
+- `experiments/exp_023_encoding_backend/` — hypothesis + run.py
+- `run_exp_023_ci` + `tests/integration/test_exp_023_smoke.py`
+- `QuantumNetAmplitude` — optional `qml_device` for PennyLane backend parity with angle QNN
+
+### Changed
+
+- `config/experiments.yaml` — exp_023 entry with ci/publication profiles
+- `docs/research_agenda.md` — exp_023 status CI smoke
+- `tests/regression/golden_ci.json` — exp_023 bounds
+
 ## [0.9.18] - 2026-06-17
 
 ### Added

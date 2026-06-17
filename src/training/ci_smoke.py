@@ -429,3 +429,79 @@ def run_exp_022_ci(*, log_path: Path | None = None, epochs: int = 15) -> dict[st
         }
     finally:
         metrics_module.LOGS_PATH = original_log_path
+
+
+EXP_023_KEY = "exp_023_encoding_backend"
+EXP_023_ID = "exp_023"
+EXP_023_CI_MODELS = ("angle_default", "amplitude_default", "angle_lightning")
+
+
+def run_exp_023_ci(*, log_path: Path | None = None) -> dict[str, list[float]]:
+    """Fast CI smoke: encoding×backend 2×2 on PCA-MNIST (default.qubit required)."""
+    from src.data.dataset_registry import prepare_dataset
+    from src.quantum.pennylane_device import QmlDeviceError, resolve_qml_device
+    from src.quantum.qnn_amplitude import QuantumNetAmplitude
+    from src.quantum.qnn_basic import QuantumNetBasic
+
+    cfg = load_experiment_config(EXP_023_KEY, profile="ci")
+    mc = cfg.get("model_configs", {})
+    n_qubits = cfg.get("n_qubits", 4)
+    n_layers = cfg.get("n_layers", 2)
+    n_components = cfg.get("n_components", 8)
+    model_names: list[str] = []
+
+    for name, model_cfg in mc.items():
+        qml_device = model_cfg.get("qml_device", "default.qubit")
+        try:
+            resolve_qml_device(n_qubits, qml_device)
+            model_names.append(name)
+        except QmlDeviceError:
+            if qml_device == "default.qubit":
+                raise
+
+    assert model_names, "exp_023 CI requires at least default.qubit cells"
+    model_names = [name for name in EXP_023_CI_MODELS if name in model_names] or model_names
+
+    def build_model(seed: int) -> dict:
+        X_train, X_test, y_train, y_test, _meta = prepare_dataset(
+            cfg.get("dataset", "mnist_binary"),
+            test_size=cfg["test_size"],
+            random_state=seed,
+            n_samples=cfg["n_samples"],
+            n_components=n_components,
+        )
+        input_dim = X_train.shape[1]
+        models: dict[str, tuple] = {}
+        for name in model_names:
+            model_cfg = mc[name]
+            encoding = model_cfg.get("encoding", "angle")
+            qml_device = model_cfg.get("qml_device", "default.qubit")
+            lr = model_cfg.get("learning_rate", cfg.get("learning_rate", 0.02))
+            if encoding == "amplitude":
+                model = QuantumNetAmplitude(
+                    n_qubits=n_qubits,
+                    n_layers=n_layers,
+                    input_dim=input_dim,
+                    qml_device=qml_device,
+                )
+            else:
+                model = QuantumNetBasic(
+                    n_qubits=n_qubits,
+                    n_layers=n_layers,
+                    input_dim=input_dim,
+                    qml_device=qml_device,
+                )
+            models[name] = (model, lr)
+        return {
+            "splits": (X_train, X_test, y_train, y_test),
+            "models": models,
+        }
+
+    return _run_holdout_loop(
+        exp_key=EXP_023_KEY,
+        exp_id=EXP_023_ID,
+        cfg=cfg,
+        model_names=model_names,
+        build_model=build_model,
+        log_path=log_path,
+    )

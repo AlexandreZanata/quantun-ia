@@ -67,6 +67,32 @@
       "classical_mean_max": 1.0
     }
   },
+  "exp_023": {
+    "angle_default": {
+      "mean_min": 0.35,
+      "mean_max": 1.0,
+      "per_seed_min": 0.25,
+      "per_seed_max": 1.0
+    },
+    "angle_lightning": {
+      "mean_min": 0.35,
+      "mean_max": 1.0,
+      "per_seed_min": 0.25,
+      "per_seed_max": 1.0
+    },
+    "amplitude_default": {
+      "mean_min": 0.35,
+      "mean_max": 1.0,
+      "per_seed_min": 0.25,
+      "per_seed_max": 1.0
+    },
+    "amplitude_lightning": {
+      "mean_min": 0.35,
+      "mean_max": 1.0,
+      "per_seed_min": 0.25,
+      "per_seed_max": 1.0
+    }
+  },
   "nano_train": {
     "perceptron": {
       "mean_min": 0.35,

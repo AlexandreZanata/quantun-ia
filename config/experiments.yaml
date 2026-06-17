@@ -421,3 +421,32 @@ experiments:
         epochs: 12
       publication:
         epochs: 50
+
+  exp_023_encoding_backend:
+    description: "Encoding × backend interaction — angle vs amplitude on PCA-MNIST across PennyLane backends"
+    exp_id: exp_023
+    dataset: mnist_binary
+    n_samples: 500
+    n_components: 8
+    n_qubits: 4
+    n_layers: 2
+    learning_rate: 0.02
+    parity_threshold_pp: 2.0
+    encoding_parity_threshold_pp: 2.0
+    model_configs:
+      angle_default:
+        encoding: angle
+        qml_device: default.qubit
+        learning_rate: 0.02
+      angle_lightning:
+        encoding: angle
+        qml_device: lightning.qubit
+        learning_rate: 0.02
+      amplitude_default:
+        encoding: amplitude
+        qml_device: default.qubit
+        learning_rate: 0.02
+      amplitude_lightning:
+        encoding: amplitude
+        qml_device: lightning.qubit
+        learning_rate: 0.02
