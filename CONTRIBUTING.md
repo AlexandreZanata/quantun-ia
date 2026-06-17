@@ -88,3 +88,18 @@ Open an issue or refer to:
 - [Getting Started](docs/getting-started.md)
 - [Hypothesis Workflow](docs/hypothesis-workflow.md)
 - [Architecture](docs/architecture.md)
+- [Reviewer Guide](docs/reviewer_guide.md) — artifact evaluation and replication
+
+## Replication challenge
+
+Independent replicators are welcome. Fast verification:
+
+```bash
+make reviewer-repro
+```
+
+For a full publication replay (long), use `make replay-publication`.
+
+When reporting results, open a GitHub issue with the **Experiment Replication Challenge** template
+(`.github/ISSUE_TEMPLATE/experiment_replication.yml`). Include experiment ID, profile, commit SHA,
+your holdout metrics, and a verdict vs `experiments/exp_NNN_*/results.md`.

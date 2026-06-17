@@ -1,0 +1,58 @@
+name: Bug Report
+description: Report incorrect behavior, test failures, or infrastructure issues
+title: "[bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. Include steps to reproduce and the output of `make check` if applicable.
+
+  - type: input
+    id: version
+    attributes:
+      label: Software version
+      description: Output of `python -c "import importlib.metadata as m; print(m.version('quantun-ia'))"` or git commit SHA
+      placeholder: "0.9.14 or abc1234"
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. make repro
+        2. pytest tests/integration/test_exp_001_smoke.py -v
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, Python version, CPU/GPU, relevant env vars (QML_DEVICE, MLFLOW_DISABLE)
+      placeholder: "Ubuntu 22.04, Python 3.12, CPU, MLFLOW_DISABLE=1"
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs or stack trace
+      render: shell

@@ -1,0 +1,79 @@
+name: Experiment Replication Challenge
+description: Report independent replication of a quantun-ia experiment (holdout metrics, seeds, profile)
+title: "[replication]: "
+labels:
+  - replication
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template for independent replication of published experiments.
+        See [docs/reviewer_guide.md](docs/reviewer_guide.md) and `make reviewer-repro` for the fast path.
+
+  - type: input
+    id: exp_id
+    attributes:
+      label: Experiment ID
+      description: e.g. exp_001, exp_011, exp_021
+      placeholder: exp_001
+    validations:
+      required: true
+
+  - type: dropdown
+    id: profile
+    attributes:
+      label: Profile used
+      options:
+        - ci
+        - publication
+        - publication_large
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Compute environment
+      description: Hardware, OS, Python, PennyLane backend, commit SHA or release tag
+      placeholder: |
+        CPU Ubuntu 22.04, Python 3.12, default.qubit, commit cdf484d
+    validations:
+      required: true
+
+  - type: textarea
+    id: commands
+    attributes:
+      label: Commands run
+      render: shell
+      placeholder: |
+        make reviewer-repro
+        python experiments/exp_021_qml_backend_parity/run.py
+    validations:
+      required: true
+
+  - type: textarea
+    id: results
+    attributes:
+      label: Your holdout metrics
+      description: Mean accuracy, 95% CI, seeds — compare to experiments/exp_NNN/results.md
+      placeholder: |
+        quantum_default: 91.1% [88.0, 93.3] (10 seeds)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: verdict
+    attributes:
+      label: Replication verdict
+      options:
+        - Matches published results within CI/golden bounds
+        - Matches mean but outside published CI
+        - Does not match — needs investigation
+    validations:
+      required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional notes
+      description: Deviations, ablations, or data issues

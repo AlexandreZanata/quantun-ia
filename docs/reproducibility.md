@@ -134,17 +134,35 @@ Expected outcome: `make repro` passes; metrics within golden bounds in `tests/re
 ## 8. Known limitations
 
 - Fresh clone has empty `logs/experiments.jsonl` — run experiments or `dvc pull` for dashboard data.
-- exp_011–014 have `hypothesis.md` but `results.md` pending first publication runs.
+- exp_011–018 have uniform `results.md`; headline claims exp_021/022 documented in publication profile.
 - MLflow tracking is optional (`MLFLOW_DISABLE=1` in CI).
-- Zenodo DOI: enable via [docs/zenodo.md](zenodo.md) after GitHub release `v0.9.1`.
+- Zenodo DOI: enable via [zenodo.md](zenodo.md) after GitHub release tag.
 
 ---
 
-## 9. Checklist for reviewers
+## 9. Author-run statement
+
+All paper metrics were produced by the author using the `publication` profile (10 seeds,
+stratified holdout). Each run logs `started_at`, `seed`, and `elapsed_s` to `logs/experiments.jsonl`.
+Hardware and software versions are recorded in [compute_environment.md](compute_environment.md).
+
+---
+
+## 10. Checklist for reviewers
+
+Fast path:
+
+```bash
+make reviewer-repro
+```
+
+Manual checklist:
 
 - [ ] Clone repo and install from `requirements.lock`
-- [ ] `make repro` passes
-- [ ] `pytest tests/ --cov-fail-under=70` passes
+- [ ] `make reviewer-repro` or `make repro` passes
+- [ ] `pytest tests/ --cov-fail-under=80` passes
 - [ ] Re-run one experiment (e.g. exp_001) and compare holdout accuracy to `results.md`
 - [ ] Verify split-then-scale in `src/data/scaling.py` (no test-set leakage)
 - [ ] Confirm Holm correction applied in multi-comparison experiments
+
+See [reviewer_guide.md](reviewer_guide.md) for artifact evaluation workflow.

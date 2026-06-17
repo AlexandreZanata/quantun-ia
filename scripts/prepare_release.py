@@ -13,7 +13,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_DIST = ROOT / "dist" / "release"
-RELEASE_VERSION = "0.9.13"
+RELEASE_VERSION = "0.9.14"
 STATIC_ARTIFACTS = ("CITATION.cff", "RELEASE_NOTES.md", "CHANGELOG.md", "SECURITY.md")
 RELEASE_DOCS = (
     "docs/api.md",
@@ -21,6 +21,8 @@ RELEASE_DOCS = (
     "docs/compute_environment.md",
     "docs/ethics.md",
     "docs/microqml_bench.md",
+    "docs/reviewer_guide.md",
+    "docs/reproducibility.md",
     "docs/zenodo.md",
 )
 RELEASE_RESULTS = (
@@ -125,6 +127,15 @@ def prepare_release(dist_dir: Path = DEFAULT_DIST) -> list[Path]:
     if lock.exists():
         dest = dist_dir / "requirements.lock"
         shutil.copy2(lock, dest)
+        artifacts.append(dest)
+
+    reviewer_script = ROOT / "scripts" / "reviewer_repro.sh"
+    if reviewer_script.exists():
+        scripts_dir = dist_dir / "scripts"
+        scripts_dir.mkdir(parents=True, exist_ok=True)
+        dest = scripts_dir / "reviewer_repro.sh"
+        shutil.copy2(reviewer_script, dest)
+        dest.chmod(dest.stat().st_mode | 0o111)
         artifacts.append(dest)
 
     docs_dir = dist_dir / "docs"

@@ -1,0 +1,13 @@
+# Default owners for pull requests and issues.
+# See https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+* @AlexandreZanata
+
+# Experiment and research artifacts
+/experiments/ @AlexandreZanata
+/paper/ @AlexandreZanata
+/config/ @AlexandreZanata
+
+# Platform and API
+/src/presentation/ @AlexandreZanata
+/tests/e2e/ @AlexandreZanata

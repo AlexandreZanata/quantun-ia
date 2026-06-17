@@ -1,5 +1,8 @@
 # Quantum-Inspired Micro ML Lab
 
+[![CI](https://github.com/AlexandreZanata/quantun-ia/actions/workflows/ci.yml/badge.svg)](https://github.com/AlexandreZanata/quantun-ia/actions/workflows/ci.yml)
+[![coverage](https://img.shields.io/badge/coverage-%E2%89%A580%25-brightgreen)](https://github.com/AlexandreZanata/quantun-ia/actions/workflows/ci.yml)
+
 A laboratory for classical and quantum ML experiments with rigorous measurement, append-only logging, and a retro benchmark dashboard.
 
 ## Quick Start
@@ -104,6 +107,7 @@ make check              # lint + mypy + pytest (80% cov) + contracts
 make install            # pip install -e .
 make health             # pre-flight checks before large runs
 make repro              # CI smoke profile + golden bounds
+make reviewer-repro     # artifact evaluator fast path (< 15 min)
 make hpo                # Optuna hyperparameter search (exp_011 default)
 make figures            # PDF figures from logs/experiments.jsonl
 make latex-tables       # LaTeX tables for paper/

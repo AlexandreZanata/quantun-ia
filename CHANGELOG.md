@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.14] - 2026-06-17
+
+### Added
+
+- Phase 23: **Collaboration & artifact evaluation** — `CODEOWNERS`, GitHub issue templates, `make reviewer-repro`
+- `docs/reviewer_guide.md` — ACM/NeurIPS reviewer fast path and author-run statement
+- `scripts/reviewer_repro.sh` — one-click reproduction for artifact evaluators
+- Contract tests: `tests/contracts/test_collaboration_artifacts.py`
+- CI and coverage badges in root `README.md`
+
+### Changed
+
+- `docs/reproducibility.md` — author-run statement, updated reviewer checklist (80% cov)
+- `CONTRIBUTING.md` — replication challenge section
+- Release bundle includes `reviewer_repro.sh`, `reviewer_guide.md`, `reproducibility.md`
+
 ## [0.9.13] - 2026-06-17
 
 ### Added
