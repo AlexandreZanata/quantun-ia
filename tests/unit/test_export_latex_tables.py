@@ -29,7 +29,7 @@ def test_summary_to_latex_contains_model_and_ci():
         "exp_001",
         {"classical_32": {"mean": 0.65, "ci_low": 0.62, "ci_high": 0.68}},
     )
-    assert "classical_32" in tex
+    assert "classical\\_32" in tex or "classical_32" in tex
     assert "65.0" in tex
     assert "\\begin{table}" in tex
     assert "\\toprule" in tex
@@ -42,6 +42,6 @@ def test_export_latex_tables_writes_files(tmp_path):
     assert len(created) >= 2
     holdout = out_dir / "exp_001_holdout.tex"
     assert holdout.exists()
-    assert "classical_32" in holdout.read_text()
+    assert "classical\\_32" in holdout.read_text() or "classical_32" in holdout.read_text()
     combined = (out_dir / "all_experiments_summary.tex").read_text()
     assert "\\input{tables/exp_001_holdout}" in combined

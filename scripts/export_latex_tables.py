@@ -12,6 +12,10 @@ DEFAULT_JSONL = Path("logs/experiments.jsonl")
 DEFAULT_OUT = Path("paper/tables")
 
 
+def _latex_escape(text: str) -> str:
+    return text.replace("_", r"\_").replace("%", r"\%")
+
+
 def _load_summaries(jsonl_path: Path) -> dict[str, dict[str, dict]]:
     if jsonl_path == DEFAULT_JSONL:
         records = load_records()
@@ -49,7 +53,7 @@ def summary_to_latex(
         mean_pct = stats["mean"] * 100
         ci_low = stats["ci_low"] * 100
         ci_high = stats["ci_high"] * 100
-        lines.append(f"{model} & {mean_pct:.1f} & [{ci_low:.1f}, {ci_high:.1f}] \\\\")
+        lines.append(f"{_latex_escape(model)} & {mean_pct:.1f} & [{ci_low:.1f}, {ci_high:.1f}] \\\\")
     lines.extend(["\\bottomrule", "\\end{tabular}", "\\end{table}"])
     return "\n".join(lines)
 
