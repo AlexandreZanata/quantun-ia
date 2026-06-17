@@ -7,8 +7,43 @@ from datetime import date
 from pathlib import Path
 
 from dashboard.benchmark_data import latest_multi_seed_summaries, load_records
+from src.training.effect_size import format_cohens_d, minimum_detectable_effect
 
 DEFAULT_JSONL = Path("logs/experiments.jsonl")
+
+REQUIRED_SECTIONS = (
+    "## Holdout results",
+    "## Conclusion",
+    "## Verdict",
+    "## Power analysis",
+    "## Limitations",
+)
+
+
+def _infer_verdict(comparisons: list[dict] | None, n_seeds: int) -> str:
+    if not comparisons:
+        return "**inconclusive** — no paired comparison logged in JSONL."
+    primary = comparisons[0]
+    label_a = primary.get("label_a", "?")
+    label_b = primary.get("label_b", "?")
+    d = primary.get("effect_size_cohens_d")
+    d_abs = abs(d) if d is not None and d == d else 0.0
+    sig = primary.get("significant_holm", primary.get("significant"))
+    mde = minimum_detectable_effect(n_seeds)
+    if sig:
+        return (
+            f"**accepted** — primary comparison ({label_a} vs {label_b}) is "
+            f"Holm-significant with {format_cohens_d(d)}."
+        )
+    if d_abs < mde:
+        return (
+            f"**inconclusive** — |d|={d_abs:.2f} below MDE={mde:.2f} "
+            f"for n={n_seeds} seeds (underpowered)."
+        )
+    return (
+        f"**rejected** — primary comparison ({label_a} vs {label_b}) "
+        f"not significant after Holm correction ({format_cohens_d(d)})."
+    )
 
 
 def _load_records(jsonl_path: Path) -> list[dict]:
@@ -104,8 +139,22 @@ def generate_results_md(
             sig = comp.get("significant_holm", comp.get("significant"))
             sig_txt = "yes" if sig else "no"
             p_txt = f"{p_holm:.3f}" if p_holm is not None else "—"
-            d_txt = f"{d:.2f}" if d is not None else "—"
+            d_txt = format_cohens_d(d)
             lines.append(f"| {label_a} vs {label_b} | {mean_diff:+.1f} pp | {p_txt} | {d_txt} | {sig_txt} |")
+
+    mde = minimum_detectable_effect(n_seeds)
+    lines.extend(
+        [
+            "",
+            "## Verdict",
+            _infer_verdict(comparisons, n_seeds),
+            "",
+            "## Power analysis",
+            f"- Design: {n_seeds} paired holdout accuracies per model (profile `{profile}`).",
+            f"- Minimum detectable |Cohen's d| at α=0.05, power=0.80: **{mde:.2f}**.",
+            "- Run `make power-analysis` or `python scripts/power_analysis.py --table` for other seed counts.",
+        ]
+    )
 
     lines.extend(["", "## Conclusion"])
     if conclusion_hint:

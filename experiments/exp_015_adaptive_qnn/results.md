@@ -15,9 +15,17 @@
 ## Paired Wilcoxon (Holm-Bonferroni where batched)
 | Comparison | Mean diff | p-value | Cohen's d | Significant |
 |------------|-----------|---------|-----------|-------------|
-| quantum_6q_3l_adaptive vs quantum_6q_3l_fixed | +5.3 pp | 0.059 | 0.78 | no |
-| quantum_6q_3l_adaptive vs quantum_4q_2l_fixed | +7.8 pp | 0.012 | 1.40 | yes |
-| quantum_6q_3l_adaptive vs classical_matched_h14 | +1.8 pp | 0.576 | 0.35 | no |
+| quantum_6q_3l_adaptive vs quantum_6q_3l_fixed | +5.3 pp | 0.059 | 0.78 (medium) | no |
+| quantum_6q_3l_adaptive vs quantum_4q_2l_fixed | +7.8 pp | 0.012 | 1.40 (large) | yes |
+| quantum_6q_3l_adaptive vs classical_matched_h14 | +1.8 pp | 0.576 | 0.35 (small) | no |
+
+## Verdict
+**inconclusive** — |d|=0.78 below MDE=0.89 for n=10 seeds (underpowered).
+
+## Power analysis
+- Design: 10 paired holdout accuracies per model (profile `publication`).
+- Minimum detectable |Cohen's d| at α=0.05, power=0.80: **0.89**.
+- Run `make power-analysis` or `python scripts/power_analysis.py --table` for other seed counts.
 
 ## Conclusion
 Primary test: adaptive vs fixed LR at 6q×3l. See `docs/literature_review.md`.

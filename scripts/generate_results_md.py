@@ -85,7 +85,7 @@ def main() -> int:
         "--exp",
         nargs="+",
         default=list(EXP_META.keys()),
-        help="Experiment ids (default: exp_011 through exp_015)",
+        help="Experiment ids (default: exp_011 through exp_018)",
     )
     parser.add_argument("--jsonl", type=Path, default=Path("logs/experiments.jsonl"))
     args = parser.parse_args()

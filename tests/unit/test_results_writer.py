@@ -49,6 +49,43 @@ def test_generate_results_md_includes_summary_table(tmp_path):
     assert "## Limitations" in md
 
 
+def test_generate_results_md_includes_verdict_and_power(tmp_path):
+    jsonl = tmp_path / "experiments.jsonl"
+    records = [
+        {
+            "exp_id": "exp_011",
+            "record_type": "multi_seed_summary",
+            "started_at": "2026-06-17T12:00:00",
+            "summary": {
+                "perceptron": {"mean": 0.92, "ci_low": 0.90, "ci_high": 0.94, "n_seeds": 10},
+            },
+        },
+        {
+            "exp_id": "exp_011",
+            "record_type": "paired_comparison_batch",
+            "started_at": "2026-06-17T12:01:00",
+            "comparisons": [
+                {
+                    "label_a": "perceptron",
+                    "label_b": "quantum",
+                    "mean_diff": 0.04,
+                    "p_value": 0.01,
+                    "p_value_holm": 0.01,
+                    "significant_holm": True,
+                    "effect_size_cohens_d": 0.9,
+                }
+            ],
+        },
+        {"exp_id": "exp_011", "profile": "publication", "seed": 42},
+    ]
+    jsonl.write_text("\n".join(json.dumps(r) for r in records) + "\n")
+    md = generate_results_md("exp_011", "EXP 011 Test", jsonl_path=jsonl)
+    assert "## Verdict" in md
+    assert "## Power analysis" in md
+    assert "accepted" in md
+    assert "(large)" in md
+
+
 def test_generate_results_md_raises_without_summary(tmp_path):
     jsonl = tmp_path / "empty.jsonl"
     jsonl.write_text('{"exp_id": "exp_011", "model_name": "x"}\n')

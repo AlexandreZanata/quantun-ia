@@ -1,7 +1,7 @@
 # Results — EXP 016 (Hybrid NAS)
 
 **Run date:** 2026-06-17  
-**Profile:** publication, 10 seeds
+**Profile:** ci, 10 seeds
 **Dataset:** circles, noise=0.2, Optuna over hybrid layouts
 
 ## Holdout results
@@ -15,9 +15,17 @@
 ## Paired Wilcoxon (Holm-Bonferroni where batched)
 | Comparison | Mean diff | p-value | Cohen's d | Significant |
 |------------|-----------|---------|-----------|-------------|
-| nas_best vs hybrid_sandwich | +2.6 pp | 0.059 | 0.90 | no |
-| nas_best vs quantum_first | -0.8 pp | 0.477 | -0.31 | no |
-| nas_best vs classical_first | +2.6 pp | 0.059 | 0.90 | no |
+| nas_best vs hybrid_sandwich | +2.6 pp | 0.059 | 0.90 (large) | no |
+| nas_best vs quantum_first | -0.8 pp | 0.477 | -0.31 (small) | no |
+| nas_best vs classical_first | +2.6 pp | 0.059 | 0.90 (large) | no |
+
+## Verdict
+**rejected** — primary comparison (nas_best vs hybrid_sandwich) not significant after Holm correction (0.90 (large)).
+
+## Power analysis
+- Design: 10 paired holdout accuracies per model (profile `ci`).
+- Minimum detectable |Cohen's d| at α=0.05, power=0.80: **0.89**.
+- Run `make power-analysis` or `python scripts/power_analysis.py --table` for other seed counts.
 
 ## Conclusion
 NAS-best hybrid vs fixed EXP 002 baselines. See `docs/literature_review.md` §5.

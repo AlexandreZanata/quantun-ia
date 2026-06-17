@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.4] - 2026-06-17
+
+### Added
+
+- Phase 14: **Statistical upgrade** — uniform `results.md` with verdict, power analysis, Cohen's d labels
+- `src/training/effect_size.py` — magnitude labels and minimum detectable effect (MDE)
+- `scripts/power_analysis.py` + `make power-analysis`
+- `tests/contracts/test_results_md_uniform.py` for exp_011–018
+- Protocol comparison table in `docs/baselines.md`
+
+### Changed
+
+- `results_writer.py` adds Verdict, Power analysis, and formatted Cohen's d columns
+- Regenerated `results.md` for exp_011–018 via `make results-new`
+
 ## [0.9.3] - 2026-06-17
 
 ### Added

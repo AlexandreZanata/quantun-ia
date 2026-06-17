@@ -19,10 +19,18 @@
 ## Paired Wilcoxon (Holm-Bonferroni where batched)
 | Comparison | Mean diff | p-value | Cohen's d | Significant |
 |------------|-----------|---------|-----------|-------------|
-| quantum_first_poison_0 vs hybrid_sandwich_poison_0 | +4.7 pp | 0.008 | 1.34 | yes |
-| quantum_first_poison_30 vs hybrid_sandwich_poison_30 | +3.9 pp | 0.422 | 0.56 | no |
-| nas_preset_poison_30 vs hybrid_sandwich_poison_30 | +3.9 pp | 0.422 | 0.61 | no |
-| classical_first_poison_30 vs hybrid_sandwich_poison_30 | +3.1 pp | 0.422 | 0.53 | no |
+| quantum_first_poison_0 vs hybrid_sandwich_poison_0 | +4.7 pp | 0.008 | 1.34 (large) | yes |
+| quantum_first_poison_30 vs hybrid_sandwich_poison_30 | +3.9 pp | 0.422 | 0.56 (medium) | no |
+| nas_preset_poison_30 vs hybrid_sandwich_poison_30 | +3.9 pp | 0.422 | 0.61 (medium) | no |
+| classical_first_poison_30 vs hybrid_sandwich_poison_30 | +3.1 pp | 0.422 | 0.53 (medium) | no |
+
+## Verdict
+**accepted** — primary comparison (quantum_first_poison_0 vs hybrid_sandwich_poison_0) is Holm-significant with 1.34 (large).
+
+## Power analysis
+- Design: 10 paired holdout accuracies per model (profile `publication`).
+- Minimum detectable |Cohen's d| at α=0.05, power=0.80: **0.89**.
+- Run `make power-analysis` or `python scripts/power_analysis.py --table` for other seed counts.
 
 ## Conclusion
 Topology-driven poisoning robustness on clean holdout. Builds on exp_004/010/016.

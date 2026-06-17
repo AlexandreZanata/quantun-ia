@@ -60,6 +60,21 @@ exp_015 implements variance-scaled Adam (`src/training/adaptive_lr.py`) with Coh
 2. Read multi-seed summary from `logs/experiments.jsonl` or `make dashboard-local`.
 3. Compare bootstrap CI against the table above — focus on **relative ordering**, not absolute match.
 4. Document in `experiments/exp_NNN/results.md` with citation and protocol differences.
+5. Report Cohen's d with magnitude labels and check MDE via `make power-analysis`.
+
+## Our protocol vs literature
+
+| Aspect | Typical literature | quantun-ia (this repo) |
+|--------|-------------------|------------------------|
+| Train/test split | Often k-fold CV on full dataset | Single 70/30 stratified holdout **before** scaling |
+| Seeds | Frequently single run or unreported | 10 seeds (`publication` profile) |
+| Significance | Varies; often none | Paired Wilcoxon + Holm-Bonferroni |
+| Effect size | Rarely reported | Cohen's d (paired) in JSONL and `results.md` |
+| Classical baseline | SVM / tuned MLP | Parameter-matched perceptron / MLP (`param_match.py`) |
+| Qubit budget | Inconsistent | Documented per experiment; ≤8 qubits default |
+| Preprocessing | Sometimes on full data | Fit scaler/PCA on train only (`scaling.py`) |
+
+> Use this table in `results.md` Limitations when citing external accuracy numbers.
 
 ## References
 

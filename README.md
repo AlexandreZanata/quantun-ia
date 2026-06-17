@@ -114,7 +114,8 @@ make train-demo           # Nano Trainer CI demo (exp_019 path)
 make api                  # REST API server (exp_020 path)
 make api-demo             # API smoke test
 make experiments-new    # publication runs exp_011–015
-make results-new        # generate results.md from JSONL summaries
+make results-new        # generate results.md from JSONL summaries (exp_011–018)
+make power-analysis     # minimum detectable Cohen's d table by seed count
 make release            # Bundle artifacts for Zenodo v0.9.1 (SHA-256 manifest)
 make release-check      # Verify dist/release MANIFEST.txt checksums
 make paper-build        # LaTeX paper draft (figures + tables + PDF)

@@ -8,12 +8,20 @@
 | Model | Mean | 95% CI |
 |-------|------|--------|
 | **quantum_amplitude** | 99.9% | [99.8%, 100.0%] |
-| quantum_angle | 93.3% | [90.1%, 96.4%] |
+| quantum_angle | 94.4% | [91.2%, 97.4%] |
 
 ## Paired Wilcoxon (Holm-Bonferroni where batched)
 | Comparison | Mean diff | p-value | Cohen's d | Significant |
 |------------|-----------|---------|-----------|-------------|
-| quantum_amplitude vs quantum_angle | +6.7 pp | 0.004 | 1.22 | yes |
+| quantum_amplitude vs quantum_angle | +5.5 pp | 0.004 | 1.03 (large) | yes |
+
+## Verdict
+**accepted** — primary comparison (quantum_amplitude vs quantum_angle) is Holm-significant with 1.03 (large).
+
+## Power analysis
+- Design: 10 paired holdout accuracies per model (profile `publication`).
+- Minimum detectable |Cohen's d| at α=0.05, power=0.80: **0.89**.
+- Run `make power-analysis` or `python scripts/power_analysis.py --table` for other seed counts.
 
 ## Conclusion
 Angle vs amplitude encoding on PCA-reduced MNIST at matched qubit budget.

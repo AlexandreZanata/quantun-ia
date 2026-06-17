@@ -15,9 +15,17 @@
 ## Paired Wilcoxon (Holm-Bonferroni where batched)
 | Comparison | Mean diff | p-value | Cohen's d | Significant |
 |------------|-----------|---------|-----------|-------------|
-| transformer_qnn_fusion vs quantum_pca | +36.1 pp | 0.006 | 6.13 | yes |
-| transformer_qnn_fusion vs transformer_mini | -1.8 pp | 0.023 | -1.17 | yes |
-| transformer_qnn_fusion vs quantum_flat | -0.5 pp | 0.441 | -0.19 | no |
+| transformer_qnn_fusion vs quantum_pca | +36.1 pp | 0.006 | 6.13 (large) | yes |
+| transformer_qnn_fusion vs transformer_mini | -1.8 pp | 0.023 | -1.17 (large) | yes |
+| transformer_qnn_fusion vs quantum_flat | -0.5 pp | 0.441 | -0.19 (negligible) | no |
+
+## Verdict
+**accepted** — primary comparison (transformer_qnn_fusion vs quantum_pca) is Holm-significant with 6.13 (large).
+
+## Power analysis
+- Design: 10 paired holdout accuracies per model (profile `publication`).
+- Minimum detectable |Cohen's d| at α=0.05, power=0.80: **0.89**.
+- Run `make power-analysis` or `python scripts/power_analysis.py --table` for other seed counts.
 
 ## Conclusion
 Transformer → QNN fusion vs PCA-QNN and flat QNN on phase-sensitive sequences.
