@@ -4,26 +4,28 @@
 
 ```
 tests/
-├── smoke/         # Import checks — fast, run on every CI push
-├── unit/          # Pure functions, mocked dependencies
-└── (integration)  # Full experiment smoke runs (future)
+├── unit/           # Pure functions, mocked dependencies
+├── smoke/          # Import and forward-pass checks
+├── integration/    # exp_001 CI profile smoke + golden bounds
+├── contracts/      # JSONL schema validation (jsonschema)
+└── regression/     # golden_ci.json metric ranges
 ```
 
 ## Running Tests
 
 ```bash
-# Docker (recommended)
-make test
+# Full engineering gate (lint + mypy + tests + contracts)
+make check
 
-# Local
+# Local pytest
 source .venv/bin/activate
-pytest tests/ -v
+MLFLOW_DISABLE=1 pytest tests/ -v
 
-# With coverage
-pytest tests/ --cov=src --cov-report=term-missing --cov-fail-under=70
+# With coverage (≥ 80%)
+MLFLOW_DISABLE=1 pytest tests/ --cov=src --cov-report=term-missing --cov-fail-under=80
 
-# Single file
-pytest tests/unit/test_metrics.py -v
+# Docker
+make test
 ```
 
 ## Coverage Thresholds
@@ -32,64 +34,48 @@ Configured in `pyproject.toml`:
 
 | Metric | Minimum |
 |--------|---------|
-| Statements | 70% |
-| Branches | — |
-| Functions | — |
-| Lines | 70% |
+| Statements | 80% |
 
-## Test Files
+## Type Checking
+
+```bash
+make typecheck    # mypy src/training src/quantum
+```
+
+## Pre-commit
+
+```bash
+pip install pre-commit
+pre-commit install
+pre-commit run --all-files
+```
+
+Hooks: ruff, mypy (training + quantum), trailing whitespace, hypothesis placeholder check.
+
+## Contract Tests
+
+`tests/contracts/test_jsonl_schema.py` validates sample and live `logs/experiments.jsonl`
+records against JSON schemas in `tests/contracts/jsonl_schema.py`.
+
+## CI Pipeline
+
+GitHub Actions jobs: **Lint**, **Type Check**, **Unit Tests** (80% cov), **Experiment Smoke**,
+**Contracts**, **pip-audit**, **Editable Install**, **Docker Test Suite**.
+
+## Test Files (selected)
 
 | File | What it tests |
 |------|---------------|
 | `smoke/test_imports.py` | All core modules import without error |
 | `unit/test_metrics.py` | ExperimentLogger writes valid JSON |
-| `unit/test_config.py` | Config loader merges defaults |
-| `unit/test_base_model.py` | TrainableMixin contract (train/predict/evaluate) |
-| `unit/test_splits.py` | Stratified train/test split |
-| `unit/test_gradients.py` | Gradient variance is finite (no NaN) |
-| `smoke/test_models.py` | Forward passes for all model families |
-| `unit/test_poisoning.py` | Label flip + robustness measurement |
-| `unit/test_generators.py` | Dataset shape, dtype, reproducibility |
-| `unit/test_curriculum.py` | Difficulty sorting, batch staging |
-| `unit/test_amplitude_encoding.py` | Unit norm, padding, angle scaling |
+| `unit/test_config.py` | Config loader merges defaults and profiles |
+| `contracts/test_jsonl_schema.py` | JSONL record schema compliance |
+| `integration/test_exp_001_smoke.py` | CI profile golden bounds |
+| `unit/test_adaptive_lr.py` | Gradient-variance LR scaling |
+| `unit/test_cli.py` | `qml-run` CLI entry point |
 
-## Linting
+## Health Check
 
 ```bash
-make lint          # Docker
-ruff check src/ tests/ experiments/   # Local
-ruff check --fix src/                 # Auto-fix
+make health    # disk, logs writable, MLflow/DVC optional checks
 ```
-
-## CI Pipeline
-
-GitHub Actions (`.github/workflows/ci.yml`) runs on every push/PR:
-
-| Job | What it does |
-|-----|-------------|
-| `lint` | ruff check on src/, tests/, experiments/ |
-| `test` | pytest with coverage ≥ 70% |
-| `docker-test` | Full test suite inside Docker container |
-| `smoke-import` | Verify PennyLane, PyTorch, Streamlit imports |
-
-## Writing New Tests
-
-Follow TDD: write the failing test first, then implement.
-
-```python
-# tests/unit/test_my_module.py
-def test_my_function_returns_expected_shape(sample_binary_data):
-    X, y = sample_binary_data
-    result = my_function(X)
-    assert result.shape == X.shape
-```
-
-Use fixtures from `tests/conftest.py`:
-- `sample_binary_data` — 50-sample binary classification dataset
-- `temp_log_file` — isolated log file via monkeypatch
-
-## Adding Tests for New Experiments
-
-When adding a new experiment, create at minimum:
-1. A smoke test that the `run.py` imports without error
-2. A unit test for any new utility function in `src/`

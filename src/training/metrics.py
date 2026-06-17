@@ -2,7 +2,7 @@ import json
 from datetime import datetime
 from pathlib import Path
 
-from src.training.structured_log import log_event
+from src.training.structured_log import log_event, set_experiment_context
 from src.training.tracking import RunTracker
 
 LOGS_PATH = Path("logs/experiments.jsonl")
@@ -25,6 +25,7 @@ class ExperimentLogger:
         self.started_at = datetime.now().isoformat()
         self.epochs = []
         self._tracker = RunTracker(exp_id, model_name, seed=seed, profile=profile)
+        set_experiment_context(experiment_id=exp_id, seed=seed, profile=profile)
         log_event(
             "info",
             "experiment started",

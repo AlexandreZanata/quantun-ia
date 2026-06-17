@@ -72,6 +72,9 @@ See [Experiments](docs/experiments.md) for full details.
 ## Reproducibility, HPO & Publication
 
 ```bash
+make check              # lint + mypy + pytest (80% cov) + contracts
+make install            # pip install -e .
+make health             # pre-flight checks before large runs
 make repro              # CI smoke profile + golden bounds
 make hpo                # Optuna hyperparameter search (exp_011 default)
 make figures            # PDF figures from logs/experiments.jsonl

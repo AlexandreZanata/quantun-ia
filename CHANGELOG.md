@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-06-17
+
+### Added
+
+- Phase 5 engineering excellence
+- `pip install -e .` packaging via hatchling (`pyproject.toml` build-system)
+- `qml-run` CLI (`scripts/cli.py`) — run experiments with `--profile`
+- `make check` — ruff + mypy + pytest (80% cov) + integration + contracts
+- `make health` — pre-flight disk/logs/MLflow checks (`scripts/health_check.py`)
+- `.pre-commit-config.yaml` — ruff, mypy, hypothesis placeholder guard
+- `tests/contracts/` — JSONL schema validation with jsonschema
+- CI jobs: mypy, pip-audit, editable install, contracts in experiment-smoke
+- `.github/dependabot.yml` — weekly pip and GitHub Actions updates
+- `set_experiment_context()` in `structured_log.py` — experimentId/seed/profile on every log line
+
+### Changed
+
+- Coverage threshold raised to **80%** (pyproject.toml, CI, Dockerfile)
+- `requirements-dev.txt` adds mypy, jsonschema, pre-commit, pip-audit, hatchling
+
 ## [0.3.0] - 2026-06-17
 
 ### Added

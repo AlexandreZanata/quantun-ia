@@ -1,6 +1,19 @@
-.PHONY: dev test test-watch lint lint-fix coverage dashboard dashboard-local experiment experiment-large repro export-results hpo figures latex-tables release docker-build docker-test docker-lint clean
+.PHONY: dev test test-watch lint lint-fix typecheck coverage dashboard dashboard-local experiment experiment-large repro export-results hpo figures latex-tables release check health docker-build docker-test docker-lint clean install
 
 PYTHON ?= $(shell test -x .venv/bin/python && echo .venv/bin/python || echo python3)
+
+install:
+	$(PYTHON) -m pip install -e .
+
+health:
+	$(PYTHON) scripts/health_check.py
+
+check: lint-local typecheck
+	MLFLOW_DISABLE=1 $(PYTHON) -m pytest tests/ --cov=src --cov-fail-under=80 -q
+	MLFLOW_DISABLE=1 $(PYTHON) -m pytest tests/integration/ tests/contracts/ -q
+
+typecheck:
+	$(PYTHON) -m mypy src/training src/quantum
 
 dev:
 	docker compose up app
@@ -13,6 +26,9 @@ test-watch:
 
 lint:
 	docker compose -f docker-compose.test.yml run --rm lint
+
+lint-local:
+	ruff check src/ tests/ experiments/ scripts/
 
 lint-fix:
 	docker compose run --rm app ruff check --fix src/ tests/ experiments/

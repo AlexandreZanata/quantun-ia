@@ -10,7 +10,8 @@ def test_load_config_has_defaults():
     assert cfg["defaults"]["dataset"] == "circles"
 
 
-def test_load_experiment_config_merges_defaults():
+def test_load_experiment_config_merges_defaults(monkeypatch):
+    monkeypatch.delenv("QML_PROFILE", raising=False)
     cfg = load_experiment_config("exp_004_data_poisoning")
     assert cfg["epochs"] == 50
     assert cfg["poison_rates"] == [0.0, 0.05, 0.1, 0.2, 0.3]

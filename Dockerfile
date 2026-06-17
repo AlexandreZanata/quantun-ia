@@ -38,7 +38,7 @@ COPY . .
 
 RUN mkdir -p logs
 
-CMD ["pytest", "tests/", "--cov=src", "--cov-report=term-missing", "--cov-fail-under=70"]
+CMD ["pytest", "tests/", "--cov=src", "--cov-report=term-missing", "--cov-fail-under=80"]
 
 # ── Dashboard ─────────────────────────────────────────────────────────────────
 FROM deps AS dashboard
