@@ -85,6 +85,15 @@ EXP_META: dict[str, dict[str, str]] = {
             "See `docs/compute_environment.md` for hardware profile."
         ),
     },
+    "exp_022": {
+        "dir": "exp_022_nano_quantum_parity",
+        "title": "EXP 022 (Nano Quantum Parity)",
+        "dataset": "UCI tabular (breast_cancer, wine_binary), 30% holdout",
+        "conclusion": (
+            "Hybrid sandwich quantum nanomodel vs parameter-matched classical MLP. "
+            "Prefer `python experiments/exp_022_nano_quantum_parity/run.py --write-results`."
+        ),
+    },
 }
 
 

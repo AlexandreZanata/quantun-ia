@@ -1,4 +1,4 @@
-.PHONY: dev test test-watch lint lint-fix typecheck coverage dashboard dashboard-local experiment experiment-large repro export-results hpo figures latex-tables release release-check paper-sync paper-build replay-publication replay-publication-artifacts power-analysis microqml-bench check health docker-build docker-test docker-lint clean install train-demo nano-parity-bench nano-parity-download api api-demo e2e
+.PHONY: dev test test-watch lint lint-fix typecheck coverage dashboard dashboard-local experiment experiment-large repro export-results hpo figures latex-tables release release-check paper-sync paper-build replay-publication replay-publication-artifacts power-analysis microqml-bench check health docker-build docker-test docker-lint clean install train-demo nano-parity-bench nano-parity-download nano-parity-publication api api-demo e2e
 
 PYTHON ?= $(shell test -x .venv/bin/python && echo .venv/bin/python || echo python3)
 
@@ -79,6 +79,9 @@ nano-parity-bench:
 
 nano-parity-download:
 	MLFLOW_DISABLE=1 $(PYTHON) -m scripts.nano_parity_bench --download-only
+
+nano-parity-publication:
+	MLFLOW_DISABLE=1 QML_PROFILE=publication $(PYTHON) experiments/exp_022_nano_quantum_parity/run.py --profile publication --write-results
 
 api:
 	MLFLOW_DISABLE=1 $(PYTHON) -m scripts.api_server --host 127.0.0.1 --port 8000

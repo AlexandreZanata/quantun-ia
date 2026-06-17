@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.11] - 2026-06-17
+
+### Added
+
+- Phase 22b: **exp_022 publication profile** — 10-seed run on breast_cancer + wine_binary + `results.md`
+- `src/application/parity_results_writer.py` — uniform results.md for Nano Parity Bench
+- `make nano-parity-publication` + `--profile` / `QML_PROFILE` on exp_022 `run.py`
+- `tests/unit/test_parity_results_writer.py`
+
+### Changed
+
+- exp_022 `run.py` auto-writes `results.md` on publication profile runs
+- `test_results_md_uniform.py` includes exp_022
+
 ## [0.9.10] - 2026-06-17
 
 ### Added
