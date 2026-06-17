@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-06-17
+
+### Added
+
+- Post-roadmap closure: publication runs for exp_011–exp_015
+- `src/training/results_writer.py` and `scripts/generate_results_md.py` (`make results-new`)
+- `scripts/run_exp_011_015.py` (`make experiments-new`)
+- `results.md` for exp_011–exp_015 (publication profile, 10 seeds)
+- Integration smoke `test_exp_011_smoke.py` + golden bounds for UCI perceptron
+- `RELEASE_NOTES.md` for v0.4.0 Zenodo release
+- `run_exp_011_ci` in `ci_smoke.py`
+
+### Changed
+
+- `docs/zenodo.md` updated for v0.4.0 release workflow
+- `prepare_release.py` references v0.4.0 tag
+- Roadmap archived and removed (all phases complete)
+
 ## [0.4.0] - 2026-06-17
 
 ### Added

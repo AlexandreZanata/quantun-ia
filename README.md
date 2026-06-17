@@ -79,7 +79,9 @@ make repro              # CI smoke profile + golden bounds
 make hpo                # Optuna hyperparameter search (exp_011 default)
 make figures            # PDF figures from logs/experiments.jsonl
 make latex-tables       # LaTeX tables for paper/
-make release            # Bundle artifacts for Zenodo v0.2.0
+make experiments-new    # publication runs exp_011–015
+make results-new        # generate results.md from JSONL summaries
+make release            # Bundle artifacts for Zenodo v0.4.0
 ```
 
 See [Reproducibility](docs/reproducibility.md), [Negative Results](docs/negative_results.md), and [Zenodo guide](docs/zenodo.md).

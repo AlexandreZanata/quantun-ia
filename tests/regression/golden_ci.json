@@ -6,5 +6,13 @@
       "per_seed_min": 0.30,
       "per_seed_max": 0.85
     }
+  },
+  "exp_011": {
+    "perceptron": {
+      "mean_min": 0.70,
+      "mean_max": 1.0,
+      "per_seed_min": 0.60,
+      "per_seed_max": 1.0
+    }
   }
 }

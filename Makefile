@@ -67,6 +67,12 @@ latex-tables:
 release:
 	$(PYTHON) scripts/prepare_release.py
 
+experiments-new:
+	MLFLOW_DISABLE=1 $(PYTHON) scripts/run_exp_011_015.py --profile publication
+
+results-new:
+	$(PYTHON) scripts/generate_results_md.py
+
 docker-build:
 	docker compose build
 

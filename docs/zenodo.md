@@ -9,7 +9,7 @@ This guide describes how to obtain a citable DOI for quantun-ia releases via the
 
 - Admin access to the GitHub repository
 - Zenodo account linked to GitHub
-- Local experiment logs (`logs/experiments.jsonl`) or exported CSV from DVC
+- Local experiment logs (`logs/experiments.jsonl`) — run `make experiments-new` if missing exp_011–015 summaries
 
 ---
 
@@ -17,6 +17,8 @@ This guide describes how to obtain a citable DOI for quantun-ia releases via the
 
 ```bash
 source .venv/bin/activate
+make experiments-new    # optional: publication runs for exp_011–015
+make results-new        # write results.md from JSONL summaries
 make release
 ```
 
@@ -39,20 +41,21 @@ This creates `dist/release/` containing:
 
 ---
 
-## Step 3 — Create GitHub release v0.2.0
+## Step 3 — Create GitHub release v0.4.0
 
 ```bash
-git tag v0.2.0
-git push origin v0.2.0
+git tag v0.4.0
+git push origin v0.4.0
 ```
 
 On GitHub:
 
 1. **Releases → Draft a new release**
-2. Tag: `v0.2.0`
-3. Title: `v0.2.0 — Publication artifacts (Phase 3)`
+2. Tag: `v0.4.0`
+3. Title: `v0.4.0 — 5-Star QML Research Lab (Phases 0–5)`
 4. Attach files from `dist/release/`
-5. Publish release
+5. Paste summary from [RELEASE_NOTES.md](../RELEASE_NOTES.md)
+6. Publish release
 
 Zenodo will create an archive within a few minutes.
 
@@ -63,7 +66,7 @@ Zenodo will create an archive within a few minutes.
 Copy the DOI from the Zenodo record page and add to `CITATION.cff`:
 
 ```yaml
-version: 0.2.0
+version: 0.4.0
 date-released: 2026-06-17
 doi: 10.5281/zenodo.XXXXXXX
 ```
@@ -78,6 +81,7 @@ Commit and push the DOI update.
 - [ ] `CITATION.cff` includes DOI
 - [ ] README citation section references DOI
 - [ ] Paper draft (`paper/main.tex`) cites the Zenodo archive
+- [ ] `experiments/exp_011`–`exp_015/results.md` present after `make results-new`
 
 ---
 
@@ -85,4 +89,4 @@ Commit and push the DOI update.
 
 - Zenodo archives the **full repository snapshot** at release time plus uploaded assets.
 - The DOI is version-specific; each new release gets a new DOI (with a concept DOI for all versions).
-- If logs are empty on the release machine, figures will be empty — run `make experiment-large` first or use `dvc pull`.
+- Run `make experiment-large` before release for richer `publication_large` summaries in the bundle.

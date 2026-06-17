@@ -80,7 +80,7 @@ def prepare_release(dist_dir: Path = DEFAULT_DIST) -> list[Path]:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Prepare v0.2.0 release bundle for Zenodo")
+    parser = argparse.ArgumentParser(description="Prepare v0.4.0 release bundle for Zenodo")
     parser.add_argument(
         "--dist",
         type=Path,
@@ -97,7 +97,7 @@ def main() -> int:
 
     print(f"Release bundle ready at {args.dist} ({len(artifacts)} artifacts)")
     print("Next steps:")
-    print("  1. git tag v0.2.0 && git push origin v0.2.0")
+    print("  1. git tag v0.4.0 && git push origin v0.4.0")
     print("  2. Create GitHub release from tag (attach dist/release/*)")
     print("  3. Enable Zenodo-GitHub integration → copy DOI to CITATION.cff")
     print("  See docs/zenodo.md for full instructions.")

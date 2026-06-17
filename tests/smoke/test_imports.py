@@ -12,6 +12,7 @@ MODULES = [
     "src.training.gradients",
     "src.training.param_match",
     "src.training.reproducibility",
+    "src.training.results_writer",
     "src.training.tracking",
     "src.training.checkpoints",
     "src.training.ci_smoke",
