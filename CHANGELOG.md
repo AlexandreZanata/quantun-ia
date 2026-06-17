@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.2] - 2026-06-17
+
+### Added
+
+- Phase 12: **Paper v1 readiness** — contribution statement, limitations section, `make paper-build`
+- `scripts/build_paper.py` — sync figures and compile `paper/main.pdf`
+- CI `paper-build` job (LaTeX, `continue-on-error`)
+- `tests/unit/test_build_paper.py`
+
+### Fixed
+
+- Pin `pandas==2.2.3` in `requirements.lock` (mlflow requires `pandas<3`; fixes CI/Docker)
+
+### Changed
+
+- Paper sections updated for 20 experiments and Option C narrative
+- `requirements.txt` caps pandas below 3.x
+
 ## [0.9.1] - 2026-06-17
 
 ### Added

@@ -1,4 +1,4 @@
-.PHONY: dev test test-watch lint lint-fix typecheck coverage dashboard dashboard-local experiment experiment-large repro export-results hpo figures latex-tables release release-check check health docker-build docker-test docker-lint clean install train-demo api api-demo
+.PHONY: dev test test-watch lint lint-fix typecheck coverage dashboard dashboard-local experiment experiment-large repro export-results hpo figures latex-tables release release-check paper-sync paper-build check health docker-build docker-test docker-lint clean install train-demo api api-demo
 
 PYTHON ?= $(shell test -x .venv/bin/python && echo .venv/bin/python || echo python3)
 
@@ -87,6 +87,12 @@ release:
 
 release-check:
 	$(PYTHON) scripts/prepare_release.py --verify-only dist/release
+
+paper-sync:
+	$(PYTHON) scripts/build_paper.py --sync-only
+
+paper-build: latex-tables figures paper-sync
+	$(PYTHON) scripts/build_paper.py
 
 experiments-new:
 	MLFLOW_DISABLE=1 $(PYTHON) scripts/run_exp_011_015.py --profile publication

@@ -197,3 +197,33 @@ jobs:
         run: |
           python -c "from importlib.metadata import entry_points; scripts = entry_points(group='console_scripts'); assert any(s.name == 'qml-run' for s in scripts)"
           python -c "from scripts.cli import main; assert main([__import__('pathlib').Path('nope.py')]) == 1"
+
+  paper-build:
+    name: Paper Build (LaTeX)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install TeX Live
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends texlive-latex-base texlive-latex-recommended texlive-fonts-recommended
+
+      - name: Install Python dependencies
+        run: |
+          pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+          pip install -r requirements-dev.txt
+          pip install -e .
+
+      - name: Build paper PDF
+        env:
+          MLFLOW_DISABLE: "1"
+        run: |
+          mkdir -p logs
+          cp tests/contracts/fixtures/sample_experiments.jsonl logs/experiments.jsonl
+          make paper-build

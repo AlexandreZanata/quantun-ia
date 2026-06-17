@@ -3,14 +3,25 @@
 
 Quantum machine learning (QML) promises expressivity advantages for certain data regimes,
 yet reproducible benchmarks with rigorous statistical testing remain scarce.
-We introduce \texttt{quantun-ia}, a modular research lab spanning 14 experiments
-from 2D synthetic classification to UCI tabular and MNIST-subset tasks.
+We introduce \texttt{quantun-ia}, a modular research lab spanning 20 experiments
+from 2D synthetic classification to UCI tabular, MNIST-subset, and sequence tasks.
 
-Our contributions:
+\paragraph{Contribution.}
+We provide (1) a holdout-fair comparison protocol that splits data before preprocessing,
+logs multi-seed metrics with bootstrap confidence intervals, and applies Holm-corrected
+Wilcoxon tests; (2) an open benchmark suite with parameter-matched classical baselines
+and documented negative results; and (3) a reproducible publication pipeline that
+exports figures, LaTeX tables, and Zenodo-archived release bundles from append-only logs.
+
+Our headline narrative follows \emph{Option~C --- honest QML benchmark}:
+exp\_011--014 on real data, hybrid and robustness studies (exp\_002, exp\_017),
+and openly reported failures (exp\_003, exp\_009).
+Innovation tracks (adaptive LR, NAS, fusion) are deferred to follow-up papers.
+
+Supporting contributions:
 \begin{itemize}
   \item Hypothesis-first experiment workflow with append-only logging.
   \item Parameter-matched classical baselines for fair quantum comparisons.
-  \item Multi-seed holdout evaluation with bootstrap CIs and Holm-corrected Wilcoxon tests.
   \item Open publication pipeline: figures, LaTeX tables, and Zenodo-archived releases.
 \end{itemize}
 

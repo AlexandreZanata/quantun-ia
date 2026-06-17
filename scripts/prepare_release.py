@@ -12,7 +12,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_DIST = ROOT / "dist" / "release"
-RELEASE_VERSION = "0.9.1"
+RELEASE_VERSION = "0.9.2"
 STATIC_ARTIFACTS = ("CITATION.cff", "RELEASE_NOTES.md", "CHANGELOG.md")
 
 

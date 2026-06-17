@@ -117,6 +117,7 @@ make experiments-new    # publication runs exp_011–015
 make results-new        # generate results.md from JSONL summaries
 make release            # Bundle artifacts for Zenodo v0.9.1 (SHA-256 manifest)
 make release-check      # Verify dist/release MANIFEST.txt checksums
+make paper-build        # LaTeX paper draft (figures + tables + PDF)
 ```
 
 See [Reproducibility](docs/reproducibility.md), [Negative Results](docs/negative_results.md), and [Zenodo guide](docs/zenodo.md).

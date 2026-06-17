@@ -1,0 +1,22 @@
+\section{Limitations}
+\label{sec:limitations}
+
+Our study has several scope boundaries that reviewers should weigh when interpreting claims.
+
+\begin{itemize}
+  \item \textbf{Simulator-only circuits.} All quantum results use PennyLane simulators
+        (\texttt{default.qubit} / \texttt{lightning.qubit}); hardware noise and
+        shot-based readout are not modeled.
+  \item \textbf{Small qubit budgets.} Circuits use at most eight qubits and shallow
+        depth to avoid barren-plateau regimes; results may not transfer to larger VQCs.
+  \item \textbf{Binary classification focus.} Benchmarks are limited to two-class tasks
+        on tabular, PCA-reduced MNIST, and low-dimensional synthetic data.
+  \item \textbf{Classical parity, not SOTA.} Baselines are parameter-matched perceptrons
+        and MLPs, not tuned deep networks or kernel SVMs from the literature.
+  \item \textbf{Single-lab replication.} Metrics reported here come from one codebase
+        and one compute environment; independent replication is encouraged via
+        \texttt{make repro} and the Zenodo release bundle.
+\end{itemize}
+
+Future work includes noise-aware backends, pre-registered large-scale runs (exp\_021+),
+and external leaderboard replication (MicroQML Bench).
