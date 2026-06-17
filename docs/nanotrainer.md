@@ -8,6 +8,7 @@ The Nano Trainer is a lightweight application surface for running **mini trainin
 |---------|---------|
 | CLI | `qml-train --model perceptron --dataset breast_cancer --profile mini` |
 | Streamlit | `make dashboard-local` → open **Nano Trainer** page |
+| REST API | `make api` → `POST /api/v1/training-jobs` |
 | Makefile demo | `make train-demo` |
 
 All runs log to `logs/experiments.jsonl` with `exp_id=nano_train`. These records are **excluded** from the publication leaderboard.
@@ -46,8 +47,8 @@ qml-train --model transformer_qnn_fusion --dataset sequential_phase --epochs 10
 ## Architecture
 
 ```
-qml-train / Streamlit
-    → src/application/train_nanomodel.py
+qml-train / Streamlit / REST API
+    → src/application/train_nanomodel.py (or create_training_job for API)
         → model_registry.build_model()
         → dataset_registry.prepare_dataset()
         → training.holdout.train_with_holdout()
@@ -56,7 +57,8 @@ qml-train / Streamlit
 
 ## Limitations
 
-- No REST API or multi-tenant auth (`tenantId: local` only).
+- API training is synchronous — use `mini`/`ci` profiles for HTTP requests.
+- No JWT auth yet — API uses `X-Tenant-ID` header (default `local`).
 - Quantum models are CPU-bound; use `mini` or `ci` for interactive runs.
 - Checkpoints are optional (`save_checkpoints=False` by default in Nano Trainer).
 

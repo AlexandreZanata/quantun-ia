@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#050805" />
+  <meta name="description" content="Quantum ML Lab benchmark leaderboard" />
+  <link rel="manifest" href="manifest.json" />
+  <title>QML Benchmarks</title>
+  <style>
+    :root {
+      --bg: #050805;
+      --fg: #33ff66;
+      --muted: #1a3d1a;
+      --card: #0a120a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Share Tech Mono", "Courier New", monospace;
+      background: var(--bg);
+      color: var(--fg);
+      min-height: 100dvh;
+      padding: 1rem;
+    }
+    h1 { font-size: 1.4rem; letter-spacing: 0.1em; margin: 0 0 0.5rem; }
+    .sub { color: #7fdc9a; font-size: 0.85rem; margin-bottom: 1rem; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--muted);
+      border-radius: 8px;
+      padding: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+    .row { display: flex; justify-content: space-between; gap: 0.5rem; }
+    .model { font-weight: bold; }
+    .acc { font-size: 1.2rem; }
+    .meta { font-size: 0.75rem; color: #7fdc9a; }
+    #status { margin-bottom: 1rem; font-size: 0.85rem; }
+    button {
+      background: var(--muted);
+      color: var(--fg);
+      border: 1px solid var(--fg);
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font: inherit;
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>QML BENCHMARKS</h1>
+  <p class="sub">Mobile-friendly publication leaderboard</p>
+  <div id="status">Loading…</div>
+  <button type="button" id="refresh">REFRESH</button>
+  <div id="list"></div>
+  <script>
+    const API = "/api/v1/benchmarks/leaderboard";
+
+    async function loadLeaderboard() {
+      const status = document.getElementById("status");
+      const list = document.getElementById("list");
+      status.textContent = "Loading…";
+      try {
+        const res = await fetch(API);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        list.innerHTML = "";
+        if (!data.rows || data.rows.length === 0) {
+          status.textContent = "No publication experiments logged yet.";
+          return;
+        }
+        status.textContent = `${data.rows.length} models on leaderboard`;
+        for (const row of data.rows) {
+          const card = document.createElement("div");
+          card.className = "card";
+          const ci = row.ci_low != null && row.ci_high != null
+            ? `CI ${row.ci_low.toFixed(1)}–${row.ci_high.toFixed(1)}%`
+            : row.source || "";
+          card.innerHTML = `
+            <div class="row">
+              <span class="model">${row.model}</span>
+              <span class="acc">${row.accuracy.toFixed(1)}%</span>
+            </div>
+            <div class="meta">${row.exp_id} · ${ci}</div>
+          `;
+          list.appendChild(card);
+        }
+      } catch (err) {
+        status.textContent = `Error: ${err.message}`;
+        list.innerHTML = "";
+      }
+    }
+
+    document.getElementById("refresh").addEventListener("click", loadLeaderboard);
+    loadLeaderboard();
+
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("sw.js").catch(() => {});
+    }
+  </script>
+</body>
+</html>

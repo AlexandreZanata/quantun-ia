@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-06-17
+
+### Added
+
+- Phase 10: **REST API** — FastAPI service wrapping Nano Trainer
+- `src/domain/entities/training_job.py` + SQLite `training_jobs` table
+- `src/application/create_training_job.py` — persist and run jobs with `tenantId`
+- `src/presentation/http/app.py` — `/health`, `/ready`, `/metrics`, training-jobs, leaderboard
+- Mobile benchmark **PWA** at `/pwa/`
+- CLI `qml-api` + `make api` / `make api-demo`
+- `experiments/exp_020_api_smoke` + `tests/e2e/test_api_routes.py`
+- `docs/api.md`
+
+### Changed
+
+- Documentation updated to 20 experiments
+- `docs/nanotrainer.md` — API surface documented
+
 ## [0.8.0] - 2026-06-17
 
 ### Added

@@ -1,4 +1,4 @@
-.PHONY: dev test test-watch lint lint-fix typecheck coverage dashboard dashboard-local experiment experiment-large repro export-results hpo figures latex-tables release check health docker-build docker-test docker-lint clean install train-demo
+.PHONY: dev test test-watch lint lint-fix typecheck coverage dashboard dashboard-local experiment experiment-large repro export-results hpo figures latex-tables release check health docker-build docker-test docker-lint clean install train-demo api api-demo
 
 PYTHON ?= $(shell test -x .venv/bin/python && echo .venv/bin/python || echo python3)
 
@@ -69,6 +69,12 @@ fusion:
 
 train-demo:
 	MLFLOW_DISABLE=1 $(PYTHON) -m scripts.nano_train --model perceptron --dataset breast_cancer --profile ci
+
+api:
+	MLFLOW_DISABLE=1 $(PYTHON) -m scripts.api_server --host 127.0.0.1 --port 8000
+
+api-demo:
+	MLFLOW_DISABLE=1 $(PYTHON) experiments/exp_020_api_smoke/run.py
 
 figures:
 	$(PYTHON) scripts/generate_figures.py

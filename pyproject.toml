@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "quantun-ia"
-version = "0.8.0"
+version = "0.9.0"
 description = "Quantum-Inspired Micro ML Lab"
 requires-python = ">=3.11"
 readme = "README.md"
@@ -27,11 +27,15 @@ dependencies = [
     "loguru>=0.7.2",
     "mlflow>=2.12.0",
     "optuna>=3.6.0",
+    "fastapi>=0.111.0",
+    "uvicorn[standard]>=0.29.0",
+    "pydantic>=2.7.0",
 ]
 
 [project.scripts]
 qml-run = "scripts.cli:main"
 qml-train = "scripts.nano_train:main"
+qml-api = "scripts.api_server:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src", "scripts"]
