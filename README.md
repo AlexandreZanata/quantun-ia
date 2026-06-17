@@ -65,6 +65,7 @@ Results append to `logs/experiments.jsonl` (never delete — append only).
 | 012 | MNIST PCA QML | Angle vs amplitude on PCA-reduced MNIST |
 | 013 | Augmentation Robustness | Gaussian augmentation on noisy circles |
 | 014 | Sequence Baselines | RNN, Transformer-mini vs flattened QNN |
+| 015 | Adaptive QNN | Gradient-variance LR vs fixed LR (Phase 4) |
 
 See [Experiments](docs/experiments.md) for full details.
 
@@ -86,7 +87,8 @@ Paper draft skeleton: `paper/main.tex`.
 | Doc | Description |
 |-----|-------------|
 | [Getting Started](docs/getting-started.md) | Full setup, Makefile, workflow |
-| [Experiments](docs/experiments.md) | All 14 experiments + ablations |
+| [Experiments](docs/experiments.md) | All 15 experiments + ablations |
+| [Literature Review](docs/literature_review.md) | Phase 4 research context |
 | [Baselines](docs/baselines.md) | Literature comparison table |
 | [Negative Results](docs/negative_results.md) | Honest failures (curriculum, self-play, entanglement) |
 | [Reproducibility](docs/reproducibility.md) | NeurIPS-style checklist |
@@ -101,7 +103,7 @@ Paper draft skeleton: `paper/main.tex`.
 ```
 quantun-ia/
 ├── src/              # Models, data, training utilities
-├── experiments/      # exp_001 – exp_014 + template
+├── experiments/      # exp_001 – exp_015 + template
 ├── config/           # experiments.yaml (central hyperparameters)
 ├── dashboard/        # Retro Streamlit benchmark monitor
 ├── logs/             # experiments.jsonl (append-only)

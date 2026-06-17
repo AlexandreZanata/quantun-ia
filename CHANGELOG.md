@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-06-17
+
+### Added
+
+- Phase 4 innovation: gradient-variance adaptive learning rate
+- `src/training/adaptive_lr.py` — `AdaptiveLRConfig`, `train_model_adaptive`
+- `train_with_holdout_adaptive` in `holdout.py`
+- `cohens_d_paired` effect size in `statistics.py` (paired comparisons)
+- Experiment `exp_015_adaptive_qnn` with hypothesis and ablation plan
+- `docs/literature_review.md` — barren plateau and adaptive LR context
+
+### Changed
+
+- `compare_conditions_batch` logs Cohen's d per comparison
+- Documentation updated to 15 experiments
+
 ## [0.2.0] - 2026-06-17
 
 ### Added

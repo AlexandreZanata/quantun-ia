@@ -2,7 +2,7 @@
 
 ## Overview
 
-Fourteen experiments compare classical and quantum ML on synthetic and real-world tasks.
+Fifteen experiments compare classical and quantum ML on synthetic and real-world tasks.
 Configuration is centralized in `config/experiments.yaml`.
 
 | ID | Name | Question |
@@ -21,6 +21,7 @@ Configuration is centralized in `config/experiments.yaml`.
 | 012 | MNIST PCA QML | Does amplitude encoding beat angle on PCA-reduced MNIST? |
 | 013 | Augmentation Robustness | Does Gaussian augmentation improve QNN on noisy circles? |
 | 014 | Sequence Baselines | Do RNN/Transformer beat flattened QNN on sequential data? |
+| 015 | Adaptive QNN | Does gradient-variance LR beat fixed LR on plateau-prone 6q QNN? |
 
 **Publication profile defaults:** `circles`, `noise=0.2`, `n_samples=500`, **10 seeds**, 30% holdout.
 
@@ -142,6 +143,14 @@ vim experiments/exp_003_entanglement_effect/results.md
 | 012 | MNIST 0 vs 1 + PCA | quantum_angle, quantum_amplitude | 8 PCA components, 4 qubits |
 | 013 | circles + noise | baseline vs augmented QNN | Uses `augmentation.py` |
 | 014 | sequential_binary | RNNMini, TransformerMini, flattened QNN | Uses `rnn_mini.py`, `transformer_mini.py` |
+
+### EXP 015 — Adaptive QNN (Phase 4 innovation)
+
+**Models:** `quantum_6q_3l_fixed`, `quantum_6q_3l_adaptive`, `quantum_4q_2l_fixed`, `classical_matched`  
+**Novelty:** Per-step gradient variance scales Adam LR (`src/training/adaptive_lr.py`)  
+**Stats:** Paired Wilcoxon + Cohen's d + Holm-Bonferroni  
+**Literature:** `docs/literature_review.md`  
+**Ablation plan:** See `hypothesis.md` (var_target, qubit depth, warmup)
 
 ## Publication Profiles
 

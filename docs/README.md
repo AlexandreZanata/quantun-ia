@@ -8,7 +8,8 @@ Welcome to the **Quantum-Inspired Micro ML Lab** documentation.
 |----------|-------------|
 | [Getting Started](getting-started.md) | Install, venv, Docker, dashboard, run all experiments |
 | [Architecture](architecture.md) | Code structure, module responsibilities, data flow |
-| [Experiments](experiments.md) | All 14 experiments — goals, ablations, known flags |
+| [Experiments](experiments.md) | All 15 experiments — goals, ablations, known flags |
+| [Literature Review](literature_review.md) | Phase 4 barren plateau and adaptive LR context |
 | [Baselines](baselines.md) | Literature comparison for real-data experiments |
 | [Negative Results](negative_results.md) | Documented honest failures (exp_005, 007, 003, 009) |
 | [Reproducibility](reproducibility.md) | NeurIPS-style reproducibility checklist |

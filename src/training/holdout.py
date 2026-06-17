@@ -8,6 +8,7 @@ from datetime import datetime
 import torch
 
 from src.training import metrics as metrics_module
+from src.training.adaptive_lr import AdaptiveLRConfig, train_model_adaptive
 from src.training.statistics import holm_bonferroni, paired_comparison, seed_summary
 from src.training.structured_log import log_event
 from src.training.trainer import train_model
@@ -41,6 +42,43 @@ def train_with_holdout(
         model_name,
         epochs=epochs,
         lr=lr,
+        X_test=X_test_t,
+        y_test=y_test_t,
+        seed=seed,
+        profile=profile,
+        save_checkpoints=save_checkpoints,
+    )
+    return model.evaluate(X_test_t, y_test_t)
+
+
+def train_with_holdout_adaptive(
+    model,
+    X_train,
+    y_train,
+    X_test,
+    y_test,
+    exp_id: str,
+    model_name: str,
+    epochs: int = 50,
+    adaptive_config: AdaptiveLRConfig | None = None,
+    seed: int | None = None,
+    profile: str | None = None,
+    save_checkpoints: bool = True,
+) -> dict:
+    """Train with gradient-variance adaptive LR; return holdout metrics."""
+    X_train_t = torch.tensor(X_train)
+    y_train_t = torch.tensor(y_train)
+    X_test_t = torch.tensor(X_test)
+    y_test_t = torch.tensor(y_test)
+
+    train_model_adaptive(
+        model,
+        X_train_t,
+        y_train_t,
+        exp_id,
+        model_name,
+        epochs=epochs,
+        config=adaptive_config,
         X_test=X_test_t,
         y_test=y_test_t,
         seed=seed,
@@ -147,6 +185,14 @@ def compare_conditions_batch(
         comp.update({"label_a": spec["label_a"], "label_b": spec["label_b"]})
         results.append(comp)
         p_values.append(comp.get("p_value"))
+        log_event(
+            "info",
+            "effect size",
+            exp_id=exp_id,
+            label_a=spec["label_a"],
+            label_b=spec["label_b"],
+            cohens_d=comp.get("effect_size_cohens_d"),
+        )
 
     holm = holm_bonferroni([p if p is not None else 1.0 for p in p_values], alpha=alpha)
     for comp, adj in zip(results, holm):

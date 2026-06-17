@@ -18,6 +18,7 @@ MODULES = [
     "src.training.device",
     "src.training.hpo",
     "src.training.plot_style",
+    "src.training.adaptive_lr",
     "src.data.generators",
     "src.data.poisoning",
     "src.data.scaling",

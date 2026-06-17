@@ -43,6 +43,22 @@ def seed_summary(values: list[float] | np.ndarray) -> dict:
     }
 
 
+def cohens_d_paired(
+    condition_a: list[float] | np.ndarray,
+    condition_b: list[float] | np.ndarray,
+) -> float:
+    """Cohen's d for paired samples (mean diff / SD of diffs)."""
+    a = np.asarray(condition_a, dtype=np.float64)
+    b = np.asarray(condition_b, dtype=np.float64)
+    if len(a) != len(b) or len(a) < 2:
+        return float("nan")
+    diffs = a - b
+    sd = float(np.std(diffs, ddof=1))
+    if sd == 0.0:
+        return 0.0
+    return float(np.mean(diffs) / sd)
+
+
 def paired_comparison(
     condition_a: list[float],
     condition_b: list[float],
@@ -60,6 +76,7 @@ def paired_comparison(
             "p_value": None,
             "significant": None,
             "mean_diff": float(np.mean(a - b)),
+            "effect_size_cohens_d": cohens_d_paired(a, b),
             "n_pairs": len(a),
         }
 
@@ -71,6 +88,7 @@ def paired_comparison(
             "p_value": 1.0,
             "significant": False,
             "mean_diff": 0.0,
+            "effect_size_cohens_d": 0.0,
             "n_pairs": len(a),
         }
 
@@ -81,6 +99,7 @@ def paired_comparison(
         "p_value": float(p_value),
         "significant": bool(p_value < alpha),
         "mean_diff": float(np.mean(diffs)),
+        "effect_size_cohens_d": cohens_d_paired(a, b),
         "n_pairs": len(a),
         "alpha": alpha,
     }

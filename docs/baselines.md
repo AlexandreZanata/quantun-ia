@@ -45,6 +45,15 @@ learning_rate: 0.02
 
 Implemented as `QuantumNetBasic(n_qubits=4, n_layers=2)` in exp_001 and exp_011.
 
+## Adaptive LR (this repo — Phase 4)
+
+| Reference | Method | Our experiment |
+|-----------|--------|----------------|
+| McClean et al. (2018) | Barren plateau theory | exp_006 diagnostics → exp_015 `var_target` |
+| Grant et al. (2019) | Initialization strategies | Compared via fixed vs adaptive LR |
+
+exp_015 implements variance-scaled Adam (`src/training/adaptive_lr.py`) with Cohen's d reporting.
+
 ## How to compare results
 
 1. Run experiment with `publication` or `publication_large` profile.

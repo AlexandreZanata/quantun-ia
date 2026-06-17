@@ -255,3 +255,33 @@ experiments:
         learning_rate: 0.01
       quantum_flat:
         learning_rate: 0.02
+
+  exp_015_adaptive_qnn:
+    description: "Gradient-variance adaptive LR vs fixed LR on plateau-prone QNN"
+    exp_id: exp_015
+    dataset: circles
+    noise: 0.2
+    learning_rate: 0.02
+    adaptive_lr:
+      var_target: 0.015
+      min_scale: 0.25
+      max_scale: 4.0
+      warmup_epochs: 3
+      adapt_every: 1
+      base_lr: 0.02
+    models:
+      - quantum_6q_3l_fixed
+      - quantum_6q_3l_adaptive
+      - quantum_4q_2l_fixed
+      - classical_matched
+    model_configs:
+      quantum_6q_3l:
+        n_qubits: 6
+        n_layers: 3
+        learning_rate: 0.02
+      quantum_4q_2l:
+        n_qubits: 4
+        n_layers: 2
+        learning_rate: 0.02
+      classical_matched:
+        learning_rate: 0.01

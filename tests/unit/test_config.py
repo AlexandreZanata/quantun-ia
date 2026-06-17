@@ -58,3 +58,6 @@ def test_exp_011_through_014_config():
     assert cfg13["augment_sigma"] == 0.15
     cfg14 = load_experiment_config("exp_014_sequence_baselines")
     assert cfg14["seq_len"] == 8
+    cfg15 = load_experiment_config("exp_015_adaptive_qnn")
+    assert cfg15["adaptive_lr"]["var_target"] == 0.015
+    assert "quantum_6q_3l_adaptive" in cfg15["models"]
