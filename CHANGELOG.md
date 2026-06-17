@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.5] - 2026-06-17
+
+### Added
+
+- Phase 15: **`docs/research_agenda.md`** — public 12-month falsifiable roadmap
+- **`experiments/exp_021_qml_backend_parity`** — PennyLane `default.qubit` vs `lightning.qubit` on breast cancer QNN
+- `src/quantum/pennylane_device.py` — configurable PennyLane device resolution
+- `run_exp_021_ci` + `tests/integration/test_exp_021_smoke.py`
+- `tests/unit/test_pennylane_device.py`
+
+### Changed
+
+- `QuantumNetBasic` / `make_qnn_basic` accept optional `qml_device` parameter
+- `config/experiments.yaml` — exp_021 entry with ci/publication profiles
+
 ## [0.9.4] - 2026-06-17
 
 ### Added

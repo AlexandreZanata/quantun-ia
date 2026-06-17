@@ -150,7 +150,7 @@ Paper draft skeleton: `paper/main.tex`.
 ```
 quantun-ia/
 ├── src/              # Models, data, training utilities
-├── experiments/      # exp_001 – exp_020 + template
+├── experiments/      # exp_001 – exp_021 + template
 ├── config/           # experiments.yaml, nanotrainer.yaml
 ├── dashboard/        # Streamlit monitor + static PWA
 ├── logs/             # experiments.jsonl (append-only)

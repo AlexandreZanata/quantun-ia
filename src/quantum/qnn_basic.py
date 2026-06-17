@@ -5,12 +5,14 @@ import torch
 import torch.nn as nn
 
 from src.quantum.circuit_utils import qnode_diff_method
+from src.quantum.pennylane_device import DEFAULT_QML_DEVICE, resolve_qml_device
 from src.training.base_model import TrainableMixin
 
 
-def make_qnn_basic(n_qubits: int = 4, n_layers: int = 2):
-    dev = qml.device("default.qubit", wires=n_qubits)
-    diff_method = qnode_diff_method(n_layers)
+def make_qnn_basic(n_qubits: int = 4, n_layers: int = 2, *, qml_device: str | None = None):
+    device_name = qml_device or DEFAULT_QML_DEVICE
+    dev = resolve_qml_device(n_qubits, device_name)
+    diff_method = qnode_diff_method(n_layers, qml_device=device_name)
 
     @qml.qnode(dev, interface="torch", diff_method=diff_method)
     def circuit(inputs, weights):
@@ -28,11 +30,19 @@ def make_qnn_basic(n_qubits: int = 4, n_layers: int = 2):
 
 
 class QuantumNetBasic(TrainableMixin, nn.Module):
-    def __init__(self, n_qubits: int = 4, n_layers: int = 2, input_dim: int = 2):
+    def __init__(
+        self,
+        n_qubits: int = 4,
+        n_layers: int = 2,
+        input_dim: int = 2,
+        *,
+        qml_device: str | None = None,
+    ):
         super().__init__()
         self.n_qubits = n_qubits
+        self.qml_device = qml_device
         self.pre = nn.Linear(input_dim, n_qubits) if input_dim != n_qubits else nn.Identity()
-        self.qlayer = make_qnn_basic(n_qubits, n_layers)
+        self.qlayer = make_qnn_basic(n_qubits, n_layers, qml_device=qml_device)
         self.post = nn.Linear(1, 1)
 
     def forward(self, x):

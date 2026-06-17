@@ -25,6 +25,7 @@ Configuration is centralized in `config/experiments.yaml`.
 | 016 | Hybrid NAS | Does Optuna NAS beat fixed EXP 002 hybrid presets? |
 | 017 | Poison × Topology | Does hybrid layout affect label-poison robustness? |
 | 018 | Feature Fusion | Does Transformer → QNN beat PCA/flat QNN on phase sequences? |
+| 021 | QML Backend Parity | Do `default.qubit` and `lightning.qubit` agree within 2 pp on breast cancer QNN? |
 
 **Publication profile defaults:** `circles`, `noise=0.2`, `n_samples=500`, **10 seeds**, 30% holdout.
 
@@ -175,6 +176,14 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Dataset:** `sequential_phase` (12×4, phase-sensitive; PCA on flat windows insufficient)  
 **Novelty:** `src/quantum/transformer_qnn_fusion.py` — encoder pools sequence → QNN  
 **Command:** `make fusion` or `python experiments/exp_018_feature_fusion/run.py`  
+
+### EXP 021 — QML Backend Parity (Phase 15)
+
+**Models:** `quantum_default` (`default.qubit`), `quantum_lightning` (`lightning.qubit`)  
+**Dataset:** breast cancer (same protocol as exp_011)  
+**Claim:** Holdout accuracies within 2 pp across backends — simulator choice should not change conclusions  
+**Command:** `python experiments/exp_021_qml_backend_parity/run.py`  
+**Roadmap:** [`docs/research_agenda.md`](research_agenda.md)
 
 ## Publication Profiles
 

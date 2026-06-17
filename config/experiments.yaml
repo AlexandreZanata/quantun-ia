@@ -389,3 +389,19 @@ experiments:
         n_layers: 3
         learning_rate: 0.02
         reupload: true
+
+  exp_021_qml_backend_parity:
+    description: "PennyLane backend parity — default.qubit vs lightning.qubit on breast cancer QNN"
+    exp_id: exp_021
+    dataset: breast_cancer
+    n_qubits: 4
+    n_layers: 2
+    learning_rate: 0.02
+    parity_threshold_pp: 2.0
+    model_configs:
+      quantum_default:
+        qml_device: default.qubit
+        learning_rate: 0.02
+      quantum_lightning:
+        qml_device: lightning.qubit
+        learning_rate: 0.02

@@ -8,11 +8,19 @@ from __future__ import annotations
 PARAMETER_SHIFT_MIN_LAYERS = 3
 
 
-def qnode_diff_method(n_layers: int, *, for_training: bool = True) -> str:
+def qnode_diff_method(
+    n_layers: int,
+    *,
+    for_training: bool = True,
+    qml_device: str | None = None,
+) -> str:
     """
     Gradient method for QNodes.
     Training uses backprop (batched). Diagnostics use parameter-shift when deep.
+    Lightning simulators use adjoint — backprop is unsupported on those devices.
     """
+    if for_training and qml_device and "lightning" in qml_device:
+        return "adjoint"
     if for_training:
         return "backprop"
     if n_layers >= PARAMETER_SHIFT_MIN_LAYERS:

@@ -317,3 +317,67 @@ def run_exp_018_ci(*, log_path: Path | None = None) -> dict[str, list[float]]:
         metrics_module.LOGS_PATH = original_log_path
 
     return results
+
+
+EXP_021_KEY = "exp_021_qml_backend_parity"
+EXP_021_ID = "exp_021"
+
+
+def run_exp_021_ci(*, log_path: Path | None = None) -> dict[str, list[float]]:
+    """Fast CI smoke: QNN on breast cancer with default.qubit (and lightning when available)."""
+    from src.data.dataset_registry import prepare_dataset
+    from src.quantum.pennylane_device import QmlDeviceError, resolve_qml_device
+    from src.quantum.qnn_basic import QuantumNetBasic
+
+    cfg = load_experiment_config(EXP_021_KEY, profile="ci")
+    mc = cfg.get("model_configs", {})
+    n_qubits = cfg.get("n_qubits", 4)
+    n_layers = cfg.get("n_layers", 2)
+    model_names: list[str] = []
+
+    for name, model_cfg in mc.items():
+        qml_device = model_cfg.get("qml_device", "default.qubit")
+        try:
+            resolve_qml_device(n_qubits, qml_device)
+            model_names.append(name)
+        except QmlDeviceError:
+            if qml_device == "default.qubit":
+                raise
+
+    assert model_names, "exp_021 CI requires at least default.qubit"
+
+    def build_model(seed: int) -> dict:
+        X_train, X_test, y_train, y_test, meta = prepare_dataset(
+            cfg.get("dataset", "breast_cancer"),
+            test_size=cfg["test_size"],
+            random_state=seed,
+            scale=True,
+        )
+        input_dim = meta.get("n_features", X_train.shape[1])
+        models: dict[str, tuple] = {}
+        for name in model_names:
+            model_cfg = mc[name]
+            qml_device = model_cfg.get("qml_device", "default.qubit")
+            lr = model_cfg.get("learning_rate", cfg.get("learning_rate", 0.02))
+            models[name] = (
+                QuantumNetBasic(
+                    n_qubits=n_qubits,
+                    n_layers=n_layers,
+                    input_dim=input_dim,
+                    qml_device=qml_device,
+                ),
+                lr,
+            )
+        return {
+            "splits": (X_train, X_test, y_train, y_test),
+            "models": models,
+        }
+
+    return _run_holdout_loop(
+        exp_key=EXP_021_KEY,
+        exp_id=EXP_021_ID,
+        cfg=cfg,
+        model_names=model_names,
+        build_model=build_model,
+        log_path=log_path,
+    )

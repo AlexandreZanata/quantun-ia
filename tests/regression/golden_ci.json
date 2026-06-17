@@ -45,6 +45,20 @@
       "mean_max": 1.0
     }
   },
+  "exp_021": {
+    "quantum_default": {
+      "mean_min": 0.2,
+      "mean_max": 1.0,
+      "per_seed_min": 0.15,
+      "per_seed_max": 1.0
+    },
+    "quantum_lightning": {
+      "mean_min": 0.2,
+      "mean_max": 1.0,
+      "per_seed_min": 0.15,
+      "per_seed_max": 1.0
+    }
+  },
   "nano_train": {
     "perceptron": {
       "mean_min": 0.35,
