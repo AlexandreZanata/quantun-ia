@@ -819,3 +819,35 @@ experiments:
         n_rows: 500
       publication:
         n_rows: 10000
+
+  exp_036_method_ablation_higgs:
+    description: "LargeNanoMLP training method ablation on HIGGS — baseline vs curriculum vs adaptive vs champion"
+    exp_id: exp_036
+    dataset_id: higgs_v1
+    seed: 42
+    hidden1: 2048
+    hidden2: 512
+    hidden3: 64
+    dropout: 0.3
+    batch_size: 1024
+    learning_rate: 0.001
+    weight_decay: 0.0001
+    adaptive_var_target: 0.015
+    baseline_epochs: 20
+    curriculum_stages: 4
+    epochs_per_stage: 12
+    refine_epochs: 12
+    adaptive_epochs: 50
+    champion_epochs: 30
+    min_beat_baseline_pp: 0.5
+    seeds: [42, 123, 456]
+    profile_overrides:
+      ci:
+        n_train_rows: 50000
+        n_val_rows: 10000
+        baseline_epochs: 20
+      publication:
+        seeds: [42, 123, 456, 789, 1024, 1337, 2048, 3001, 4096, 5000]
+        n_train_rows: 50000
+        n_val_rows: 10000
+        baseline_epochs: 20
