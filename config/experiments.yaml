@@ -598,3 +598,21 @@ experiments:
       publication:
         seeds: [42, 123, 456, 789, 1024, 1337, 2048, 3001, 4096, 5000]
         epochs: 50
+
+  exp_027_continuous_retrain:
+    description: "Continuous retrain champion/challenger gate — 4 simulated weekly cycles"
+    exp_id: exp_027
+    model: hybrid_sandwich
+    dataset: breast_cancer
+    champion_exp_id: quantum_nano_bc_app
+    champion_seed: 42
+    promote_max_delta_pp: 0.5
+    demote_regression_pp: 1.0
+    weeks: 4
+    profile_overrides:
+      ci:
+        seeds: [42, 123, 456, 789, 1024]
+        epochs: 12
+      publication:
+        seeds: [42, 123, 456, 789, 1024, 1337, 2048, 3001]
+        epochs: 50

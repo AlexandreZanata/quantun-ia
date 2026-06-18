@@ -19,6 +19,10 @@ profiles:
     epochs: 50
     seed: 42
     save_checkpoints: true
+  continuous:
+    epochs: 30
+    seed: 42
+    save_checkpoints: true
 
 datasets:
   breast_cancer:
