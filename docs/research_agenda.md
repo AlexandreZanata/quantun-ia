@@ -1,8 +1,8 @@
 # Research Agenda — 12-Month Roadmap
 
 **Lab:** Quantum-Inspired Micro ML Lab (`quantun-ia`)  
-**Version:** v0.9.19  
-**Last updated:** 2026-06-17  
+**Version:** v0.9.23  
+**Last updated:** 2026-06-18  
 **Primary narrative:** Holdout-fair comparison of hybrid quantum–classical classifiers on real and synthetic benchmarks (Option C — see `paper/sections/introduction.tex`).
 
 This document is the **public** research roadmap. Every listed experiment has (or will have) a pre-written `hypothesis.md` before any `run.py` run, per lab workflow.
@@ -27,6 +27,7 @@ This document is the **public** research roadmap. Every listed experiment has (o
 | **023** | [Encoding × backend interaction](../experiments/exp_023_encoding_backend/hypothesis.md) | Amplitude vs angle encoding parity holds across backends on PCA-MNIST | **Partial** — angle backend parity accepted; amplitude_lightning failed all seeds |
 | **024** | [QuantumNano-BC flagship](../experiments/exp_024_quantum_nano_bc/hypothesis.md) | Hybrid sandwich within 2 pp of logistic regression on full breast cancer | **Accepted (parity)** — Δ=−0.5 pp, 30 seeds; logistic 97.9%, hybrid 97.4% |
 | **025** | [Pima generalization](../experiments/exp_025_pima_generalization/hypothesis.md) | exp_024 parity extends to Pima Indians Diabetes (OpenML id=37) | **Accepted (parity)** — Δ=−1.0 pp, 30 seeds; hybrid 76.2%, logistic 77.2% |
+| **026** | [Real app E2E](../experiments/exp_026_real_app_e2e/hypothesis.md) | Async API (`device=cuda`) matches CLI holdout within 0.5 pp | **Accepted** — max Δ=0.00 pp, 5 seeds on RTX 4060 |
 | 024 | Gradient diagnostic parity (planned) | Epoch-1 gradient norms agree within 10% across backends for 4q/2l ansatz | Planned |
 
 **Exit criteria:** exp_021 `results.md` with multi-seed verdict; backends logged in every JSONL line; OSF pre-registration filed before publication-profile runs.
@@ -49,12 +50,14 @@ This document is the **public** research roadmap. Every listed experiment has (o
 
 ## Q1 2027 (Jan–Mar) — Platform without compromising science
 
-| Phase | Scope | Falsifiable claim |
-|-------|--------|-------------------|
-| 16 | JWT auth + async GPU job queue | ✅ Authenticated async job completes with same holdout accuracy as local `nano_train` |
-| — | Tenant-scoped SQLite → PostgreSQL migration path | Every repository query includes `tenantId` in contract tests |
+| Phase | Scope | Falsifiable claim | Status |
+|-------|--------|-------------------|--------|
+| 16 | JWT auth + async GPU job queue | Authenticated async job completes with same holdout accuracy as local `nano_train` | ✅ exp_020 + **exp_026** (0.00 pp max delta, RTX 4060) |
+| — | Tenant-scoped SQLite → PostgreSQL migration path | Every repository query includes `tenantId` in contract tests | Planned |
 
 Platform work runs **in parallel** with the paper track; it must not change split order or preprocessing invariants.
+
+See [exp_026 real-app E2E](../experiments/exp_026_real_app_e2e/hypothesis.md).
 
 ---
 

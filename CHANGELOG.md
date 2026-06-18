@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.23] - 2026-06-18
+
+### Added
+
+- Phase C (publication refresh): `make exp-024-publication`, `make exp-025-publication`, `make phase-c-publication` — RTX 4060 local gate
+- `tests/real/test_publication_bounds.py` — 10-seed hybrid mean within exp_024/025 publication 95% CI
+- `docs/testing.md` — Tier 1 (CI) vs Tier 2 (`make check-real`) real GPU validation
+- `docs/research_agenda.md` — exp_026 real-app E2E row (Q3 2026 track)
+
+### Changed
+
+- Phase C complete: exp_024/025 publication re-run on RTX 4060 (30 seeds, ~65s / ~58s; combined 2m 3s)
+- `experiments/exp_024_quantum_nano_bc/results.md` and `experiments/exp_025_pima_generalization/results.md` refreshed
+- `model_cards/quantum_nano_bc.md` regenerated from latest publication JSONL
+- `docs/compute_environment.md` — Intel i7-13620H, 32 GB RAM, Phase C wall-clock benchmarks
+
 ## [0.9.22] - 2026-06-18
 
 ### Added

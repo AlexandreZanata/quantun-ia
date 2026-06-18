@@ -2,7 +2,7 @@
 
 **Lab:** Quantum-Inspired Micro ML Lab (`quantun-ia`)  
 **Last updated:** 2026-06-18  
-**Software version:** v0.9.22
+**Software version:** v0.9.23
 
 This document records the hardware and software stack used for **publication-profile** experiment numbers cited in the paper and `results.md` files.
 
@@ -12,13 +12,24 @@ This document records the hardware and software stack used for **publication-pro
 
 | Field | Value |
 |-------|-------|
-| CPU | AMD/Intel x86_64 (Pop!_OS 22.04, kernel 6.x) |
-| GPU | **NVIDIA GeForce RTX 4060 Laptop GPU** (8 GB) — classical PyTorch via `QML_DEVICE=cuda`; PennyLane simulators stay CPU |
-| RAM | ≥ 16 GB recommended for PennyLane `lightning.qubit` |
-| Python | 3.11+ (CI: 3.12) |
-| PyTorch | ≥ 2.2 (CPU wheel in CI) |
-| PennyLane | ≥ 0.35 (`default.qubit`, `lightning.qubit` when installed) |
+| CPU | **Intel Core i7-13620H** (16 threads, up to 4.9 GHz) |
+| GPU | **NVIDIA GeForce RTX 4060 Laptop GPU** (8 GB VRAM, CUDA 13.0, driver 580.159) |
+| RAM | **32 GB** |
+| OS | Pop!_OS (Linux kernel 7.x) |
+| Python | 3.12 |
+| PyTorch | ≥ 2.2 (`QML_DEVICE=cuda` for classical heads) |
+| PennyLane | ≥ 0.35 (`default.qubit` — CPU simulator for hybrid quantum blocks) |
 | XGBoost | ≥ 2.0 (exp_024 clinical baselines) |
+
+### Wall-clock (Phase C refresh — 2026-06-18, this machine)
+
+| Experiment | Profile | Seeds | Models | Wall-clock |
+|------------|---------|-------|--------|------------|
+| exp_024 QuantumNano-BC | publication | 30 | 5 | **51 s** |
+| exp_025 Pima generalization | publication | 30 | 5 | **61 s** |
+| **Combined** (`make phase-c-publication`) | publication | 30 each | 5 each | **~2 min** |
+
+Classical PyTorch layers run on **RTX 4060**; PennyLane quantum simulation stays on CPU.
 
 Publication-profile runs (`config/experiments.yaml` → `profile: publication`) use:
 
@@ -37,6 +48,7 @@ Publication-profile runs (`config/experiments.yaml` → `profile: publication`) 
 | Models | hybrid_sandwich, logistic_regression, xgboost_shallow, perceptron, classical_matched |
 | Backend | PennyLane `default.qubit` (simulator-only) |
 | Verdict | Parity accepted — hybrid 97.4% vs logistic 97.9% mean holdout (Δ=−0.5 pp) |
+| Wall-clock (Phase C, 2026-06-18) | **51 s** (30 seeds × 5 models, RTX 4060 + PennyLane CPU) |
 
 Record wall-clock time and exact CPU model in `results.md` when citing externally.
 
@@ -52,6 +64,7 @@ Record wall-clock time and exact CPU model in `results.md` when citing externall
 | Classical backend | PyTorch on **NVIDIA RTX 4060** (`QML_DEVICE=cuda`) |
 | Quantum backend | PennyLane `default.qubit` (CPU — TorchLayer constraint) |
 | Claim | Parity within 2 pp vs logistic regression (generalization vs exp_024) |
+| Wall-clock (Phase C, 2026-06-18) | **61 s** (30 seeds × 5 models, RTX 4060 + PennyLane CPU) |
 
 Local publication command:
 
@@ -84,10 +97,13 @@ make health
 MLFLOW_DISABLE=1 python experiments/exp_024_quantum_nano_bc/run.py --profile ci
 ```
 
-**Full flagship verdict (30 seeds, ~2–4 h CPU):**
+**Full flagship verdict (30 seeds, ~2 min on RTX 4060):**
 
 ```bash
-QML_PROFILE=publication MLFLOW_DISABLE=1 python experiments/exp_024_quantum_nano_bc/run.py --profile publication --write-results --write-model-card
+QML_DEVICE=cuda MLFLOW_DISABLE=1 make phase-c-publication
+# or individually:
+QML_DEVICE=cuda MLFLOW_DISABLE=1 make exp-024-publication
+QML_DEVICE=cuda MLFLOW_DISABLE=1 make exp-025-publication
 ```
 
 **Paper artifacts from logs:**

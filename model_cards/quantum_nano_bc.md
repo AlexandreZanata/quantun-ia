@@ -32,7 +32,7 @@ on the Wisconsin Breast Cancer (UCI) dataset. **Not for clinical deployment.**
 
 | Model | Mean holdout accuracy | 95% CI |
 |-------|----------------------|--------|
-| **hybrid_sandwich** | 97.4% | [97.0%, 97.7%] |
+| **hybrid_sandwich** | 97.4% | [97.0%, 97.8%] |
 | logistic_regression | 97.9% | — |
 | xgboost_shallow | 96.2% | — |
 
