@@ -13,7 +13,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_DIST = ROOT / "dist" / "release"
-RELEASE_VERSION = "0.9.22"
+RELEASE_VERSION = "1.0.0-rc1"
 PUBLICATION_JSONL = ROOT / "tests" / "contracts" / "fixtures" / "publication_experiments.jsonl"
 STATIC_ARTIFACTS = ("AUTHORS.md", "CITATION.cff", "RELEASE_NOTES.md", "CHANGELOG.md", "SECURITY.md")
 RELEASE_DOCS = (
@@ -28,6 +28,7 @@ RELEASE_DOCS = (
     "docs/paper_narrative.md",
     "docs/reviewer_guide.md",
     "docs/reproducibility.md",
+    "docs/testing.md",
     "docs/zenodo.md",
 )
 RELEASE_RESULTS = (
@@ -35,6 +36,8 @@ RELEASE_RESULTS = (
     "experiments/exp_022_nano_quantum_parity/results.md",
     "experiments/exp_023_encoding_backend/results.md",
     "experiments/exp_024_quantum_nano_bc/results.md",
+    "experiments/exp_025_pima_generalization/results.md",
+    "experiments/exp_026_real_app_e2e/results.md",
 )
 RELEASE_MODEL_CARDS = ("model_cards/quantum_nano_bc.md",)
 RELEASE_LEADERBOARD = ("v1.json", "meta.json")

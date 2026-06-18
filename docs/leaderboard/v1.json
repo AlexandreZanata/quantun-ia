@@ -40,6 +40,14 @@
       "flagship": true
     },
     {
+      "task_id": "tabular_pima_diabetes",
+      "category": "tabular",
+      "exp_id": "exp_025",
+      "dataset": "pima_diabetes",
+      "description": "Pima Indians Diabetes \u2014 hybrid sandwich generalization vs logistic regression",
+      "primary": true
+    },
+    {
       "task_id": "pca_mnist_binary",
       "category": "image_tabular",
       "exp_id": "exp_012",
@@ -178,7 +186,7 @@
       "source": "multi_seed_summary"
     }
   ],
-  "generated_at": "2026-06-18T15:11:49.253461+00:00",
-  "software_version": "0.9.20",
+  "generated_at": "2026-06-18T17:25:29.958816+00:00",
+  "software_version": "1.0.0-rc1",
   "citation": "MicroQML Bench v1.0.0 \u2014 quantun-ia Quantum-Inspired Micro ML Lab. https://github.com/AlexandreZanata/quantun-ia"
 }

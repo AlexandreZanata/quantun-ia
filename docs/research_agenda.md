@@ -1,7 +1,7 @@
 # Research Agenda — 12-Month Roadmap
 
 **Lab:** Quantum-Inspired Micro ML Lab (`quantun-ia`)  
-**Version:** v0.9.23  
+**Version:** v1.0.0-rc1  
 **Last updated:** 2026-06-18  
 **Primary narrative:** Holdout-fair comparison of hybrid quantum–classical classifiers on real and synthetic benchmarks (Option C — see `paper/sections/introduction.tex`).
 

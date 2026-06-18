@@ -8,6 +8,7 @@ import yaml
 
 RELEASE_RECORD_V0916 = Path("docs/releases/v0.9.16.md")
 RELEASE_RECORD_V0922 = Path("docs/releases/v0.9.22.md")
+RELEASE_RECORD_V100RC1 = Path("docs/releases/v1.0.0-rc1.md")
 CITATION_LOOP = Path("docs/citation_loop.md")
 
 
@@ -17,6 +18,17 @@ def test_release_record_v0916_exists():
 
 def test_release_record_v0922_exists():
     assert RELEASE_RECORD_V0922.is_file(), "missing docs/releases/v0.9.22.md"
+
+
+def test_release_record_v100rc1_exists():
+    assert RELEASE_RECORD_V100RC1.is_file(), "missing docs/releases/v1.0.0-rc1.md"
+
+
+def test_release_record_v100rc1_documents_phase_d():
+    text = RELEASE_RECORD_V100RC1.read_text(encoding="utf-8")
+    assert "v1.0.0-rc1" in text
+    assert "phase-d-preflight" in text or "Phase D" in text
+    assert "RTX 4060" in text
 
 
 def test_release_record_documents_tag_and_bundle():

@@ -3,7 +3,7 @@
 This guide describes how to obtain a citable DOI for quantun-ia releases via the
 [Zenodo–GitHub integration](https://docs.github.com/en/repositories/archiving-a-github-repository/referencing-and-citing-content).
 
-**Current target version:** `v0.9.22` (Phase F — exp_025 Pima generalization).
+**Current target version:** `v1.0.0-rc1` (Phase D — open-science release candidate).
 
 ---
 

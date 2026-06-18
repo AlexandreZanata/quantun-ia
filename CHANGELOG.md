@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0-rc1] - 2026-06-18
+
+### Added
+
+- Phase D (open science): `make phase-d-preflight` — RTX 4060 real gate + release bundle + leaderboard
+- `docs/releases/v1.0.0-rc1.md` — release tag evidence for Phase D closure
+- Release bundle includes exp_025, exp_026 results and `docs/testing.md`
+
+### Changed
+
+- Version bump to **1.0.0-rc1** — first release candidate for real-application stack
+- `RELEASE_NOTES.md` — Phases B–D highlights (real GPU gate, exp_026, publication refresh)
+- `docs/citation_loop.md`, `docs/zenodo.md`, `docs/reviewer_guide.md` — v1.0.0-rc1 target
+
+### Includes (since v0.9.22)
+
+- Phase B: `make check-real`, exp_026 API=CLI parity, `set_global_seed` fix
+- Phase C: `make phase-c-publication`, `test_publication_bounds.py`, compute_environment wall-clock
+
 ## [0.9.23] - 2026-06-18
 
 ### Added
