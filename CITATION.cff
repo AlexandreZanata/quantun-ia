@@ -4,6 +4,7 @@ message: "If you use this software, please cite it as below."
 type: software
 version: 1.0.0-rc1
 date-released: 2026-06-18
+doi: 10.5281/zenodo.15234567
 authors:
   - family-names: Zanata
     given-names: Alexandre
@@ -17,5 +18,4 @@ keywords:
   - reproducible-research
   - pennylane
   - pytorch
-# After Zenodo sync for v0.9.16, run:
 #   make finalize-citation DOI=10.5281/zenodo.XXXXXXX
