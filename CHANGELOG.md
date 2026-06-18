@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.22] - 2026-06-18
+
 ### Added
 
 - Phase F (generalization): **exp_025 Pima Indians Diabetes** — cross-dataset parity vs exp_024

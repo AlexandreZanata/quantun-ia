@@ -9,9 +9,9 @@ health:
 	$(PYTHON) scripts/health_check.py
 
 check: lint-local typecheck
-	MLFLOW_DISABLE=1 $(PYTHON) -m pytest tests/ --cov=src --cov-fail-under=80 -q
-	MLFLOW_DISABLE=1 $(PYTHON) -m pytest tests/integration/ tests/contracts/ -q
-	MLFLOW_DISABLE=1 $(PYTHON) -m pytest tests/e2e/ -q
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m pytest tests/ --cov=src --cov-fail-under=80 -q
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m pytest tests/integration/ tests/contracts/ -q
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m pytest tests/e2e/ -q
 
 e2e:
 	MLFLOW_DISABLE=1 $(PYTHON) -m pytest tests/e2e/ -v

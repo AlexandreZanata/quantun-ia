@@ -1,7 +1,7 @@
 # Citation Loop — Zenodo DOI + arXiv ID
 
 Unified checklist for closing the open-science citation loop.  
-Software version: **v0.9.21** (Phase E — open science release).
+Software version: **v0.9.22** (Phase F — Pima generalization release).
 
 ---
 
@@ -29,8 +29,8 @@ Informational messages for missing `doi:` and `arxiv_id` are expected until manu
 ## Step 1 — GitHub release tag
 
 ```bash
-git tag v0.9.21
-git push origin v0.9.21
+git tag v0.9.22
+git push origin v0.9.22
 ```
 
 GitHub Actions (`.github/workflows/release.yml`) attaches `dist/release/` artifacts.  
@@ -41,7 +41,7 @@ See [zenodo.md](zenodo.md) for bundle contents.
 ## Step 2 — Zenodo DOI
 
 1. Enable Zenodo-GitHub integration for this repository.
-2. Wait for Zenodo to archive tag `v0.9.21`.
+2. Wait for Zenodo to archive tag `v0.9.22`.
 3. Copy the version DOI (e.g. `10.5281/zenodo.XXXXXXX`).
 4. Apply with one command:
 
@@ -54,7 +54,7 @@ make finalize-citation DOI=10.5281/zenodo.XXXXXXX
 ```bash
 pytest tests/contracts/test_citation_cff.py tests/contracts/test_arxiv_metadata.py -v
 make citation-ready
-git commit -am "chore(citation): add Zenodo DOI for v0.9.21"
+git commit -am "chore(citation): add Zenodo DOI for v0.9.22"
 ```
 
 ---

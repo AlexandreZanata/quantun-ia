@@ -20,4 +20,4 @@ See [CITATION.cff](CITATION.cff) and [docs/citation_loop.md](docs/citation_loop.
 
 ## Co-authors
 
-None at v0.9.21. Add names here before arXiv v1 if collaborators contribute powered experiments or writing.
+None at v0.9.22. Add names here before arXiv v1 if collaborators contribute powered experiments or writing.

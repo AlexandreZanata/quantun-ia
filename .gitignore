@@ -10,11 +10,13 @@ build/
 logs/experiments.jsonl
 .local/
 mlruns/
+mlflow.db
 artifacts/
 data/exports/
 data/raw/
 data/*.db
 figures/
 dist/
+paper/tables/exp_test_holdout.tex
 .DS_Store
 *.log
