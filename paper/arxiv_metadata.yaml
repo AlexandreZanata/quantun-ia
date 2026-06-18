@@ -2,7 +2,7 @@
 # After upload, set arxiv_id (e.g. "2606.12345") and commit.
 
 title: "Quantum-Inspired Machine Learning: A Reproducible Benchmark Suite on Synthetic and Real Data"
-software_version: "1.0.0-rc1"
+software_version: "1.0.0"
 
 abstract: >
   We present quantun-ia, an open-source benchmark suite comparing variational quantum

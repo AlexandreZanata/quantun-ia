@@ -2,7 +2,7 @@
 
 **Lab:** Quantum-Inspired Micro ML Lab (`quantun-ia`)  
 **Last updated:** 2026-06-18  
-**Software version:** v1.0.0-rc1
+**Software version:** v1.0.0
 
 This document records the hardware and software stack used for **publication-profile** experiment numbers cited in the paper and `results.md` files.
 

@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-06-18
+
+### Added
+
+- **Real application inference** — `POST /api/v1/predictions`, checkpoint + scaler bundle, `make train-ship`
+- `scripts/demo_predict.py` — train QuantumNano-BC and score raw UCI rows on RTX 4060
+- `tests/real/test_checkpoint_inference.py` — 7/7 real gate on NVIDIA RTX 4060
+
+### Changed
+
+- Version **1.0.0** — first stable release of the real-application stack (Phases A–D + inference)
+- `RELEASE_NOTES.md` and `docs/releases/v1.0.0.md` — v1.0.0 release evidence
+
 ## [1.0.0-rc1] - 2026-06-18
 
 ### Added

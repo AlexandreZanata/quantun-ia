@@ -106,7 +106,7 @@ phase-c-publication: exp-024-publication exp-025-publication
 
 phase-d-preflight: check-real citation-ready-full open-science-preflight publish-leaderboard publish-leaderboard-check
 	@echo "Phase D local preflight complete — pending manual Zenodo DOI + arXiv ID"
-	@echo "Next: git tag v1.0.0-rc1 && git push origin v1.0.0-rc1"
+	@echo "Next: git tag v1.0.0 && git push origin v1.0.0"
 	@echo "Then: make finalize-citation DOI=10.5281/zenodo.XXXXXXX [ARXIV_ID=2606.XXXXX]"
 
 train-ship:

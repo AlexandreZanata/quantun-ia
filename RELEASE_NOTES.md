@@ -1,27 +1,30 @@
-# Release v1.0.0-rc1 — Real Application + Open Science (Phases B–D)
+# Release v1.0.0 — QuantumNano-BC Real Application
 
 ## Highlights
 
-- **Real GPU gate** — `make check-real` on RTX 4060 (6 tests: nanotrainer, exp_026 API=CLI, publication bounds)
-- **exp_026** — async API (`device=cuda`) matches CLI holdout (0.00 pp max delta, 5 seeds)
-- **Phase C publication refresh** — exp_024/025 re-run on RTX 4060 (30 seeds, ~2 min combined)
-- **Open-science bundle** — `make phase-d-preflight` builds Zenodo-ready `dist/release/` + arXiv sources
-- **QuantumNano-BC** — hybrid 97.4% vs logistic 97.9% (breast cancer); Pima 76.2% vs 77.2%
+- **Real GPU gate** — `make check-real` on RTX 4060 (7 tests)
+- **Train + infer** — `hybrid_sandwich` checkpoint, scaler, `POST /api/v1/predictions`
+- **CLI demo** — `make train-ship` trains on full breast cancer and scores sample rows
+- **Scientific parity** — exp_024/025/026 validated on real clinical tabular data
+- **Open science** — `make phase-d-preflight` builds release bundle + arXiv sources
 
 ## Validation (RTX 4060)
 
 ```bash
 source .venv/bin/activate
 make health-gpu
-QML_DEVICE=cuda MLFLOW_DISABLE=1 make phase-d-preflight
+QML_DEVICE=cuda MLFLOW_DISABLE=1 make check-real
+QML_DEVICE=cuda MLFLOW_DISABLE=1 make train-ship
 ```
 
-## Manual steps (after tag push)
+## Tag
 
-1. `git tag v1.0.0-rc1 && git push origin v1.0.0-rc1`
-2. Zenodo archives the tag → `make finalize-citation DOI=10.5281/zenodo.XXXXXXX`
-3. arXiv upload → `make finalize-citation DOI=... ARXIV_ID=2606.XXXXX`
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
 
 ## Previous releases
 
-See [CHANGELOG.md](CHANGELOG.md) — v0.9.22 (Phase F Pima), v0.9.21 (open-science preflight).
+- [v1.0.0-rc1](docs/releases/v1.0.0-rc1.md) — open-science preflight (Phase D)
+- [CHANGELOG.md](CHANGELOG.md) — full history from v0.9.x

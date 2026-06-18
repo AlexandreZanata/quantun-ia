@@ -13,7 +13,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_DIST = ROOT / "dist" / "release"
-RELEASE_VERSION = "1.0.0-rc1"
+RELEASE_VERSION = "1.0.0"
 PUBLICATION_JSONL = ROOT / "tests" / "contracts" / "fixtures" / "publication_experiments.jsonl"
 STATIC_ARTIFACTS = ("AUTHORS.md", "CITATION.cff", "RELEASE_NOTES.md", "CHANGELOG.md", "SECURITY.md")
 RELEASE_DOCS = (
