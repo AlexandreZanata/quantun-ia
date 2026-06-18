@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-06-18
+
+### Added
+
+- **Open data (Phase L1–L3)** — `data/open/higgs/`, `data/open/synthea_cv_risk/`, manifest + DVC gates
+- **LargeNanoMLP** — `src/classical/large_nano_mlp.py`, `exp_032` on 805K HIGGS train rows
+- **Serve artifacts** — `src/application/open_serve.py`, HIGGS batch/API/chatbot wiring
+- **Serve parity** — `exp_033` batch↔API↔chatbot gate (< 1e-5 on 10K rows)
+- `make phase-v1.2.0-preflight` — RTX 4060 gate before v1.2.0 tag
+- `docs/releases/v1.2.0.md` — release evidence for Phase L
+
+### Fixed
+
+- `TrainableMixin.eval()` — propagate eval mode to nested `Dropout` layers for deterministic inference
+
+### Changed
+
+- Version **1.2.0** — million-row open tabular nano model + serve parity
+- `make check-real` expanded to **14/14** real GPU tests on RTX 4060
+- `config/nanotrainer.yaml` — `large_nano_mlp × higgs_v1` pair
+
 ## [1.1.0] - 2026-06-18
 
 ### Added
