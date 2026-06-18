@@ -159,3 +159,17 @@ def validate_open_data(root: Path, *, dataset_id: str = "higgs_v1") -> tuple[boo
     """Validate open data manifest, checksums, schema, and DVC pointer."""
     issues = collect_open_data_issues(root, dataset_id=dataset_id)
     return len(issues) == 0, issues
+
+
+def validate_all_ready_open_data(root: Path) -> tuple[bool, list[str]]:
+    """Validate every dataset marked ready in manifest.json."""
+    manifest_path = root / "data" / "open" / "manifest.json"
+    manifest = load_manifest(manifest_path)
+    all_issues: list[str] = []
+    for dataset in manifest.get("datasets", []):
+        if not dataset.get("ready"):
+            continue
+        ok, issues = validate_open_data(root, dataset_id=dataset["id"])
+        if not ok:
+            all_issues.extend(f"{dataset['id']}: {issue}" for issue in issues)
+    return len(all_issues) == 0, all_issues

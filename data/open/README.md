@@ -14,7 +14,7 @@ This folder holds **reproducible, license-clear** datasets for large-scale nano 
 | ID | Path | Rows (target) | Features | License | Status |
 |----|------|---------------|----------|---------|--------|
 | `higgs_v1` | `higgs/processed/v1/` | 1,150,000 | 28 | CC0 (UCI) | `ready` (DVC: `processed/v1.dvc`) |
-| `synthea_cv_risk_v1` | `synthea_cv_risk/processed/v1/` | 1,000,000 | ~40 | MIT (Synthea) | `pending` |
+| `synthea_cv_risk_v1` | `synthea_cv_risk/processed/v1/` | 1,000,000 | 40 | MIT (Synthea) | `ready` (DVC: `processed/v1.dvc`) |
 
 See `manifest.json` for checksums and split counts once built.
 
@@ -34,8 +34,9 @@ make data-open-higgs
 # L2 gate — manifest + checksums + schema + DVC pointer
 make data-open-verify
 
-# Clinical-aligned (Tier B) — after Synthea toolchain installed
+# Clinical-aligned (Tier B)
 make data-open-synthea-cv
+make data-open-verify
 ```
 
 ## Citations

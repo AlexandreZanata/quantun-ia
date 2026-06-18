@@ -43,7 +43,7 @@
       "description": "Synthea synthetic cohort \u2014 12-month cardiovascular event risk, ~40 tabular features",
       "license": "MIT",
       "source_url": "https://github.com/synthetichealth/synthea",
-      "ready": false,
+      "ready": true,
       "row_counts": {
         "total": 1000000,
         "train": 700000,
@@ -57,7 +57,12 @@
         "test": "test.parquet",
         "stats": "stats.json"
       },
-      "checksums": {},
+      "checksums": {
+        "train": "df4ded35b9b8a9534119b6b327c3322f4e3712600fe76ea4387c67247c6ba155",
+        "val": "529bcf484b7e97ff720222d2dc4d45a0df0a0bcfb0fb8061e14c039bd30d3377",
+        "test": "7ca90dc1933357af60bb9b6a2b1777b1a8ae725fe677867f198b903ecf965087",
+        "stats": "c99e6153c00c158599ea6e8d439706b552e3c1e1806e15f59abfaf955f996ba2"
+      },
       "build_script": "scripts/build_synthea_cv_risk.py"
     }
   ]
