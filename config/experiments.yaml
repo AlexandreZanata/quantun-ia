@@ -465,3 +465,64 @@ experiments:
         encoding: amplitude
         qml_device: lightning.qubit
         learning_rate: 0.02
+
+  exp_024_quantum_nano_bc:
+    description: "Flagship QuantumNano-BC — hybrid sandwich vs clinical baselines on full breast cancer"
+    exp_id: exp_024
+    dataset: breast_cancer
+    n_qubits: 4
+    n_layers: 2
+    learning_rate: 0.02
+    parity_threshold_pp: 2.0
+    advantage_threshold_pp: 3.0
+    save_checkpoints: true
+    include_xgboost: true
+    model_configs:
+      logistic_regression: {}
+      perceptron:
+        learning_rate: 0.02
+      classical_matched:
+        learning_rate: 0.01
+      hybrid_sandwich:
+        learning_rate: 0.02
+        reupload: true
+      xgboost_shallow: {}
+    profile_overrides:
+      ci:
+        seeds: [42, 123]
+        epochs: 12
+        save_checkpoints: false
+      publication:
+        seeds:
+          - 42
+          - 123
+          - 456
+          - 789
+          - 1024
+          - 1337
+          - 2048
+          - 3001
+          - 4096
+          - 5000
+          - 6001
+          - 6002
+          - 6003
+          - 6004
+          - 6005
+          - 6006
+          - 6007
+          - 6008
+          - 6009
+          - 6010
+          - 6011
+          - 6012
+          - 6013
+          - 6014
+          - 6015
+          - 6016
+          - 6017
+          - 6018
+          - 6019
+          - 6020
+        epochs: 50
+        save_checkpoints: true

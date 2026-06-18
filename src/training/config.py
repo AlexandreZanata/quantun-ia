@@ -23,6 +23,8 @@ def load_experiment_config(exp_key: str, profile: str | None = None) -> dict[str
     profile_name = profile or os.environ.get("QML_PROFILE") or defaults.get("profile", "publication")
     profile_cfg = cfg.get("profiles", {}).get(profile_name, {})
     exp_cfg = cfg.get("experiments", {}).get(exp_key, {})
-    merged = {**defaults, **profile_cfg, **exp_cfg}
+    overrides = (exp_cfg.get("profile_overrides") or {}).get(profile_name, {})
+    exp_cfg_clean = {k: v for k, v in exp_cfg.items() if k != "profile_overrides"}
+    merged = {**defaults, **profile_cfg, **exp_cfg_clean, **overrides}
     merged["profile"] = profile_name
     return merged

@@ -19,7 +19,7 @@ All runs log to `logs/experiments.jsonl` with `exp_id=nano_train`. These records
 |---------|----------|
 | `mini` | Default for app/CLI — ~100 samples, 8 epochs, single seed |
 | `ci` | Fast CI smoke tests |
-| `publication` | Full holdout protocol (slower) |
+| `publication` | Full holdout protocol for flagship QuantumNano-BC (50 epochs, checkpoints) |
 
 Configuration lives in `config/nanotrainer.yaml` and `config/experiments.yaml`.
 
@@ -42,6 +42,9 @@ qml-train --model quantum_angle --dataset breast_cancer --profile ci --json
 
 # Sequence fusion model
 qml-train --model transformer_qnn_fusion --dataset sequential_phase --epochs 10
+
+# Flagship QuantumNano-BC (full breast cancer, publication checkpoints)
+qml-train --model hybrid_sandwich --dataset breast_cancer --profile publication
 ```
 
 ## Architecture

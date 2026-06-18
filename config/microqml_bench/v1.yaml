@@ -30,6 +30,14 @@ tasks:
     description: UCI breast cancer — angle QNN vs parameter-matched MLP
     primary: true
 
+  - task_id: quantum_nano_bc
+    category: tabular
+    exp_id: exp_024
+    dataset: breast_cancer
+    description: Flagship QuantumNano-BC — hybrid sandwich vs logistic regression and XGBoost
+    primary: true
+    flagship: true
+
   - task_id: pca_mnist_binary
     category: image_tabular
     exp_id: exp_012

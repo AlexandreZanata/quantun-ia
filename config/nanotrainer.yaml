@@ -15,6 +15,10 @@ profiles:
     n_samples: 50
     epochs: 5
     seed: 42
+  publication:
+    epochs: 50
+    seed: 42
+    save_checkpoints: true
 
 datasets:
   breast_cancer:

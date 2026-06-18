@@ -14,6 +14,12 @@ from src.training.structured_log import log_event
 from src.training.trainer import train_model
 
 
+def _is_sklearn_model(model) -> bool:
+    from src.classical.sklearn_wrapper import SklearnBinaryClassifier
+
+    return isinstance(model, SklearnBinaryClassifier)
+
+
 def train_with_holdout(
     model,
     X_train,
@@ -33,6 +39,22 @@ def train_with_holdout(
     y_train_t = torch.tensor(y_train)
     X_test_t = torch.tensor(X_test)
     y_test_t = torch.tensor(y_test)
+
+    if _is_sklearn_model(model):
+        model.train(
+            X_train_t,
+            y_train_t,
+            exp_id=exp_id,
+            model_name=model_name,
+            epochs=epochs,
+            lr=lr,
+            X_test=X_test_t,
+            y_test=y_test_t,
+            seed=seed,
+            profile=profile,
+            save_checkpoints=save_checkpoints,
+        )
+        return model.evaluate(X_test_t, y_test_t)
 
     train_model(
         model,

@@ -9,7 +9,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Phase 30 (foundation): **Zenodo reference dataset export** — `scripts/export_reference_datasets.py`, `make export-reference-datasets`
+- Phase 30 (flagship): **exp_024 QuantumNano-BC** — hybrid sandwich vs logistic regression, XGBoost, perceptron on full breast cancer
+- `src/classical/sklearn_wrapper.py`, `logistic_baseline.py`, `xgboost_baseline.py` — clinical tabular baselines
+- `scripts/generate_model_card.py` + `model_cards/quantum_nano_bc.md` — flagship model card
+- `config/experiments.yaml` exp_024 with 30-seed publication profile and `profile_overrides`
+- `config/nanotrainer.yaml` `publication` profile (50 epochs, checkpoints, full dataset)
+- MicroQML Bench v1 flagship task `quantum_nano_bc`
+- `tests/integration/test_exp_024_smoke.py`, `tests/unit/test_sklearn_classifier.py`, `tests/unit/test_generate_model_card.py`
+- DVC `model_card` stage; `make model-card` target
+
+### Changed
+
+- `src/training/holdout.py` — sklearn model training path via `SklearnBinaryClassifier`
+- `src/training/config.py` — merge `profile_overrides` per experiment profile
+- `src/application/train_nanomodel.py` — publication profile saves checkpoints
+- `docs/experiments.md`, `docs/nanotrainer.md`, `README.md` — QuantumNano-BC flagship docs
+
+### Dependencies
+
+- `xgboost>=2.0.0`, `joblib>=1.3.0` in `requirements.txt`
+
+## [0.9.20] - 2026-06-17
+
+### Added
+
+- Phase 29 (foundation): **Zenodo reference dataset export** — `scripts/export_reference_datasets.py`, `make export-reference-datasets`
 - `experiments/exp_019_nanotrainer_smoke/results.md` and `exp_020_api_smoke/results.md` — infrastructure experiment documentation
 - `experiments/exp_023_encoding_backend/results.md` — publication-profile encoding×backend results
 - `config/experiments.yaml` entries for exp_019 and exp_020 (`infrastructure: true`)
@@ -26,18 +50,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Nano Trainer `quantum_amplitude` × `mnist_binary` shape mismatch (784 vs PCA-8) in exp_019 smoke
-
-## [0.9.20] - 2026-06-17
-
-### Added
-
 - Phase 29: **DVC remote bootstrap** — `make dvc-setup`, `make dvc-push`, `make dvc-push-full`
-- `scripts/dvc_remote_setup.py` — idempotent local filesystem remote (`../quantun-ia-dvc-storage`)
-- `scripts/dvc_push.py` — venv `python -m dvc push` wrapper
-- Unit tests: `tests/unit/test_dvc_remote_setup.py`
-- `dvc>=3.0.0` in `requirements-dev.txt`
+- `scripts/dvc_remote_setup.py`, `scripts/dvc_push.py`, `dvc>=3.0.0` in `requirements-dev.txt`
 
-### Changed
+### Changed (continued)
 
 - `scripts/validate_dvc.py` — detects `python -m dvc` in venv
 - `docs/dvc_remote.md` — documents Make targets (no system `dvc` required)

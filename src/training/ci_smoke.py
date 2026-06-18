@@ -28,6 +28,7 @@ def _run_holdout_loop(
     model_names: list[str],
     build_model,
     log_path: Path | None,
+    save_checkpoints: bool = False,
 ) -> dict[str, list[float]]:
     original_log_path = metrics_module.LOGS_PATH
     if log_path is not None:
@@ -54,6 +55,7 @@ def _run_holdout_loop(
                     lr=lr,
                     seed=seed,
                     profile=cfg.get("profile"),
+                    save_checkpoints=save_checkpoints,
                 )
                 results[name].append(metrics["accuracy"])
     finally:
@@ -504,4 +506,67 @@ def run_exp_023_ci(*, log_path: Path | None = None) -> dict[str, list[float]]:
         model_names=model_names,
         build_model=build_model,
         log_path=log_path,
+    )
+
+
+EXP_024_KEY = "exp_024_quantum_nano_bc"
+EXP_024_ID = "exp_024"
+
+
+def run_exp_024_ci(*, log_path: Path | None = None) -> dict[str, list[float]]:
+    """Fast CI smoke for exp_024 QuantumNano-BC (all baselines, ci profile)."""
+    from src.classical.logistic_baseline import LogisticBaseline
+    from src.classical.perceptron import Perceptron
+    from src.classical.xgboost_baseline import XGBoostShallow
+    from src.data.dataset_registry import prepare_dataset
+    from src.quantum.hybrid_model import HybridSandwich
+    from src.training.param_match import build_param_matched_classical
+    from src.training.trainer import count_parameters
+
+    cfg = load_experiment_config(EXP_024_KEY, profile="ci")
+
+    def build_model(seed: int) -> dict:
+        X_train, X_test, y_train, y_test, _meta = prepare_dataset(
+            cfg.get("dataset", "breast_cancer"),
+            test_size=cfg["test_size"],
+            random_state=seed,
+            scale=True,
+        )
+        input_dim = int(X_train.shape[1])
+        mc = cfg.get("model_configs", {})
+        hybrid = HybridSandwich(
+            input_dim=input_dim,
+            n_qubits=cfg.get("n_qubits", 4),
+            n_layers=cfg.get("n_layers", 2),
+            reupload=bool(mc.get("hybrid_sandwich", {}).get("reupload", True)),
+        )
+        matched = build_param_matched_classical(count_parameters(hybrid), input_dim=input_dim)
+        hidden = matched.net[0].out_features
+        models = {
+            "logistic_regression": (LogisticBaseline(input_dim=input_dim), 1.0),
+            "perceptron": (
+                Perceptron(input_dim=input_dim),
+                mc.get("perceptron", {}).get("learning_rate", cfg["learning_rate"]),
+            ),
+            f"classical_matched_h{hidden}": (
+                matched,
+                mc.get("classical_matched", {}).get("learning_rate", cfg["learning_rate"]),
+            ),
+            "hybrid_sandwich": (
+                hybrid,
+                mc.get("hybrid_sandwich", {}).get("learning_rate", cfg["learning_rate"]),
+            ),
+            "xgboost_shallow": (XGBoostShallow(input_dim=input_dim), 0.1),
+        }
+        return {"splits": (X_train, X_test, y_train, y_test), "models": models}
+
+    model_names = list(build_model(cfg["seeds"][0])["models"].keys())
+    return _run_holdout_loop(
+        exp_key=EXP_024_KEY,
+        exp_id=EXP_024_ID,
+        cfg=cfg,
+        model_names=model_names,
+        build_model=build_model,
+        log_path=log_path,
+        save_checkpoints=False,
     )

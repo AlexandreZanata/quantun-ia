@@ -52,6 +52,7 @@ MICROQML_BENCH_V1_SCHEMA: dict = {
                     "dataset": {"type": "string"},
                     "description": {"type": "string"},
                     "primary": {"type": "boolean"},
+                    "flagship": {"type": "boolean"},
                 },
                 "additionalProperties": False,
             },

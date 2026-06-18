@@ -18,6 +18,7 @@ EXP_RESULTS = [
     "experiments/exp_021_qml_backend_parity/results.md",
     "experiments/exp_022_nano_quantum_parity/results.md",
     "experiments/exp_023_encoding_backend/results.md",
+    "experiments/exp_024_quantum_nano_bc/results.md",
 ]
 
 

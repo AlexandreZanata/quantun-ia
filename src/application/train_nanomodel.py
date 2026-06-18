@@ -56,6 +56,7 @@ def execute(dto: TrainNanomodelDTO) -> Result[TrainNanomodelResult, TrainNanomod
     seed = dto.seed if dto.seed is not None else int(prof.get("seed", 42))
     epochs = dto.epochs if dto.epochs is not None else int(prof.get("epochs", 8))
     n_samples = prof.get("n_samples")
+    save_checkpoints = dto.save_checkpoints or bool(prof.get("save_checkpoints", False))
 
     ds_cfg = cfg.get("datasets", {}).get(dto.dataset, {})
     kind = dataset_kind(cfg, dto.dataset)
@@ -108,7 +109,7 @@ def execute(dto: TrainNanomodelDTO) -> Result[TrainNanomodelResult, TrainNanomod
         lr=lr,
         seed=seed,
         profile=dto.profile,
-        save_checkpoints=dto.save_checkpoints,
+        save_checkpoints=save_checkpoints,
     )
     elapsed = time.perf_counter() - t0
 

@@ -103,6 +103,15 @@ EXP_META: dict[str, dict[str, str]] = {
             "Combines exp_012 (encoding) and exp_021 (backend parity) protocols."
         ),
     },
+    "exp_024": {
+        "dir": "exp_024_quantum_nano_bc",
+        "title": "EXP 024 (QuantumNano-BC)",
+        "dataset": "breast_cancer (UCI Wisconsin), full dataset, 30% holdout",
+        "conclusion": (
+            "Flagship QuantumNano-BC: hybrid sandwich vs logistic regression, XGBoost, "
+            "and parameter-matched classical on Wisconsin Breast Cancer."
+        ),
+    },
 }
 
 

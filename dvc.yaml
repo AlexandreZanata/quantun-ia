@@ -25,3 +25,12 @@ stages:
       - dashboard/benchmark_data.py
     outs:
       - paper/tables/
+
+  model_card:
+    cmd: python scripts/generate_model_card.py
+    deps:
+      - scripts/generate_model_card.py
+      - logs/experiments.jsonl
+      - dashboard/benchmark_data.py
+    outs:
+      - model_cards/quantum_nano_bc.md

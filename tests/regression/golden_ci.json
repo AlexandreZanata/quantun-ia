@@ -93,6 +93,12 @@
       "per_seed_max": 1.0
     }
   },
+  "exp_024": {
+    "logistic_regression": {"mean_min": 0.85, "mean_max": 1.0},
+    "perceptron": {"mean_min": 0.80, "mean_max": 1.0},
+    "hybrid_sandwich": {"mean_min": 0.85, "mean_max": 1.0},
+    "xgboost_shallow": {"mean_min": 0.85, "mean_max": 1.0}
+  },
   "nano_train": {
     "perceptron": {
       "mean_min": 0.35,

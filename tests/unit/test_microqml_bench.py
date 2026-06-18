@@ -7,12 +7,15 @@ import json
 from src.benchmark.microqml_bench import build_bench_export, load_bench_config, write_bench_export
 
 
-def test_load_bench_config_has_four_primary_tasks():
+def test_load_bench_config_has_five_primary_tasks():
     config = load_bench_config()
     primary = [t for t in config["tasks"] if t.get("primary")]
-    assert len(primary) == 4
+    assert len(primary) == 5
+    flagship = [t for t in primary if t.get("flagship")]
+    assert len(flagship) == 1
+    assert flagship[0]["task_id"] == "quantum_nano_bc"
     exp_ids = {t["exp_id"] for t in primary}
-    assert exp_ids == {"exp_001", "exp_011", "exp_012", "exp_014"}
+    assert exp_ids == {"exp_001", "exp_011", "exp_012", "exp_014", "exp_024"}
 
 
 def test_build_export_leaderboard_only_includes_bench_tasks():

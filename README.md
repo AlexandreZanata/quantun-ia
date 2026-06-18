@@ -77,8 +77,19 @@ Results append to `logs/experiments.jsonl` (never delete — append only).
 | 021 | QML Backend Parity | `default.qubit` vs `lightning.qubit` on breast cancer QNN |
 | 022 | Nano Quantum Parity | Hybrid sandwich vs param-matched classical on UCI tabular |
 | 023 | Encoding × Backend | Angle vs amplitude × backends on PCA-MNIST |
+| 024 | QuantumNano-BC | Flagship hybrid sandwich vs clinical baselines on breast cancer |
 
 See [Experiments](docs/experiments.md) and [MicroQML Bench](docs/microqml_bench.md) for full details.
+
+## QuantumNano-BC (Flagship Nano Model)
+
+Train the flagship hybrid QML model on real UCI breast cancer data:
+
+```bash
+qml-train --model hybrid_sandwich --dataset breast_cancer --profile publication
+python experiments/exp_024_quantum_nano_bc/run.py --profile publication
+make model-card    # generate model_cards/quantum_nano_bc.md from logs
+```
 
 ## Nano Trainer
 
@@ -162,7 +173,7 @@ Paper draft skeleton: `paper/main.tex`.
 ```
 quantun-ia/
 ├── src/              # Models, data, training utilities
-├── experiments/      # exp_001 – exp_023 + template
+├── experiments/      # exp_001 – exp_024 + template
 ├── config/           # experiments.yaml, nanotrainer.yaml
 ├── dashboard/        # Streamlit monitor + static PWA
 ├── logs/             # experiments.jsonl (append-only)

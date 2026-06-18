@@ -30,6 +30,7 @@ Configuration is centralized in `config/experiments.yaml`.
 | 021 | QML Backend Parity | Do `default.qubit` and `lightning.qubit` agree within 2 pp on breast cancer QNN? |
 | 022 | Nano Quantum Parity | Does hybrid sandwich beat param-matched classical on UCI tabular? |
 | 023 | Encoding × Backend | Do angle vs amplitude and backend choice interact on PCA-MNIST? |
+| 024 | QuantumNano-BC | Does hybrid sandwich match or beat logistic regression on full breast cancer? |
 
 **Publication profile defaults:** `circles`, `noise=0.2`, `n_samples=500`, **10 seeds**, 30% holdout.
 
@@ -219,6 +220,15 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Claim:** Encoding gap within 2 pp across backends; no interaction term  
 **Command:** `python experiments/exp_023_encoding_backend/run.py`  
 **Pre-registration:** OSF link required before publication-profile runs (see `hypothesis.md`)
+
+### EXP 024 — QuantumNano-BC (Phase 30 flagship)
+
+**Models:** `hybrid_sandwich`, `logistic_regression`, `xgboost_shallow`, `perceptron`, parameter-matched classical  
+**Dataset:** breast cancer (full 569 samples, no subsampling)  
+**Claim:** Hybrid within 2 pp of logistic regression (parity) OR ≥3 pp advantage (Holm-significant)  
+**Seeds:** 30 (publication profile)  
+**Artifacts:** `model_cards/quantum_nano_bc.md`, checkpoints under `artifacts/exp_024/`  
+**Command:** `python experiments/exp_024_quantum_nano_bc/run.py --profile publication`
 
 ## Publication Profiles
 
