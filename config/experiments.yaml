@@ -899,3 +899,35 @@ experiments:
         n_rows: 500
       publication:
         n_rows: 10000
+
+  exp_039_synthea_regularized:
+    description: "Regularized LargeNanoMLP on Synthea — stronger dropout/WD vs exp_034 baseline"
+    exp_id: exp_039
+    dataset_id: synthea_cv_risk_v1
+    reference_nano_val_auc: 0.7867
+    seed: 42
+    hidden1: 2048
+    hidden2: 512
+    hidden3: 64
+    dropout: 0.5
+    batch_size: 2048
+    learning_rate: 0.0005
+    weight_decay: 0.001
+    epochs: 5
+    min_params: 1000000
+    min_auc_advantage_pp: -2.0
+    min_improvement_vs_exp_034_pp: 0.0
+    save_checkpoints: false
+    profile_overrides:
+      ci:
+        n_train_rows: 50000
+        n_val_rows: 10000
+        epochs: 5
+        min_improvement_vs_exp_034_pp: -1.0
+      publication:
+        n_train_rows: 0
+        n_val_rows: 0
+        epochs: 15
+        min_auc_advantage_pp: -2.0
+        min_improvement_vs_exp_034_pp: 0.0
+        save_checkpoints: true

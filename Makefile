@@ -1,4 +1,4 @@
-.PHONY: dev test test-watch lint lint-fix typecheck coverage dashboard dashboard-local experiment experiment-large repro export-results hpo figures latex-tables release release-check paper-sync paper-build paper-build-publication arxiv-bundle replay-publication replay-publication-artifacts repro-publication-ci open-science-preflight power-analysis microqml-bench publish-leaderboard publish-leaderboard-check check check-real health health-gpu docker-build docker-test docker-lint clean install train-demo nano-parity-bench nano-parity-download nano-parity-publication api api-demo e2e reviewer-repro citation-ready citation-ready-full finalize-citation dvc-check dvc-setup dvc-push model-card exp-026 exp-026-publication exp-024-publication exp-025-publication exp-027 exp-027-publication exp-028 exp-028-publication exp-029 exp-029-publication exp-030 exp-030-publication exp-031 exp-031-publication continuous-train batch-predict data-open-higgs data-open-synthea-cv data-open-verify exp-032 exp-032-publication exp-033 exp-033-publication exp-034 exp-034-publication exp-035 exp-035-publication exp-036 exp-036-publication exp-037 exp-037-publication exp-038 exp-038-publication phase-c-publication phase-d-preflight phase-v1.1.0-preflight phase-v1.2.0-preflight
+.PHONY: dev test test-watch lint lint-fix typecheck coverage dashboard dashboard-local experiment experiment-large repro export-results hpo figures latex-tables release release-check paper-sync paper-build paper-build-publication arxiv-bundle replay-publication replay-publication-artifacts repro-publication-ci open-science-preflight power-analysis microqml-bench publish-leaderboard publish-leaderboard-check check check-real health health-gpu docker-build docker-test docker-lint clean install train-demo nano-parity-bench nano-parity-download nano-parity-publication api api-demo e2e reviewer-repro citation-ready citation-ready-full finalize-citation dvc-check dvc-setup dvc-push model-card exp-026 exp-026-publication exp-024-publication exp-025-publication exp-027 exp-027-publication exp-028 exp-028-publication exp-029 exp-029-publication exp-030 exp-030-publication exp-031 exp-031-publication continuous-train batch-predict data-open-higgs data-open-synthea-cv data-open-verify exp-032 exp-032-publication exp-033 exp-033-publication exp-034 exp-034-publication exp-035 exp-035-publication exp-036 exp-036-publication exp-037 exp-037-publication exp-038 exp-038-publication exp-039 exp-039-publication phase-c-publication phase-d-preflight phase-v1.1.0-preflight phase-v1.2.0-preflight
 
 PYTHON ?= $(shell test -x .venv/bin/python && echo .venv/bin/python || echo python3)
 
@@ -175,6 +175,12 @@ exp-038:
 
 exp-038-publication:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_038_hybrid_serve_parity/run.py --profile publication --write-results
+
+exp-039:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_039_synthea_regularized/run.py --profile ci
+
+exp-039-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_039_synthea_regularized/run.py --profile publication --write-results
 
 batch-predict:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) scripts/batch_predict.py \
