@@ -1,7 +1,7 @@
 # Citation Loop — Zenodo DOI + arXiv ID
 
-Unified checklist for closing the open-science citation loop after Phases 18b and 19b.
-Software version: **v0.9.16** (Phase 25).
+Unified checklist for closing the open-science citation loop.  
+Software version: **v0.9.21** (Phase E — open science release).
 
 ---
 
@@ -10,26 +10,30 @@ Software version: **v0.9.16** (Phase 25).
 ```bash
 source .venv/bin/activate
 make check
-make citation-ready          # version alignment + artifact presence
-make release && make release-check   # optional — full Zenodo bundle
-make arxiv-bundle-sources    # arXiv TeX tarball (no pdflatex required)
+make open-science-preflight   # release + leaderboard + citation + arXiv sources
+make citation-ready           # version alignment + artifact presence
 ```
 
-`make citation-ready` runs `scripts/validate_citation_ready.py`. Informational messages
-for missing `doi:` and `arxiv_id` are expected until manual upload completes.
+`make open-science-preflight` runs `scripts/open_science_preflight.py`:
+
+1. Seeds `logs/experiments.jsonl` from `publication_experiments.jsonl` (exp_021–024)
+2. Builds `dist/release/` with leaderboard JSON, model card, exp_024 results
+3. Verifies public leaderboard (`docs/leaderboard/v1.json`)
+4. Validates citation artifacts (`scripts/validate_citation_ready.py`)
+5. Bundles arXiv TeX sources (`make arxiv-bundle-sources`)
+
+Informational messages for missing `doi:` and `arxiv_id` are expected until manual upload completes.
 
 ---
 
 ## Step 1 — GitHub release tag
 
-**Status:** `v0.9.16` tagged and pushed (see [releases/v0.9.16.md](releases/v0.9.16.md)).
-
 ```bash
-git tag v0.9.16
-git push origin v0.9.16
+git tag v0.9.21
+git push origin v0.9.21
 ```
 
-GitHub Actions (`.github/workflows/release.yml`) attaches `dist/release/` artifacts.
+GitHub Actions (`.github/workflows/release.yml`) attaches `dist/release/` artifacts.  
 See [zenodo.md](zenodo.md) for bundle contents.
 
 ---
@@ -37,18 +41,12 @@ See [zenodo.md](zenodo.md) for bundle contents.
 ## Step 2 — Zenodo DOI
 
 1. Enable Zenodo-GitHub integration for this repository.
-2. Wait for Zenodo to archive tag `v0.9.16`.
+2. Wait for Zenodo to archive tag `v0.9.21`.
 3. Copy the version DOI (e.g. `10.5281/zenodo.XXXXXXX`).
-4. Apply with one command (updates `CITATION.cff` and `paper/references.bib`):
+4. Apply with one command:
 
 ```bash
 make finalize-citation DOI=10.5281/zenodo.XXXXXXX
-```
-
-Or with arXiv ID at the same time:
-
-```bash
-make finalize-citation DOI=10.5281/zenodo.XXXXXXX ARXIV_ID=2606.12345
 ```
 
 5. Validate:
@@ -56,7 +54,7 @@ make finalize-citation DOI=10.5281/zenodo.XXXXXXX ARXIV_ID=2606.12345
 ```bash
 pytest tests/contracts/test_citation_cff.py tests/contracts/test_arxiv_metadata.py -v
 make citation-ready
-git commit -am "chore(citation): add Zenodo DOI for v0.9.16"
+git commit -am "chore(citation): add Zenodo DOI for v0.9.21"
 ```
 
 ---
@@ -65,33 +63,19 @@ git commit -am "chore(citation): add Zenodo DOI for v0.9.16"
 
 1. `make paper-build && make arxiv-bundle` (requires TeX Live for PDF).
 2. Upload `dist/arxiv/quantun-ia-paper.tar.gz` per [arxiv.md](arxiv.md).
-3. If not set in step 2, add moderated ID:
+3. Add moderated ID:
 
 ```bash
 make finalize-citation DOI=10.5281/zenodo.XXXXXXX ARXIV_ID=2606.12345
 ```
 
-4. Validate:
-
-```bash
-pytest tests/contracts/test_arxiv_metadata.py -v
-```
-
 ---
 
-## Step 4 — Cross-link README
+## Step 4 — OSF pre-registration (exp_024)
 
-- Re-run `make paper-build` if `references.bib` changed.
-- Update root `README.md` citation section with live DOI and arXiv link when available.
-
----
-
-## Narrative scope
-
-Primary paper follows **Option C** — see [paper_narrative.md](paper_narrative.md).
-Headline experiments: exp_011–014, exp_021–022, negative results 003/009.
-Deferred tracks (GV-ALR exp_015, NAS exp_016) are documented separately in
-[method_adaptive_lr.md](method_adaptive_lr.md).
+1. File OSF pre-registration for QuantumNano-BC (exp_024).
+2. Paste `https://osf.io/...` in `experiments/exp_024_quantum_nano_bc/hypothesis.md`.
+3. Add `exp_024_quantum_nano_bc` to `PREREG_REQUIRED` in `tests/contracts/test_osf_prereg.py`.
 
 ---
 
@@ -99,6 +83,8 @@ Deferred tracks (GV-ALR exp_015, NAS exp_016) are documented separately in
 
 | Item | Evidence |
 |------|----------|
-| Zenodo DOI live | `doi:` uncommented in `CITATION.cff`, `test_citation_cff` green |
-| arXiv ID live | `arxiv_id` set in `paper/arxiv_metadata.yaml` |
-| Version alignment | `make citation-ready` exit 0 with no blocking errors |
+| Zenodo DOI live | `doi:` in `CITATION.cff`, `test_citation_cff` green |
+| arXiv ID live | `arxiv_id` in `paper/arxiv_metadata.yaml` |
+| Release bundle | `make open-science-preflight` exit 0 |
+| Public leaderboard | https://alexandrezanata.github.io/quantun-ia/leaderboard/ |
+| Version alignment | `make citation-ready` exit 0 (no blocking errors) |

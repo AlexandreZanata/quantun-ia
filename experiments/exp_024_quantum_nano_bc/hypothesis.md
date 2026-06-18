@@ -2,7 +2,13 @@
 
 **Date:** 2026-06-18  
 **Author:** Quantum ML Lab  
-**Pre-registration:** Pending OSF link before publication-profile runs
+**Pre-registration:** See [Pre-registration](#pre-registration) below.
+
+## Pre-registration
+
+- **Policy:** Publication-profile runs require OSF pre-registration before external citation.
+- **Status:** Pending author filing (manual step before arXiv v1).
+- **OSF URL:** _Paste `https://osf.io/...` after registration._
 
 ## What I expect to happen
 

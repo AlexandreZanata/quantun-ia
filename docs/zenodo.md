@@ -3,7 +3,7 @@
 This guide describes how to obtain a citable DOI for quantun-ia releases via the
 [Zenodo–GitHub integration](https://docs.github.com/en/repositories/archiving-a-github-repository/referencing-and-citing-content).
 
-**Current target version:** `v0.9.12` (Phases 0–22b complete).
+**Current target version:** `v0.9.21` (Phases 30–32 + open science release).
 
 ---
 
@@ -12,7 +12,8 @@ This guide describes how to obtain a citable DOI for quantun-ia releases via the
 - Admin access to the GitHub repository
 - Zenodo account linked to GitHub
 - Local `make check` green
-- Publication `results.md` for headline experiments (exp_021, exp_022 included in bundle)
+- `make open-science-preflight` green
+- Publication `results.md` for headline experiments (exp_021–024 included in bundle)
 
 ---
 
@@ -22,24 +23,24 @@ This guide describes how to obtain a citable DOI for quantun-ia releases via the
 source .venv/bin/activate
 make health
 make check
-make export-reference-datasets   # optional preview
-make release
+make open-science-preflight
 make release-check      # verify SHA-256 checksums in MANIFEST.txt
 ```
 
 This creates `dist/release/` containing:
 
 - `results.csv` — aggregated experiment export
-- `reference_datasets/` — `breast_cancer.csv`, `circles.csv` + metadata JSON (canonical real + synthetic anchors)
+- `reference_datasets/` — `breast_cancer.csv`, `circles.csv` + metadata JSON
 - `figures/*.pdf` — publication figures
 - `tables/*.tex` — LaTeX holdout summary tables
-- `microqml_bench/v1.json` — MicroQML Bench export
-- `experiments/exp_021_qml_backend_parity/results.md`
-- `experiments/exp_022_nano_quantum_parity/results.md`
+- `microqml_bench/v1.json` — MicroQML Bench export (from publication fixture)
+- `leaderboard/v1.json` — public GitHub Pages leaderboard snapshot
+- `model_cards/quantum_nano_bc.md` — flagship model card
+- `experiments/exp_021_qml_backend_parity/results.md` through `exp_024_quantum_nano_bc/results.md`
 - `docs/api.md`, `compute_environment.md`, `ethics.md`, `microqml_bench.md`, `zenodo.md`
 - `publication_large_summary.md` (if present)
 - `requirements.lock`
-- `CITATION.cff`, `RELEASE_NOTES.md`, `CHANGELOG.md`, `SECURITY.md`
+- `AUTHORS.md`, `CITATION.cff`, `RELEASE_NOTES.md`, `CHANGELOG.md`, `SECURITY.md`
 - `MANIFEST.txt` — relative paths with SHA-256 checksums
 
 ---

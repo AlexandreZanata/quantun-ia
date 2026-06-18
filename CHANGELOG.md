@@ -7,8 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.21] - 2026-06-18
+
 ### Added
 
+- Phase E (open science release): **`make open-science-preflight`** — Zenodo/arXiv readiness pipeline
+- `scripts/open_science_preflight.py` + `tests/contracts/test_open_science_preflight.py`
+- `AUTHORS.md` — author attribution for citation and arXiv
 - Phase 30 (flagship): **exp_024 QuantumNano-BC** — hybrid sandwich vs logistic regression, XGBoost, perceptron on full breast cancer
 - Phase 31 (publication package): weekly `repro-publication` CI workflow, `make paper-build-publication`, `scripts/repro_publication_ci.sh`
 - Phase 32 (external adoption): public MicroQML leaderboard on GitHub Pages (`docs/leaderboard/`)
@@ -27,15 +32,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- `scripts/prepare_release.py` — seeds publication JSONL; bundles leaderboard JSON + model card + exp_024 results
 - `src/training/holdout.py` — sklearn model training path via `SklearnBinaryClassifier`
 - `src/training/config.py` — merge `profile_overrides` per experiment profile
 - `src/application/train_nanomodel.py` — publication profile saves checkpoints
 - `docs/experiments.md`, `docs/nanotrainer.md`, `README.md` — QuantumNano-BC flagship docs
 - `docs/compute_environment.md` — exp_024 hardware traceability, 30-seed publication profile
 - `docs/microqml_bench.md`, `README.md` — public GitHub Pages leaderboard URLs
+- `docs/citation_loop.md`, `docs/zenodo.md` — v0.9.21 open-science workflow
 - `CONTRIBUTING.md` — "Reproduce QuantumNano-BC in 15 minutes" section
-- `scripts/prepare_release.py` — bundles `model_cards/quantum_nano_bc.md`
 - `paper/sections/results.tex` — exp_024 flagship headline
+- `.github/workflows/release.yml` — publication fixture for reproducible Zenodo bundle
 
 ### Dependencies
 

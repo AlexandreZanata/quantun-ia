@@ -13,8 +13,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_DIST = ROOT / "dist" / "release"
-RELEASE_VERSION = "0.9.20"
-STATIC_ARTIFACTS = ("CITATION.cff", "RELEASE_NOTES.md", "CHANGELOG.md", "SECURITY.md")
+RELEASE_VERSION = "0.9.21"
+PUBLICATION_JSONL = ROOT / "tests" / "contracts" / "fixtures" / "publication_experiments.jsonl"
+STATIC_ARTIFACTS = ("AUTHORS.md", "CITATION.cff", "RELEASE_NOTES.md", "CHANGELOG.md", "SECURITY.md")
 RELEASE_DOCS = (
     "docs/api.md",
     "docs/arxiv.md",
@@ -36,6 +37,16 @@ RELEASE_RESULTS = (
     "experiments/exp_024_quantum_nano_bc/results.md",
 )
 RELEASE_MODEL_CARDS = ("model_cards/quantum_nano_bc.md",)
+RELEASE_LEADERBOARD = ("v1.json", "meta.json")
+
+
+def _seed_publication_logs() -> None:
+    """Use publication fixture so Zenodo bundle matches paper/leaderboard numbers."""
+    if not PUBLICATION_JSONL.is_file():
+        raise FileNotFoundError(f"missing publication fixture: {PUBLICATION_JSONL}")
+    logs_path = ROOT / "logs" / "experiments.jsonl"
+    logs_path.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(PUBLICATION_JSONL, logs_path)
 
 
 def sha256_file(path: Path) -> str:
@@ -86,6 +97,7 @@ def _copy_static_artifacts(dist_dir: Path) -> list[Path]:
 
 def prepare_release(dist_dir: Path = DEFAULT_DIST) -> list[Path]:
     """Export CSV, figures, LaTeX tables into dist/release/. Returns artifact paths."""
+    _seed_publication_logs()
     if dist_dir.exists():
         shutil.rmtree(dist_dir)
     dist_dir.mkdir(parents=True)
@@ -179,6 +191,15 @@ def prepare_release(dist_dir: Path = DEFAULT_DIST) -> list[Path]:
         src = ROOT / rel
         if src.exists():
             dest = model_cards_dir / src.name
+            shutil.copy2(src, dest)
+            artifacts.append(dest)
+
+    leaderboard_dir = dist_dir / "leaderboard"
+    leaderboard_dir.mkdir(parents=True, exist_ok=True)
+    for name in RELEASE_LEADERBOARD:
+        src = ROOT / "docs" / "leaderboard" / name
+        if src.exists():
+            dest = leaderboard_dir / name
             shutil.copy2(src, dest)
             artifacts.append(dest)
 

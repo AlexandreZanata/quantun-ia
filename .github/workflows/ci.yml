@@ -256,3 +256,26 @@ jobs:
           cp tests/contracts/fixtures/sample_experiments.jsonl logs/experiments.jsonl
           make paper-build
           make arxiv-bundle-sources
+
+  open-science-preflight:
+    name: Open Science Preflight (Zenodo readiness)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+          pip install -r requirements-dev.txt
+          pip install -e .
+
+      - name: Run open-science preflight
+        env:
+          MLFLOW_DISABLE: "1"
+        run: python scripts/open_science_preflight.py

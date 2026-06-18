@@ -32,7 +32,7 @@ jobs:
           MLFLOW_DISABLE: "1"
         run: |
           mkdir -p logs
-          cp tests/contracts/fixtures/sample_experiments.jsonl logs/experiments.jsonl
+          cp tests/contracts/fixtures/publication_experiments.jsonl logs/experiments.jsonl
           python scripts/prepare_release.py
           python scripts/prepare_release.py --verify-only dist/release
 
