@@ -20,6 +20,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `resolve_device(model=...)` forces CPU for PennyLane hybrid models on CUDA hosts
 - Holdout/self-play eval align tensors to model device (CUDA-safe)
 
+### Changed
+
+- Phase F publication complete: exp_025 Pima parity verdict (Δ=−1.0 pp, 30 seeds, RTX 4060)
+- `tests/conftest.py` auto-sets `QML_DEVICE=cuda` when NVIDIA GPU available
+- `docs/compute_environment.md` records RTX 4060 Laptop GPU for publication runs
+- `paper/tables/exp_025_holdout.tex` from publication JSONL
+
 ## [0.9.21] - 2026-06-18
 
 ### Added

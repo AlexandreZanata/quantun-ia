@@ -13,7 +13,7 @@ This document records the hardware and software stack used for **publication-pro
 | Field | Value |
 |-------|-------|
 | CPU | AMD/Intel x86_64 (Pop!_OS 22.04, kernel 6.x) |
-| GPU | Optional — CI and default local runs use **CPU-only** PyTorch |
+| GPU | **NVIDIA GeForce RTX 4060 Laptop GPU** (8 GB) — classical PyTorch via `QML_DEVICE=cuda`; PennyLane simulators stay CPU |
 | RAM | ≥ 16 GB recommended for PennyLane `lightning.qubit` |
 | Python | 3.11+ (CI: 3.12) |
 | PyTorch | ≥ 2.2 (CPU wheel in CI) |
@@ -42,6 +42,25 @@ Record wall-clock time and exact CPU model in `results.md` when citing externall
 
 ---
 
+## Generalization experiment (exp_025 Pima Indians Diabetes)
+
+| Field | Value |
+|-------|-------|
+| Dataset | Pima Indians Diabetes (OpenML id=37, 768 samples, 8 features) |
+| Seeds | 30 (publication profile in `config/experiments.yaml`) |
+| Models | hybrid_sandwich, logistic_regression, xgboost_shallow, perceptron, classical_matched |
+| Classical backend | PyTorch on **NVIDIA RTX 4060** (`QML_DEVICE=cuda`) |
+| Quantum backend | PennyLane `default.qubit` (CPU — TorchLayer constraint) |
+| Claim | Parity within 2 pp vs logistic regression (generalization vs exp_024) |
+
+Local publication command:
+
+```bash
+QML_DEVICE=cuda MLFLOW_DISABLE=1 python experiments/exp_025_pima_generalization/run.py --profile publication --write-results
+```
+
+---
+
 ## CI vs local
 
 | Environment | Purpose | Profile |
@@ -49,7 +68,7 @@ Record wall-clock time and exact CPU model in `results.md` when citing externall
 | GitHub Actions `ubuntu-latest` | Regression gates (`golden_ci.json`, e2e) | `ci` (2 seeds, 5–15 epochs) |
 | Weekly `repro-publication` workflow | Real exp_024 CI + paper-build from JSONL | `ci` + publication fixture merge |
 | `golden_publication.json` smoke | Publication drift detection | `publication` (2 seeds, 15 epochs) |
-| Maintainer workstation | Full publication verdicts | `publication` (30 seeds for exp_024, 50 epochs) |
+| Maintainer workstation | Full publication verdicts | `publication` (30 seeds for exp_024/025, 50 epochs); **RTX 4060** for classical models |
 
 Docker reproduction: `make docker-test` (validates wiring; not full publication profile).
 

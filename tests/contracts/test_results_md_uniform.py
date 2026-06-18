@@ -19,6 +19,7 @@ EXP_RESULTS = [
     "experiments/exp_022_nano_quantum_parity/results.md",
     "experiments/exp_023_encoding_backend/results.md",
     "experiments/exp_024_quantum_nano_bc/results.md",
+    "experiments/exp_025_pima_generalization/results.md",
 ]
 
 

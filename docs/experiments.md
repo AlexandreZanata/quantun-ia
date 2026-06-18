@@ -236,8 +236,9 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Folder:** `experiments/exp_025_pima_generalization/`  
 **Dataset:** `pima_diabetes` (OpenML id=37, 768 samples, 8 features)  
 **Claim:** Hybrid within 2 pp of logistic regression on second tabular benchmark (generalization vs exp_024)  
+**Verdict:** Accepted (parity) — hybrid 76.2% vs logistic 77.2% (Δ=−1.0 pp, 30 seeds)  
 **Seeds:** 30 (publication profile)  
-**Command:** `python experiments/exp_025_pima_generalization/run.py --profile publication --write-results`
+**Command:** `QML_DEVICE=cuda python experiments/exp_025_pima_generalization/run.py --profile publication --write-results`
 
 ## Publication Profiles
 
