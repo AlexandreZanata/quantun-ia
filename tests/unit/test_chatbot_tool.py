@@ -8,9 +8,11 @@ from src.application.chatbot_tool import (
     RESEARCH_DISCLAIMER,
     TOOL_SCORE_BREAST_CANCER,
     TOOL_SCORE_HIGGS,
+    TOOL_SCORE_SYNTHEA_CV,
     ChatbotToolCallDTO,
     build_higgs_tool_schema,
     build_openai_tool_schema,
+    build_synthea_cv_tool_schema,
     execute_tool_call,
     format_assistant_message,
     load_dialogue_fixtures,
@@ -47,6 +49,20 @@ def test_parse_tool_arguments_higgs():
     outcome = parse_tool_arguments(TOOL_SCORE_HIGGS, {"features": [[0.0] * 28]})
     assert isinstance(outcome, Ok)
     assert len(outcome.value[0]) == 28
+
+
+def test_synthea_cv_tool_schema_has_40_features():
+    schema = build_synthea_cv_tool_schema()
+    items = schema["function"]["parameters"]["properties"]["features"]["items"]
+    assert items["minItems"] == 40
+    assert items["maxItems"] == 40
+    assert schema["function"]["name"] == TOOL_SCORE_SYNTHEA_CV
+
+
+def test_parse_tool_arguments_synthea_cv():
+    outcome = parse_tool_arguments(TOOL_SCORE_SYNTHEA_CV, {"features": [[0.0] * 40]})
+    assert isinstance(outcome, Ok)
+    assert len(outcome.value[0]) == 40
 
 
 def test_validate_feature_rows_rejects_wrong_count():

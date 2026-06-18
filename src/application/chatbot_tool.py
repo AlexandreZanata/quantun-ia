@@ -17,8 +17,11 @@ from src.training.structured_log import init_correlation_id, log_event
 
 TOOL_SCORE_BREAST_CANCER = "score_breast_cancer"
 TOOL_SCORE_HIGGS = "score_higgs"
+TOOL_SCORE_SYNTHEA_CV = "score_synthea_cv_risk"
 BREAST_CANCER_FEATURE_COUNT = 30
 HIGGS_FEATURE_COUNT = open_dataset_feature_count("higgs_v1")
+SYNTHEA_CV_FEATURE_COUNT = open_dataset_feature_count("synthea_cv_risk_v1")
+SUPPORTED_TOOLS = frozenset({TOOL_SCORE_BREAST_CANCER, TOOL_SCORE_HIGGS, TOOL_SCORE_SYNTHEA_CV})
 RESEARCH_DISCLAIMER = "This output is from a research prototype — not a clinical diagnosis."
 
 DEFAULT_EXP_ID = "quantum_nano_bc_app"
@@ -83,9 +86,23 @@ def build_higgs_tool_schema() -> dict[str, Any]:
     )
 
 
+def build_synthea_cv_tool_schema() -> dict[str, Any]:
+    """OpenAI-compatible function tool definition for Synthea CV risk scoring."""
+    return _build_tool_schema(
+        TOOL_SCORE_SYNTHEA_CV,
+        "Score Synthea synthetic EHR tabular features and return 12-month CV event probability. "
+        "Requires exactly 40 numeric raw features per row (feature_0..feature_39).",
+        SYNTHEA_CV_FEATURE_COUNT,
+    )
+
+
 def build_openai_tool_schemas() -> list[dict[str, Any]]:
     """All supported chatbot tool schemas."""
-    return [build_openai_tool_schema(), build_higgs_tool_schema()]
+    return [
+        build_openai_tool_schema(),
+        build_higgs_tool_schema(),
+        build_synthea_cv_tool_schema(),
+    ]
 
 
 def _build_tool_schema(name: str, description: str, feature_count: int) -> dict[str, Any]:
@@ -136,6 +153,8 @@ def _expected_feature_count(tool_name: str) -> int:
         return BREAST_CANCER_FEATURE_COUNT
     if tool_name == TOOL_SCORE_HIGGS:
         return HIGGS_FEATURE_COUNT
+    if tool_name == TOOL_SCORE_SYNTHEA_CV:
+        return SYNTHEA_CV_FEATURE_COUNT
     msg = f"unsupported tool: {tool_name}"
     raise ValueError(msg)
 
@@ -144,7 +163,7 @@ def parse_tool_arguments(
     tool_name: str,
     arguments: dict[str, Any],
 ) -> Result[list[list[float]], ChatbotToolError]:
-    if tool_name not in {TOOL_SCORE_BREAST_CANCER, TOOL_SCORE_HIGGS}:
+    if tool_name not in SUPPORTED_TOOLS:
         return fail(ChatbotToolError("UNKNOWN_TOOL", f"unsupported tool: {tool_name}"))
 
     raw = arguments.get("features")
@@ -169,11 +188,12 @@ def format_assistant_message(
     labels: list[int],
     tool_name: str = TOOL_SCORE_BREAST_CANCER,
 ) -> str:
-    title = (
-        "Breast cancer risk scores (research prototype):"
-        if tool_name == TOOL_SCORE_BREAST_CANCER
-        else "HIGGS signal scores (research prototype):"
-    )
+    titles = {
+        TOOL_SCORE_BREAST_CANCER: "Breast cancer risk scores (research prototype):",
+        TOOL_SCORE_HIGGS: "HIGGS signal scores (research prototype):",
+        TOOL_SCORE_SYNTHEA_CV: "Synthea CV risk scores (research prototype):",
+    }
+    title = titles.get(tool_name, "Tabular risk scores (research prototype):")
     lines = [title]
     for idx, (prob, label) in enumerate(zip(probabilities, labels, strict=True)):
         lines.append(f"- Row {idx + 1}: probability={prob:.4f}, label={label}")

@@ -122,6 +122,8 @@ pairs:
     dataset: pima_diabetes
   - model: large_nano_mlp
     dataset: higgs_v1
+  - model: large_nano_mlp
+    dataset: synthea_cv_risk_v1
   - model: transformer_mini
     dataset: sequential_binary
   - model: transformer_mini
