@@ -35,6 +35,7 @@ RELEASE_RESULTS = (
     "experiments/exp_023_encoding_backend/results.md",
     "experiments/exp_024_quantum_nano_bc/results.md",
 )
+RELEASE_MODEL_CARDS = ("model_cards/quantum_nano_bc.md",)
 
 
 def sha256_file(path: Path) -> str:
@@ -169,6 +170,15 @@ def prepare_release(dist_dir: Path = DEFAULT_DIST) -> list[Path]:
         if src.exists():
             dest = results_dir / src.parent.name / "results.md"
             dest.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(src, dest)
+            artifacts.append(dest)
+
+    model_cards_dir = dist_dir / "model_cards"
+    model_cards_dir.mkdir(parents=True, exist_ok=True)
+    for rel in RELEASE_MODEL_CARDS:
+        src = ROOT / rel
+        if src.exists():
+            dest = model_cards_dir / src.name
             shutil.copy2(src, dest)
             artifacts.append(dest)
 

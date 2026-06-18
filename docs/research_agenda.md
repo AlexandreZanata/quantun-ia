@@ -38,7 +38,7 @@ This document is the **public** research roadmap. Every listed experiment has (o
 |----|--------------------------|-------------------|--------|
 | 024 | MicroQML Bench contract v1 | ✅ `make microqml-bench`, schema v1 API | **Shipped** |
 | — | Leaderboard JSON schema | Contract tests in `tests/contracts/` pass on sample exports | Planned |
-| — | `docs/compute_environment.md` | Publication numbers traceable to hardware profile | Planned |
+| — | `docs/compute_environment.md` | Publication numbers traceable to hardware profile | **Shipped** (exp_024, 30 seeds) |
 
 **Exit criteria:** Versioned bench name, schema semver, and Zenodo data bundle for synthetic + UCI tasks.
 

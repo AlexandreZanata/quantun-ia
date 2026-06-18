@@ -1,7 +1,7 @@
 # Reviewer & Artifact Evaluation Guide
 
 This guide supports **ACM artifact evaluation**, **NeurIPS reproducibility review**, and independent
-replication challengers. Target software version: **v0.9.14** (Phase 23).
+replication challengers. Target software version: **v0.9.20** (Phase 31).
 
 ---
 

@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Phase 30 (flagship): **exp_024 QuantumNano-BC** — hybrid sandwich vs logistic regression, XGBoost, perceptron on full breast cancer
+- Phase 31 (publication package): weekly `repro-publication` CI workflow, `make paper-build-publication`, `scripts/repro_publication_ci.sh`
+- `tests/contracts/fixtures/publication_experiments.jsonl` — publication-profile JSONL for paper-build (exp_021–024)
+- `tests/contracts/test_publication_repro.py` — publication pipeline contract tests
 - `src/classical/sklearn_wrapper.py`, `logistic_baseline.py`, `xgboost_baseline.py` — clinical tabular baselines
 - `scripts/generate_model_card.py` + `model_cards/quantum_nano_bc.md` — flagship model card
 - `config/experiments.yaml` exp_024 with 30-seed publication profile and `profile_overrides`
@@ -24,6 +27,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `src/training/config.py` — merge `profile_overrides` per experiment profile
 - `src/application/train_nanomodel.py` — publication profile saves checkpoints
 - `docs/experiments.md`, `docs/nanotrainer.md`, `README.md` — QuantumNano-BC flagship docs
+- `docs/compute_environment.md` — exp_024 hardware traceability, 30-seed publication profile
+- `CONTRIBUTING.md` — "Reproduce QuantumNano-BC in 15 minutes" section
+- `scripts/prepare_release.py` — bundles `model_cards/quantum_nano_bc.md`
+- `paper/sections/results.tex` — exp_024 flagship headline
 
 ### Dependencies
 

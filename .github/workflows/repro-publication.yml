@@ -1,0 +1,58 @@
+name: Repro Publication
+
+on:
+  schedule:
+    # Weekly slow integration — publication pipeline with real + fixture JSONL
+    - cron: "0 8 * * 0"
+  workflow_dispatch:
+
+concurrency:
+  group: repro-publication-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  repro-publication:
+    name: Publication Reproduction (weekly)
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install TeX Live
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends texlive-latex-base texlive-latex-recommended texlive-fonts-recommended texlive-bibtex-extra
+
+      - name: Install dependencies
+        run: |
+          pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+          pip install -r requirements-dev.txt
+          pip install -e .
+
+      - name: Run publication reproduction script
+        env:
+          MLFLOW_DISABLE: "1"
+        run: bash scripts/repro_publication_ci.sh
+
+      - name: Build paper PDF (TeX available in CI)
+        env:
+          MLFLOW_DISABLE: "1"
+        run: |
+          make paper-artifacts
+          python scripts/build_paper.py
+
+      - name: Upload publication artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: publication-repro-${{ github.run_id }}
+          path: |
+            logs/experiments.jsonl
+            paper/tables/
+            figures/
+            dist/release/
+          retention-days: 30

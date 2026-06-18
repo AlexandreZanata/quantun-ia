@@ -1,4 +1,4 @@
-.PHONY: dev test test-watch lint lint-fix typecheck coverage dashboard dashboard-local experiment experiment-large repro export-results hpo figures latex-tables release release-check paper-sync paper-build arxiv-bundle replay-publication replay-publication-artifacts power-analysis microqml-bench check health docker-build docker-test docker-lint clean install train-demo nano-parity-bench nano-parity-download nano-parity-publication api api-demo e2e reviewer-repro citation-ready citation-ready-full finalize-citation dvc-check dvc-setup dvc-push
+.PHONY: dev test test-watch lint lint-fix typecheck coverage dashboard dashboard-local experiment experiment-large repro export-results hpo figures latex-tables release release-check paper-sync paper-build paper-build-publication arxiv-bundle replay-publication replay-publication-artifacts repro-publication-ci power-analysis microqml-bench check health docker-build docker-test docker-lint clean install train-demo nano-parity-bench nano-parity-download nano-parity-publication api api-demo e2e reviewer-repro citation-ready citation-ready-full finalize-citation dvc-check dvc-setup dvc-push model-card
 
 PYTHON ?= $(shell test -x .venv/bin/python && echo .venv/bin/python || echo python3)
 
@@ -104,8 +104,19 @@ release-check:
 paper-sync:
 	$(PYTHON) scripts/build_paper.py --sync-only
 
-paper-build: latex-tables figures paper-sync
+paper-artifacts: latex-tables figures paper-sync
+	@echo "Paper artifacts ready (tables + figures synced to paper/)"
+
+paper-build: paper-artifacts
 	$(PYTHON) scripts/build_paper.py
+
+paper-build-publication:
+	@mkdir -p logs
+	cp tests/contracts/fixtures/publication_experiments.jsonl logs/experiments.jsonl
+	$(MAKE) paper-artifacts
+
+repro-publication-ci:
+	MLFLOW_DISABLE=1 bash scripts/repro_publication_ci.sh
 
 arxiv-bundle: paper-build
 	$(PYTHON) scripts/prepare_arxiv_submission.py

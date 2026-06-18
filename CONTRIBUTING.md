@@ -90,6 +90,28 @@ Open an issue or refer to:
 - [Architecture](docs/architecture.md)
 - [Reviewer Guide](docs/reviewer_guide.md) — artifact evaluation and replication
 
+## Reproduce QuantumNano-BC in 15 minutes
+
+The flagship nano model (exp\_024) validates hybrid QML against clinical baselines on Wisconsin Breast Cancer.
+
+```bash
+python -m venv .venv && source .venv/bin/activate
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+pip install -r requirements-dev.txt
+pip install -e .
+
+# CI-profile smoke (2 seeds, ~5 min CPU)
+MLFLOW_DISABLE=1 python experiments/exp_024_quantum_nano_bc/run.py --profile ci
+
+# Or via Nano Trainer CLI
+MLFLOW_DISABLE=1 qml-train --model hybrid_sandwich --dataset breast_cancer --profile ci
+```
+
+Expected: all models report holdout accuracy in [0.85, 1.0] on breast cancer.
+Full publication verdict (30 seeds): `--profile publication --write-results --write-model-card`.
+
+See `model_cards/quantum_nano_bc.md` and `experiments/exp_024_quantum_nano_bc/results.md`.
+
 ## Replication challenge
 
 Independent replicators are welcome. Fast verification:

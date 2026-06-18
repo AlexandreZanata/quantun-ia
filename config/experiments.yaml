@@ -490,7 +490,7 @@ experiments:
     profile_overrides:
       ci:
         seeds: [42, 123]
-        epochs: 12
+        epochs: 15
         save_checkpoints: false
       publication:
         seeds:
