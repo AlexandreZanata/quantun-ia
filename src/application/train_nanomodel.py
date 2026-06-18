@@ -58,6 +58,10 @@ def execute(dto: TrainNanomodelDTO) -> Result[TrainNanomodelResult, TrainNanomod
     n_samples = prof.get("n_samples")
     save_checkpoints = dto.save_checkpoints or bool(prof.get("save_checkpoints", False))
 
+    from src.training.reproducibility import set_global_seed
+
+    set_global_seed(seed)
+
     ds_cfg = cfg.get("datasets", {}).get(dto.dataset, {})
     kind = dataset_kind(cfg, dto.dataset)
 

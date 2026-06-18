@@ -583,3 +583,18 @@ experiments:
           - 6019
           - 6020
         epochs: 50
+
+  exp_026_real_app_e2e:
+    description: "Real application E2E — async API (CUDA) vs CLI holdout parity on hybrid_sandwich"
+    exp_id: exp_026
+    infrastructure: true
+    model: hybrid_sandwich
+    dataset: breast_cancer
+    max_delta_pp: 0.5
+    profile_overrides:
+      ci:
+        seeds: [42, 123, 456, 789, 1024]
+        epochs: 12
+      publication:
+        seeds: [42, 123, 456, 789, 1024, 1337, 2048, 3001, 4096, 5000]
+        epochs: 50

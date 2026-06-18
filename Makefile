@@ -1,4 +1,4 @@
-.PHONY: dev test test-watch lint lint-fix typecheck coverage dashboard dashboard-local experiment experiment-large repro export-results hpo figures latex-tables release release-check paper-sync paper-build paper-build-publication arxiv-bundle replay-publication replay-publication-artifacts repro-publication-ci open-science-preflight power-analysis microqml-bench publish-leaderboard publish-leaderboard-check check health docker-build docker-test docker-lint clean install train-demo nano-parity-bench nano-parity-download nano-parity-publication api api-demo e2e reviewer-repro citation-ready citation-ready-full finalize-citation dvc-check dvc-setup dvc-push model-card
+.PHONY: dev test test-watch lint lint-fix typecheck coverage dashboard dashboard-local experiment experiment-large repro export-results hpo figures latex-tables release release-check paper-sync paper-build paper-build-publication arxiv-bundle replay-publication replay-publication-artifacts repro-publication-ci open-science-preflight power-analysis microqml-bench publish-leaderboard publish-leaderboard-check check check-real health health-gpu docker-build docker-test docker-lint clean install train-demo nano-parity-bench nano-parity-download nano-parity-publication api api-demo e2e reviewer-repro citation-ready citation-ready-full finalize-citation dvc-check dvc-setup dvc-push model-card exp-026 exp-026-publication
 
 PYTHON ?= $(shell test -x .venv/bin/python && echo .venv/bin/python || echo python3)
 
@@ -6,12 +6,18 @@ install:
 	$(PYTHON) -m pip install -e .
 
 health:
-	$(PYTHON) scripts/health_check.py
+	$(PYTHON) scripts/health_check.py $(HEALTH_OPTS)
+
+health-gpu:
+	$(PYTHON) scripts/health_check.py --gpu
 
 check: lint-local typecheck
-	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m pytest tests/ --cov=src --cov-fail-under=80 -q
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m pytest tests/ --ignore=tests/real --cov=src --cov-fail-under=80 -q
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m pytest tests/integration/ tests/contracts/ -q
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m pytest tests/e2e/ -q
+
+check-real:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m pytest tests/real/ -m real $(if $(VERBOSE),,-q)
 
 e2e:
 	MLFLOW_DISABLE=1 $(PYTHON) -m pytest tests/e2e/ -v
@@ -82,6 +88,12 @@ nano-parity-download:
 
 nano-parity-publication:
 	MLFLOW_DISABLE=1 QML_PROFILE=publication $(PYTHON) experiments/exp_022_nano_quantum_parity/run.py --profile publication --write-results
+
+exp-026:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_026_real_app_e2e/run.py --profile ci
+
+exp-026-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_026_real_app_e2e/run.py --profile publication
 
 api:
 	MLFLOW_DISABLE=1 $(PYTHON) -m scripts.api_server --host 127.0.0.1 --port 8000

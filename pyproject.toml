@@ -46,6 +46,9 @@ packages = ["src", "scripts"]
 testpaths = ["tests"]
 pythonpath = ["."]
 addopts = "-v --tb=short"
+markers = [
+    "real: real-hardware tests — require CUDA and actual dataset training (local gate only)",
+]
 filterwarnings = [
     "ignore::DeprecationWarning",
 ]
