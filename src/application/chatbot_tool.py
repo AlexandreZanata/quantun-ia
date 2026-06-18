@@ -11,11 +11,14 @@ from sklearn.datasets import load_breast_cancer
 
 from src.application.dto import PredictNanomodelDTO
 from src.application.predict_nanomodel import execute as predict_execute
-from src.shared.result import Result, fail, ok
+from src.application.open_serve import open_dataset_feature_count
+from src.shared.result import Fail, Ok, Result, fail, ok
 from src.training.structured_log import init_correlation_id, log_event
 
 TOOL_SCORE_BREAST_CANCER = "score_breast_cancer"
+TOOL_SCORE_HIGGS = "score_higgs"
 BREAST_CANCER_FEATURE_COUNT = 30
+HIGGS_FEATURE_COUNT = open_dataset_feature_count("higgs_v1")
 RESEARCH_DISCLAIMER = "This output is from a research prototype — not a clinical diagnosis."
 
 DEFAULT_EXP_ID = "quantum_nano_bc_app"
@@ -61,29 +64,47 @@ def breast_cancer_feature_names() -> list[str]:
 
 
 def build_openai_tool_schema() -> dict[str, Any]:
-    """OpenAI-compatible function tool definition for local LLM tool routing."""
+    """OpenAI-compatible function tool definition for breast cancer scoring."""
+    return _build_tool_schema(
+        TOOL_SCORE_BREAST_CANCER,
+        "Score Wisconsin Breast Cancer tabular features and return malignancy probability. "
+        "Requires exactly 30 numeric features per row (raw UCI scale).",
+        BREAST_CANCER_FEATURE_COUNT,
+    )
+
+
+def build_higgs_tool_schema() -> dict[str, Any]:
+    """OpenAI-compatible function tool definition for HIGGS open dataset scoring."""
+    return _build_tool_schema(
+        TOOL_SCORE_HIGGS,
+        "Score HIGGS tabular features and return signal probability. "
+        "Requires exactly 28 numeric raw features per row (feature_0..feature_27).",
+        HIGGS_FEATURE_COUNT,
+    )
+
+
+def build_openai_tool_schemas() -> list[dict[str, Any]]:
+    """All supported chatbot tool schemas."""
+    return [build_openai_tool_schema(), build_higgs_tool_schema()]
+
+
+def _build_tool_schema(name: str, description: str, feature_count: int) -> dict[str, Any]:
     return {
         "type": "function",
         "function": {
-            "name": TOOL_SCORE_BREAST_CANCER,
-            "description": (
-                "Score Wisconsin Breast Cancer tabular features and return malignancy "
-                "probability. Requires exactly 30 numeric features per row (raw UCI scale)."
-            ),
+            "name": name,
+            "description": description,
             "parameters": {
                 "type": "object",
                 "properties": {
                     "features": {
                         "type": "array",
-                        "description": (
-                            "Rows of raw Wisconsin Breast Cancer features "
-                            f"({BREAST_CANCER_FEATURE_COUNT} values per row)."
-                        ),
+                        "description": f"Rows of raw tabular features ({feature_count} values per row).",
                         "items": {
                             "type": "array",
                             "items": {"type": "number"},
-                            "minItems": BREAST_CANCER_FEATURE_COUNT,
-                            "maxItems": BREAST_CANCER_FEATURE_COUNT,
+                            "minItems": feature_count,
+                            "maxItems": feature_count,
                         },
                         "minItems": 1,
                     }
@@ -110,11 +131,20 @@ def validate_feature_rows(
     return None
 
 
+def _expected_feature_count(tool_name: str) -> int:
+    if tool_name == TOOL_SCORE_BREAST_CANCER:
+        return BREAST_CANCER_FEATURE_COUNT
+    if tool_name == TOOL_SCORE_HIGGS:
+        return HIGGS_FEATURE_COUNT
+    msg = f"unsupported tool: {tool_name}"
+    raise ValueError(msg)
+
+
 def parse_tool_arguments(
     tool_name: str,
     arguments: dict[str, Any],
 ) -> Result[list[list[float]], ChatbotToolError]:
-    if tool_name != TOOL_SCORE_BREAST_CANCER:
+    if tool_name not in {TOOL_SCORE_BREAST_CANCER, TOOL_SCORE_HIGGS}:
         return fail(ChatbotToolError("UNKNOWN_TOOL", f"unsupported tool: {tool_name}"))
 
     raw = arguments.get("features")
@@ -127,7 +157,7 @@ def parse_tool_arguments(
             return fail(ChatbotToolError("INVALID_FEATURES", "each feature row must be a list"))
         rows.append([float(v) for v in item])
 
-    err = validate_feature_rows(rows)
+    err = validate_feature_rows(rows, expected_count=_expected_feature_count(tool_name))
     if err is not None:
         return fail(err)
     return ok(rows)
@@ -137,8 +167,14 @@ def format_assistant_message(
     *,
     probabilities: list[float],
     labels: list[int],
+    tool_name: str = TOOL_SCORE_BREAST_CANCER,
 ) -> str:
-    lines = ["Breast cancer risk scores (research prototype):"]
+    title = (
+        "Breast cancer risk scores (research prototype):"
+        if tool_name == TOOL_SCORE_BREAST_CANCER
+        else "HIGGS signal scores (research prototype):"
+    )
+    lines = [title]
     for idx, (prob, label) in enumerate(zip(probabilities, labels, strict=True)):
         lines.append(f"- Row {idx + 1}: probability={prob:.4f}, label={label}")
     lines.append("")
@@ -191,6 +227,7 @@ def execute_tool_call(
     message = format_assistant_message(
         probabilities=result.probabilities,
         labels=result.labels,
+        tool_name=dto.tool_name,
     )
     log_event(
         "info",
@@ -210,7 +247,7 @@ def execute_tool_call(
             probabilities=result.probabilities,
             labels=result.labels,
             checkpoint_path=result.checkpoint_path,
-            feature_count=BREAST_CANCER_FEATURE_COUNT,
+            feature_count=_expected_feature_count(dto.tool_name),
             message=message,
         )
     )

@@ -13,6 +13,7 @@ from sklearn.datasets import load_breast_cancer
 
 from src.application.dto import PredictNanomodelDTO
 from src.application.predict_nanomodel import execute as predict_execute
+from src.application.open_serve import open_dataset_feature_count
 from src.shared.result import Fail, Ok, Result, fail, ok
 from src.training.champion import load_champion_manifest
 from src.training.checkpoints import resolve_checkpoint_dir
@@ -71,8 +72,13 @@ def _feature_columns(frame: pd.DataFrame) -> list[str]:
     return numeric
 
 
-def load_input_rows(path: Path) -> tuple[list[list[float]], list[str]]:
-    """Load raw feature rows from CSV (569-row breast cancer fixture supported)."""
+def load_input_rows(path: Path, *, dataset: str = DEFAULT_DATASET) -> tuple[list[list[float]], list[str]]:
+    """Load raw feature rows from CSV or JSON."""
+    expected_features = (
+        BREAST_CANCER_FEATURE_COUNT
+        if dataset == DEFAULT_DATASET
+        else open_dataset_feature_count(dataset)
+    )
     if not path.is_file():
         raise FileNotFoundError(f"input not found: {path}")
 
@@ -84,8 +90,12 @@ def load_input_rows(path: Path) -> tuple[list[list[float]], list[str]]:
         elif isinstance(payload, list):
             rows = [[float(v) for v in row] for row in payload]
         else:
-            raise ValueError("JSON must be a list of rows or {\"features\": [...]}")
-        columns = breast_cancer_column_names()
+            raise ValueError('JSON must be a list of rows or {"features": [...]}')
+        columns = (
+            breast_cancer_column_names()
+            if dataset == DEFAULT_DATASET
+            else [f"feature_{i}" for i in range(expected_features)]
+        )
     elif suffix == ".csv":
         frame = pd.read_csv(path)
         columns = _feature_columns(frame)
@@ -95,13 +105,13 @@ def load_input_rows(path: Path) -> tuple[list[list[float]], list[str]]:
 
     if not rows:
         raise ValueError("input contains no feature rows")
-    expected = len(columns) if columns else BREAST_CANCER_FEATURE_COUNT
-    if expected != BREAST_CANCER_FEATURE_COUNT:
-        raise ValueError(f"expected {BREAST_CANCER_FEATURE_COUNT} features, got {expected}")
+    expected = len(columns) if columns else expected_features
+    if expected != expected_features:
+        raise ValueError(f"expected {expected_features} features, got {expected}")
     for idx, row in enumerate(rows):
-        if len(row) != BREAST_CANCER_FEATURE_COUNT:
+        if len(row) != expected_features:
             raise ValueError(
-                f"row {idx} must have {BREAST_CANCER_FEATURE_COUNT} features (got {len(row)})"
+                f"row {idx} must have {expected_features} features (got {len(row)})"
             )
     return rows, columns
 
@@ -118,7 +128,7 @@ def run_batch_predict(dto: BatchPredictDTO) -> Result[BatchPredictResult, BatchP
     if not dto.features:
         return fail(BatchPredictError("INVALID_FEATURES", "features must not be empty"))
 
-    err = _validate_rows(dto.features)
+    err = _validate_rows(dto.features, dto.dataset)
     if err is not None:
         return fail(err)
 
@@ -170,12 +180,17 @@ def run_batch_predict(dto: BatchPredictDTO) -> Result[BatchPredictResult, BatchP
     )
 
 
-def _validate_rows(rows: list[list[float]]) -> BatchPredictError | None:
+def _validate_rows(rows: list[list[float]], dataset: str) -> BatchPredictError | None:
+    expected = (
+        BREAST_CANCER_FEATURE_COUNT
+        if dataset == DEFAULT_DATASET
+        else open_dataset_feature_count(dataset)
+    )
     for idx, row in enumerate(rows):
-        if len(row) != BREAST_CANCER_FEATURE_COUNT:
+        if len(row) != expected:
             return BatchPredictError(
                 "INVALID_FEATURES",
-                f"row {idx} must have {BREAST_CANCER_FEATURE_COUNT} features",
+                f"row {idx} must have {expected} features",
             )
     return None
 

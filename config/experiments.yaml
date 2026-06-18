@@ -761,3 +761,17 @@ experiments:
         batch_size: 2048
         min_auc_advantage_pp: 1.0
         save_checkpoints: true
+
+  exp_033_higgs_serve_parity:
+    description: "LargeNanoMLP serve parity — batch vs API vs chatbot on HIGGS holdout"
+    exp_id: exp_033
+    checkpoint_exp_id: exp_032
+    model_name: large_nano_mlp
+    dataset_id: higgs_v1
+    seed: 42
+    chunk_size: 256
+    profile_overrides:
+      ci:
+        n_rows: 500
+      publication:
+        n_rows: 10000

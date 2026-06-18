@@ -7,7 +7,9 @@ from pathlib import Path
 from src.application.chatbot_tool import (
     RESEARCH_DISCLAIMER,
     TOOL_SCORE_BREAST_CANCER,
+    TOOL_SCORE_HIGGS,
     ChatbotToolCallDTO,
+    build_higgs_tool_schema,
     build_openai_tool_schema,
     execute_tool_call,
     format_assistant_message,
@@ -31,6 +33,20 @@ def test_openai_tool_schema_has_30_features():
     assert items["minItems"] == 30
     assert items["maxItems"] == 30
     assert schema["function"]["name"] == TOOL_SCORE_BREAST_CANCER
+
+
+def test_higgs_tool_schema_has_28_features():
+    schema = build_higgs_tool_schema()
+    items = schema["function"]["parameters"]["properties"]["features"]["items"]
+    assert items["minItems"] == 28
+    assert items["maxItems"] == 28
+    assert schema["function"]["name"] == TOOL_SCORE_HIGGS
+
+
+def test_parse_tool_arguments_higgs():
+    outcome = parse_tool_arguments(TOOL_SCORE_HIGGS, {"features": [[0.0] * 28]})
+    assert isinstance(outcome, Ok)
+    assert len(outcome.value[0]) == 28
 
 
 def test_validate_feature_rows_rejects_wrong_count():

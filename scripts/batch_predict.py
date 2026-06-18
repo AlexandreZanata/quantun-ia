@@ -33,7 +33,7 @@ def main(argv: list[str] | None = None) -> int:
     os.environ.setdefault("MLFLOW_DISABLE", "1")
     os.environ.setdefault("QML_DEVICE", "cuda")
 
-    rows, _ = load_input_rows(args.input_path)
+    rows, _ = load_input_rows(args.input_path, dataset=args.dataset)
     dto = BatchPredictDTO(
         features=rows,
         exp_id=args.exp_id,

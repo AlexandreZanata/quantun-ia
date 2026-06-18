@@ -7,6 +7,7 @@ from typing import Any
 import torch
 
 from src.application.nanotrainer_config import load_nanotrainer_config, model_kind
+from src.classical.large_nano_mlp import LargeNanoMLP
 from src.classical.mlp import ClassicalNet
 from src.classical.perceptron import Perceptron
 from src.classical.transformer_mini import TransformerMini
@@ -106,6 +107,17 @@ def build_model(
                 n_qubits=mc.get("n_qubits", 4),
                 n_layers=mc.get("n_layers", 2),
                 reupload=bool(mc.get("reupload", False)),
+            ),
+            lr,
+        )
+    if name == "large_nano_mlp":
+        return (
+            LargeNanoMLP(
+                input_dim=input_dim,
+                hidden1=int(mc.get("hidden1", 2048)),
+                hidden2=int(mc.get("hidden2", 512)),
+                hidden3=int(mc.get("hidden3", 64)),
+                dropout=float(mc.get("dropout", 0.3)),
             ),
             lr,
         )

@@ -29,3 +29,13 @@ def test_model_predict_and_evaluate(sample_binary_data, temp_log_file):
     metrics = model.evaluate(X_t, y_t)
     assert "accuracy" in metrics
     assert "loss" in metrics
+
+
+def test_eval_propagates_to_dropout_layers():
+    from src.classical.large_nano_mlp import LargeNanoMLP
+
+    model = LargeNanoMLP(input_dim=28)
+    model.eval()
+    dropout_layers = [m for m in model.modules() if isinstance(m, torch.nn.Dropout)]
+    assert dropout_layers
+    assert all(not layer.training for layer in dropout_layers)

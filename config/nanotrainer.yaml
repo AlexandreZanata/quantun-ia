@@ -42,6 +42,12 @@ datasets:
     kind: tabular
     n_samples: 200
     n_components: 8
+  higgs_v1:
+    kind: tabular
+    n_features: 28
+  synthea_cv_risk_v1:
+    kind: tabular
+    n_features: 40
   sequential_binary:
     kind: sequence
     seq_len: 8
@@ -77,6 +83,13 @@ models:
     n_qubits: 4
     n_layers: 2
     reupload: true
+  large_nano_mlp:
+    kind: tabular
+    learning_rate: 0.001
+    hidden1: 2048
+    hidden2: 512
+    hidden3: 64
+    dropout: 0.3
   transformer_mini:
     kind: sequence
     learning_rate: 0.01
@@ -107,6 +120,8 @@ pairs:
     dataset: breast_cancer
   - model: hybrid_sandwich
     dataset: pima_diabetes
+  - model: large_nano_mlp
+    dataset: higgs_v1
   - model: transformer_mini
     dataset: sequential_binary
   - model: transformer_mini
