@@ -2,7 +2,7 @@
 
 ## Overview
 
-Twenty-three experiments compare classical and quantum ML on synthetic and real-world tasks.
+Twenty-five experiments compare classical and quantum ML on synthetic and real-world tasks.
 Configuration is centralized in `config/experiments.yaml`.
 
 | ID | Name | Question |
@@ -31,6 +31,7 @@ Configuration is centralized in `config/experiments.yaml`.
 | 022 | Nano Quantum Parity | Does hybrid sandwich beat param-matched classical on UCI tabular? |
 | 023 | Encoding × Backend | Do angle vs amplitude and backend choice interact on PCA-MNIST? |
 | 024 | QuantumNano-BC | Does hybrid sandwich match or beat logistic regression on full breast cancer? |
+| 025 | Pima Generalization | Does exp_024 parity extend to Pima Indians Diabetes (OpenML id=37)? |
 
 **Publication profile defaults:** `circles`, `noise=0.2`, `n_samples=500`, **10 seeds**, 30% holdout.
 
@@ -229,6 +230,14 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Seeds:** 30 (publication profile)  
 **Artifacts:** `model_cards/quantum_nano_bc.md`, checkpoints under `artifacts/exp_024/`  
 **Command:** `python experiments/exp_024_quantum_nano_bc/run.py --profile publication`
+
+### EXP 025 — Pima Generalization (Phase F)
+
+**Folder:** `experiments/exp_025_pima_generalization/`  
+**Dataset:** `pima_diabetes` (OpenML id=37, 768 samples, 8 features)  
+**Claim:** Hybrid within 2 pp of logistic regression on second tabular benchmark (generalization vs exp_024)  
+**Seeds:** 30 (publication profile)  
+**Command:** `python experiments/exp_025_pima_generalization/run.py --profile publication --write-results`
 
 ## Publication Profiles
 

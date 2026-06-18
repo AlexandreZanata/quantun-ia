@@ -38,6 +38,13 @@ tasks:
     primary: true
     flagship: true
 
+  - task_id: tabular_pima_diabetes
+    category: tabular
+    exp_id: exp_025
+    dataset: pima_diabetes
+    description: Pima Indians Diabetes — hybrid sandwich generalization vs logistic regression
+    primary: true
+
   - task_id: pca_mnist_binary
     category: image_tabular
     exp_id: exp_012

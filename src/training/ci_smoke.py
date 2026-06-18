@@ -511,10 +511,18 @@ def run_exp_023_ci(*, log_path: Path | None = None) -> dict[str, list[float]]:
 
 EXP_024_KEY = "exp_024_quantum_nano_bc"
 EXP_024_ID = "exp_024"
+EXP_025_KEY = "exp_025_pima_generalization"
+EXP_025_ID = "exp_025"
 
 
-def run_exp_024_ci(*, log_path: Path | None = None) -> dict[str, list[float]]:
-    """Fast CI smoke for exp_024 QuantumNano-BC (all baselines, ci profile)."""
+def run_nano_tabular_ci(
+    *,
+    exp_key: str,
+    exp_id: str,
+    log_path: Path | None = None,
+    save_checkpoints: bool = False,
+) -> dict[str, list[float]]:
+    """CI smoke for tabular nano benchmarks (exp_024, exp_025)."""
     from src.classical.logistic_baseline import LogisticBaseline
     from src.classical.perceptron import Perceptron
     from src.classical.xgboost_baseline import XGBoostShallow
@@ -523,11 +531,13 @@ def run_exp_024_ci(*, log_path: Path | None = None) -> dict[str, list[float]]:
     from src.training.param_match import build_param_matched_classical
     from src.training.trainer import count_parameters
 
-    cfg = load_experiment_config(EXP_024_KEY, profile="ci")
+    cfg = load_experiment_config(exp_key, profile="ci")
+
+    dataset = cfg.get("dataset", "breast_cancer")
 
     def build_model(seed: int) -> dict:
         X_train, X_test, y_train, y_test, _meta = prepare_dataset(
-            cfg.get("dataset", "breast_cancer"),
+            dataset,
             test_size=cfg["test_size"],
             random_state=seed,
             scale=True,
@@ -562,11 +572,31 @@ def run_exp_024_ci(*, log_path: Path | None = None) -> dict[str, list[float]]:
 
     model_names = list(build_model(cfg["seeds"][0])["models"].keys())
     return _run_holdout_loop(
-        exp_key=EXP_024_KEY,
-        exp_id=EXP_024_ID,
+        exp_key=exp_key,
+        exp_id=exp_id,
         cfg=cfg,
         model_names=model_names,
         build_model=build_model,
+        log_path=log_path,
+        save_checkpoints=save_checkpoints,
+    )
+
+
+def run_exp_024_ci(*, log_path: Path | None = None) -> dict[str, list[float]]:
+    """Fast CI smoke for exp_024 QuantumNano-BC (all baselines, ci profile)."""
+    return run_nano_tabular_ci(
+        exp_key=EXP_024_KEY,
+        exp_id=EXP_024_ID,
+        log_path=log_path,
+        save_checkpoints=False,
+    )
+
+
+def run_exp_025_ci(*, log_path: Path | None = None) -> dict[str, list[float]]:
+    """Fast CI smoke for exp_025 Pima diabetes generalization (ci profile)."""
+    return run_nano_tabular_ci(
+        exp_key=EXP_025_KEY,
+        exp_id=EXP_025_ID,
         log_path=log_path,
         save_checkpoints=False,
     )

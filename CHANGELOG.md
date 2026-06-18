@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Phase F (generalization): **exp_025 Pima Indians Diabetes** — cross-dataset parity vs exp_024
+- `load_pima_diabetes_raw()` (OpenML id=37) + `pima_diabetes` dataset registry entry
+- `experiments/exp_025_pima_generalization/` with hypothesis + run.py
+- `run_exp_025_ci` smoke + `tests/integration/test_exp_025_smoke.py`
+- MicroQML Bench task `tabular_pima_diabetes`; Zenodo export for Pima CSV
+
+### Fixed
+
+- `resolve_device(model=...)` forces CPU for PennyLane hybrid models on CUDA hosts
+- Holdout/self-play eval align tensors to model device (CUDA-safe)
+
 ## [0.9.21] - 2026-06-18
 
 ### Added

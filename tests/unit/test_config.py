@@ -95,3 +95,13 @@ def test_exp_024_profile_overrides(monkeypatch):
     cfg_pub = load_experiment_config("exp_024_quantum_nano_bc", profile="publication")
     assert len(cfg_pub["seeds"]) == 30
     assert cfg_pub["save_checkpoints"] is True
+
+
+def test_exp_025_profile_overrides(monkeypatch):
+    monkeypatch.delenv("QML_PROFILE", raising=False)
+    cfg_ci = load_experiment_config("exp_025_pima_generalization", profile="ci")
+    assert cfg_ci["dataset"] == "pima_diabetes"
+    assert cfg_ci["seeds"] == [42, 123]
+    assert cfg_ci["epochs"] == 15
+    cfg_pub = load_experiment_config("exp_025_pima_generalization", profile="publication")
+    assert len(cfg_pub["seeds"]) == 30

@@ -2,6 +2,7 @@
 
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 from scripts.export_reference_datasets import export_all, export_breast_cancer, export_circles
@@ -26,8 +27,18 @@ def test_export_circles_writes_expected_shape(tmp_path: Path):
     assert "make_circles" in meta
 
 
-def test_export_all_writes_both_datasets(tmp_path: Path):
+def test_export_all_writes_all_reference_datasets(tmp_path: Path, monkeypatch):
+    import src.data.real_datasets as rd
+
+    fake_x = np.random.default_rng(0).normal(size=(768, 8)).astype(np.float32)
+    fake_y = np.zeros(768, dtype=np.float32)
+    monkeypatch.setattr(
+        rd,
+        "load_pima_diabetes_raw",
+        lambda: (fake_x, fake_y, {"name": "pima_diabetes", "n_features": 8, "source": "openml:37"}),
+    )
     paths = export_all(tmp_path)
-    assert len(paths) == 2
+    assert len(paths) == 3
     assert (tmp_path / "breast_cancer.csv").is_file()
+    assert (tmp_path / "pima_diabetes.csv").is_file()
     assert (tmp_path / "circles.csv").is_file()

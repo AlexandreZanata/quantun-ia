@@ -11,7 +11,19 @@ from src.training import metrics as metrics_module
 from src.training.adaptive_lr import AdaptiveLRConfig, train_model_adaptive
 from src.training.statistics import holm_bonferroni, paired_comparison, seed_summary
 from src.training.structured_log import log_event
-from src.training.trainer import train_model
+from src.training.trainer import evaluate as evaluate_model, train_model
+
+
+def _model_device(model) -> torch.device:
+    try:
+        return next(model.parameters()).device
+    except StopIteration:
+        return torch.device("cpu")
+
+
+def _align_eval_tensors(model, X_test_t: torch.Tensor, y_test_t: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
+    dev = _model_device(model)
+    return X_test_t.to(dev), y_test_t.to(dev)
 
 
 def _is_sklearn_model(model) -> bool:
@@ -54,7 +66,7 @@ def train_with_holdout(
             profile=profile,
             save_checkpoints=save_checkpoints,
         )
-        return model.evaluate(X_test_t, y_test_t)
+        return evaluate_model(model, *_align_eval_tensors(model, X_test_t, y_test_t))
 
     train_model(
         model,
@@ -70,7 +82,8 @@ def train_with_holdout(
         profile=profile,
         save_checkpoints=save_checkpoints,
     )
-    return model.evaluate(X_test_t, y_test_t)
+    X_eval, y_eval = _align_eval_tensors(model, X_test_t, y_test_t)
+    return evaluate_model(model, X_eval, y_eval)
 
 
 def train_with_holdout_adaptive(
@@ -107,7 +120,8 @@ def train_with_holdout_adaptive(
         profile=profile,
         save_checkpoints=save_checkpoints,
     )
-    return model.evaluate(X_test_t, y_test_t)
+    X_eval, y_eval = _align_eval_tensors(model, X_test_t, y_test_t)
+    return evaluate_model(model, X_eval, y_eval)
 
 
 def _write_summary_record(record: dict) -> None:

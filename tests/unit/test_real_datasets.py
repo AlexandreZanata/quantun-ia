@@ -20,6 +20,42 @@ def test_get_dataset_registry_breast_cancer():
     assert meta["source"] == "sklearn"
 
 
+def test_load_pima_diabetes_raw(monkeypatch):
+    import src.data.real_datasets as rd
+
+    fake_x = np.random.default_rng(0).normal(size=(768, 8)).astype(np.float32)
+    fake_y = np.zeros(768, dtype=np.float32)
+    fake_y[::2] = 1.0
+
+    def _fake_loader():
+        return fake_x, fake_y, {"name": "pima_diabetes", "n_features": 8, "source": "openml:37"}
+
+    monkeypatch.setattr(rd, "load_pima_diabetes_raw", _fake_loader)
+    X, y, meta = get_dataset("pima_diabetes")
+    assert X.shape == (768, 8)
+    assert meta["name"] == "pima_diabetes"
+
+
+def test_prepare_pima_diabetes_splits_and_scales(monkeypatch):
+    import src.data.real_datasets as rd
+
+    rng = np.random.default_rng(42)
+    fake_x = rng.normal(size=(768, 8)).astype(np.float32)
+    fake_y = (fake_x[:, 0] > 0).astype(np.float32)
+    monkeypatch.setattr(
+        rd,
+        "load_pima_diabetes_raw",
+        lambda: (fake_x, fake_y, {"name": "pima_diabetes", "n_features": 8, "source": "openml:37"}),
+    )
+    X_train, X_test, y_train, y_test, meta = prepare_dataset(
+        "pima_diabetes",
+        random_state=42,
+        test_size=0.3,
+    )
+    assert len(X_train) + len(X_test) == 768
+    assert meta["scaled"] is True
+
+
 def test_scaler_fit_on_train_only_no_leakage():
     X, y, _ = load_breast_cancer_raw()
     X_train, X_test = X[:400], X[400:]

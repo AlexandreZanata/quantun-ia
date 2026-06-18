@@ -23,6 +23,8 @@ profiles:
 datasets:
   breast_cancer:
     kind: tabular
+  pima_diabetes:
+    kind: tabular
   wine_binary:
     kind: tabular
   iris_binary:
@@ -94,6 +96,8 @@ pairs:
     dataset: mnist_binary
   - model: hybrid_sandwich
     dataset: breast_cancer
+  - model: hybrid_sandwich
+    dataset: pima_diabetes
   - model: transformer_mini
     dataset: sequential_binary
   - model: transformer_mini

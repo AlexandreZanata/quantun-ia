@@ -80,7 +80,7 @@ def train_model_adaptive(
     if seed is not None:
         set_global_seed(seed)
 
-    dev = resolve_device(device)
+    dev = resolve_device(device, model=model)
     model = model.to(dev)
     X = X.to(dev)
     y = y.to(dev)

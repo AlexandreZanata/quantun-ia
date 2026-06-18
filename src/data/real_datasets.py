@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -10,6 +11,39 @@ from torchvision import datasets
 
 from src.data.scaling import pca_train_test, scale_train_test
 from src.data.splits import split_train_test
+
+
+def load_pima_diabetes_raw() -> tuple[np.ndarray, np.ndarray, dict[str, Any]]:
+    """Pima Indians Diabetes (OpenML id=37) — 768 samples, 8 features, binary outcome."""
+    from sklearn.datasets import fetch_openml
+
+    data_home = Path(__file__).resolve().parents[2] / "data" / "raw" / "openml"
+    data_home.mkdir(parents=True, exist_ok=True)
+    bunch = fetch_openml(
+        data_id=37,
+        as_frame=False,
+        parser="auto",
+        data_home=str(data_home),
+    )
+    X = np.asarray(bunch.data, dtype=np.float32)
+    y_raw = np.asarray(bunch.target)
+    if y_raw.dtype == object or y_raw.dtype.kind in {"U", "O", "S"}:
+        labels = {str(v).lower(): idx for idx, v in enumerate(np.unique(y_raw))}
+        positive_key = next(
+            (k for k in labels if "positive" in k or k in {"1", "true", "yes"}),
+            str(np.unique(y_raw)[-1]).lower(),
+        )
+        y = np.array([1.0 if str(v).lower() == positive_key else 0.0 for v in y_raw], dtype=np.float32)
+    else:
+        y = y_raw.astype(np.float32)
+        if set(np.unique(y)) - {0.0, 1.0}:
+            y = (y > 0).astype(np.float32)
+    return X, y, {
+        "name": "pima_diabetes",
+        "n_features": int(X.shape[1]),
+        "source": "openml:37",
+        "openml_id": 37,
+    }
 
 
 def load_breast_cancer_raw() -> tuple[np.ndarray, np.ndarray, dict[str, Any]]:

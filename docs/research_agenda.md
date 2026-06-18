@@ -26,6 +26,7 @@ This document is the **public** research roadmap. Every listed experiment has (o
 | **022** | [Nano quantum parity](../experiments/exp_022_nano_quantum_parity/hypothesis.md) | `hybrid_sandwich` beats parameter-matched classical MLP on UCI tabular (≥2 pp, Holm-significant) | **Inconclusive** — publication 10-seed: +0.5/+1.3 pp, p≥0.125 |
 | **023** | [Encoding × backend interaction](../experiments/exp_023_encoding_backend/hypothesis.md) | Amplitude vs angle encoding parity holds across backends on PCA-MNIST | **Partial** — angle backend parity accepted; amplitude_lightning failed all seeds |
 | **024** | [QuantumNano-BC flagship](../experiments/exp_024_quantum_nano_bc/hypothesis.md) | Hybrid sandwich within 2 pp of logistic regression on full breast cancer | **Accepted (parity)** — Δ=−0.5 pp, 30 seeds; logistic 97.9%, hybrid 97.4% |
+| **025** | [Pima generalization](../experiments/exp_025_pima_generalization/hypothesis.md) | exp_024 parity extends to Pima Indians Diabetes (OpenML id=37) | **Shipped** — CI smoke + MicroQML Bench task |
 | 024 | Gradient diagnostic parity (planned) | Epoch-1 gradient norms agree within 10% across backends for 4q/2l ansatz | Planned |
 
 **Exit criteria:** exp_021 `results.md` with multi-seed verdict; backends logged in every JSONL line; OSF pre-registration filed before publication-profile runs.

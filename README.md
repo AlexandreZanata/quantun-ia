@@ -78,6 +78,7 @@ Results append to `logs/experiments.jsonl` (never delete — append only).
 | 022 | Nano Quantum Parity | Hybrid sandwich vs param-matched classical on UCI tabular |
 | 023 | Encoding × Backend | Angle vs amplitude × backends on PCA-MNIST |
 | 024 | QuantumNano-BC | Flagship hybrid sandwich vs clinical baselines on breast cancer |
+| 025 | Pima Generalization | Cross-dataset parity test on Pima Indians Diabetes |
 
 See [Experiments](docs/experiments.md) and [MicroQML Bench](docs/microqml_bench.md) for full details.
 
@@ -163,7 +164,7 @@ Paper draft skeleton: `paper/main.tex`.
 | Doc | Description |
 |-----|-------------|
 | [Getting Started](docs/getting-started.md) | Full setup, Makefile, workflow |
-| [Experiments](docs/experiments.md) | All 23 experiments + ablations |
+| [Experiments](docs/experiments.md) | All 25 experiments + ablations |
 | [Nano Trainer](docs/nanotrainer.md) | CLI + Streamlit mini training app |
 | [API](docs/api.md) | REST API + benchmark PWA |
 | [Literature Review](docs/literature_review.md) | Phase 4 research context |

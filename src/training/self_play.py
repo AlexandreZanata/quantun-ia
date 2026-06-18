@@ -9,7 +9,7 @@ import torch
 import torch.nn as nn
 
 from src.training.structured_log import log_event
-from src.training.trainer import evaluate, fine_tune
+from src.training.trainer import evaluate, fine_tune, predict
 
 
 def select_hard_subset(
@@ -25,9 +25,10 @@ def select_hard_subset(
     model.eval()
 
     with torch.no_grad():
-        pred = model(X_t)
-        per_sample_loss = nn.BCELoss(reduction="none")(pred, y_t)
-        wrong = (pred > 0.5) != y_t.bool()
+        pred = predict(model, X_t)
+        y_eval = y_t.to(pred.device)
+        per_sample_loss = nn.BCELoss(reduction="none")(pred, y_eval)
+        wrong = (pred > 0.5) != y_eval.bool()
 
     wrong_idx = wrong.nonzero(as_tuple=True)[0].cpu().numpy()
     if len(wrong_idx) == 0:

@@ -12,6 +12,7 @@ from src.data.splits import split_train_test
 
 REAL_LOADERS = {
     "breast_cancer": real_datasets.load_breast_cancer_raw,
+    "pima_diabetes": real_datasets.load_pima_diabetes_raw,
     "wine_binary": real_datasets.load_wine_binary_raw,
     "iris_binary": real_datasets.load_iris_binary_raw,
 }

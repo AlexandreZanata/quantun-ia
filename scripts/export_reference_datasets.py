@@ -77,9 +77,30 @@ def export_circles(out_dir: Path = DEFAULT_OUT, *, n_samples: int = 500, noise: 
     return _write_csv_bundle(out_dir, "circles", features, labels, metadata)
 
 
+def export_pima_diabetes(out_dir: Path = DEFAULT_OUT) -> Path:
+    """Export Pima Indians Diabetes (OpenML id=37) features and binary labels."""
+    features, labels, meta = get_dataset("pima_diabetes", random_state=42)
+    metadata = {
+        "dataset": "pima_diabetes",
+        "source": "openml:37",
+        "license": "CC BY 4.0 (UCI / OpenML)",
+        "n_samples": int(features.shape[0]),
+        "n_features": int(features.shape[1]),
+        "label_meaning": "0=negative, 1=positive diabetes test",
+        "preprocessing": "raw features — split and scale in experiment code only",
+        "citation": "Pima Indians Diabetes Database — UCI ML Repository / OpenML id=37",
+        **meta,
+    }
+    return _write_csv_bundle(out_dir, "pima_diabetes", features, labels, metadata)
+
+
 def export_all(out_dir: Path = DEFAULT_OUT) -> list[Path]:
     """Export all reference datasets for Zenodo bundles."""
-    return [export_breast_cancer(out_dir), export_circles(out_dir)]
+    return [
+        export_breast_cancer(out_dir),
+        export_pima_diabetes(out_dir),
+        export_circles(out_dir),
+    ]
 
 
 def main() -> int:

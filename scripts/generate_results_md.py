@@ -112,6 +112,15 @@ EXP_META: dict[str, dict[str, str]] = {
             "and parameter-matched classical on Wisconsin Breast Cancer."
         ),
     },
+    "exp_025": {
+        "dir": "exp_025_pima_generalization",
+        "title": "EXP 025 (Pima Generalization)",
+        "dataset": "pima_diabetes (OpenML id=37), full 768 samples, 30% holdout",
+        "conclusion": (
+            "Cross-dataset generalization: hybrid sandwich vs logistic regression and "
+            "XGBoost on Pima Indians Diabetes."
+        ),
+    },
 }
 
 

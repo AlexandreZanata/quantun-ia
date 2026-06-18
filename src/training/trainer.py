@@ -35,7 +35,7 @@ def train_model(
     if seed is not None:
         set_global_seed(seed)
 
-    dev = resolve_device(device)
+    dev = resolve_device(device, model=model)
     model = model.to(dev)
     X = X.to(dev)
     y = y.to(dev)
@@ -145,13 +145,24 @@ def train_model(
     return log
 
 
+def _tensor_device(model: nn.Module) -> torch.device:
+    try:
+        return next(model.parameters()).device
+    except StopIteration:
+        return torch.device("cpu")
+
+
 def predict(model: nn.Module, X: torch.Tensor) -> torch.Tensor:
     model.eval()
+    X = X.to(_tensor_device(model))
     with torch.no_grad():
         return model(X)
 
 
 def evaluate(model: nn.Module, X: torch.Tensor, y: torch.Tensor) -> dict:
+    dev = _tensor_device(model)
+    X = X.to(dev)
+    y = y.to(dev)
     model.eval()
     with torch.no_grad():
         pred = model(X)
@@ -172,7 +183,7 @@ def fine_tune(
     if seed is not None:
         set_global_seed(seed)
 
-    dev = resolve_device(device)
+    dev = resolve_device(device, model=model)
     model = model.to(dev)
     X, y = X.to(dev), y.to(dev)
 
