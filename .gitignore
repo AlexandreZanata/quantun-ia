@@ -25,5 +25,10 @@ data/*.db
 figures/
 dist/
 paper/tables/exp_test_holdout.tex
+paper/main.aux
+paper/main.bbl
+paper/main.blg
+paper/main.out
+paper/main.pdf
 .DS_Store
 *.log
