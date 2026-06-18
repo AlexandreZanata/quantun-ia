@@ -701,3 +701,33 @@ experiments:
           - 6018
           - 6019
           - 6020
+
+  exp_031_curriculum_clinical:
+    description: "Clinical curriculum ablation — margin_batches vs random on breast cancer"
+    exp_id: exp_031
+    dataset: breast_cancer
+    curriculum_stages: 4
+    epochs_per_stage: 12
+    refine_epochs: 12
+    learnability_threshold: 0.90
+    min_advantage_pp: 0.0
+    n_qubits: 4
+    n_layers: 2
+    learning_rate: 0.02
+    model_configs:
+      hybrid_sandwich:
+        learning_rate: 0.02
+        n_qubits: 4
+        n_layers: 2
+        reupload: true
+    profile_overrides:
+      ci:
+        seeds: [42, 123, 456]
+        curriculum_stages: 2
+        epochs_per_stage: 4
+        refine_epochs: 4
+        learnability_threshold: 0.55
+        min_advantage_pp: -5.0
+      publication:
+        seeds: [42, 123, 456, 789, 1024, 1337, 2048, 3001, 4096, 5000]
+        min_advantage_pp: 0.0
