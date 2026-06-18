@@ -731,3 +731,33 @@ experiments:
       publication:
         seeds: [42, 123, 456, 789, 1024, 1337, 2048, 3001, 4096, 5000]
         min_advantage_pp: 0.0
+
+  exp_032_large_nano_higgs:
+    description: "LargeNanoMLP ~1.2M params on HIGGS — val AUC vs logistic baseline"
+    exp_id: exp_032
+    dataset_id: higgs_v1
+    seed: 42
+    hidden1: 2048
+    hidden2: 512
+    hidden3: 64
+    dropout: 0.3
+    batch_size: 2048
+    learning_rate: 0.001
+    weight_decay: 0.0001
+    min_params: 1000000
+    min_auc_advantage_pp: 1.0
+    save_checkpoints: false
+    profile_overrides:
+      ci:
+        n_train_rows: 50000
+        n_val_rows: 10000
+        epochs: 5
+        batch_size: 1024
+        min_auc_advantage_pp: 0.0
+      publication:
+        n_train_rows: 0
+        n_val_rows: 0
+        epochs: 12
+        batch_size: 2048
+        min_auc_advantage_pp: 1.0
+        save_checkpoints: true
