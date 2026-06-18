@@ -8,6 +8,7 @@ from pathlib import Path
 import torch
 
 from src.classical.large_nano_mlp import LargeNanoMLP
+from src.quantum.large_nano_hybrid import LargeNanoHybrid
 from src.data.open_parquet import load_open_parquet_splits
 from src.training.checkpoints import (
     checkpoint_path,
@@ -26,6 +27,9 @@ DEFAULT_SERVE_EXP_ID = "exp_032"
 DEFAULT_SERVE_MODEL = "large_nano_mlp"
 DEFAULT_SERVE_DATASET = "higgs_v1"
 DEFAULT_SERVE_SEED = 42
+
+DEFAULT_HYBRID_SERVE_EXP_ID = "exp_037"
+DEFAULT_HYBRID_SERVE_MODEL = "large_nano_hybrid"
 
 
 def open_dataset_feature_count(dataset_id: str) -> int:
@@ -115,6 +119,122 @@ def publish_large_nano_serve_artifact(
     save_checkpoint(model, target_dir, config=config, metadata=metadata)
     save_scaler(scaler, target_dir)
     return target_dir
+
+
+def _hybrid_arch_from_state_dict(state_dict: dict[str, torch.Tensor]) -> dict[str, int | bool]:
+    return {
+        "hidden1": int(state_dict["backbone.0.weight"].shape[0]),
+        "hidden2": int(state_dict["backbone.3.weight"].shape[0]),
+        "hidden3": int(state_dict["backbone.6.weight"].shape[0]),
+        "n_qubits": int(state_dict["head_proj.weight"].shape[0]),
+    }
+
+
+def build_large_nano_hybrid_for_inference(
+    state_dict: dict,
+    *,
+    n_features: int,
+    config: dict | None = None,
+) -> LargeNanoHybrid:
+    """Reconstruct hybrid model architecture from checkpoint weights for serve inference."""
+    cfg = {**_hybrid_arch_from_state_dict(state_dict), **(config or {})}
+    model = LargeNanoHybrid(
+        input_dim=n_features,
+        hidden1=int(cfg.get("hidden1", 2048)),
+        hidden2=int(cfg.get("hidden2", 512)),
+        hidden3=int(cfg.get("hidden3", 64)),
+        dropout=float(cfg.get("dropout", 0.3)),
+        n_qubits=int(cfg.get("n_qubits", 4)),
+        n_layers=int(cfg.get("n_layers", 2)),
+        reupload=bool(cfg.get("reupload", True)),
+        backbone_device="cuda" if _serve_uses_cuda_backbone() else "cpu",
+    )
+    model.load_state_dict(state_dict)
+    model.freeze_backbone()
+    return model
+
+
+def _serve_uses_cuda_backbone() -> bool:
+    import os
+
+    import torch
+
+    return os.environ.get("QML_DEVICE", "cpu").lower() == "cuda" and torch.cuda.is_available()
+
+
+def publish_large_nano_hybrid_serve_artifact(
+    root: Path,
+    *,
+    exp_id: str = DEFAULT_HYBRID_SERVE_EXP_ID,
+    model_name: str = DEFAULT_HYBRID_SERVE_MODEL,
+    dataset_id: str = DEFAULT_SERVE_DATASET,
+    seed: int = DEFAULT_SERVE_SEED,
+) -> Path:
+    """Publish hybrid nanotrainer checkpoint + scaler for API/batch/chatbot."""
+    source_dir = checkpoint_path(exp_id, model_name, seed)
+    weights_path = source_dir / "best.pt"
+    if not weights_path.is_file():
+        msg = f"hybrid training checkpoint missing: {weights_path}"
+        raise FileNotFoundError(msg)
+
+    n_features = open_dataset_feature_count(dataset_id)
+    x_train, _, _, _, _, _, scaler = load_open_parquet_splits(
+        dataset_id,
+        root,
+        random_state=seed,
+    )
+    if int(x_train.shape[1]) != n_features:
+        msg = f"expected {n_features} features, got {x_train.shape[1]}"
+        raise ValueError(msg)
+
+    payload = json.loads((source_dir / "config.json").read_text(encoding="utf-8"))
+    train_config = dict(payload.get("config", {}))
+    metadata = dict(payload.get("metadata", {}))
+    metadata["serve_published"] = True
+
+    state_dict = torch.load(weights_path, map_location="cpu", weights_only=True)
+    arch = _hybrid_arch_from_state_dict(state_dict)
+    model = build_large_nano_hybrid_for_inference(
+        state_dict,
+        n_features=n_features,
+        config=train_config,
+    )
+
+    serve_config = {
+        **train_config,
+        **arch,
+        "input_dim": n_features,
+        "dataset_id": dataset_id,
+        "dropout": float(train_config.get("dropout", 0.3)),
+        "n_layers": int(train_config.get("n_layers", 2)),
+        "reupload": bool(train_config.get("reupload", True)),
+    }
+
+    target_dir = resolve_checkpoint_dir(exp_id, model_name, dataset_id, seed=seed)
+    save_checkpoint(model, target_dir, config=serve_config, metadata=metadata)
+    save_scaler(scaler, target_dir)
+    return target_dir
+
+
+def ensure_large_nano_hybrid_serve_artifact(
+    root: Path,
+    *,
+    exp_id: str = DEFAULT_HYBRID_SERVE_EXP_ID,
+    model_name: str = DEFAULT_HYBRID_SERVE_MODEL,
+    dataset_id: str = DEFAULT_SERVE_DATASET,
+    seed: int = DEFAULT_SERVE_SEED,
+) -> Path:
+    """Return hybrid serve checkpoint dir, publishing from exp_037 weights if needed."""
+    target_dir = resolve_checkpoint_dir(exp_id, model_name, dataset_id, seed=seed)
+    if (target_dir / "best.pt").is_file() and (target_dir / "scaler.joblib").is_file():
+        return target_dir
+    return publish_large_nano_hybrid_serve_artifact(
+        root,
+        exp_id=exp_id,
+        model_name=model_name,
+        dataset_id=dataset_id,
+        seed=seed,
+    )
 
 
 def ensure_large_nano_serve_artifact(

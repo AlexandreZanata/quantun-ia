@@ -124,6 +124,15 @@ def build_model(
     if name == "large_nano_hybrid":
         from src.quantum.large_nano_hybrid import LargeNanoHybrid
 
+        import os
+
+        import torch
+
+        bb_device = (
+            "cuda"
+            if os.environ.get("QML_DEVICE", "cpu").lower() == "cuda" and torch.cuda.is_available()
+            else "cpu"
+        )
         return (
             LargeNanoHybrid(
                 input_dim=input_dim,
@@ -134,6 +143,7 @@ def build_model(
                 n_qubits=int(mc.get("n_qubits", 4)),
                 n_layers=int(mc.get("n_layers", 2)),
                 reupload=bool(mc.get("reupload", True)),
+                backbone_device=bb_device,
             ),
             lr,
         )

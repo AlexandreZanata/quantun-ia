@@ -885,3 +885,17 @@ experiments:
         batch_size: 512
         min_vs_classical_pp: -1.0
         save_checkpoints: true
+
+  exp_038_hybrid_serve_parity:
+    description: "LargeNanoHybrid serve parity — batch vs API vs chatbot on HIGGS holdout"
+    exp_id: exp_038
+    checkpoint_exp_id: exp_037
+    model_name: large_nano_hybrid
+    dataset_id: higgs_v1
+    seed: 42
+    chunk_size: 256
+    profile_overrides:
+      ci:
+        n_rows: 500
+      publication:
+        n_rows: 10000

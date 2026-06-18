@@ -58,8 +58,17 @@ def execute(dto: PredictNanomodelDTO) -> Result[PredictNanomodelResult, PredictN
             )
         )
 
-    model, _ = build_model(dto.model_name, input_dim=input_dim)
-    model.load_state_dict(bundle.state_dict)
+    if dto.model_name == "large_nano_hybrid":
+        from src.application.open_serve import build_large_nano_hybrid_for_inference
+
+        model = build_large_nano_hybrid_for_inference(
+            bundle.state_dict,
+            n_features=input_dim,
+            config=bundle.config,
+        )
+    else:
+        model, _ = build_model(dto.model_name, input_dim=input_dim)
+        model.load_state_dict(bundle.state_dict)
     dev = resolve_device(None, model=model)
     model = model.to(dev)
 
