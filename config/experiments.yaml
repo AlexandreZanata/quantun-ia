@@ -644,3 +644,60 @@ experiments:
       publication:
         n_rows: 569
         epochs: 30
+
+  exp_030_publication_large:
+    description: "30-seed hybrid scale stability on circles n=1000 vs 10-seed reference"
+    exp_id: exp_030
+    dataset: circles
+    noise: 0.2
+    parity_max_delta_pp: 2.0
+    reference_seeds: 10
+    min_seed_accuracy: 0.45
+    model_configs:
+      hybrid_sandwich:
+        learning_rate: 0.02
+        n_qubits: 4
+        n_layers: 2
+        reupload: true
+    profile_overrides:
+      ci:
+        n_samples: 100
+        seeds: [42, 123, 456]
+        epochs: 12
+        reference_seeds: 2
+        min_seed_accuracy: 0.35
+        parity_max_delta_pp: 5.0
+      publication_large:
+        n_samples: 1000
+        epochs: 50
+        seeds:
+          - 42
+          - 123
+          - 456
+          - 789
+          - 1024
+          - 1337
+          - 2048
+          - 3001
+          - 4096
+          - 5000
+          - 6001
+          - 6002
+          - 6003
+          - 6004
+          - 6005
+          - 6006
+          - 6007
+          - 6008
+          - 6009
+          - 6010
+          - 6011
+          - 6012
+          - 6013
+          - 6014
+          - 6015
+          - 6016
+          - 6017
+          - 6018
+          - 6019
+          - 6020
