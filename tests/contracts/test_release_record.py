@@ -6,16 +6,21 @@ from pathlib import Path
 
 import yaml
 
-RELEASE_RECORD = Path("docs/releases/v0.9.16.md")
+RELEASE_RECORD_V0916 = Path("docs/releases/v0.9.16.md")
+RELEASE_RECORD_V0922 = Path("docs/releases/v0.9.22.md")
 CITATION_LOOP = Path("docs/citation_loop.md")
 
 
 def test_release_record_v0916_exists():
-    assert RELEASE_RECORD.is_file(), "missing docs/releases/v0.9.16.md"
+    assert RELEASE_RECORD_V0916.is_file(), "missing docs/releases/v0.9.16.md"
+
+
+def test_release_record_v0922_exists():
+    assert RELEASE_RECORD_V0922.is_file(), "missing docs/releases/v0.9.22.md"
 
 
 def test_release_record_documents_tag_and_bundle():
-    text = RELEASE_RECORD.read_text(encoding="utf-8")
+    text = RELEASE_RECORD_V0916.read_text(encoding="utf-8")
     assert "v0.9.16" in text
     assert "git tag" in text
     assert "citation-ready-full" in text or "make release" in text

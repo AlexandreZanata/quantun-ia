@@ -8,6 +8,7 @@ build/
 .mypy_cache/
 .ipynb_checkpoints/
 logs/experiments.jsonl
+logs/hpo_results.jsonl
 .local/
 mlruns/
 mlflow.db
