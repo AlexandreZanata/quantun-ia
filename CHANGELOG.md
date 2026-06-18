@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-06-18
+
+### Added
+
+- **Continuous training** — `src/training/champion.py`, `scripts/continuous_train.py`, `exp_027`
+- **Chatbot tool** — `src/application/chatbot_tool.py`, `exp_028` (10 golden dialogues)
+- **Batch scoring** — `src/application/batch_predict.py`, `scripts/batch_predict.py`, `exp_029`
+- **Scale monitoring** — `exp_030` publication_large 30-seed stability gate
+- **Clinical curriculum** — `exp_031` margin_batches vs random on breast cancer
+- `make phase-v1.1.0-preflight` — RTX 4060 gate before v1.1.0 tag
+- `docs/releases/v1.1.0.md` — release evidence for Phases F–J
+
+### Changed
+
+- Version **1.1.0** — continuous training + chatbot + batch application tracks
+- `make check-real` expanded to **12/12** real GPU tests on RTX 4060
+- `config/nanotrainer.yaml` — `publication_large` profile for weekly challenger runs
+
 ## [1.0.0] - 2026-06-18
 
 ### Added

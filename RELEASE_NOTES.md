@@ -1,12 +1,13 @@
-# Release v1.0.0 — QuantumNano-BC Real Application
+# Release v1.1.0 — Continuous Training & Application Tracks
 
 ## Highlights
 
-- **Real GPU gate** — `make check-real` on RTX 4060 (7 tests)
-- **Train + infer** — `hybrid_sandwich` checkpoint, scaler, `POST /api/v1/predictions`
-- **CLI demo** — `make train-ship` trains on full breast cancer and scores sample rows
-- **Scientific parity** — exp_024/025/026 validated on real clinical tabular data
-- **Open science** — `make phase-d-preflight` builds release bundle + arXiv sources
+- **Continuous retrain** — `exp_027` champion/challenger gate, `make continuous-train`
+- **Chatbot integration** — `exp_028` tool adapter vs API (10 dialogues, max |Δp| < 1e-5)
+- **Batch pipeline** — `exp_029` batch script vs API on 569-row holdout
+- **Scale gate** — `exp_030` 30-seed hybrid stability on circles n=1000
+- **Curriculum ablation** — `exp_031` margin curriculum vs random on breast cancer
+- **Real GPU gate** — `make check-real` (12 tests) on RTX 4060
 
 ## Validation (RTX 4060)
 
@@ -14,17 +15,18 @@
 source .venv/bin/activate
 make health-gpu
 QML_DEVICE=cuda MLFLOW_DISABLE=1 make check-real
-QML_DEVICE=cuda MLFLOW_DISABLE=1 make train-ship
+QML_DEVICE=cuda MLFLOW_DISABLE=1 make phase-v1.1.0-preflight
 ```
 
 ## Tag
 
 ```bash
-git tag v1.0.0
-git push origin v1.0.0
+git tag v1.1.0
+git push origin v1.1.0
 ```
 
 ## Previous releases
 
+- [v1.0.0](docs/releases/v1.0.0.md) — real application stack (train + infer)
 - [v1.0.0-rc1](docs/releases/v1.0.0-rc1.md) — open-science preflight (Phase D)
 - [CHANGELOG.md](CHANGELOG.md) — full history from v0.9.x

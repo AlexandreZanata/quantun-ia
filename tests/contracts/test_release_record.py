@@ -10,6 +10,7 @@ RELEASE_RECORD_V0916 = Path("docs/releases/v0.9.16.md")
 RELEASE_RECORD_V0922 = Path("docs/releases/v0.9.22.md")
 RELEASE_RECORD_V100RC1 = Path("docs/releases/v1.0.0-rc1.md")
 RELEASE_RECORD_V100 = Path("docs/releases/v1.0.0.md")
+RELEASE_RECORD_V110 = Path("docs/releases/v1.1.0.md")
 CITATION_LOOP = Path("docs/citation_loop.md")
 
 
@@ -27,6 +28,17 @@ def test_release_record_v100rc1_exists():
 
 def test_release_record_v100_exists():
     assert RELEASE_RECORD_V100.is_file(), "missing docs/releases/v1.0.0.md"
+
+
+def test_release_record_v110_exists():
+    assert RELEASE_RECORD_V110.is_file(), "missing docs/releases/v1.1.0.md"
+
+
+def test_release_record_v110_documents_application_tracks():
+    text = RELEASE_RECORD_V110.read_text(encoding="utf-8")
+    assert "v1.1.0" in text
+    assert "exp_027" in text or "continuous" in text.lower()
+    assert "RTX 4060" in text
 
 
 def test_release_record_v100_documents_stable_release():
