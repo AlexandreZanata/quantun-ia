@@ -109,6 +109,12 @@ phase-d-preflight: check-real citation-ready-full open-science-preflight publish
 	@echo "Next: git tag v1.0.0-rc1 && git push origin v1.0.0-rc1"
 	@echo "Then: make finalize-citation DOI=10.5281/zenodo.XXXXXXX [ARXIV_ID=2606.XXXXX]"
 
+train-ship:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) scripts/demo_predict.py --profile publication --epochs 30 --rows 5
+
+demo-predict:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) scripts/demo_predict.py --profile mini --epochs 12 --rows 3
+
 api:
 	MLFLOW_DISABLE=1 $(PYTHON) -m scripts.api_server --host 127.0.0.1 --port 8000
 

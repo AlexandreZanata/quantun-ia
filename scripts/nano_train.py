@@ -24,6 +24,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--epochs", type=int, default=None)
     parser.add_argument("--seed", type=int, default=None)
     parser.add_argument("--exp-id", default="nano_train", dest="exp_id")
+    parser.add_argument("--save-checkpoints", action="store_true", dest="save_checkpoints")
     parser.add_argument("--json", action="store_true", help="Print machine-readable JSON summary")
     args = parser.parse_args(argv)
 
@@ -36,6 +37,7 @@ def main(argv: list[str] | None = None) -> int:
         epochs=args.epochs,
         seed=args.seed,
         exp_id=args.exp_id,
+        save_checkpoints=args.save_checkpoints,
     )
     result = execute(dto)
 
@@ -56,6 +58,7 @@ def main(argv: list[str] | None = None) -> int:
         "elapsed_s": r.elapsed_s,
         "n_params": r.n_params,
         "n_epochs": r.n_epochs,
+        "checkpoint_path": r.checkpoint_path,
     }
     if args.json:
         print(json.dumps(payload))
@@ -64,6 +67,8 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Loss: {r.loss:.4f}")
         print(f"Elapsed: {r.elapsed_s}s | Params: {r.n_params} | Epochs: {r.n_epochs}")
         print(f"Logged to logs/experiments.jsonl (exp_id={r.exp_id})")
+        if r.checkpoint_path:
+            print(f"Checkpoint: {r.checkpoint_path}")
     return 0
 
 

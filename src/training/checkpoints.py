@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
@@ -10,6 +11,15 @@ import torch
 import torch.nn as nn
 
 ARTIFACTS_ROOT = Path("artifacts")
+SCALER_FILENAME = "scaler.joblib"
+
+
+@dataclass(frozen=True)
+class CheckpointBundle:
+    directory: Path
+    config: dict[str, Any]
+    metadata: dict[str, Any]
+    state_dict: dict[str, Any]
 
 
 def checkpoint_path(exp_id: str, model_name: str, seed: int | None) -> Path:
@@ -67,3 +77,57 @@ def save_best_checkpoint(
         metadata=metadata or {"metric_value": metric_value},
     )
     return metric_value, path
+
+
+def save_scaler(scaler: Any, directory: Path) -> Path:
+    """Persist sklearn StandardScaler for inference on raw features."""
+    import joblib
+
+    directory.mkdir(parents=True, exist_ok=True)
+    path = directory / SCALER_FILENAME
+    joblib.dump(scaler, path)
+    return path
+
+
+def load_scaler(directory: Path) -> Any:
+    import joblib
+
+    path = directory / SCALER_FILENAME
+    if not path.is_file():
+        raise FileNotFoundError(f"scaler not found: {path}")
+    return joblib.load(path)
+
+
+def resolve_checkpoint_dir(
+    exp_id: str,
+    model_name: str,
+    dataset: str,
+    *,
+    seed: int,
+) -> Path:
+    """Return checkpoint directory for nanotrainer naming convention."""
+    return checkpoint_path(exp_id, f"{model_name}_{dataset}", seed)
+
+
+def load_checkpoint_bundle(
+    exp_id: str,
+    model_name: str,
+    dataset: str,
+    *,
+    seed: int,
+) -> CheckpointBundle:
+    """Load weights and metadata from a saved nanotrainer checkpoint."""
+    directory = resolve_checkpoint_dir(exp_id, model_name, dataset, seed=seed)
+    weights_path = directory / "best.pt"
+    config_path = directory / "config.json"
+    if not weights_path.is_file() or not config_path.is_file():
+        raise FileNotFoundError(f"checkpoint not found under {directory}")
+
+    payload = json.loads(config_path.read_text(encoding="utf-8"))
+    state_dict = torch.load(weights_path, map_location="cpu", weights_only=True)
+    return CheckpointBundle(
+        directory=directory,
+        config=payload.get("config", {}),
+        metadata=payload.get("metadata", {}),
+        state_dict=state_dict,
+    )

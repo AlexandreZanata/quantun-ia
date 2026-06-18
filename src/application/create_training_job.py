@@ -23,6 +23,7 @@ class CreateTrainingJobDTO:
     exp_id: str = "nano_train"
     device: str = "auto"
     async_mode: bool = False
+    save_checkpoints: bool = False
 
 
 class CreateTrainingJobError:
@@ -64,6 +65,6 @@ def execute(
     if dto.async_mode:
         return ok(job)
 
-    outcome = process_job(job, repo)
+    outcome = process_job(job, repo, save_checkpoints=dto.save_checkpoints)
     assert isinstance(outcome, Ok)
     return ok(outcome.value)

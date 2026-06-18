@@ -40,6 +40,8 @@ def _device_context(device: str):
 def execute(
     job: TrainingJob,
     repo: TrainingJobRepository,
+    *,
+    save_checkpoints: bool = False,
 ) -> Result[TrainingJob, ProcessTrainingJobError]:
     """Transition job to RUNNING, execute training, and persist terminal status."""
     if job.status not in {TrainingJobStatus.PENDING, TrainingJobStatus.RUNNING}:
@@ -57,6 +59,7 @@ def execute(
         epochs=job.epochs,
         seed=job.seed,
         exp_id=job.exp_id,
+        save_checkpoints=save_checkpoints,
     )
 
     os.environ.setdefault("MLFLOW_DISABLE", "1")
@@ -85,6 +88,7 @@ def execute(
         "n_epochs": result.n_epochs,
         "seed": result.seed,
         "device": job.device,
+        "checkpoint_path": result.checkpoint_path,
     }
     job.updated_at = _now()
     job.version += 1

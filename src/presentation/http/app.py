@@ -15,6 +15,8 @@ from fastapi.responses import PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 
 from dashboard.benchmark_data import load_records, to_leaderboard_rows
+from src.application.dto import PredictNanomodelDTO
+from src.application.predict_nanomodel import execute as predict_execute
 from src.application.create_training_job import CreateTrainingJobDTO
 from src.application.create_training_job import execute as create_job
 from src.application.issue_tokens import IssueTokensDTO
@@ -37,6 +39,8 @@ from src.presentation.http.schemas import (
     IssueTokenRequest,
     LeaderboardResponse,
     LeaderboardRowResponse,
+    PredictRequest,
+    PredictResponse,
     RefreshTokenRequest,
     TokenPairResponse,
     TrainingJobResponse,
@@ -205,6 +209,7 @@ def create_app() -> FastAPI:
             exp_id=body.exp_id,
             device=body.device,
             async_mode=body.async_mode,
+            save_checkpoints=body.save_checkpoints,
         )
         os.environ.setdefault("MLFLOW_DISABLE", "1")
         outcome = create_job(dto, repo)
@@ -231,6 +236,40 @@ def create_app() -> FastAPI:
         if job is None:
             raise HTTPException(status_code=404, detail="Training job not found")
         return _job_to_response(job)
+
+    @app.post("/api/v1/predictions", response_model=PredictResponse)
+    def post_predictions(
+        body: PredictRequest,
+        tenant: TenantContext = Depends(resolve_tenant_context),
+    ) -> PredictResponse:
+        _ = tenant  # tenant scoping reserved for multi-tenant checkpoint registry
+        os.environ.setdefault("MLFLOW_DISABLE", "1")
+        outcome = predict_execute(
+            PredictNanomodelDTO(
+                exp_id=body.exp_id,
+                model_name=body.model_name,
+                dataset=body.dataset,
+                seed=body.seed,
+                features=body.features,
+            )
+        )
+        if isinstance(outcome, Fail):
+            status = 404 if outcome.error.code == "CHECKPOINT_NOT_FOUND" else 422
+            raise HTTPException(
+                status_code=status,
+                detail={"code": outcome.error.code, "message": outcome.error.message},
+            )
+        assert isinstance(outcome, Ok)
+        result = outcome.value
+        return PredictResponse(
+            exp_id=result.exp_id,
+            model_name=result.model_name,
+            dataset=result.dataset,
+            seed=result.seed,
+            probabilities=result.probabilities,
+            labels=result.labels,
+            checkpoint_path=result.checkpoint_path,
+        )
 
     @app.get("/api/v1/benchmarks/leaderboard", response_model=LeaderboardResponse)
     def get_leaderboard() -> LeaderboardResponse:

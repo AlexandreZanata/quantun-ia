@@ -29,7 +29,29 @@ class TrainNanomodelResult:
     elapsed_s: float
     n_params: int
     n_epochs: int
+    checkpoint_path: str | None = None
     record_source: str = field(default="nanotrainer")
+
+
+@dataclass(frozen=True)
+class PredictNanomodelDTO:
+    exp_id: str
+    model_name: str
+    dataset: str
+    seed: int
+    features: list[list[float]]
+
+
+@dataclass(frozen=True)
+class PredictNanomodelResult:
+    exp_id: str
+    model_name: str
+    dataset: str
+    seed: int
+    probabilities: list[float]
+    labels: list[int]
+    checkpoint_path: str
+    record_source: str = field(default="nanotrainer_predict")
 
 
 @dataclass(frozen=True)

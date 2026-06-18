@@ -16,6 +16,7 @@ from src.data.dataset_registry import prepare_dataset
 from src.shared.result import Result, fail, ok
 from src.training.holdout import train_with_holdout
 from src.training.structured_log import init_correlation_id, log_event, set_experiment_context
+from src.training.checkpoints import resolve_checkpoint_dir, save_scaler
 from src.training.trainer import count_parameters
 
 
@@ -117,6 +118,34 @@ def execute(dto: TrainNanomodelDTO) -> Result[TrainNanomodelResult, TrainNanomod
     )
     elapsed = time.perf_counter() - t0
 
+    checkpoint_path_str: str | None = None
+    if save_checkpoints and kind == "tabular":
+        ckpt_dir = resolve_checkpoint_dir(
+            dto.exp_id,
+            dto.model_name,
+            dto.dataset,
+            seed=seed,
+        )
+        if ckpt_dir.is_dir() and (ckpt_dir / "best.pt").is_file():
+            scaler = meta.get("scaler")
+            if scaler is not None:
+                save_scaler(scaler, ckpt_dir)
+            config_path = ckpt_dir / "config.json"
+            if config_path.is_file():
+                import json
+
+                payload = json.loads(config_path.read_text(encoding="utf-8"))
+                payload.setdefault("config", {})
+                payload["config"].update(
+                    {
+                        "model_name": dto.model_name,
+                        "dataset": dto.dataset,
+                        "input_dim": int(X_train.shape[1]),
+                    }
+                )
+                config_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+            checkpoint_path_str = str(ckpt_dir)
+
     result = TrainNanomodelResult(
         exp_id=dto.exp_id,
         model_name=dto.model_name,
@@ -128,6 +157,7 @@ def execute(dto: TrainNanomodelDTO) -> Result[TrainNanomodelResult, TrainNanomod
         elapsed_s=round(elapsed, 3),
         n_params=count_parameters(model),
         n_epochs=epochs,
+        checkpoint_path=checkpoint_path_str,
     )
 
     log_event(

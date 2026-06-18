@@ -16,6 +16,25 @@ class CreateTrainingJobRequest(BaseModel):
     exp_id: str = "nano_train"
     device: str = Field(default="auto", pattern="^(auto|cpu|cuda)$")
     async_mode: bool = False
+    save_checkpoints: bool = False
+
+
+class PredictRequest(BaseModel):
+    exp_id: str = Field(..., min_length=1)
+    model_name: str = Field(..., min_length=1)
+    dataset: str = Field(..., min_length=1)
+    seed: int = Field(..., ge=0)
+    features: list[list[float]] = Field(..., min_length=1)
+
+
+class PredictResponse(BaseModel):
+    exp_id: str
+    model_name: str
+    dataset: str
+    seed: int
+    probabilities: list[float]
+    labels: list[int]
+    checkpoint_path: str
 
 
 class IssueTokenRequest(BaseModel):
