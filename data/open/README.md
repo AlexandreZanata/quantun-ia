@@ -13,7 +13,7 @@ This folder holds **reproducible, license-clear** datasets for large-scale nano 
 
 | ID | Path | Rows (target) | Features | License | Status |
 |----|------|---------------|----------|---------|--------|
-| `higgs_v1` | `higgs/processed/v1/` | 1,150,000 | 28 | CC0 (UCI) | run `make data-open-higgs` |
+| `higgs_v1` | `higgs/processed/v1/` | 1,150,000 | 28 | CC0 (UCI) | `ready` (DVC: `processed/v1.dvc`) |
 | `synthea_cv_risk_v1` | `synthea_cv_risk/processed/v1/` | 1,000,000 | ~40 | MIT (Synthea) | `pending` |
 
 See `manifest.json` for checksums and split counts once built.
@@ -28,8 +28,11 @@ All Phase L tabular sets follow `schemas/tabular_binary_v1.json`:
 ## Reproduce
 
 ```bash
-# Bootstrap (Tier A) — script landing in Phase L1
+# Bootstrap (Tier A)
 make data-open-higgs
+
+# L2 gate — manifest + checksums + schema + DVC pointer
+make data-open-verify
 
 # Clinical-aligned (Tier B) — after Synthea toolchain installed
 make data-open-synthea-cv

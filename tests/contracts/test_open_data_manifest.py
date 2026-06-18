@@ -9,6 +9,13 @@ import numpy as np
 import pandas as pd
 import pytest
 
+from src.data.open_manifest import (
+    dvc_pointer_path,
+    expected_feature_columns,
+    validate_open_data,
+    verify_stratified_balance,
+)
+
 ROOT = Path(__file__).resolve().parents[2]
 MANIFEST_PATH = ROOT / "data" / "open" / "manifest.json"
 SCHEMA_PATH = ROOT / "data" / "open" / "schemas" / "tabular_binary_v1.json"
@@ -105,3 +112,57 @@ def test_higgs_checksums_when_ready():
         assert key in checksums
         assert len(checksums[key]) == 64
         assert (processed / filename).is_file()
+
+
+def test_higgs_dvc_pointer_committed():
+    manifest = _load_manifest()
+    higgs = _dataset_by_id(manifest, "higgs_v1")
+    if not higgs.get("ready"):
+        pytest.skip("higgs_v1 not built yet (ready=false)")
+    pointer = dvc_pointer_path(ROOT, higgs)
+    assert pointer.is_file(), f"missing DVC pointer: {pointer}"
+
+
+def test_higgs_stats_stratified_balance():
+    manifest = _load_manifest()
+    higgs = _dataset_by_id(manifest, "higgs_v1")
+    if not higgs.get("ready"):
+        pytest.skip("higgs_v1 not built yet (ready=false)")
+    stats_path = ROOT / "data" / "open" / higgs["path"] / higgs["files"]["stats"]
+    if not stats_path.is_file():
+        pytest.skip(f"missing stats: {stats_path}")
+    stats = json.loads(stats_path.read_text(encoding="utf-8"))
+    errors = verify_stratified_balance(stats, tolerance=0.01)
+    assert errors == []
+
+
+def test_higgs_parquet_tabular_binary_contract():
+    manifest = _load_manifest()
+    higgs = _dataset_by_id(manifest, "higgs_v1")
+    if not higgs.get("ready"):
+        pytest.skip("higgs_v1 not built yet (ready=false)")
+    processed = ROOT / "data" / "open" / higgs["path"]
+    expected_cols = expected_feature_columns(higgs["n_features"]) + ["label"]
+    for split_name in ("train", "val", "test"):
+        parquet_path = processed / higgs["files"][split_name]
+        if not parquet_path.is_file():
+            pytest.skip(f"missing processed file: {parquet_path}")
+        frame = pd.read_parquet(parquet_path)
+        assert list(frame.columns) == expected_cols
+
+
+def test_open_data_l2_gate_passes_when_built():
+    manifest = _load_manifest()
+    higgs = _dataset_by_id(manifest, "higgs_v1")
+    if not higgs.get("ready"):
+        pytest.skip("higgs_v1 not built yet (ready=false)")
+    processed = ROOT / "data" / "open" / higgs["path"]
+    if not (processed / "train.parquet").is_file():
+        pytest.skip("processed parquet not present locally")
+    ok, issues = validate_open_data(ROOT)
+    assert ok, issues
+
+
+def test_data_open_verify_registered_in_makefile():
+    makefile = (ROOT / "Makefile").read_text(encoding="utf-8")
+    assert "data-open-verify" in makefile
