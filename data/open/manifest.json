@@ -1,0 +1,64 @@
+{
+  "schema_version": "1",
+  "project": "quantun-ia",
+  "phase": "L",
+  "updated_at": "2026-06-18",
+  "hardware_target": "NVIDIA RTX 4060 Laptop GPU (8 GB VRAM)",
+  "model_target_params": {
+    "min": 1000000,
+    "max": 2500000
+  },
+  "datasets": [
+    {
+      "id": "higgs_v1",
+      "path": "higgs/processed/v1",
+      "description": "UCI HIGGS subsample \u2014 stratified 1.15M rows, 28 features, binary label",
+      "license": "CC0-1.0",
+      "source_url": "https://archive.ics.uci.edu/ml/datasets/HIGGS",
+      "ready": true,
+      "row_counts": {
+        "total": 1150000,
+        "train": 805000,
+        "val": 172500,
+        "test": 172500
+      },
+      "n_features": 28,
+      "files": {
+        "train": "train.parquet",
+        "val": "val.parquet",
+        "test": "test.parquet",
+        "stats": "stats.json"
+      },
+      "checksums": {
+        "train": "04df0c5e39ce1d31907bf1b738cc70f7fee5da5e24356453f3ccc60fc6ea6e3d",
+        "val": "d353ee565759b1c38c89b1b115fa13afbf223acf0e923124390493f1aa4870e6",
+        "test": "1a8ca4ff8e73bb9502086aa04b78fbdc26b076d8e22c5854a942bf6efd4e14ea",
+        "stats": "f56b17a5d370c87323e9c18181607fd4b49421b8a2b9aff47d285a0d45272c3d"
+      },
+      "build_script": "scripts/build_open_higgs.py"
+    },
+    {
+      "id": "synthea_cv_risk_v1",
+      "path": "synthea_cv_risk/processed/v1",
+      "description": "Synthea synthetic cohort \u2014 12-month cardiovascular event risk, ~40 tabular features",
+      "license": "MIT",
+      "source_url": "https://github.com/synthetichealth/synthea",
+      "ready": false,
+      "row_counts": {
+        "total": 1000000,
+        "train": 700000,
+        "val": 150000,
+        "test": 150000
+      },
+      "n_features": 40,
+      "files": {
+        "train": "train.parquet",
+        "val": "val.parquet",
+        "test": "test.parquet",
+        "stats": "stats.json"
+      },
+      "checksums": {},
+      "build_script": "scripts/build_synthea_cv_risk.py"
+    }
+  ]
+}

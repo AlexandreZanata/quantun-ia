@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "quantun-ia tabular binary dataset v1",
+  "description": "Contract for Phase L open datasets — train, batch_predict, and API adapters",
+  "type": "object",
+  "required": ["feature_columns", "label_column", "dtype"],
+  "properties": {
+    "feature_columns": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^feature_[0-9]+$" },
+      "minItems": 1
+    },
+    "label_column": {
+      "type": "string",
+      "const": "label"
+    },
+    "label_values": {
+      "type": "array",
+      "items": { "type": "integer" },
+      "const": [0, 1]
+    },
+    "dtype": {
+      "type": "string",
+      "const": "float32"
+    },
+    "label_dtype": {
+      "type": "string",
+      "const": "int32"
+    },
+    "missing_values": {
+      "type": "string",
+      "const": "forbidden_after_export"
+    },
+    "split_files": {
+      "type": "object",
+      "required": ["train", "val", "test"],
+      "properties": {
+        "train": { "type": "string" },
+        "val": { "type": "string" },
+        "test": { "type": "string" }
+      }
+    }
+  },
+  "examples": [
+    {
+      "dataset_id": "higgs_v1",
+      "feature_columns": ["feature_0", "feature_1", "feature_27"],
+      "label_column": "label",
+      "n_features": 28
+    }
+  ]
+}

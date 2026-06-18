@@ -11,10 +11,15 @@ logs/experiments.jsonl
 logs/hpo_results.jsonl
 .local/
 mlruns/
+.dvc/cache/
+.dvc/tmp/
 mlflow.db
 artifacts/
 data/exports/
 data/raw/
+data/open/higgs/raw/
+data/open/higgs/processed/v1/
+data/open/synthea_cv_risk/processed/
 data/*.db
 figures/
 dist/

@@ -1,0 +1,41 @@
+# Open Datasets — quantun-ia (public)
+
+This folder holds **reproducible, license-clear** datasets for large-scale nano model training (Phase L).
+
+## Principles
+
+- **Licenses must allow redistribution** (or we ship DVC pointers + download scripts only).
+- **No PHI** — synthetic (Synthea) or non-clinical bootstrap (HIGGS) only in this phase.
+- **Raw features only** — scaling happens after train/val/test split in training code (same as breast cancer).
+- **Bulk artifacts** live under `*/processed/` and may be tracked with DVC — not committed as multi-GB blobs in git.
+
+## Datasets
+
+| ID | Path | Rows (target) | Features | License | Status |
+|----|------|---------------|----------|---------|--------|
+| `higgs_v1` | `higgs/processed/v1/` | 1,150,000 | 28 | CC0 (UCI) | run `make data-open-higgs` |
+| `synthea_cv_risk_v1` | `synthea_cv_risk/processed/v1/` | 1,000,000 | ~40 | MIT (Synthea) | `pending` |
+
+See `manifest.json` for checksums and split counts once built.
+
+## Schema
+
+All Phase L tabular sets follow `schemas/tabular_binary_v1.json`:
+
+- `feature_0 … feature_{N-1}` — float32, no NaN after export
+- `label` — int `{0, 1}`
+
+## Reproduce
+
+```bash
+# Bootstrap (Tier A) — script landing in Phase L1
+make data-open-higgs
+
+# Clinical-aligned (Tier B) — after Synthea toolchain installed
+make data-open-synthea-cv
+```
+
+## Citations
+
+- **HIGGS:** Baldi, P., Sadowski, P., Whiteson, D. (2014). Searching for Exotic Particles in High-Energy Physics with Deep Learning. *Nature Communications*. UCI ML Repository.
+- **Synthea:** Walonoski, J. et al. Synthea: An approach, method, and software mechanism for generating synthetic patients and the standard medical data of a comprehensive lifetime journey. *JAMIA* (2018).
