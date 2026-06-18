@@ -629,3 +629,18 @@ experiments:
         epochs: 12
       publication:
         epochs: 30
+
+  exp_029_batch_calc_parity:
+    description: "Batch predict script vs REST API on full breast cancer (569 rows)"
+    exp_id: exp_029
+    checkpoint_exp_id: quantum_nano_bc_app
+    seed: 42
+    max_delta: 1.0e-5
+    chunk_size: 64
+    profile_overrides:
+      ci:
+        n_rows: 50
+        epochs: 12
+      publication:
+        n_rows: 569
+        epochs: 30
