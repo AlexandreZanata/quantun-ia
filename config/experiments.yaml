@@ -406,6 +406,21 @@ experiments:
         qml_device: lightning.qubit
         learning_rate: 0.02
 
+  exp_019_nanotrainer_smoke:
+    description: "Infrastructure — Nano Trainer registry smoke (not a publication benchmark)"
+    exp_id: exp_019
+    infrastructure: true
+    profile: ci
+    uses_nanotrainer_config: true
+
+  exp_020_api_smoke:
+    description: "Infrastructure — REST API training job smoke (not a publication benchmark)"
+    exp_id: exp_020
+    infrastructure: true
+    profile: ci
+    api_model: perceptron
+    api_dataset: breast_cancer
+
   exp_022_nano_quantum_parity:
     description: "Hybrid sandwich quantum nanomodel vs parameter-matched classical on UCI tabular"
     exp_id: exp_022

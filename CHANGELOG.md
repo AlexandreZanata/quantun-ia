@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Phase 30 (foundation): **Zenodo reference dataset export** — `scripts/export_reference_datasets.py`, `make export-reference-datasets`
+- `experiments/exp_019_nanotrainer_smoke/results.md` and `exp_020_api_smoke/results.md` — infrastructure experiment documentation
+- `experiments/exp_023_encoding_backend/results.md` — publication-profile encoding×backend results
+- `config/experiments.yaml` entries for exp_019 and exp_020 (`infrastructure: true`)
+
+### Changed
+
+- `README.md` and `docs/experiments.md` — document experiments 019–023
+- `scripts/prepare_release.py` — bundles `reference_datasets/` and exp_023 results
+- `docs/research_agenda.md` — exp_023 status updated to partial publication result
+- `src/application/train_nanomodel.py` — use actual `X_train.shape[1]` for model input (fixes MNIST PCA)
+- `src/data/real_datasets.py` — `n_features` metadata after PCA reflects component count
+- `experiments/exp_023_encoding_backend/run.py` — skip paired comparisons with unequal seed coverage
+
+### Fixed
+
+- Nano Trainer `quantum_amplitude` × `mnist_binary` shape mismatch (784 vs PCA-8) in exp_019 smoke
+
 ## [0.9.20] - 2026-06-17
 
 ### Added

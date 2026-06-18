@@ -151,6 +151,9 @@ power-analysis:
 microqml-bench:
 	MLFLOW_DISABLE=1 $(PYTHON) scripts/export_microqml_bench.py
 
+export-reference-datasets:
+	$(PYTHON) scripts/export_reference_datasets.py
+
 experiments-new:
 	MLFLOW_DISABLE=1 $(PYTHON) scripts/run_exp_011_015.py --profile publication
 

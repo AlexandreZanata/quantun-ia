@@ -92,7 +92,7 @@ def execute(dto: TrainNanomodelDTO) -> Result[TrainNanomodelResult, TrainNanomod
             input_dim_seq=input_dim_seq,
         )
     else:
-        input_dim = int(meta.get("n_features", X_train.shape[1]))
+        input_dim = int(X_train.shape[1])
         model, lr = build_model(dto.model_name, input_dim=input_dim)
 
     t0 = time.perf_counter()

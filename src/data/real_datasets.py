@@ -139,7 +139,7 @@ def prepare_mnist_pca_splits(
     )
     X_train, X_test, y_train, y_test = split_train_test(X, y, test_size=test_size, random_state=random_state)
     X_train, X_test, pca = pca_train_test(X_train, X_test, n_components, random_state=random_state)
-    meta.update({"pca_components": n_components, "pca": pca})
+    meta.update({"pca_components": n_components, "pca": pca, "n_features": n_components})
     return X_train, X_test, y_train, y_test, meta
 
 

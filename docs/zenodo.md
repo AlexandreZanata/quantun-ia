@@ -22,6 +22,7 @@ This guide describes how to obtain a citable DOI for quantun-ia releases via the
 source .venv/bin/activate
 make health
 make check
+make export-reference-datasets   # optional preview
 make release
 make release-check      # verify SHA-256 checksums in MANIFEST.txt
 ```
@@ -29,6 +30,7 @@ make release-check      # verify SHA-256 checksums in MANIFEST.txt
 This creates `dist/release/` containing:
 
 - `results.csv` — aggregated experiment export
+- `reference_datasets/` — `breast_cancer.csv`, `circles.csv` + metadata JSON (canonical real + synthetic anchors)
 - `figures/*.pdf` — publication figures
 - `tables/*.tex` — LaTeX holdout summary tables
 - `microqml_bench/v1.json` — MicroQML Bench export

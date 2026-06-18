@@ -74,8 +74,11 @@ Results append to `logs/experiments.jsonl` (never delete — append only).
 | 018 | Feature Fusion | Transformer → QNN on phase sequences (Phase 8) |
 | 019 | Nano Trainer Smoke | Validates app path for all registry models (Phase 9) |
 | 020 | API Smoke | REST API + SQLite job persistence (Phase 10) |
+| 021 | QML Backend Parity | `default.qubit` vs `lightning.qubit` on breast cancer QNN |
+| 022 | Nano Quantum Parity | Hybrid sandwich vs param-matched classical on UCI tabular |
+| 023 | Encoding × Backend | Angle vs amplitude × backends on PCA-MNIST |
 
-See [Experiments](docs/experiments.md) for full details.
+See [Experiments](docs/experiments.md) and [MicroQML Bench](docs/microqml_bench.md) for full details.
 
 ## Nano Trainer
 
@@ -140,7 +143,7 @@ Paper draft skeleton: `paper/main.tex`.
 | Doc | Description |
 |-----|-------------|
 | [Getting Started](docs/getting-started.md) | Full setup, Makefile, workflow |
-| [Experiments](docs/experiments.md) | All 19 experiments + ablations |
+| [Experiments](docs/experiments.md) | All 23 experiments + ablations |
 | [Nano Trainer](docs/nanotrainer.md) | CLI + Streamlit mini training app |
 | [API](docs/api.md) | REST API + benchmark PWA |
 | [Literature Review](docs/literature_review.md) | Phase 4 research context |
@@ -159,7 +162,7 @@ Paper draft skeleton: `paper/main.tex`.
 ```
 quantun-ia/
 ├── src/              # Models, data, training utilities
-├── experiments/      # exp_001 – exp_021 + template
+├── experiments/      # exp_001 – exp_023 + template
 ├── config/           # experiments.yaml, nanotrainer.yaml
 ├── dashboard/        # Streamlit monitor + static PWA
 ├── logs/             # experiments.jsonl (append-only)

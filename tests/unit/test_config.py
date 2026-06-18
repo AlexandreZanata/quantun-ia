@@ -75,3 +75,13 @@ def test_exp_011_through_014_config(monkeypatch):
     cfg18 = load_experiment_config("exp_018_feature_fusion")
     assert cfg18["dataset"] == "sequential_phase"
     assert "transformer_qnn_fusion" in cfg18["models"]
+
+
+def test_exp_019_and_020_infrastructure_config(monkeypatch):
+    monkeypatch.delenv("QML_PROFILE", raising=False)
+    cfg19 = load_experiment_config("exp_019_nanotrainer_smoke")
+    assert cfg19["infrastructure"] is True
+    assert cfg19["exp_id"] == "exp_019"
+    cfg20 = load_experiment_config("exp_020_api_smoke")
+    assert cfg20["infrastructure"] is True
+    assert cfg20["api_model"] == "perceptron"

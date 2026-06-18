@@ -75,15 +75,29 @@ def _paired_comparisons(results: dict[str, list[float]]) -> list[dict]:
         ("angle_lightning", "amplitude_lightning"),
     ]
     for label_a, label_b in pairs:
-        if label_a in results and label_b in results:
-            comparisons.append(
-                {
-                    "label_a": label_a,
-                    "label_b": label_b,
-                    "condition_a": results[label_a],
-                    "condition_b": results[label_b],
-                }
+        if label_a not in results or label_b not in results:
+            continue
+        a_vals = results[label_a]
+        b_vals = results[label_b]
+        if len(a_vals) == 0 or len(b_vals) == 0 or len(a_vals) != len(b_vals):
+            log_event(
+                "warning",
+                "skipping paired comparison — unequal seed coverage",
+                exp_id=EXP_ID,
+                label_a=label_a,
+                label_b=label_b,
+                n_a=len(a_vals),
+                n_b=len(b_vals),
             )
+            continue
+        comparisons.append(
+            {
+                "label_a": label_a,
+                "label_b": label_b,
+                "condition_a": a_vals,
+                "condition_b": b_vals,
+            }
+        )
     return comparisons
 
 

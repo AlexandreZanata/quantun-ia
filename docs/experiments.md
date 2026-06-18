@@ -2,7 +2,7 @@
 
 ## Overview
 
-Eighteen experiments compare classical and quantum ML on synthetic and real-world tasks.
+Twenty-three experiments compare classical and quantum ML on synthetic and real-world tasks.
 Configuration is centralized in `config/experiments.yaml`.
 
 | ID | Name | Question |
@@ -25,7 +25,11 @@ Configuration is centralized in `config/experiments.yaml`.
 | 016 | Hybrid NAS | Does Optuna NAS beat fixed EXP 002 hybrid presets? |
 | 017 | Poison × Topology | Does hybrid layout affect label-poison robustness? |
 | 018 | Feature Fusion | Does Transformer → QNN beat PCA/flat QNN on phase sequences? |
+| 019 | Nano Trainer Smoke | Does every registry model train via the app orchestrator? |
+| 020 | API Smoke | Does REST API training match the Nano Trainer path? |
 | 021 | QML Backend Parity | Do `default.qubit` and `lightning.qubit` agree within 2 pp on breast cancer QNN? |
+| 022 | Nano Quantum Parity | Does hybrid sandwich beat param-matched classical on UCI tabular? |
+| 023 | Encoding × Backend | Do angle vs amplitude and backend choice interact on PCA-MNIST? |
 
 **Publication profile defaults:** `circles`, `noise=0.2`, `n_samples=500`, **10 seeds**, 30% holdout.
 
@@ -184,6 +188,37 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Claim:** Holdout accuracies within 2 pp across backends — simulator choice should not change conclusions  
 **Command:** `python experiments/exp_021_qml_backend_parity/run.py`  
 **Roadmap:** [`docs/research_agenda.md`](research_agenda.md)
+
+### EXP 019 — Nano Trainer Smoke (Phase 9, infrastructure)
+
+**Scope:** Validates `train_nanomodel.execute` for every model in `config/nanotrainer.yaml`  
+**Profile:** `ci` — not a publication benchmark (`infrastructure: true` in config)  
+**Models:** all registry pairs (tabular + sequence)  
+**Success:** holdout accuracy ∈ [0.35, 1.0]; JSONL records with `exp_id=nano_train`  
+**Command:** `make train-demo` or `python experiments/exp_019_nanotrainer_smoke/run.py`
+
+### EXP 020 — API Smoke (Phase 10, infrastructure)
+
+**Scope:** REST API `POST /api/v1/training-jobs` + SQLite persistence  
+**Profile:** `ci` — infrastructure validation only  
+**Pair:** perceptron + breast_cancer  
+**Success:** `201 COMPLETED`, `GET /health` and `GET /ready` return 200  
+**Command:** `make api-demo` or `python experiments/exp_020_api_smoke/run.py`
+
+### EXP 022 — Nano Quantum Parity (Phase 17)
+
+**Models:** `hybrid_sandwich` vs parameter-matched `classical_mlp`  
+**Datasets:** breast_cancer, wine_binary (UCI tabular)  
+**Claim:** Quantum nano model beats classical by ≥2 pp (Holm-significant)  
+**Command:** `make nano-parity-bench` or `python experiments/exp_022_nano_quantum_parity/run.py`
+
+### EXP 023 — Encoding × Backend (Phase 18)
+
+**Models:** 2×2 factorial — angle/amplitude × `default.qubit`/`lightning.qubit`  
+**Dataset:** MNIST 0 vs 1, PCA-8, 4 qubits, 2 layers  
+**Claim:** Encoding gap within 2 pp across backends; no interaction term  
+**Command:** `python experiments/exp_023_encoding_backend/run.py`  
+**Pre-registration:** OSF link required before publication-profile runs (see `hypothesis.md`)
 
 ## Publication Profiles
 

@@ -94,6 +94,15 @@ EXP_META: dict[str, dict[str, str]] = {
             "Prefer `python experiments/exp_022_nano_quantum_parity/run.py --write-results`."
         ),
     },
+    "exp_023": {
+        "dir": "exp_023_encoding_backend",
+        "title": "EXP 023 (Encoding × Backend)",
+        "dataset": "MNIST 0 vs 1, PCA-8, angle vs amplitude × default/lightning backends",
+        "conclusion": (
+            "2×2 factorial encoding×backend interaction on PCA-MNIST. "
+            "Combines exp_012 (encoding) and exp_021 (backend parity) protocols."
+        ),
+    },
 }
 
 

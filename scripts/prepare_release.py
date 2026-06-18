@@ -32,6 +32,7 @@ RELEASE_DOCS = (
 RELEASE_RESULTS = (
     "experiments/exp_021_qml_backend_parity/results.md",
     "experiments/exp_022_nano_quantum_parity/results.md",
+    "experiments/exp_023_encoding_backend/results.md",
 )
 
 
@@ -99,6 +100,15 @@ def prepare_release(dist_dir: Path = DEFAULT_DIST) -> list[Path]:
     if src_csv.exists():
         shutil.copy2(src_csv, csv_out)
         artifacts.append(csv_out)
+
+    ref_datasets_dir = dist_dir / "reference_datasets"
+    subprocess.run(
+        [sys.executable, str(ROOT / "scripts" / "export_reference_datasets.py"), "--out-dir", str(ref_datasets_dir)],
+        check=True,
+        cwd=ROOT,
+    )
+    artifacts.extend(sorted(ref_datasets_dir.glob("*.csv")))
+    artifacts.extend(sorted(ref_datasets_dir.glob("*.meta.json")))
 
     figures_dir = dist_dir / "figures"
     subprocess.run(
