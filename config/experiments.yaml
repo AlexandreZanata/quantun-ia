@@ -852,6 +852,40 @@ experiments:
         n_val_rows: 10000
         baseline_epochs: 20
 
+  exp_040_full_scale_ablation_higgs:
+    description: "Full-scale 805K HIGGS methodology ablation — baseline vs curriculum vs adaptive vs champion"
+    exp_id: exp_040
+    dataset_id: higgs_v1
+    seed: 42
+    hidden1: 2048
+    hidden2: 512
+    hidden3: 64
+    dropout: 0.3
+    batch_size: 2048
+    learning_rate: 0.001
+    weight_decay: 0.0001
+    adaptive_var_target: 0.015
+    baseline_epochs: 12
+    curriculum_stages: 3
+    epochs_per_stage: 8
+    refine_epochs: 8
+    adaptive_epochs: 12
+    champion_epochs: 12
+    min_beat_baseline_pp: 0.5
+    seeds: [42, 123, 456]
+    profile_overrides:
+      full_scale:
+        n_train_rows: 0
+        n_val_rows: 0
+        seeds: [42, 123, 456]
+        batch_size: 2048
+        baseline_epochs: 12
+        curriculum_stages: 3
+        epochs_per_stage: 8
+        refine_epochs: 8
+        adaptive_epochs: 12
+        champion_epochs: 12
+
   exp_037_hybrid_nano_higgs:
     description: "Frozen LargeNanoMLP backbone + 4-qubit hybrid head on HIGGS"
     exp_id: exp_037

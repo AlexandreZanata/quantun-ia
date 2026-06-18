@@ -365,7 +365,7 @@ def run_exp_036(
     init_correlation_id()
     if verbose:
         print(f"\n{'=' * 60}")
-        print(f"EXP 036 — Method Ablation HIGGS | profile={profile} | seeds={len(seeds)}")
+        print(f"EXP {EXP_ID} — Method Ablation HIGGS | profile={profile} | seeds={len(seeds)}")
         print(f"Methods: {', '.join(METHODS)} | gate: beat baseline ≥ {min_beat_pp} pp")
         print(f"{'=' * 60}\n")
 
