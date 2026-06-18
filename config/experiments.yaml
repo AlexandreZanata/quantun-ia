@@ -616,3 +616,16 @@ experiments:
       publication:
         seeds: [42, 123, 456, 789, 1024, 1337, 2048, 3001]
         epochs: 50
+
+  exp_028_chatbot_tool_parity:
+    description: "Chatbot tool adapter vs REST API prediction parity on golden dialogues"
+    exp_id: exp_028
+    checkpoint_exp_id: quantum_nano_bc_app
+    seed: 42
+    max_delta: 1.0e-5
+    max_latency_s: 2.0
+    profile_overrides:
+      ci:
+        epochs: 12
+      publication:
+        epochs: 30

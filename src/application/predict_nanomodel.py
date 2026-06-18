@@ -68,7 +68,10 @@ def execute(dto: PredictNanomodelDTO) -> Result[PredictNanomodelResult, PredictN
     x = torch.tensor(scaled, dtype=torch.float32)
 
     with torch.no_grad():
-        probs = predict(model, x).cpu().numpy().astype(float).tolist()
+        prob_tensor = predict(model, x)
+        if prob_tensor.ndim == 0:
+            prob_tensor = prob_tensor.unsqueeze(0)
+        probs = prob_tensor.cpu().numpy().astype(float).reshape(-1).tolist()
     labels = [1 if p >= 0.5 else 0 for p in probs]
 
     ckpt_path = str(resolve_checkpoint_dir(dto.exp_id, dto.model_name, dto.dataset, seed=dto.seed))
