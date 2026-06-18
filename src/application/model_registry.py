@@ -121,6 +121,22 @@ def build_model(
             ),
             lr,
         )
+    if name == "large_nano_hybrid":
+        from src.quantum.large_nano_hybrid import LargeNanoHybrid
+
+        return (
+            LargeNanoHybrid(
+                input_dim=input_dim,
+                hidden1=int(mc.get("hidden1", 2048)),
+                hidden2=int(mc.get("hidden2", 512)),
+                hidden3=int(mc.get("hidden3", 64)),
+                dropout=float(mc.get("dropout", 0.3)),
+                n_qubits=int(mc.get("n_qubits", 4)),
+                n_layers=int(mc.get("n_layers", 2)),
+                reupload=bool(mc.get("reupload", True)),
+            ),
+            lr,
+        )
     raise ValueError(f"Unknown tabular model: {name}")
 
 

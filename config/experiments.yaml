@@ -851,3 +851,37 @@ experiments:
         n_train_rows: 50000
         n_val_rows: 10000
         baseline_epochs: 20
+
+  exp_037_hybrid_nano_higgs:
+    description: "Frozen LargeNanoMLP backbone + 4-qubit hybrid head on HIGGS"
+    exp_id: exp_037
+    dataset_id: higgs_v1
+    checkpoint_exp_id: exp_032
+    checkpoint_model_name: large_nano_mlp
+    seed: 42
+    hidden1: 2048
+    hidden2: 512
+    hidden3: 64
+    dropout: 0.3
+    n_qubits: 4
+    n_layers: 2
+    reupload: true
+    batch_size: 256
+    learning_rate: 0.01
+    weight_decay: 0.0001
+    epochs: 4
+    min_vs_classical_pp: -1.0
+    save_checkpoints: false
+    profile_overrides:
+      ci:
+        n_train_rows: 8000
+        n_val_rows: 1500
+        epochs: 4
+        min_vs_classical_pp: -2.0
+      publication:
+        n_train_rows: 50000
+        n_val_rows: 10000
+        epochs: 8
+        batch_size: 512
+        min_vs_classical_pp: -1.0
+        save_checkpoints: true

@@ -90,6 +90,16 @@ models:
     hidden2: 512
     hidden3: 64
     dropout: 0.3
+  large_nano_hybrid:
+    kind: tabular
+    learning_rate: 0.01
+    hidden1: 2048
+    hidden2: 512
+    hidden3: 64
+    dropout: 0.3
+    n_qubits: 4
+    n_layers: 2
+    reupload: true
   transformer_mini:
     kind: sequence
     learning_rate: 0.01
@@ -124,6 +134,8 @@ pairs:
     dataset: higgs_v1
   - model: large_nano_mlp
     dataset: synthea_cv_risk_v1
+  - model: large_nano_hybrid
+    dataset: higgs_v1
   - model: transformer_mini
     dataset: sequential_binary
   - model: transformer_mini

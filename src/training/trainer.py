@@ -146,6 +146,10 @@ def train_model(
 
 
 def _tensor_device(model: nn.Module) -> torch.device:
+    from src.training.device import model_requires_cpu
+
+    if model_requires_cpu(model):
+        return torch.device("cpu")
     try:
         return next(model.parameters()).device
     except StopIteration:
