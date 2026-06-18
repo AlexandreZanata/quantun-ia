@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MicroQML Bench — Public Leaderboard</title>
+  <meta name="description" content="Holdout-fair quantum vs classical benchmark leaderboard (MicroQML Bench v1)" />
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #0f1419;
+      --panel: #1a2332;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --accent: #58a6ff;
+      --flagship: #3fb950;
+      --border: #30363d;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f6f8fa;
+        --panel: #ffffff;
+        --text: #1f2328;
+        --muted: #656d76;
+        --accent: #0969da;
+        --flagship: #1a7f37;
+        --border: #d0d7de;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem 3rem; }
+    h1 { font-size: 1.75rem; margin: 0 0 0.25rem; }
+    .sub { color: var(--muted); margin-bottom: 1.5rem; }
+    .meta { font-size: 0.875rem; color: var(--muted); margin-bottom: 1rem; }
+    .meta a { color: var(--accent); }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    th, td { padding: 0.65rem 0.85rem; text-align: left; border-bottom: 1px solid var(--border); }
+    th { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+    tr:last-child td { border-bottom: none; }
+    .flagship { color: var(--flagship); font-weight: 600; }
+    .acc { font-variant-numeric: tabular-nums; font-weight: 600; }
+    .ci { color: var(--muted); font-size: 0.875rem; }
+    #status { margin: 1rem 0; color: var(--muted); }
+    footer { margin-top: 2rem; font-size: 0.8125rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>MicroQML Bench v1</h1>
+    <p class="sub">Public holdout-fair leaderboard — quantum vs classical nano models</p>
+    <p class="meta">
+      JSON: <a id="json-link" href="v1.json">v1.json</a> ·
+      Schema v1 ·
+      <a href="https://github.com/AlexandreZanata/quantun-ia/blob/main/docs/microqml_bench.md">Documentation</a>
+    </p>
+    <p id="status">Loading leaderboard…</p>
+    <table id="board" hidden>
+      <thead>
+        <tr>
+          <th>Task</th>
+          <th>Model</th>
+          <th>Holdout</th>
+          <th>95% CI</th>
+          <th>Seeds</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <footer>
+      Reproduce locally: <code>make publish-leaderboard</code> ·
+      Submit results via
+      <a href="https://github.com/AlexandreZanata/quantun-ia/issues/new?template=experiment_replication.yml">Replication Challenge</a>
+    </footer>
+  </main>
+  <script>
+    const tbody = document.querySelector("#board tbody");
+    const status = document.getElementById("status");
+    const table = document.getElementById("board");
+
+    function flagshipTasks(tasks) {
+      return new Set((tasks || []).filter(t => t.flagship).map(t => t.task_id));
+    }
+
+    function render(data) {
+      const flagship = flagshipTasks(data.tasks);
+      const rows = [...(data.leaderboard || [])].sort(
+        (a, b) => (b.accuracy_pct || 0) - (a.accuracy_pct || 0)
+      );
+      tbody.replaceChildren();
+      for (const row of rows) {
+        const tr = document.createElement("tr");
+        const taskLabel = row.task_id + (flagship.has(row.task_id) ? " ★" : "");
+        const ci = row.ci_low_pct != null && row.ci_high_pct != null
+          ? `[${row.ci_low_pct}, ${row.ci_high_pct}]`
+          : "—";
+        tr.innerHTML = `
+          <td class="${flagship.has(row.task_id) ? "flagship" : ""}">${taskLabel}</td>
+          <td>${row.model}</td>
+          <td class="acc">${row.accuracy_pct}%</td>
+          <td class="ci">${ci}</td>
+          <td>${row.n_seeds ?? "—"}</td>`;
+        tbody.appendChild(tr);
+      }
+      status.textContent = `${rows.length} models · generated ${data.generated_at || ""} · v${data.version || "?"}`;
+      table.hidden = rows.length === 0;
+    }
+
+    fetch("v1.json")
+      .then(r => { if (!r.ok) throw new Error(r.statusText); return r.json(); })
+      .then(render)
+      .catch(err => { status.textContent = "Failed to load leaderboard: " + err.message; });
+  </script>
+</body>
+</html>

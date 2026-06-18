@@ -17,10 +17,26 @@
 |---------|----------|------------|---------|
 | `synthetic_circles` | synthetic | exp_001 | circles |
 | `tabular_breast_cancer` | tabular | exp_011 | breast cancer |
+| `quantum_nano_bc` | tabular | exp_024 | breast cancer (flagship) |
 | `pca_mnist_binary` | image_tabular | exp_012 | MNIST 0 vs 1 (PCA-8) |
 | `sequence_phase` | sequence | exp_014 | sequential_phase |
 
-All tasks use the **publication profile**: 30% stratified holdout (fit preprocessing on train only), 10 seeds, bootstrap 95% CI, Holm-corrected Wilcoxon for paired comparisons.
+All tasks use the **publication profile**: 30% stratified holdout (fit preprocessing on train only), bootstrap 95% CI, Holm-corrected Wilcoxon for paired comparisons. Flagship task `quantum_nano_bc` uses **30 seeds** (exp_024).
+
+## Public leaderboard (GitHub Pages)
+
+| Resource | URL |
+|----------|-----|
+| Viewer | https://alexandrezanata.github.io/quantun-ia/leaderboard/ |
+| JSON | https://alexandrezanata.github.io/quantun-ia/leaderboard/v1.json |
+| Source | `docs/leaderboard/` (committed, deployed via `.github/workflows/pages.yml`) |
+
+```bash
+make publish-leaderboard        # regenerate from publication fixture
+make publish-leaderboard-check  # CI validation
+```
+
+External consumers should validate against `tests/contracts/microqml_bench_schema.py`.
 
 ## Export bundle
 
@@ -52,7 +68,7 @@ Each row maps one model on one bench task:
 - `source` — `multi_seed_summary` or `single_seed`
 - `eval_set` — always `holdout_test` for publication rows
 
-Rows are filtered to the four v1 tasks; `nano_train` and smoke experiments are excluded.
+Rows are filtered to the five v1 primary tasks; `nano_train` and smoke experiments are excluded.
 
 ## Reproduction
 

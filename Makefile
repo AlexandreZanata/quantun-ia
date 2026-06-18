@@ -1,4 +1,4 @@
-.PHONY: dev test test-watch lint lint-fix typecheck coverage dashboard dashboard-local experiment experiment-large repro export-results hpo figures latex-tables release release-check paper-sync paper-build paper-build-publication arxiv-bundle replay-publication replay-publication-artifacts repro-publication-ci power-analysis microqml-bench check health docker-build docker-test docker-lint clean install train-demo nano-parity-bench nano-parity-download nano-parity-publication api api-demo e2e reviewer-repro citation-ready citation-ready-full finalize-citation dvc-check dvc-setup dvc-push model-card
+.PHONY: dev test test-watch lint lint-fix typecheck coverage dashboard dashboard-local experiment experiment-large repro export-results hpo figures latex-tables release release-check paper-sync paper-build paper-build-publication arxiv-bundle replay-publication replay-publication-artifacts repro-publication-ci power-analysis microqml-bench publish-leaderboard publish-leaderboard-check check health docker-build docker-test docker-lint clean install train-demo nano-parity-bench nano-parity-download nano-parity-publication api api-demo e2e reviewer-repro citation-ready citation-ready-full finalize-citation dvc-check dvc-setup dvc-push model-card
 
 PYTHON ?= $(shell test -x .venv/bin/python && echo .venv/bin/python || echo python3)
 
@@ -161,6 +161,12 @@ power-analysis:
 
 microqml-bench:
 	MLFLOW_DISABLE=1 $(PYTHON) scripts/export_microqml_bench.py
+
+publish-leaderboard:
+	$(PYTHON) scripts/publish_leaderboard.py
+
+publish-leaderboard-check:
+	$(PYTHON) scripts/publish_leaderboard.py --verify-only
 
 export-reference-datasets:
 	$(PYTHON) scripts/export_reference_datasets.py

@@ -81,6 +81,15 @@ Results append to `logs/experiments.jsonl` (never delete — append only).
 
 See [Experiments](docs/experiments.md) and [MicroQML Bench](docs/microqml_bench.md) for full details.
 
+## Public Leaderboard
+
+Hosted MicroQML Bench v1 JSON and viewer (GitHub Pages):
+
+- **Viewer:** https://alexandrezanata.github.io/quantun-ia/leaderboard/
+- **JSON:** https://alexandrezanata.github.io/quantun-ia/leaderboard/v1.json
+
+Refresh locally: `make publish-leaderboard` → commits `docs/leaderboard/v1.json`.
+
 ## QuantumNano-BC (Flagship Nano Model)
 
 Train the flagship hybrid QML model on real UCI breast cancer data:

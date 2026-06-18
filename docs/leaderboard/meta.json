@@ -1,0 +1,9 @@
+{
+  "bench_id": "microqml_bench",
+  "schema_version": "1",
+  "format": "microqml_bench_v1",
+  "canonical_json_url": "https://alexandrezanata.github.io/quantun-ia/leaderboard/v1.json",
+  "viewer_url": "https://alexandrezanata.github.io/quantun-ia/leaderboard/",
+  "leaderboard_rows": 8,
+  "source_fixture": "tests/contracts/fixtures/publication_experiments.jsonl"
+}
