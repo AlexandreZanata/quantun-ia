@@ -1242,6 +1242,50 @@ experiments:
         min_vs_e2e_pp: 0.5
         save_checkpoints: true
 
+  exp_075_adaptive_hybrid_nihr:
+    description: "GV-ALR vs fixed LR on frozen hybrid QNN head — val PR-AUC efficiency gate (C2 replication)"
+    exp_id: exp_075
+    dataset_id: nihr_cv_synthetic_v1
+    checkpoint_exp_id: exp_069
+    checkpoint_model_name: large_nano_mlp
+    seed: 42
+    hidden1: 2048
+    hidden2: 512
+    hidden3: 64
+    dropout: 0.3
+    n_qubits: 4
+    n_layers: 2
+    reupload: true
+    batch_size: 256
+    learning_rate: 0.01
+    weight_decay: 0.0001
+    adaptive_var_target: 0.015
+    fixed_epochs: 8
+    adaptive_epochs: 5
+    max_epoch_fraction: 0.7
+    max_pr_delta_pp: 0.3
+    save_checkpoints: false
+    adaptive_lr:
+      base_lr: 0.01
+      var_target: 0.015
+      warmup_epochs: 1
+      adapt_every: 1
+    profile_overrides:
+      ci:
+        n_train_rows: 5000
+        n_val_rows: 2000
+        fixed_epochs: 4
+        adaptive_epochs: 2
+        max_pr_delta_pp: 0.5
+      publication:
+        n_train_rows: 50000
+        n_val_rows: 15000
+        fixed_epochs: 8
+        adaptive_epochs: 5
+        batch_size: 512
+        max_pr_delta_pp: 0.3
+        save_checkpoints: true
+
   exp_074_entangle_schedule_nihr:
     description: "Dynamic entanglement schedule vs fixed topologies on NIHR — val PR-AUC gate (C2 replication)"
     exp_id: exp_074

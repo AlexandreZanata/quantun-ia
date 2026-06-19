@@ -88,8 +88,10 @@ recipes:
     quantum: true
     source_exp:
       higgs: exp_054
+      nihr: exp_075
     delta_pp:
       higgs: 0.01
+      nihr: -0.24
 
   entangle_schedule:
     label: Dynamic entanglement schedule vs best fixed

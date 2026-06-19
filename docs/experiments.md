@@ -393,7 +393,16 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `QML_DEVICE=cuda python experiments/exp_074_entangle_schedule_nihr/run.py --profile publication --write-results`  
 **Lesson:** H-Q3 dynamic entanglement failure on breast cancer replicates on NIHR clinical tabular.
 
-**Next:** Phase 3 continuation — exp_075 GV-ALR on NIHR; exp_068b compound stress (ACYD).
+### EXP 075 — GV-ALR on frozen hybrid QNN head (NIHR C2 replication)
+
+**Models:** Frozen C2 backbone + QNN head — fixed LR vs GV-ALR  
+**Dataset:** `nihr_cv_synthetic_v1` (50,000 train / 15,000 val)  
+**Claim:** |Δ PR-AUC| ≤ 0.3 pp and adaptive epochs ≤ 70% of fixed  
+**Verdict:** Accepted — fixed 0.2392 vs GV-ALR 0.2369 (−0.24 pp); 5/8 epochs; wall-time ratio 0.58  
+**Command:** `QML_DEVICE=cuda python experiments/exp_075_adaptive_hybrid_nihr/run.py --profile publication --write-results`  
+**Lesson:** H-Q4 GV-ALR efficiency win on HIGGS replicates on NIHR clinical tabular.
+
+**Next:** Phase 3/4 — exp_068b compound stress label (ACYD).
 
 ## Publication Profiles
 

@@ -333,6 +333,12 @@ exp-074:
 exp-074-publication:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_074_entangle_schedule_nihr/run.py --profile publication --write-results
 
+exp-075:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_075_adaptive_hybrid_nihr/run.py --profile ci
+
+exp-075-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_075_adaptive_hybrid_nihr/run.py --profile publication --write-results
+
 exp-053:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_053_entangle_schedule_bc/run.py
 
