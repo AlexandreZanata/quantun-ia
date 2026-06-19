@@ -1579,6 +1579,43 @@ experiments:
         min_vs_classical_pp: -1.0
         save_checkpoints: true
 
+  exp_068a_angle_encoding_acyd:
+    description: "Seasonal angle vs amplitude QNN head on frozen ACYD C4 — val ROC-AUC gates"
+    exp_id: exp_068a
+    dataset_id: acyd_soy_brazil_v1
+    checkpoint_exp_id: exp_060
+    checkpoint_model_name: large_nano_mlp
+    seed: 42
+    hidden1: 2048
+    hidden2: 512
+    hidden3: 64
+    dropout: 0.3
+    n_qubits: 4
+    n_layers: 2
+    reupload: true
+    batch_size: 256
+    learning_rate: 0.01
+    weight_decay: 0.0001
+    epochs: 4
+    min_vs_classical_pp: 0.5
+    min_vs_amplitude_pp: 0.5
+    save_checkpoints: false
+    profile_overrides:
+      ci:
+        n_train_rows: 5000
+        n_val_rows: 1000
+        epochs: 3
+        min_vs_classical_pp: 0.0
+        min_vs_amplitude_pp: 0.0
+      publication:
+        n_train_rows: 0
+        n_val_rows: 0
+        epochs: 8
+        batch_size: 512
+        min_vs_classical_pp: 0.5
+        min_vs_amplitude_pp: 0.5
+        save_checkpoints: true
+
   exp_046_model_scale_curve:
     description: "LargeNanoMLP scale ablation nano_s→nano_xxl on HIGGS — VRAM + AUC curve"
     exp_id: exp_046

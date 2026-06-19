@@ -177,6 +177,12 @@ exp-068:
 exp-068-publication:
 	MLFLOW_DISABLE=1 $(PYTHON) experiments/exp_068_nano_grand_comparison/run.py --profile publication --write-results
 
+exp-068a:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_068a_angle_encoding_acyd/run.py --profile ci
+
+exp-068a-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_068a_angle_encoding_acyd/run.py --profile publication --write-results
+
 exp-061:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_061_conventional_acyd_baselines/run.py --profile ci
 

@@ -357,7 +357,16 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `QML_DEVICE=cuda python experiments/exp_071_hybrid_nano_gobug/run.py --profile publication --write-results`  
 **Checkpoint:** `artifacts/exp_071/large_nano_hybrid_gobug/seed_42/best.pt`
 
-**Next:** Phase 3 continuation — exp_068a angle encoding (ACYD); exp_072–075 cross-domain Q replication.
+**Next:** Phase 3 continuation — exp_072–075 cross-domain Q replication; exp_068b compound stress.
+
+### EXP 068a — Seasonal angle encoding on ACYD (H-Q8)
+
+**Models:** Frozen C4 classical head vs seasonal **angle** QNN vs seasonal **amplitude** QNN (4 cyclic features from in-season weather)  
+**Dataset:** `acyd_soy_brazil_v1` (50,107 train / 5,830 val, temporal val 2019–2021)  
+**Claim:** Angle val ROC-AUC ≥ classical + 0.5 pp and ≥ amplitude + 0.5 pp  
+**Verdict:** Honest negative — classical 0.6777 vs angle 0.4979 (−17.98 pp) vs amplitude 0.5137 (−1.58 pp angle−amp)  
+**Command:** `QML_DEVICE=cuda python experiments/exp_068a_angle_encoding_acyd/run.py --profile publication --write-results`  
+**Lesson:** Seasonal-only QNN head without backbone hidden state loses C4 representation; angle encoding does not rescue agro-climate tabular.
 
 ## Publication Profiles
 

@@ -383,6 +383,24 @@ See: `experiments/exp_070_large_nano_gobug/results.md`
 
 ---
 
+## exp_068a — Seasonal angle encoding on ACYD (H-Q8)
+
+**Profile:** acyd_soy_brazil_v1, 50,107 train / 5,830 val, seed 42, RTX 4060
+
+| Head | Val ROC-AUC |
+|------|-------------|
+| Classical (frozen C4) | 0.6777 |
+| Seasonal angle QNN | 0.4979 |
+| Seasonal amplitude QNN | 0.5137 |
+
+**Gate:** angle ≥ classical + 0.5 pp and angle ≥ amplitude + 0.5 pp → **failed** (−17.98 pp vs classical).
+
+**Interpretation:** Cyclic sin/cos features alone cannot substitute the frozen nano backbone; seasonal QNN heads collapse toward chance. Angle encoding does not beat amplitude on this 4-feature seasonal slice.
+
+See: `experiments/exp_068a_angle_encoding_acyd/results.md`
+
+---
+
 ## How we use negative results
 
 1. **Applicability gates** (`src/training/protocol.py`) prevent running expensive techniques on tasks where baselines already fail.
