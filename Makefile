@@ -183,6 +183,12 @@ exp-068a:
 exp-068a-publication:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_068a_angle_encoding_acyd/run.py --profile publication --write-results
 
+exp-068b:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_068b_compound_stress_acyd/run.py --profile ci
+
+exp-068b-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_068b_compound_stress_acyd/run.py --profile publication --write-results
+
 exp-061:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_061_conventional_acyd_baselines/run.py --profile ci
 

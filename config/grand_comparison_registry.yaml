@@ -110,3 +110,12 @@ recipes:
       gobug: exp_055
     delta_pp:
       gobug: 0.50
+
+  compound_stress_acyd:
+    label: Compound stress hybrid vs logistic
+    kind: quantum_ablation
+    quantum: true
+    source_exp:
+      acyd: exp_068b
+    delta_pp:
+      acyd: -3.88

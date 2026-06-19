@@ -453,6 +453,23 @@ See: `experiments/exp_074_entangle_schedule_nihr/results.md`
 
 ---
 
+## exp_068b — Compound stress label on ACYD (H-Q12)
+
+**Profile:** acyd_soy_brazil_v1, compound label (low yield ∧ drought/heat), 50,107 train / 5,830 val, RTX 4060
+
+| Condition | Val ROC-AUC |
+|-----------|-------------|
+| Logistic regression | 0.8462 |
+| Hybrid QNN head (frozen C4) | 0.8074 |
+
+**Gate:** hybrid ≥ logistic + 1.0 pp → **failed** (−3.88 pp).
+
+**Interpretation:** Compound stress label is highly imbalanced (5.5% train / 18.4% val positives); logistic dominates the frozen-backbone QNN head — H-Q12 interaction claim rejected.
+
+See: `experiments/exp_068b_compound_stress_acyd/results.md`
+
+---
+
 ## How we use negative results
 
 1. **Applicability gates** (`src/training/protocol.py`) prevent running expensive techniques on tasks where baselines already fail.

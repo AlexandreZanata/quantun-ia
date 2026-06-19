@@ -9,6 +9,8 @@ from urllib.request import urlretrieve
 
 import numpy as np
 import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
 
 from src.data.open_higgs import sha256_file, write_parquet_splits
 
@@ -193,6 +195,98 @@ def build_binary_labels_below_state_median(yield_frame: pd.DataFrame) -> np.ndar
     return (yield_frame["soybean_yield"] < medians).astype(np.int32).to_numpy()
 
 
+def count_season_weeks_above(
+    frame: pd.DataFrame,
+    prefix: str,
+    threshold: float,
+    *,
+    weeks: tuple[int, ...] = SEASON_WEEKS,
+) -> np.ndarray:
+    """Count in-season weeks where ``prefix{week}`` exceeds ``threshold``."""
+    cols = [f"{prefix}{week}" for week in weeks if f"{prefix}{week}" in frame.columns]
+    if not cols:
+        return np.zeros(len(frame), dtype=np.int32)
+    values = frame[cols].to_numpy(dtype=np.float64)
+    return np.sum(values > threshold, axis=1).astype(np.int32)
+
+
+def count_season_weeks_below(
+    frame: pd.DataFrame,
+    prefix: str,
+    threshold: float,
+    *,
+    weeks: tuple[int, ...] = SEASON_WEEKS,
+) -> np.ndarray:
+    """Count in-season weeks where ``prefix{week}`` is below ``threshold``."""
+    cols = [f"{prefix}{week}" for week in weeks if f"{prefix}{week}" in frame.columns]
+    if not cols:
+        return np.zeros(len(frame), dtype=np.int32)
+    values = frame[cols].to_numpy(dtype=np.float64)
+    return np.sum(values < threshold, axis=1).astype(np.int32)
+
+
+def seasonal_total_precipitation(
+    frame: pd.DataFrame,
+    *,
+    weeks: tuple[int, ...] = SEASON_WEEKS,
+) -> np.ndarray:
+    """Sum in-season weekly precipitation (mm) per row."""
+    cols = [f"precipitation_week_{week}" for week in weeks if f"precipitation_week_{week}" in frame.columns]
+    if not cols:
+        return np.full(len(frame), np.nan, dtype=np.float64)
+    values = frame[cols].to_numpy(dtype=np.float64)
+    with np.errstate(invalid="ignore"):
+        return np.nansum(values, axis=1)
+
+
+def build_compound_stress_labels(
+    merged: pd.DataFrame,
+    *,
+    heat_threshold_k: float = 308.15,
+    min_hot_weeks: int = 3,
+    drought_precip_z: float = -1.0,
+    drought_precip_train_mask: np.ndarray | None = None,
+    drought_weekly_mm: float = 5.0,
+    min_dry_weeks: int = 4,
+) -> np.ndarray:
+    """
+    Label 1 when yield is below state-year median AND (drought OR heat stress).
+
+    Drought uses seasonal precipitation z-score (SPEI proxy) when a train mask is
+    supplied; otherwise falls back to counting dry weeks below ``drought_weekly_mm``.
+    Heat uses weekly ``t2m_max`` above ``heat_threshold_k`` (35 °C default).
+    """
+    low_yield = build_binary_labels_below_state_median(merged).astype(bool)
+    hot_weeks = count_season_weeks_above(merged, "t2m_max_week_", heat_threshold_k)
+    heat_stress = hot_weeks >= min_hot_weeks
+
+    season_precip = seasonal_total_precipitation(merged)
+    if drought_precip_train_mask is not None and np.any(drought_precip_train_mask):
+        train_totals = season_precip[drought_precip_train_mask]
+        train_totals = train_totals[np.isfinite(train_totals)]
+        if train_totals.size >= 2:
+            mean = float(np.mean(train_totals))
+            std = float(np.std(train_totals))
+            if std > 0:
+                z_scores = (season_precip - mean) / std
+                drought_stress = z_scores <= drought_precip_z
+            else:
+                drought_stress = count_season_weeks_below(
+                    merged, "precipitation_week_", drought_weekly_mm
+                ) >= min_dry_weeks
+        else:
+            drought_stress = count_season_weeks_below(
+                merged, "precipitation_week_", drought_weekly_mm
+            ) >= min_dry_weeks
+    else:
+        drought_stress = count_season_weeks_below(
+            merged, "precipitation_week_", drought_weekly_mm
+        ) >= min_dry_weeks
+
+    climate_stress = drought_stress | heat_stress
+    return (low_yield & climate_stress).astype(np.int32)
+
+
 def join_yield_features(yield_frame: pd.DataFrame, feature_frame: pd.DataFrame) -> pd.DataFrame:
     """Inner join yield and climate/soil features."""
     merged = yield_frame.merge(feature_frame, on=list(JOIN_KEYS), how="inner", suffixes=("", "_feat"))
@@ -335,6 +429,93 @@ def build_acyd_soy_processed(
     stats_path.write_text(json.dumps(stats, indent=2) + "\n", encoding="utf-8")
     paths["stats"] = stats_path
     return paths
+
+
+def load_acyd_compound_stress_splits(
+    root: Path,
+    *,
+    n_train_rows: int | None = None,
+    n_val_rows: int | None = None,
+    random_state: int = 42,
+    train_max_year: int = 2018,
+    val_years: tuple[int, ...] = (2019, 2020, 2021),
+    test_min_year: int = 2022,
+    heat_threshold_k: float = 308.15,
+    min_hot_weeks: int = 3,
+    drought_precip_z: float = -1.0,
+    drought_weekly_mm: float = 5.0,
+    min_dry_weeks: int = 4,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, StandardScaler]:
+    """Load ACYD features with compound-stress labels and train-only scaling."""
+    raw_dir = root / "data" / "open" / "acyd_soy_brazil" / "raw"
+    yield_path = raw_dir / YIELD_FILE
+    feature_dir = raw_dir / "features"
+    if not yield_path.is_file():
+        msg = f"yield file missing: {yield_path}"
+        raise FileNotFoundError(msg)
+    chunk_paths = sorted(feature_dir.glob("features_chunk_*.csv"))
+    if not chunk_paths:
+        msg = f"no feature chunks under {feature_dir}"
+        raise FileNotFoundError(msg)
+
+    yield_frame = load_soybean_yield(yield_path)
+    feature_frame = load_feature_chunks(chunk_paths)
+    merged = join_yield_features(yield_frame, feature_frame)
+    features = extract_acyd_feature_matrix(merged)
+    years = merged["year"].to_numpy(dtype=int)
+    train_mask, val_mask, test_mask = temporal_year_split(
+        years,
+        train_max_year=train_max_year,
+        val_years=val_years,
+        test_min_year=test_min_year,
+    )
+    labels = build_compound_stress_labels(
+        merged,
+        heat_threshold_k=heat_threshold_k,
+        min_hot_weeks=min_hot_weeks,
+        drought_precip_z=drought_precip_z,
+        drought_precip_train_mask=train_mask,
+        drought_weekly_mm=drought_weekly_mm,
+        min_dry_weeks=min_dry_weeks,
+    )
+
+    valid = ~np.isnan(features).any(axis=1) & ~np.isinf(features).any(axis=1)
+    features = features[valid]
+    labels = labels[valid]
+    years = years[valid]
+    train_mask = train_mask[valid]
+    val_mask = val_mask[valid]
+    test_mask = test_mask[valid]
+
+    x_train, y_train = features[train_mask], labels[train_mask].astype(np.float32)
+    x_val, y_val = features[val_mask], labels[val_mask].astype(np.float32)
+    x_test, y_test = features[test_mask], labels[test_mask].astype(np.float32)
+
+    if n_train_rows is not None and n_train_rows < len(y_train):
+        idx = np.arange(len(y_train))
+        selected, _ = train_test_split(
+            idx,
+            train_size=n_train_rows,
+            stratify=y_train if len(np.unique(y_train)) > 1 else None,
+            random_state=random_state,
+        )
+        x_train, y_train = x_train[selected], y_train[selected]
+
+    if n_val_rows is not None and n_val_rows < len(y_val):
+        idx = np.arange(len(y_val))
+        selected, _ = train_test_split(
+            idx,
+            train_size=n_val_rows,
+            stratify=y_val if len(np.unique(y_val)) > 1 else None,
+            random_state=random_state,
+        )
+        x_val, y_val = x_val[selected], y_val[selected]
+
+    scaler = StandardScaler()
+    x_train = scaler.fit_transform(x_train).astype(np.float32)
+    x_val = scaler.transform(x_val).astype(np.float32)
+    x_test = scaler.transform(x_test).astype(np.float32)
+    return x_train, y_train, x_val, y_val, x_test, y_test, scaler
 
 
 def update_acyd_manifest_ready(

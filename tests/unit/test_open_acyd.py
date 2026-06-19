@@ -8,6 +8,8 @@ import pandas as pd
 from src.data.open_acyd import (
     N_FEATURES,
     build_binary_labels_below_state_median,
+    build_compound_stress_labels,
+    count_season_weeks_above,
     extract_acyd_feature_matrix,
     join_yield_features,
     temporal_year_split,
@@ -113,3 +115,22 @@ def test_join_yield_features_inner():
     merged = join_yield_features(_synthetic_yield(), _synthetic_features())
     assert len(merged) == 4
     assert "latitude" in merged.columns
+
+
+def test_count_season_weeks_above_heat():
+    frame = _synthetic_features().copy()
+    for week in (20, 21, 22):
+        frame[f"t2m_max_week_{week}"] = 310.0
+    counts = count_season_weeks_above(frame, "t2m_max_week_", 308.15)
+    assert counts[0] >= 3
+
+
+def test_build_compound_stress_labels_requires_low_yield_and_stress():
+    merged = join_yield_features(_synthetic_yield(), _synthetic_features())
+    for week in range(10, 41):
+        merged[f"t2m_max_week_{week}"] = 310.0
+    labels = build_compound_stress_labels(merged, drought_precip_train_mask=None)
+    low_yield = build_binary_labels_below_state_median(merged)
+    assert labels.dtype == np.int32
+    assert np.all(labels <= low_yield)
+    assert labels.sum() <= low_yield.sum()

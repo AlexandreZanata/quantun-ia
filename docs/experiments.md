@@ -402,7 +402,16 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `QML_DEVICE=cuda python experiments/exp_075_adaptive_hybrid_nihr/run.py --profile publication --write-results`  
 **Lesson:** H-Q4 GV-ALR efficiency win on HIGGS replicates on NIHR clinical tabular.
 
-**Next:** Phase 3/4 — exp_068b compound stress label (ACYD).
+### EXP 068b — Compound stress label on ACYD (H-Q12)
+
+**Models:** Frozen C4 backbone + QNN head vs logistic on compound-stress label  
+**Dataset:** `acyd_soy_brazil_v1` (50,107 train / 5,830 val, compound label)  
+**Claim:** Hybrid val ROC-AUC ≥ logistic + 1.0 pp  
+**Verdict:** Honest negative — logistic 0.8462 vs hybrid 0.8074 (−3.88 pp)  
+**Command:** `QML_DEVICE=cuda python experiments/exp_068b_compound_stress_acyd/run.py --profile publication --write-results`  
+**Lesson:** QNN head does not capture drought∧heat interaction better than logistic on compound stress labels.
+
+**Next:** Phase 4 — exp_078 Agro Risk Lab dashboard + human validation cases.
 
 ## Publication Profiles
 
