@@ -38,6 +38,20 @@ class QuantumNetReupload(TrainableMixin, nn.Module):
         self.qlayer = make_qnn_reupload(n_qubits, n_layers)
         self.post = nn.Linear(1, 1)
 
+    def set_n_layers(self, n_layers: int) -> None:
+        """Grow re-upload depth; preserve weights for existing layers."""
+        if n_layers <= self.n_layers:
+            return
+        old_state = self.qlayer.state_dict()
+        self.n_layers = n_layers
+        self.qlayer = make_qnn_reupload(self.n_qubits, n_layers)
+        new_state = self.qlayer.state_dict()
+        old_weights = old_state["weights"]
+        padded = new_state["weights"].clone()
+        padded[: old_weights.shape[0]] = old_weights
+        new_state["weights"] = padded
+        self.qlayer.load_state_dict(new_state)
+
     def forward(self, x):
         x = self.pre(x) if not isinstance(self.pre, nn.Identity) else x
         out = self.qlayer(x).unsqueeze(1)

@@ -266,6 +266,12 @@ exp-055:
 exp-055-publication:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_055_noise_reg_gobug/run.py --profile publication --write-results
 
+exp-056:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_056_reupload_curriculum_ladder/run.py
+
+exp-056-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_056_reupload_curriculum_ladder/run.py --profile publication --write-results
+
 exp-046:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_046_model_scale_curve/run.py
 

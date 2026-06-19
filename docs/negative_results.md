@@ -20,6 +20,7 @@ Each entry links to the experiment `results.md` and the statistical test outcome
 | exp_052 | Warm-start hybrid beats e2e by ≥0.5 pp AUC on HIGGS | **Rejected** | Δ = −0.42 pp (3 seeds); Wilcoxon p = 0.5 |
 | exp_053 | Dynamic entanglement schedule beats fixed by ≥1.0 pp | **Rejected** | Δ = −0.78 pp vs `none` (3 seeds); Wilcoxon p = 0.75 |
 | exp_055 | Depolarizing noise beats noiseless hybrid by ≥0.5 pp PR-AUC | **Rejected** | Δ = +0.50 pp on temporal test (inconclusive vs gate) |
+| exp_056 | Re-upload depth curriculum wins ≥2/3 ladder rungs | **Rejected** | 1/3 wins (PCA-MNIST only); BC/HIGGS losses |
 
 ---
 
@@ -214,6 +215,26 @@ honest negative** (rounded advantage 0.498).
 hybrid QNN remains near chance on sha-order test (~0.32 PR-AUC).
 
 See: `experiments/exp_055_noise_reg_gobug/results.md`
+
+---
+
+## exp_056 — Re-upload depth curriculum ladder
+
+**Profile:** 3 rungs (PCA-MNIST, breast cancer, HIGGS 50k), re-upload QNN 4q, layers 1→2→3, RTX 4060
+
+| Rung | Curriculum | Fixed L=3 | Δ pp | Won |
+|------|------------|-----------|------|-----|
+| pca_mnist_binary | 87.33% | 80.67% | +6.67 | yes |
+| breast_cancer | 62.57% | 95.32% | −32.75 | no |
+| higgs_50k (AUC) | 0.7201 | 0.7274 | −0.73 | no |
+
+**Finding:** Only **1/3** rungs pass gate (need ≥ 2). Depth growth hurts breast cancer badly when
+fixed depth converges quickly.
+
+**Lesson:** Re-upload depth curriculum may help low-dim PCA tasks but does not transfer to
+clinical/tabular rungs — do not promote to MicroQML Bench v2 flagship.
+
+See: `experiments/exp_056_reupload_curriculum_ladder/results.md`
 
 ---
 

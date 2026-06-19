@@ -27,12 +27,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Phase Q H-Q3** — `exp_053_entangle_schedule_bc` on RTX 4060 (rejected)
 - **exp_055** — Depolarizing noise on GoBug hybrid; inconclusive (+0.50 pp vs +0.5 pp gate)
 - **Phase Q H-Q5** — `exp_055_noise_reg_gobug` on RTX 4060 (rejected / inconclusive)
+- **exp_056** — Re-upload depth curriculum ladder; honest negative (1/3 rung wins)
+- **Phase Q H-Q6** — `exp_056_reupload_curriculum_ladder` on RTX 4060 (rejected)
 - **Phase Q H-Q4** — `exp_054_adaptive_hybrid_higgs` on RTX 4060 (accepted)
 
 ### Changed
 
-- `make check-real` — **36/36** real GPU gates on RTX 4060 (incl. exp_055 noise-reg hybrid)
-- `src/quantum/noise_regularized_qnn.py` — depolarizing channel hybrid (`default.mixed` sim)
+- `make check-real` — **37/37** real GPU gates on RTX 4060 (incl. exp_056 re-upload ladder)
+- `src/training/reupload_curriculum.py` — margin curriculum with growing re-upload depth
+- `QuantumNetReupload.set_n_layers()` — depth expansion with weight preservation
 - `make ship-hybrid-higgs` — publication ship for frozen MLP + QNN head on HIGGS
 - `batched_trainer.train_model_batched_adaptive` — GV-ALR mini-batch loop for hybrid head training
 - `batched_trainer` — batched validation eval to avoid CUDA OOM on 172K-row HIGGS val
