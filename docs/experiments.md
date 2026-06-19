@@ -274,6 +274,15 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Verdict:** Rejected — HistGradientBoosting 0.6941 vs nano 0.6777 (−1.64 pp); beats logistic (+3.86 pp, exp_060)  
 **Command:** `QML_DEVICE=cuda python experiments/exp_061_conventional_acyd_baselines/run.py --profile publication --write-results`
 
+### EXP 069 — LargeNanoMLP on NIHR synthetic CV (C2 anchor)
+
+**Models:** `LargeNanoMLP` (~1.11M params) vs `LogisticRegression`  
+**Dataset:** `nihr_cv_synthetic_v1` (70K train / 15K val, 13 features, ~8% prevalence)  
+**Claim:** Val PR-AUC ≥ logistic + 1.0 pp  
+**Verdict:** Rejected — logistic 0.2382 vs nano 0.2370 (−0.12 pp); checkpoint saved for hybrid ablations  
+**Command:** `QML_DEVICE=cuda python experiments/exp_069_large_nano_nihr/run.py --profile publication --write-results`  
+**Ship:** `qml-ship --model large_nano_mlp_nihr --skip-train --skip-gate`
+
 ## Publication Profiles
 
 | Profile | `n_samples` | Seeds | Command |

@@ -24,6 +24,7 @@ Each entry links to the experiment `results.md` and the statistical test outcome
 | exp_057 | Parameter-shift within 1 pp + ≥2× lower grad variance | **Rejected** | Δ holdout = 20.99 pp; var ratio = 0.08 (param-shift higher) |
 | exp_058 | LargeNanoMLP ≥ best conventional + 0.5 pp (HIGGS) | **Rejected** | sklearn MLP 0.8429 vs nano 0.8358 (−0.71 pp full val) |
 | exp_061 | LargeNanoMLP ≥ best conventional + 0.5 pp (ACYD) | **Rejected** | HistGB 0.6941 vs nano 0.6777 (−1.64 pp temporal val) |
+| exp_069 | LargeNanoMLP ≥ logistic + 1.0 pp PR-AUC (NIHR) | **Rejected** | logistic 0.2382 vs nano 0.2370 (−0.12 pp) |
 
 ---
 
@@ -302,6 +303,23 @@ See: `experiments/exp_058_conventional_higgs_baselines/results.md`
 **Interpretation:** On ACYD temporal val, gradient boosting beats the deep nano anchor despite exp_060 beating logistic by +3.86 pp. Honest negative for “nano beats all classical” claims on agro-climate tabular; C4 anchor still valid vs logistic gate.
 
 See: `experiments/exp_061_conventional_acyd_baselines/results.md`
+
+---
+
+## exp_069 — LargeNanoMLP on NIHR synthetic CV (C2 anchor)
+
+**Profile:** nihr_cv_synthetic_v1, 70K train / 15K val, seed 42, RTX 4060
+
+| Model | Val PR-AUC |
+|-------|------------|
+| Logistic (QRISK-style) | **0.2382** |
+| LargeNanoMLP | 0.2370 |
+
+**Gate:** LargeNanoMLP ≥ logistic + 1.0 pp PR-AUC → **failed** (−0.12 pp).
+
+**Interpretation:** At ~8% prevalence, logistic remains a strong ceiling on PR-AUC; deep nano does not beat it on this synthetic cohort. C2 checkpoint still ships for hybrid/QNN ablations (exp_051+).
+
+See: `experiments/exp_069_large_nano_nihr/results.md`
 
 ---
 

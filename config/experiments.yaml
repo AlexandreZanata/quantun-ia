@@ -1395,6 +1395,36 @@ experiments:
         histgb_max_iter: 100
         xgboost_n_estimators: 50
 
+  exp_069_large_nano_nihr:
+    description: "LargeNanoMLP ~1.11M params on NIHR synthetic CV — val PR-AUC vs logistic (C2)"
+    exp_id: exp_069
+    dataset_id: nihr_cv_synthetic_v1
+    seed: 42
+    hidden1: 2048
+    hidden2: 512
+    hidden3: 64
+    dropout: 0.3
+    batch_size: 2048
+    learning_rate: 0.001
+    weight_decay: 0.0001
+    min_params: 1000000
+    min_pr_advantage_pp: 1.0
+    save_checkpoints: false
+    profile_overrides:
+      ci:
+        n_train_rows: 5000
+        n_val_rows: 1000
+        epochs: 5
+        batch_size: 1024
+        min_pr_advantage_pp: -5.0
+      publication:
+        n_train_rows: 0
+        n_val_rows: 0
+        epochs: 12
+        batch_size: 2048
+        min_pr_advantage_pp: 1.0
+        save_checkpoints: true
+
   exp_046_model_scale_curve:
     description: "LargeNanoMLP scale ablation nano_s→nano_xxl on HIGGS — VRAM + AUC curve"
     exp_id: exp_046

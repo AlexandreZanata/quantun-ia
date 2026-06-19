@@ -170,6 +170,12 @@ exp-061:
 exp-061-publication:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_061_conventional_acyd_baselines/run.py --profile publication --write-results
 
+exp-069:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_069_large_nano_nihr/run.py --profile ci
+
+exp-069-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_069_large_nano_nihr/run.py --profile publication --write-results
+
 exp-033:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_033_higgs_serve_parity/run.py --profile ci
 
@@ -464,11 +470,15 @@ ship-all-p0:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m scripts.qml_ship --model large_nano_mlp_synthea --profile ci --skip-train --skip-gate
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m scripts.qml_ship --model large_nano_mlp_higgs --profile ci --skip-train --skip-gate
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m scripts.qml_ship --model large_nano_mlp_acyd_soy --profile ci --skip-train --skip-gate
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m scripts.qml_ship --model large_nano_mlp_nihr --profile ci --skip-train --skip-gate
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m scripts.qml_ship --model quantum_nano_bc --profile ci --skip-train --skip-gate
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m scripts.qml_ship --model large_nano_mlp_synthea_calibrated --profile ci --skip-train --skip-gate
 
 ship-acyd-soy:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m scripts.qml_ship --model large_nano_mlp_acyd_soy --profile publication --skip-train
+
+ship-nihr:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m scripts.qml_ship --model large_nano_mlp_nihr --profile ci --skip-train --skip-gate
 
 ship-hybrid-higgs:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m scripts.qml_ship --model large_nano_hybrid_higgs --profile publication --skip-train
