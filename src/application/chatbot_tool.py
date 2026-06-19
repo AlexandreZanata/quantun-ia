@@ -10,8 +10,8 @@ from typing import Any
 from sklearn.datasets import load_breast_cancer
 
 from src.application.dto import PredictNanomodelDTO
-from src.application.predict_nanomodel import execute as predict_execute
 from src.application.open_serve import open_dataset_feature_count
+from src.application.predict_nanomodel import execute as predict_execute
 from src.shared.result import Fail, Ok, Result, fail, ok
 from src.training.structured_log import init_correlation_id, log_event
 
@@ -203,7 +203,6 @@ def format_assistant_message(
 
 
 def predict_request_payload(dto: ChatbotToolCallDTO) -> dict[str, Any]:
-    from src.shared.result import Fail
 
     parsed = parse_tool_arguments(dto.tool_name, dto.arguments)
     if isinstance(parsed, Fail):
@@ -223,7 +222,6 @@ def execute_tool_call(
     """Run tool call through the same predict use case as POST /api/v1/predictions."""
     init_correlation_id()
     parsed = parse_tool_arguments(dto.tool_name, dto.arguments)
-    from src.shared.result import Fail
 
     if isinstance(parsed, Fail):
         return fail(parsed.error)
@@ -240,7 +238,6 @@ def execute_tool_call(
     if isinstance(outcome, Fail):
         return fail(ChatbotToolError(outcome.error.code, outcome.error.message))
 
-    from src.shared.result import Ok
 
     assert isinstance(outcome, Ok)
     result = outcome.value

@@ -56,6 +56,8 @@ class LargeNanoHybrid(TrainableMixin, nn.Module):
         self.qlayer = make_quantum_layer(n_qubits, n_layers, reupload=reupload)
         self.post = nn.Sequential(nn.Linear(n_qubits, 1), nn.Sigmoid())
         self._backbone_frozen = False
+        if self._backbone_device.type == "cuda":
+            self.backbone.to(self._backbone_device)
 
     def freeze_backbone(self) -> None:
         """Stop gradient flow through the million-param classical trunk."""

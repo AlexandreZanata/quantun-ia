@@ -12,7 +12,7 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
-from src.data.open_higgs import sha256_file, update_manifest_ready
+from src.data.open_higgs import update_manifest_ready
 
 SYNTHEA_LICENSE = "MIT"
 SYNTHEA_SOURCE_URL = "https://github.com/synthetichealth/synthea"

@@ -2,7 +2,11 @@
 
 from __future__ import annotations
 
+import pytest
+
 from experiments.exp_033_higgs_serve_parity.run import MAX_DELTA, run_exp_033
+
+pytestmark = pytest.mark.real
 
 
 def test_exp_033_ci_serve_parity_smoke(monkeypatch):

@@ -13,6 +13,16 @@ from sklearn.metrics import (
     recall_score,
 )
 
+from src.application.balanced_metrics import (
+    brier_score as balanced_brier_score,
+)
+from src.application.balanced_metrics import (
+    expected_calibration_error,
+    pr_auc,
+)
+from src.application.balanced_metrics import (
+    roc_auc as balanced_roc_auc,
+)
 from src.application.batch_predict import BatchPredictDTO, run_batch_predict
 from src.application.evaluate_serve_model import (
     _confusion_stats,
@@ -20,15 +30,8 @@ from src.application.evaluate_serve_model import (
     load_open_split_labeled,
 )
 from src.application.open_serve import (
-    DEFAULT_SERVE_EXP_ID,
     DEFAULT_SERVE_MODEL,
     DEFAULT_SERVE_SEED,
-)
-from src.application.balanced_metrics import (
-    brier_score as balanced_brier_score,
-    expected_calibration_error,
-    pr_auc,
-    roc_auc as balanced_roc_auc,
 )
 from src.shared.result import Fail, Ok, Result, fail, ok
 from src.training.structured_log import init_correlation_id, log_event

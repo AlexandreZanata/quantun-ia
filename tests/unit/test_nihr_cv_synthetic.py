@@ -11,13 +11,10 @@ import pytest
 from src.data.nihr_cv_synthetic import (
     COHORT_TOTAL,
     N_FEATURES,
-    RAW_FEATURE_COLUMNS,
-    build_nihr_frame,
     build_nihr_processed,
     encode_nihr_features,
     impute_train_only,
     load_nihr_frame,
-    split_nihr_partitions,
 )
 
 ROOT = Path(__file__).resolve().parents[2]

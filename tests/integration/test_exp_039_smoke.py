@@ -2,8 +2,12 @@
 
 from __future__ import annotations
 
+import pytest
+
 import experiments.exp_039_synthea_regularized.run as run_mod
 from src.training.config import load_experiment_config
+
+pytestmark = pytest.mark.real
 
 
 def _fast_cfg(exp_key: str, profile: str | None = None) -> dict:

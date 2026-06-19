@@ -5,7 +5,6 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 import torch
-import torch.nn as nn
 
 from src.quantum.hybrid_model import HybridSandwich
 from src.training.batched_trainer import train_model_batched

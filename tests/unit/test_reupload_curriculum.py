@@ -4,7 +4,11 @@ import numpy as np
 import torch
 
 from src.quantum.qnn_reupload import QuantumNetReupload
-from src.training.reupload_curriculum import layers_for_stage, train_fixed_reupload, train_reupload_curriculum
+from src.training.reupload_curriculum import (
+    layers_for_stage,
+    train_fixed_reupload,
+    train_reupload_curriculum,
+)
 
 
 def test_layers_for_stage_ladder():

@@ -10,7 +10,6 @@ import pytest
 from src.data.code_defects_gobug import (
     METRIC_COLUMNS,
     N_FEATURES,
-    build_gobug_frame,
     build_gobug_processed,
     load_gobug_frame,
     temporal_split_by_sha,

@@ -2,8 +2,12 @@
 
 from __future__ import annotations
 
+import pytest
+
 import experiments.exp_040_full_scale_ablation_higgs.run as run_mod
 from src.training.config import load_experiment_config
+
+pytestmark = pytest.mark.real
 
 
 def _fast_cfg() -> dict:

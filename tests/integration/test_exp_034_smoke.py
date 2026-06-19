@@ -2,7 +2,11 @@
 
 from __future__ import annotations
 
+import pytest
+
 from experiments.exp_034_large_nano_synthea.run import run_exp_034
+
+pytestmark = pytest.mark.real
 
 
 def test_exp_034_ci_smoke(tmp_path, monkeypatch):

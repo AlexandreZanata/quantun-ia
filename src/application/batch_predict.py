@@ -12,8 +12,8 @@ import pandas as pd
 from sklearn.datasets import load_breast_cancer
 
 from src.application.dto import PredictNanomodelDTO
-from src.application.predict_nanomodel import execute as predict_execute
 from src.application.open_serve import open_dataset_feature_count
+from src.application.predict_nanomodel import execute as predict_execute
 from src.shared.result import Fail, Ok, Result, fail, ok
 from src.training.champion import load_champion_manifest
 from src.training.checkpoints import resolve_checkpoint_dir

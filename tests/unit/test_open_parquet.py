@@ -12,7 +12,6 @@ from src.data.open_parquet import load_open_parquet_splits
 
 def _write_higgs_bundle(root: Path, n_train: int = 200, n_val: int = 50, n_test: int = 50) -> None:
     n_features = 28
-    cols = [f"feature_{i}" for i in range(n_features)] + ["label"]
     out = root / "data" / "open" / "higgs" / "processed" / "v1"
     out.mkdir(parents=True, exist_ok=True)
 

@@ -150,7 +150,7 @@ def run_exp_027(
     manifest = load_champion_manifest()
     if manifest is None:
         raise RuntimeError("champion manifest missing after exp_027")
-    link = Path("artifacts/champion/checkpoint")
+    link = champion_dir() / "checkpoint"
     if not link.is_symlink() and not link.is_dir():
         raise RuntimeError("champion checkpoint symlink missing")
 

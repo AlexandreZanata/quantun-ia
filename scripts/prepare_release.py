@@ -13,7 +13,16 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_DIST = ROOT / "dist" / "release"
-RELEASE_VERSION = "1.0.0"
+
+
+def _project_version() -> str:
+    for line in (ROOT / "pyproject.toml").read_text(encoding="utf-8").splitlines():
+        if line.startswith("version = "):
+            return line.split("=", 1)[1].strip().strip('"')
+    raise RuntimeError("version not found in pyproject.toml")
+
+
+RELEASE_VERSION = _project_version()
 PUBLICATION_JSONL = ROOT / "tests" / "contracts" / "fixtures" / "publication_experiments.jsonl"
 STATIC_ARTIFACTS = ("AUTHORS.md", "CITATION.cff", "RELEASE_NOTES.md", "CHANGELOG.md", "SECURITY.md")
 RELEASE_DOCS = (

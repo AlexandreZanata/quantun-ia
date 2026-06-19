@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import pytest
 
-from experiments.exp_040_full_scale_ablation_higgs.run import run_exp_040
 from experiments.exp_036_method_ablation_higgs.run import METHODS
+from experiments.exp_040_full_scale_ablation_higgs.run import run_exp_040
 
 pytestmark = pytest.mark.real
 

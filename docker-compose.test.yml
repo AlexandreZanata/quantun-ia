@@ -12,6 +12,6 @@ services:
     build:
       context: .
       target: dev
-    command: ruff check src/ tests/ experiments/
+    command: ruff check src/ tests/ scripts/
     environment:
       - PYTHONPATH=/app

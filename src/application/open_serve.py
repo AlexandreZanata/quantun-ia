@@ -8,8 +8,8 @@ from pathlib import Path
 import torch
 
 from src.classical.large_nano_mlp import LargeNanoMLP
-from src.quantum.large_nano_hybrid import LargeNanoHybrid
 from src.data.open_parquet import load_open_parquet_splits
+from src.quantum.large_nano_hybrid import LargeNanoHybrid
 from src.training.checkpoints import (
     checkpoint_path,
     load_checkpoint_bundle,

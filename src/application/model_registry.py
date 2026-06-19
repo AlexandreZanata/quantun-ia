@@ -122,11 +122,11 @@ def build_model(
             lr,
         )
     if name == "large_nano_hybrid":
-        from src.quantum.large_nano_hybrid import LargeNanoHybrid
-
         import os
 
         import torch
+
+        from src.quantum.large_nano_hybrid import LargeNanoHybrid
 
         bb_device = (
             "cuda"

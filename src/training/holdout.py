@@ -11,7 +11,8 @@ from src.training import metrics as metrics_module
 from src.training.adaptive_lr import AdaptiveLRConfig, train_model_adaptive
 from src.training.statistics import holm_bonferroni, paired_comparison, seed_summary
 from src.training.structured_log import log_event
-from src.training.trainer import evaluate as evaluate_model, train_model
+from src.training.trainer import evaluate as evaluate_model
+from src.training.trainer import train_model
 
 
 def _model_device(model) -> torch.device:

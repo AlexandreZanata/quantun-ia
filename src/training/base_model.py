@@ -29,7 +29,7 @@ class TrainableMixin:
     ) -> ExperimentLogger | "TrainableMixin":
         if y is None and (X is None or isinstance(X, bool)):
             mode = True if X is None else X
-            super().train(mode)
+            super().train(mode)  # type: ignore[misc]
             return self
 
         from src.training.trainer import train_model
@@ -39,7 +39,7 @@ class TrainableMixin:
         )
 
     def eval(self) -> "TrainableMixin":
-        super().eval()
+        super().eval()  # type: ignore[misc]
         return self
 
     def predict(self, X: torch.Tensor) -> torch.Tensor:

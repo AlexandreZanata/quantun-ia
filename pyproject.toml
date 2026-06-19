@@ -50,7 +50,7 @@ testpaths = ["tests"]
 pythonpath = ["."]
 addopts = "-v --tb=short"
 markers = [
-    "real: real-hardware tests — require CUDA and actual dataset training (local gate only)",
+    "real: requires CUDA, DVC open-data parquets, or trained checkpoints (local gate only; skipped in CI)",
 ]
 filterwarnings = [
     "ignore::DeprecationWarning",
@@ -78,6 +78,7 @@ ignore = ["E501"]
 
 [tool.ruff.lint.per-file-ignores]
 "experiments/**" = ["E402"]
+"scripts/**" = ["E402"]
 
 [tool.mypy]
 python_version = "3.11"
@@ -91,7 +92,7 @@ exclude = ["experiments/", "dashboard/", "notebooks/"]
 
 [[tool.mypy.overrides]]
 module = ["src.quantum.*", "src.classical.*"]
-disable_error_code = ["misc", "no-untyped-def", "no-any-return"]
+disable_error_code = ["misc", "no-untyped-def", "no-any-return", "override"]
 
 [[tool.mypy.overrides]]
 module = ["src.training.*"]

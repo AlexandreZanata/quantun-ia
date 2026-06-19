@@ -37,7 +37,7 @@ def test_evaluate_serve_model_smoke_on_higgs():
             chunk_size=128,
         )
     )
-    from src.shared.result import Fail, Ok
+    from src.shared.result import Ok
 
     assert isinstance(outcome, Ok), outcome
     r = outcome.value

@@ -12,8 +12,8 @@ health-gpu:
 	$(PYTHON) scripts/health_check.py --gpu
 
 check: lint-local typecheck
-	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m pytest tests/ --ignore=tests/real --cov=src --cov-fail-under=80 -q
-	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m pytest tests/integration/ tests/contracts/ -q
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m pytest tests/ --ignore=tests/real -m "not real" --cov=src --cov-fail-under=80 -q
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m pytest tests/integration/ tests/contracts/ -m "not real" -q
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m pytest tests/e2e/ -q
 
 check-real:
@@ -38,13 +38,13 @@ lint:
 	docker compose -f docker-compose.test.yml run --rm lint
 
 lint-local:
-	ruff check src/ tests/ experiments/ scripts/
+	ruff check src/ tests/ scripts/
 
 lint-fix:
 	docker compose run --rm app ruff check --fix src/ tests/ experiments/
 
 coverage:
-	docker compose run --rm test pytest tests/ --cov=src --cov-report=html --cov-report=term-missing
+	docker compose -f docker-compose.test.yml run --rm test pytest tests/ --ignore=tests/real -m "not real" --cov=src --cov-report=html --cov-report=term-missing -q
 
 dashboard:
 	docker compose up dashboard

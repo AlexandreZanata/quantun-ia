@@ -15,13 +15,13 @@ from fastapi.responses import PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 
 from dashboard.benchmark_data import load_records, to_leaderboard_rows
-from src.application.dto import PredictNanomodelDTO
-from src.application.predict_nanomodel import execute as predict_execute
 from src.application.create_training_job import CreateTrainingJobDTO
 from src.application.create_training_job import execute as create_job
+from src.application.dto import PredictNanomodelDTO
 from src.application.issue_tokens import IssueTokensDTO
 from src.application.issue_tokens import execute as issue_tokens
 from src.application.nanotrainer_config import load_nanotrainer_config
+from src.application.predict_nanomodel import execute as predict_execute
 from src.application.refresh_tokens import RefreshTokensDTO
 from src.application.refresh_tokens import execute as refresh_tokens_execute
 from src.benchmark.microqml_bench import build_bench_export

@@ -16,6 +16,7 @@ EXPERIMENT_RECORD_SCHEMA: dict = {
                 "paired_comparison",
                 "paired_comparison_batch",
                 "applicability_gate",
+                "clinical_validation",
             ],
         },
         "seed": {"type": ["integer", "null"]},
@@ -87,6 +88,6 @@ def schema_for_record(record: dict) -> dict:
         return MULTI_SEED_SUMMARY_SCHEMA
     if record_type == "paired_comparison_batch":
         return PAIRED_COMPARISON_BATCH_SCHEMA
-    if record_type in {"paired_comparison", "applicability_gate"}:
+    if record_type in {"paired_comparison", "applicability_gate", "clinical_validation"}:
         return {"type": "object", "required": ["exp_id", "record_type"], "additionalProperties": True}
     return EXPERIMENT_RECORD_SCHEMA

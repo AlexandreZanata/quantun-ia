@@ -14,9 +14,9 @@ from src.application.nanotrainer_config import (
 )
 from src.data.dataset_registry import prepare_dataset
 from src.shared.result import Result, fail, ok
+from src.training.checkpoints import resolve_checkpoint_dir, save_scaler
 from src.training.holdout import train_with_holdout
 from src.training.structured_log import init_correlation_id, log_event, set_experiment_context
-from src.training.checkpoints import resolve_checkpoint_dir, save_scaler
 from src.training.trainer import count_parameters
 
 

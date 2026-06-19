@@ -9,10 +9,11 @@ from pathlib import Path
 from typing import Any
 
 from src.application.evaluate_serve_model import (
-    SERVE_MODELS,
     EvaluateServeModelDTO,
-    execute as evaluate_execute,
     list_serve_models,
+)
+from src.application.evaluate_serve_model import (
+    execute as evaluate_execute,
 )
 from src.application.human_cv_scorer import PatientProfile, compare_profiles, score_patient
 from src.shared.result import Fail, Ok

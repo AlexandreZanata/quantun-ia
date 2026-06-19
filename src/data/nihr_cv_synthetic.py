@@ -12,7 +12,7 @@ import pandas as pd
 from sklearn.impute import SimpleImputer
 from sklearn.model_selection import train_test_split
 
-from src.data.open_higgs import sha256_file, update_manifest_ready
+from src.data.open_higgs import update_manifest_ready
 
 NIHR_ZENODO_CSV_URL = (
     "https://zenodo.org/api/records/12567416/files/cvd_synthetic_dataset_v0.2.csv/content"

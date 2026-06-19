@@ -2,7 +2,11 @@
 
 from __future__ import annotations
 
+import pytest
+
 from experiments.exp_032_large_nano_higgs.run import run_exp_032
+
+pytestmark = pytest.mark.real
 
 
 def test_exp_032_ci_smoke(tmp_path, monkeypatch):

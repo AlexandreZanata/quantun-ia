@@ -2,6 +2,8 @@
 
 import pytest
 
+pytestmark = pytest.mark.real
+
 
 def test_exp_070_ci_smoke(tmp_path, monkeypatch):
     import torch

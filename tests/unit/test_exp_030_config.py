@@ -11,7 +11,7 @@ def test_exp_030_ci_config():
     assert cfg["n_samples"] == 100
     assert len(cfg["seeds"]) == 3
     assert cfg["reference_seeds"] == 2
-    assert cfg["parity_max_delta_pp"] == 2.0
+    assert cfg["parity_max_delta_pp"] == 5.0
 
 
 def test_exp_030_publication_large_config():

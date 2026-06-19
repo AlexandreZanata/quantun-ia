@@ -5,6 +5,7 @@ from __future__ import annotations
 import pytest
 
 pytest.importorskip("torch")
+pytestmark = pytest.mark.real
 
 
 def test_exp_060_ci_smoke(tmp_path, monkeypatch):

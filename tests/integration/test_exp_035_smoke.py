@@ -2,7 +2,11 @@
 
 from __future__ import annotations
 
+import pytest
+
 from experiments.exp_035_synthea_serve_parity.run import MAX_DELTA, run_exp_035
+
+pytestmark = pytest.mark.real
 
 
 def test_exp_035_ci_serve_parity_smoke(monkeypatch):
