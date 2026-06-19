@@ -1001,6 +1001,38 @@ experiments:
     max_ece_after: 0.085
     min_spearman_rho: 0.85
 
+  exp_044_nihr_cv_baseline:
+    description: "LargeNanoMLP on NIHR synthetic CV — val AUC vs logistic baseline"
+    exp_id: exp_044
+    dataset_id: nihr_cv_synthetic_v1
+    seed: 42
+    hidden1: 2048
+    hidden2: 512
+    hidden3: 64
+    dropout: 0.3
+    batch_size: 2048
+    learning_rate: 0.001
+    weight_decay: 0.0001
+    min_val_auc: 0.70
+    min_auc_advantage_pp: 0.5
+    save_checkpoints: false
+    profile_overrides:
+      ci:
+        n_train_rows: 20000
+        n_val_rows: 5000
+        epochs: 5
+        batch_size: 1024
+        min_val_auc: 0.65
+        min_auc_advantage_pp: -2.0
+      publication:
+        n_train_rows: 0
+        n_val_rows: 0
+        epochs: 12
+        batch_size: 2048
+        min_val_auc: 0.70
+        min_auc_advantage_pp: 0.5
+        save_checkpoints: true
+
   exp_046_model_scale_curve:
     description: "LargeNanoMLP scale ablation nano_s→nano_xxl on HIGGS — VRAM + AUC curve"
     exp_id: exp_046

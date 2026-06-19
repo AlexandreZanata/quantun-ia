@@ -34,6 +34,13 @@ EXPECTED_SYNTHEA_COUNTS = {
     "test": 150_000,
 }
 
+EXPECTED_NIHR_COUNTS = {
+    "total": 100_000,
+    "train": 70_000,
+    "val": 15_000,
+    "test": 15_000,
+}
+
 
 def _load_manifest() -> dict:
     assert MANIFEST_PATH.is_file(), "data/open/manifest.json must exist"
@@ -75,6 +82,16 @@ def test_manifest_synthea_cv_risk_v1_metadata():
     assert synthea["row_counts"] == EXPECTED_SYNTHEA_COUNTS
 
 
+def test_manifest_nihr_cv_synthetic_v1_metadata():
+    manifest = _load_manifest()
+    nihr = _dataset_by_id(manifest, "nihr_cv_synthetic_v1")
+    assert nihr["license"] == "CC0-1.0"
+    assert nihr["n_features"] == 13
+    assert nihr["build_script"] == "scripts/build_nihr_cv_synthetic.py"
+    assert Path(ROOT / nihr["build_script"]).is_file()
+    assert nihr["row_counts"] == EXPECTED_NIHR_COUNTS
+
+
 def test_tabular_binary_schema_file_exists():
     assert SCHEMA_PATH.is_file()
     schema = json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
@@ -92,6 +109,11 @@ def test_synthea_build_script_registered_in_makefile():
     assert "data-open-synthea-cv" in makefile
 
 
+def test_nihr_build_script_registered_in_makefile():
+    makefile = (ROOT / "Makefile").read_text(encoding="utf-8")
+    assert "data-open-nihr-cv" in makefile
+
+
 @pytest.mark.parametrize(
     ("dataset_id", "split_name", "expected_rows", "n_features"),
     [
@@ -101,6 +123,9 @@ def test_synthea_build_script_registered_in_makefile():
         ("synthea_cv_risk_v1", "train", 700_000, 40),
         ("synthea_cv_risk_v1", "val", 150_000, 40),
         ("synthea_cv_risk_v1", "test", 150_000, 40),
+        ("nihr_cv_synthetic_v1", "train", 70_000, 13),
+        ("nihr_cv_synthetic_v1", "val", 15_000, 13),
+        ("nihr_cv_synthetic_v1", "test", 15_000, 13),
     ],
 )
 def test_open_dataset_splits_when_ready(

@@ -2,7 +2,7 @@
   "schema_version": "1",
   "project": "quantun-ia",
   "phase": "L",
-  "updated_at": "2026-06-18",
+  "updated_at": "2026-06-19",
   "hardware_target": "NVIDIA RTX 4060 Laptop GPU (8 GB VRAM)",
   "model_target_params": {
     "min": 1000000,
@@ -64,6 +64,34 @@
         "stats": "c99e6153c00c158599ea6e8d439706b552e3c1e1806e15f59abfaf955f996ba2"
       },
       "build_script": "scripts/build_synthea_cv_risk.py"
+    },
+    {
+      "id": "nihr_cv_synthetic_v1",
+      "path": "nihr_cv_synthetic/processed/v1",
+      "description": "NIHR synthetic CVD cohort \u2014 10-year heart attack/stroke, 13 features, realistic prevalence",
+      "license": "CC0-1.0",
+      "source_url": "https://doi.org/10.5281/zenodo.12567416",
+      "ready": true,
+      "row_counts": {
+        "total": 100000,
+        "train": 70000,
+        "val": 15000,
+        "test": 15000
+      },
+      "n_features": 13,
+      "files": {
+        "train": "train.parquet",
+        "val": "val.parquet",
+        "test": "test.parquet",
+        "stats": "stats.json"
+      },
+      "build_script": "scripts/build_nihr_cv_synthetic.py",
+      "checksums": {
+        "train": "dddc8c1ff0253f0022fb9dd6509024684fc1ff7fca3906611668564ae47ef8d9",
+        "val": "8d8f43cc14aa52e071d728159ed1265ee94ade2304110a827fa65176a77c45e6",
+        "test": "00663131b29fd1f986345b1ab6a42b2c0992d86aee4412cc2f9ab05da95b4400",
+        "stats": "4808efe4f908fc55826331a3c1496273a5a1f1775d835265af70b44746718a5a"
+      }
     }
   ]
 }

@@ -304,6 +304,7 @@ Full arXiv upload details: [docs/arxiv.md](docs/arxiv.md) · LaTeX skeleton: [pa
 | Human-interpretable CV ranking | 8 literature cases, Spearman ρ ≥ 0.85 | `make exp-041-publication` |
 | Sample-size stability | Precision/AUC curve n=100→2000 | `make exp-042-publication` |
 | HIGGS model scale ceiling | nano_s→nano_xxl on 805K rows; plateau at nano_l | `make exp-046-publication` |
+| NIHR clinical baseline | LargeNanoMLP vs logistic on 100k Zenodo cohort | `make exp-044-publication` |
 
 Write `hypothesis.md` **before** each new experiment; fill `results.md` **after** GPU runs.
 All metrics must go through `ExperimentLogger` → `logs/experiments.jsonl`.

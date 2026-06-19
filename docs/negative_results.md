@@ -15,6 +15,7 @@ Each entry links to the experiment `results.md` and the statistical test outcome
 | exp_003 | Entanglement topology improves re-upload QNN | **Rejected** | No Holm-significant pairwise vs `none` |
 | exp_009 | Entanglement helps basic QNN (no re-upload) | **Rejected** | All topologies cluster 56–61%; no Holm significance |
 | exp_046 | nano_xl beats nano_l by ≥0.3 pp AUC on HIGGS 805K | **Rejected** | nano_xl − nano_l = −0.03 pp; plateau at ~1.14M params |
+| exp_044 | LargeNanoMLP beats logistic by ≥0.5 pp on NIHR val | **Rejected** | AUC 0.831 passes; nano − logistic = −0.16 pp |
 
 ---
 
@@ -111,6 +112,26 @@ by the pre-registered 0.3 pp gate (−0.03 pp). nano_xxl fits in 8 GB VRAM but a
 champion selection should stay at nano_l unless multi-seed overnight runs show otherwise.
 
 See: `experiments/exp_046_model_scale_curve/results.md`
+
+---
+
+## exp_044 — NIHR synthetic CV baseline
+
+**Profile:** NIHR 70K train / 15K val, 12 epochs, seed 42, RTX 4060
+
+| Model | Val ROC-AUC |
+|-------|-------------|
+| Logistic (QRISK-style) | **0.8322** |
+| LargeNanoMLP (~1.11M) | 0.8306 |
+
+**Finding:** Primary AUC gate passes (0.831 ≥ 0.70), but nano does **not** beat logistic by
+the pre-registered 0.5 pp advantage gate (−0.16 pp). On realistic-prevalence NIHR (~6.6%
+positive), a simple logistic baseline is a strong ceiling for the current MLP architecture.
+
+**Lesson:** Use NIHR for honest clinical metrics and calibration (exp_047); do not assume
+million-param MLP beats logistic on low-dimensional epidemiological features without ablation.
+
+See: `experiments/exp_044_nihr_cv_baseline/results.md`
 
 ---
 

@@ -21,6 +21,8 @@ data/open/higgs/raw/
 data/open/higgs/processed/v1/
 data/open/synthea_cv_risk/raw/
 data/open/synthea_cv_risk/processed/v1/
+data/open/nihr_cv_synthetic/raw/
+data/open/nihr_cv_synthetic/processed/v1/
 data/*.db
 figures/
 dist/

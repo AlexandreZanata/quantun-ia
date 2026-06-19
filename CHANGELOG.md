@@ -14,10 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Human CV validation (Phase M)** — exp_041 clinical ranking gate, CV Risk Clinic dashboard
 - **exp_046** — LargeNanoMLP scale curve (nano_s→nano_xxl) on HIGGS; honest negative at nano_l plateau
 - **Phase 1 Step 1.1** — HIGGS model scale curve closed on RTX 4060; champion stays `large_nano_mlp` (nano_l)
+- **exp_044** — NIHR synthetic CV ingest + LargeNanoMLP baseline (val AUC 0.831; logistic ceiling on advantage gate)
+- **Phase 3 Step 3.1 (partial)** — `nihr_cv_synthetic_v1` open dataset + exp_044 baseline on RTX 4060
 
 ### Changed
 
-- `make check-real` — **29/29** real GPU gates on RTX 4060 (incl. exp_046 scale curve + nanomodel ship P0)
+- `make check-real` — **30/30** real GPU gates on RTX 4060 (incl. exp_044 NIHR + exp_046 scale curve)
 - `batched_trainer` — batched validation eval to avoid CUDA OOM on 172K-row HIGGS val
 
 ## [1.2.0] - 2026-06-18
