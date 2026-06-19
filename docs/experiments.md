@@ -303,8 +303,6 @@ vim experiments/exp_003_entanglement_effect/results.md
 | C3 GoBug | `large_nano_mlp_gobug` | exp_070 | PR-AUC +0.03 pp vs logistic | Rejected (shipped) |
 | C4 ACYD | `large_nano_mlp_acyd_soy` | exp_060 | ROC-AUC +3.86 pp vs logistic | Accepted |
 
-**Next:** Phase 2 conventional sweep GoBug (exp_077) · Phase 3 quantum heads (exp_062 ACYD).
-
 ### EXP 076 — Conventional NIHR baselines
 
 **Models:** exp_069 `LargeNanoMLP` vs sklearn `LogisticRegression`, `MLPClassifier`, `HistGradientBoosting`, `XGBoost`  
@@ -312,6 +310,27 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Claim:** Val PR-AUC ≥ best conventional + 0.5 pp  
 **Verdict:** Rejected — logistic 0.2382 vs nano 0.2393 (+0.12 pp); nano ranks first but below gate  
 **Command:** `QML_DEVICE=cuda python experiments/exp_076_conventional_nihr_baselines/run.py --profile publication --write-results`
+
+### EXP 077 — Conventional GoBug baselines
+
+**Models:** exp_070 `LargeNanoMLP` vs sklearn `LogisticRegression`, `MLPClassifier`, `HistGradientBoosting`, `XGBoost`  
+**Dataset:** `code_defects_gobug_v1` (27,172 train / 5,822 val, 23 features, temporal split)  
+**Claim:** Val PR-AUC ≥ best conventional + 0.5 pp  
+**Verdict:** Rejected — HistGB 0.3276 vs nano 0.3174 (−1.02 pp)  
+**Command:** `QML_DEVICE=cuda python experiments/exp_077_conventional_gobug_baselines/run.py --profile publication --write-results`
+
+### Phase 2 closure — four conventional sweeps (C1–C4)
+
+**Status:** Closed 2026-06-19 (RTX 4060). All four domains swept; honest negatives documented.
+
+| Domain | Experiment | Best conventional | Nano vs best |
+|--------|------------|-------------------|--------------|
+| HIGGS (C1) | exp_058 | sklearn MLP | −0.71 pp ROC-AUC |
+| NIHR (C2) | exp_076 | logistic | +0.12 pp PR-AUC (gate rejected) |
+| GoBug (C3) | exp_077 | HistGB | −1.02 pp PR-AUC |
+| ACYD (C4) | exp_061 | HistGB | −1.64 pp ROC-AUC |
+
+**Next:** Phase 3 quantum heads (exp_062 ACYD hybrid QNN).
 
 ## Publication Profiles
 

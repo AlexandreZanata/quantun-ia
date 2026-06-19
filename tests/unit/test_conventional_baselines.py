@@ -124,3 +124,36 @@ def test_run_conventional_nihr_comparison_ci(tmp_path, monkeypatch):
     assert len(result.scores) == 5
     assert result.nano_auc >= 0.0
     assert result.nano_auc <= 1.0
+
+
+def test_run_conventional_gobug_comparison_ci(tmp_path, monkeypatch):
+    pytest.importorskip("xgboost")
+    root = tmp_path
+    weights = root / "artifacts/exp_070/large_nano_mlp/seed_42"
+    weights.mkdir(parents=True)
+
+    model = LargeNanoMLP(input_dim=4)
+    torch.save(model.state_dict(), weights / "best.pt")
+
+    rng = np.random.default_rng(42)
+    n_train, n_val = 200, 50
+    x_train = rng.normal(size=(n_train, 4)).astype(np.float32)
+    y_train = (x_train[:, 0] > 0.2).astype(np.float32)
+    x_val = rng.normal(size=(n_val, 4)).astype(np.float32)
+    y_val = (x_val[:, 0] > 0.2).astype(np.float32)
+
+    def _fake_load(_dataset_id, _root, **kwargs):
+        return x_train, y_train, x_val, y_val, x_val, y_val, None
+
+    monkeypatch.setattr(
+        "src.training.conventional_baselines.load_open_parquet_splits",
+        _fake_load,
+    )
+
+    from src.training.conventional_baselines import run_conventional_gobug_comparison
+
+    result = run_conventional_gobug_comparison(root, profile="ci", weights_dir=weights)
+    assert result.n_train_rows == 200
+    assert len(result.scores) == 5
+    assert result.nano_auc >= 0.0
+    assert result.nano_auc <= 1.0

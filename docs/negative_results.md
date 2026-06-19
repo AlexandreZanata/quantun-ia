@@ -26,6 +26,7 @@ Each entry links to the experiment `results.md` and the statistical test outcome
 | exp_061 | LargeNanoMLP ≥ best conventional + 0.5 pp (ACYD) | **Rejected** | HistGB 0.6941 vs nano 0.6777 (−1.64 pp temporal val) |
 | exp_069 | LargeNanoMLP ≥ logistic + 1.0 pp PR-AUC (NIHR) | **Rejected** | logistic 0.2382 vs nano 0.2370 (−0.12 pp) |
 | exp_076 | LargeNanoMLP ≥ best conventional + 0.5 pp PR-AUC (NIHR) | **Rejected** | logistic 0.2382 vs nano 0.2393 (+0.12 pp) |
+| exp_077 | LargeNanoMLP ≥ best conventional + 0.5 pp PR-AUC (GoBug) | **Rejected** | HistGB 0.3276 vs nano 0.3174 (−1.02 pp) |
 | exp_070 | LargeNanoMLP ≥ logistic + 2.0 pp PR-AUC (GoBug) | **Rejected** | logistic 0.3097 vs nano 0.3100 (+0.03 pp) |
 
 ---
@@ -342,6 +343,26 @@ See: `experiments/exp_069_large_nano_nihr/results.md`
 **Interpretation:** Nano barely edges logistic on PR-AUC but does not clear the 0.5 pp conventional sweep gate; sklearn matched MLP underperforms. C2 anchor remains the comparison floor for quantum heads.
 
 See: `experiments/exp_076_conventional_nihr_baselines/results.md`
+
+---
+
+## exp_077 — Conventional GoBug baselines vs LargeNanoMLP
+
+**Profile:** code_defects_gobug_v1, 27,172 train / 5,822 val, seed 42, RTX 4060
+
+| Model | Val PR-AUC | Train (s) |
+|-------|------------|-----------|
+| HistGradientBoosting (sklearn) | **0.3276** | 0.2 |
+| XGBoost shallow | 0.3192 | 0.7 |
+| LargeNanoMLP (exp_070 checkpoint) | 0.3174 | 0.1 |
+| LogisticRegression | 0.3097 | 0.8 |
+| MLPClassifier (sklearn, 2048-512-64) | 0.3039 | 19.8 |
+
+**Gate:** LargeNanoMLP ≥ best conventional + 0.5 pp PR-AUC → **failed** (−1.02 pp vs HistGB).
+
+**Interpretation:** Gradient boosting beats the deep nano anchor on GoBug temporal val despite exp_070 tying logistic. Honest negative for C3 vs full classical panel; nano still valid as hybrid ablation floor.
+
+See: `experiments/exp_077_conventional_gobug_baselines/results.md`
 
 ---
 

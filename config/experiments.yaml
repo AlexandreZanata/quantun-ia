@@ -1416,6 +1416,27 @@ experiments:
         histgb_max_iter: 100
         xgboost_n_estimators: 50
 
+  exp_077_conventional_gobug_baselines:
+    description: "LargeNanoMLP vs sklearn/XGBoost conventional baselines on GoBug val PR-AUC"
+    exp_id: exp_077
+    dataset_id: code_defects_gobug_v1
+    checkpoint_exp_key: exp_070_large_nano_gobug
+    primary_metric: pr_auc
+    seed: 42
+    min_advantage_pp: 0.5
+    xgboost_learning_rate: 0.1
+    xgboost_n_estimators: 50
+    histgb_max_iter: 100
+    profile_overrides:
+      ci:
+        min_advantage_pp: 0.0
+        histgb_max_iter: 50
+        xgboost_n_estimators: 30
+      publication:
+        min_advantage_pp: 0.5
+        histgb_max_iter: 100
+        xgboost_n_estimators: 50
+
   exp_069_large_nano_nihr:
     description: "LargeNanoMLP ~1.11M params on NIHR synthetic CV — val PR-AUC vs logistic (C2)"
     exp_id: exp_069
