@@ -207,6 +207,12 @@ exp-070:
 exp-070-publication:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_070_large_nano_gobug/run.py --profile publication --write-results
 
+exp-071:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_071_hybrid_nano_gobug/run.py --profile ci
+
+exp-071-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_071_hybrid_nano_gobug/run.py --profile publication --write-results
+
 exp-033:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_033_higgs_serve_parity/run.py --profile ci
 

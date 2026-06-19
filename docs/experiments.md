@@ -344,11 +344,20 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Scope:** Curated aggregation of publication metrics — no new GPU training  
 **Domains:** HIGGS (C1), NIHR (C2), GoBug (C3), ACYD (C4)  
 **Claim:** No quantum recipe wins on ≥3/4 domains with Δ ≥ +0.5 pp  
-**Verdict:** Hypothesis **confirmed** — QNN head best +0.04 pp (HIGGS); GoBug QNN pending exp_071  
+**Verdict:** Hypothesis **confirmed** — QNN head 4q complete on C1–C4; best +0.04 pp (HIGGS), none ≥ +0.5 pp  
 **Artifacts:** `dist/leaderboards/nano_grand_comparison.json`, `paper/tables/grand_comparison.tex`  
 **Command:** `python experiments/exp_068_nano_grand_comparison/run.py --profile publication --write-results`
 
-**Next:** Phase 3 continuation — exp_071 GoBug hybrid QNN; exp_068a/b agro-specific quantum hypotheses.
+### EXP 071 — Hybrid QNN head on frozen GoBug LargeNanoMLP (C3)
+
+**Models:** Frozen `LargeNanoMLP` (exp_070) + 4-qubit re-upload QNN head (~289 trainable params) vs classical sigmoid head (same backbone)  
+**Dataset:** `code_defects_gobug_v1` (27,172 train / 5,822 val, temporal val split)  
+**Claim:** Hybrid val PR-AUC ≥ classical head − 1.0 pp  
+**Verdict:** Accepted — classical 0.3174 vs hybrid 0.3175 (+0.02 pp; within gate)  
+**Command:** `QML_DEVICE=cuda python experiments/exp_071_hybrid_nano_gobug/run.py --profile publication --write-results`  
+**Checkpoint:** `artifacts/exp_071/large_nano_hybrid_gobug/seed_42/best.pt`
+
+**Next:** Phase 3 continuation — exp_068a angle encoding (ACYD); exp_072–075 cross-domain Q replication.
 
 ## Publication Profiles
 

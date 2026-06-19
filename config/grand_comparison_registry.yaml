@@ -61,12 +61,12 @@ recipes:
     source_exp:
       higgs: exp_037
       nihr: exp_051
-      gobug: null
+      gobug: exp_071
       acyd: exp_062
     delta_pp:
       higgs: 0.04
       nihr: 0.02
-      gobug: null
+      gobug: 0.02
       acyd: -0.19
 
   quantum_warmstart:

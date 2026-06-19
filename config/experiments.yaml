@@ -1545,6 +1545,40 @@ experiments:
         min_pr_advantage_pp: 2.0
         save_checkpoints: true
 
+  exp_071_hybrid_nano_gobug:
+    description: "Frozen LargeNanoMLP (GoBug C3) + 4-qubit hybrid head — val PR-AUC vs classical head"
+    exp_id: exp_071
+    dataset_id: code_defects_gobug_v1
+    checkpoint_exp_id: exp_070
+    checkpoint_model_name: large_nano_mlp
+    seed: 42
+    hidden1: 2048
+    hidden2: 512
+    hidden3: 64
+    dropout: 0.3
+    n_qubits: 4
+    n_layers: 2
+    reupload: true
+    batch_size: 256
+    learning_rate: 0.01
+    weight_decay: 0.0001
+    epochs: 4
+    min_vs_classical_pp: -1.0
+    save_checkpoints: false
+    profile_overrides:
+      ci:
+        n_train_rows: 5000
+        n_val_rows: 1000
+        epochs: 4
+        min_vs_classical_pp: -2.0
+      publication:
+        n_train_rows: 0
+        n_val_rows: 0
+        epochs: 8
+        batch_size: 512
+        min_vs_classical_pp: -1.0
+        save_checkpoints: true
+
   exp_046_model_scale_curve:
     description: "LargeNanoMLP scale ablation nano_s→nano_xxl on HIGGS — VRAM + AUC curve"
     exp_id: exp_046

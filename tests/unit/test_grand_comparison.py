@@ -25,7 +25,7 @@ def test_build_matrix_hypothesis_confirmed():
     result = build_grand_comparison_matrix(registry, claim_win_delta_pp=0.5)
     assert result.hypothesis_confirmed is True
     assert result.quantum_recipe_wins["qnn_head_4q"] == 0
-    assert "gobug" in result.pending_domains.get("qnn_head_4q", [])
+    assert result.pending_domains.get("qnn_head_4q", []) == []
 
 
 def test_export_json_and_latex(tmp_path):
