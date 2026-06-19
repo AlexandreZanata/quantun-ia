@@ -53,6 +53,15 @@ dashboard-local:
 	@$(PYTHON) dashboard/terminal_report.py
 	@$(PYTHON) -m streamlit run dashboard/app.py --server.headless true --server.port 8501
 
+model-lab:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m streamlit run dashboard/app.py --server.headless true --server.port 8502
+
+demo-open-predict:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) scripts/demo_open_predict.py --rows 5000
+
+demo-open-predict-hybrid:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) scripts/demo_open_predict.py --exp-id exp_037 --model-name large_nano_hybrid --rows 5000
+
 experiment:
 	docker compose run --rm experiment
 
