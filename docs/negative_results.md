@@ -14,6 +14,7 @@ Each entry links to the experiment `results.md` and the statistical test outcome
 | exp_007 | Self-play hard-example mining improves holdout | **Rejected** | Holm p=1.000; zero gain at n=500 and n=1000 |
 | exp_003 | Entanglement topology improves re-upload QNN | **Rejected** | No Holm-significant pairwise vs `none` |
 | exp_009 | Entanglement helps basic QNN (no re-upload) | **Rejected** | All topologies cluster 56–61%; no Holm significance |
+| exp_046 | nano_xl beats nano_l by ≥0.3 pp AUC on HIGGS 805K | **Rejected** | nano_xl − nano_l = −0.03 pp; plateau at ~1.14M params |
 
 ---
 
@@ -88,6 +89,28 @@ See: `experiments/exp_003_entanglement_effect/results.md`
 entanglement effect. The exp_003 reversal appears tied to re-upload expressivity, not entanglement alone.
 
 See: `experiments/exp_009_entanglement_basic/results.md`
+
+---
+
+## exp_046 — Model scale curve on HIGGS
+
+**Profile:** HIGGS 805K train / 172.5K val, 8 epochs, seed 42, RTX 4060
+
+| Variant | Params | Val ROC-AUC | Peak VRAM (MB) |
+|---------|--------|-------------|----------------|
+| nano_s | 85K | 0.8270 | 69 |
+| nano_m | 309K | 0.8313 | 104 |
+| nano_l | 1.14M | **0.8316** | 181 |
+| nano_xl | 4.45M | 0.8314 | 359 |
+| nano_xxl | 9.03M | 0.8316 | 429 |
+
+**Finding:** Validation AUC **plateaus at nano_l** (~1.14M params). nano_xl does not beat nano_l
+by the pre-registered 0.3 pp gate (−0.03 pp). nano_xxl fits in 8 GB VRAM but adds no gain.
+
+**Lesson:** On HIGGS at this epoch budget, wider MLPs waste VRAM/time without AUC benefit;
+champion selection should stay at nano_l unless multi-seed overnight runs show otherwise.
+
+See: `experiments/exp_046_model_scale_curve/results.md`
 
 ---
 

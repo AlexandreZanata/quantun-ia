@@ -1000,3 +1000,53 @@ experiments:
     min_negatives: 100
     max_ece_after: 0.085
     min_spearman_rho: 0.85
+
+  exp_046_model_scale_curve:
+    description: "LargeNanoMLP scale ablation nano_s→nano_xxl on HIGGS — VRAM + AUC curve"
+    exp_id: exp_046
+    dataset_id: higgs_v1
+    seed: 42
+    dropout: 0.3
+    learning_rate: 0.001
+    weight_decay: 0.0001
+    eval_batch_size: 8192
+    min_xl_advantage_pp: 0.3
+    variant_order: [nano_s, nano_m, nano_l, nano_xl, nano_xxl]
+    variants:
+      nano_s:
+        hidden1: 512
+        hidden2: 128
+        hidden3: 32
+        batch_size: 4096
+      nano_m:
+        hidden1: 1024
+        hidden2: 256
+        hidden3: 64
+        batch_size: 2048
+      nano_l:
+        hidden1: 2048
+        hidden2: 512
+        hidden3: 64
+        batch_size: 2048
+      nano_xl:
+        hidden1: 4096
+        hidden2: 1024
+        hidden3: 128
+        batch_size: 2048
+      nano_xxl:
+        hidden1: 4096
+        hidden2: 2048
+        hidden3: 256
+        batch_size: 1024
+    profile_overrides:
+      ci:
+        n_train_rows: 50000
+        n_val_rows: 10000
+        epochs: 4
+        min_xl_advantage_pp: -5.0
+        variant_order: [nano_s, nano_l, nano_xl]
+      publication:
+        n_train_rows: 0
+        n_val_rows: 0
+        epochs: 8
+        min_xl_advantage_pp: 0.3

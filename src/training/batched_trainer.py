@@ -31,6 +31,40 @@ def evaluate_with_auc(model: nn.Module, X: torch.Tensor, y: torch.Tensor) -> dic
     return metrics
 
 
+def evaluate_with_auc_batched(
+    model: nn.Module,
+    X: torch.Tensor,
+    y: torch.Tensor,
+    *,
+    batch_size: int = 8192,
+) -> dict:
+    """ROC-AUC on large validation tensors without full-batch GPU OOM."""
+    if len(X) <= batch_size:
+        return evaluate_with_auc(model, X, y)
+
+    model.eval()
+    dev = next(model.parameters()).device
+    prob_chunks: list[np.ndarray] = []
+    label_chunks: list[np.ndarray] = []
+    with torch.no_grad():
+        for start in range(0, len(X), batch_size):
+            x_batch = X[start : start + batch_size].to(dev)
+            y_batch = y[start : start + batch_size].to(dev)
+            prob_chunks.append(predict(model, x_batch).detach().cpu().numpy())
+            label_chunks.append(y_batch.detach().cpu().numpy())
+
+    probs = np.concatenate(prob_chunks)
+    labels = np.concatenate(label_chunks)
+    preds = probs > 0.5
+    accuracy = float(np.mean(preds == labels.astype(bool)))
+    loss = float(np.mean((probs - labels) ** 2))
+    if len(np.unique(labels)) < 2:
+        auc = 0.5
+    else:
+        auc = float(roc_auc_score(labels, probs))
+    return {"accuracy": accuracy, "loss": loss, "roc_auc": auc}
+
+
 def train_model_batched(
     model: nn.Module,
     X: torch.Tensor,
@@ -80,6 +114,15 @@ def train_model_batched(
     dataset = TensorDataset(X, y)
     loader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
 
+    eval_batch_size = 8192
+
+    def _val_metrics() -> dict:
+        if X_val is None or y_val is None:
+            return {}
+        if len(y_val) > eval_batch_size:
+            return evaluate_with_auc_batched(model, X_val, y_val, batch_size=eval_batch_size)
+        return evaluate_with_auc(model, X_val, y_val)
+
     best_val_auc: float | None = None
     t0 = time.time()
     for epoch in range(epochs):
@@ -104,7 +147,7 @@ def train_model_batched(
             "accuracy": epoch_acc / max(n_batches, 1),
         }
         if X_val is not None and y_val is not None and (epoch % log_every == 0 or epoch == epochs - 1):
-            val_metrics = evaluate_with_auc(model, X_val, y_val)
+            val_metrics = _val_metrics()
             epoch_metrics["val_accuracy"] = val_metrics["accuracy"]
             epoch_metrics["val_loss"] = val_metrics["loss"]
             epoch_metrics["val_roc_auc"] = val_metrics["roc_auc"]
@@ -142,7 +185,7 @@ def train_model_batched(
     n_params = count_parameters(model)
     finish_extra: dict = {"n_params": n_params}
     if X_val is not None and y_val is not None:
-        val_metrics = evaluate_with_auc(model, X_val, y_val)
+        val_metrics = _val_metrics()
         finish_extra.update(
             {
                 "test_accuracy": val_metrics["accuracy"],
