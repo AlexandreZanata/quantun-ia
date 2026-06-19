@@ -1375,6 +1375,40 @@ experiments:
         min_auc_advantage_pp: 2.0
         save_checkpoints: true
 
+  exp_062_hybrid_nano_acyd_soy:
+    description: "Frozen LargeNanoMLP (ACYD C4) + 4-qubit hybrid head — val ROC-AUC vs classical head"
+    exp_id: exp_062
+    dataset_id: acyd_soy_brazil_v1
+    checkpoint_exp_id: exp_060
+    checkpoint_model_name: large_nano_mlp
+    seed: 42
+    hidden1: 2048
+    hidden2: 512
+    hidden3: 64
+    dropout: 0.3
+    n_qubits: 4
+    n_layers: 2
+    reupload: true
+    batch_size: 256
+    learning_rate: 0.01
+    weight_decay: 0.0001
+    epochs: 4
+    min_vs_classical_pp: -1.0
+    save_checkpoints: false
+    profile_overrides:
+      ci:
+        n_train_rows: 5000
+        n_val_rows: 1000
+        epochs: 4
+        min_vs_classical_pp: -2.0
+      publication:
+        n_train_rows: 0
+        n_val_rows: 0
+        epochs: 8
+        batch_size: 512
+        min_vs_classical_pp: -1.0
+        save_checkpoints: true
+
   exp_061_conventional_acyd_baselines:
     description: "LargeNanoMLP vs sklearn/XGBoost conventional baselines on ACYD val ROC-AUC"
     exp_id: exp_061

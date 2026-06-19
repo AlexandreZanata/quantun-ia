@@ -330,7 +330,16 @@ vim experiments/exp_003_entanglement_effect/results.md
 | GoBug (C3) | exp_077 | HistGB | −1.02 pp PR-AUC |
 | ACYD (C4) | exp_061 | HistGB | −1.64 pp ROC-AUC |
 
-**Next:** Phase 3 quantum heads (exp_062 ACYD hybrid QNN).
+### EXP 062 — Hybrid QNN head on frozen ACYD LargeNanoMLP (C4)
+
+**Models:** Frozen `LargeNanoMLP` (exp_060) + 4-qubit re-upload QNN head (~289 trainable params) vs classical sigmoid head (same backbone)  
+**Dataset:** `acyd_soy_brazil_v1` (50,107 train / 5,830 val, temporal val 2019–2021)  
+**Claim:** Hybrid val ROC-AUC ≥ classical head − 1.0 pp  
+**Verdict:** Accepted — classical 0.6777 vs hybrid 0.6758 (−0.19 pp; within gate)  
+**Command:** `QML_DEVICE=cuda python experiments/exp_062_hybrid_nano_acyd_soy/run.py --profile publication --write-results`  
+**Checkpoint:** `artifacts/exp_062/large_nano_hybrid_acyd_soy/seed_42/best.pt`
+
+**Next:** Phase 3 continuation — exp_068 grand comparison synthesis; exp_071 GoBug hybrid QNN.
 
 ## Publication Profiles
 
