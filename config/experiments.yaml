@@ -1297,6 +1297,34 @@ experiments:
         epochs_per_stage: 8
         save_checkpoints: true
 
+  exp_057_param_shift_ablation:
+    description: "Parameter-shift vs autograd on 4q×3L re-upload QNN (breast cancer)"
+    exp_id: exp_057
+    seed: 42
+    dataset: breast_cancer
+    n_qubits: 4
+    n_layers: 3
+    epochs: 20
+    learning_rate: 0.02
+    max_holdout_pp: 1.0
+    min_variance_ratio: 2.0
+    grad_samples: 10
+    seeds: [42, 123, 456, 789, 1024, 1337, 2048, 3001, 4096, 5000]
+    save_checkpoints: false
+    profile_overrides:
+      ci:
+        seeds: [42]
+        epochs: 5
+        grad_samples: 2
+        max_holdout_pp: 100.0
+        min_variance_ratio: 0.0
+      publication:
+        max_holdout_pp: 1.0
+        min_variance_ratio: 2.0
+        grad_samples: 10
+        epochs: 20
+        save_checkpoints: true
+
   exp_046_model_scale_curve:
     description: "LargeNanoMLP scale ablation nano_s→nano_xxl on HIGGS — VRAM + AUC curve"
     exp_id: exp_046

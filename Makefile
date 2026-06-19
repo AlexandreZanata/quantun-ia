@@ -272,6 +272,12 @@ exp-056:
 exp-056-publication:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_056_reupload_curriculum_ladder/run.py --profile publication --write-results
 
+exp-057:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_057_param_shift_ablation/run.py
+
+exp-057-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_057_param_shift_ablation/run.py --profile publication --write-results
+
 exp-046:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_046_model_scale_curve/run.py
 

@@ -8,11 +8,16 @@ from src.quantum.circuit_utils import qnode_diff_method
 from src.training.base_model import TrainableMixin
 
 
-def make_qnn_reupload(n_qubits: int = 4, n_layers: int = 2):
+def make_qnn_reupload(
+    n_qubits: int = 4,
+    n_layers: int = 2,
+    *,
+    diff_method: str | None = None,
+):
     dev = qml.device("default.qubit", wires=n_qubits)
-    diff_method = qnode_diff_method(n_layers)
+    method = diff_method if diff_method is not None else qnode_diff_method(n_layers)
 
-    @qml.qnode(dev, interface="torch", diff_method=diff_method)
+    @qml.qnode(dev, interface="torch", diff_method=method)
     def circuit(inputs, weights):
         for layer in range(n_layers):
             qml.AngleEmbedding(inputs, wires=range(n_qubits))
@@ -30,12 +35,20 @@ def make_qnn_reupload(n_qubits: int = 4, n_layers: int = 2):
 class QuantumNetReupload(TrainableMixin, nn.Module):
     """Angle-encoding QNN that re-uploads classical features each variational layer."""
 
-    def __init__(self, n_qubits: int = 4, n_layers: int = 2, input_dim: int = 2):
+    def __init__(
+        self,
+        n_qubits: int = 4,
+        n_layers: int = 2,
+        input_dim: int = 2,
+        *,
+        diff_method: str | None = None,
+    ):
         super().__init__()
         self.n_qubits = n_qubits
         self.n_layers = n_layers
+        self.diff_method = diff_method
         self.pre = nn.Linear(input_dim, n_qubits) if input_dim != n_qubits else nn.Identity()
-        self.qlayer = make_qnn_reupload(n_qubits, n_layers)
+        self.qlayer = make_qnn_reupload(n_qubits, n_layers, diff_method=diff_method)
         self.post = nn.Linear(1, 1)
 
     def set_n_layers(self, n_layers: int) -> None:
@@ -44,7 +57,7 @@ class QuantumNetReupload(TrainableMixin, nn.Module):
             return
         old_state = self.qlayer.state_dict()
         self.n_layers = n_layers
-        self.qlayer = make_qnn_reupload(self.n_qubits, n_layers)
+        self.qlayer = make_qnn_reupload(self.n_qubits, n_layers, diff_method=self.diff_method)
         new_state = self.qlayer.state_dict()
         old_weights = old_state["weights"]
         padded = new_state["weights"].clone()
@@ -53,6 +66,14 @@ class QuantumNetReupload(TrainableMixin, nn.Module):
         self.qlayer.load_state_dict(new_state)
 
     def forward(self, x):
+        if x.dim() == 1:
+            x = x.unsqueeze(0)
         x = self.pre(x) if not isinstance(self.pre, nn.Identity) else x
-        out = self.qlayer(x).unsqueeze(1)
-        return torch.sigmoid(self.post(out)).squeeze()
+        if self.diff_method == "parameter-shift":
+            outs = []
+            for i in range(x.shape[0]):
+                outs.append(self.qlayer(x[i]).reshape(1, 1))
+            out = torch.cat(outs, dim=0)
+        else:
+            out = self.qlayer(x).unsqueeze(1)
+        return torch.sigmoid(self.post(out)).squeeze(-1)

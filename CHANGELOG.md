@@ -29,11 +29,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Phase Q H-Q5** — `exp_055_noise_reg_gobug` on RTX 4060 (rejected / inconclusive)
 - **exp_056** — Re-upload depth curriculum ladder; honest negative (1/3 rung wins)
 - **Phase Q H-Q6** — `exp_056_reupload_curriculum_ladder` on RTX 4060 (rejected)
+- **exp_057** — Parameter-shift vs autograd ablation; honest negative (20.99 pp gap, var ratio 0.08)
+- **Phase Q H-Q7** — `exp_057_param_shift_ablation` on RTX 4060 (rejected)
 - **Phase Q H-Q4** — `exp_054_adaptive_hybrid_higgs` on RTX 4060 (accepted)
 
 ### Changed
 
-- `make check-real` — **37/37** real GPU gates on RTX 4060 (incl. exp_056 re-upload ladder)
+- `make check-real` — **38/38** real GPU gates on RTX 4060 (incl. exp_057 param-shift ablation)
+- `src/training/param_shift_ablation.py` — parameter-shift vs backprop trainer + grad variance
+- `QuantumNetReupload` — optional `diff_method`; unbatched forward for parameter-shift (#4462)
 - `src/training/reupload_curriculum.py` — margin curriculum with growing re-upload depth
 - `QuantumNetReupload.set_n_layers()` — depth expansion with weight preservation
 - `make ship-hybrid-higgs` — publication ship for frozen MLP + QNN head on HIGGS
