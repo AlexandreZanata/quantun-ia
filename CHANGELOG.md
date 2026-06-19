@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Nano model factory (Phase S)** — `qml-ship` / `qml-download`, `config/nanomodel_registry.yaml`, train→gate→publish→export pipeline, ONNX/TorchScript bundles, CPU `predict.py`, `make ship-all-p0`
+- **Scientific integrity (Phase 0)** — `balanced_metrics.py`, `calibration.py`, exp_042 sample-scale curve, exp_043 isotonic calibration
+- **Human CV validation (Phase M)** — exp_041 clinical ranking gate, CV Risk Clinic dashboard
+
+### Changed
+
+- `make check-real` — nanomodel ship P0 gate + exp_041/042/043 gates on RTX 4060
+
 ## [1.2.0] - 2026-06-18
 
 ### Added

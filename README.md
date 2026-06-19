@@ -118,16 +118,16 @@ See [Nano Trainer](docs/nanotrainer.md) for supported model × dataset pairs.
 
 Goal: **many real, reproducible nanomodels** — classical and quantum — that anyone can download and run locally. Each model goes through the full pipeline (train, gate, export); **quality over speed** (hours per model is expected).
 
-### One-command ship pipeline (planned)
+### One-command ship pipeline
 
 ```bash
 # Full pipeline: train → gate → publish serve artifact → export → model card
-qml-ship --model large_nano_mlp_synthea --profile publication_large
+qml-ship --model large_nano_mlp_synthea --profile publication
 
 # Makefile wrapper
 make ship MODEL=large_nano_mlp_synthea
 make ship MODEL=quantum_nano_bc PROFILE=publication
-make ship-all-p0    # Synthea + HIGGS + QuantumNano-BC (once scaffold lands)
+make ship-all-p0    # Synthea + HIGGS + QuantumNano-BC + calibrated Synthea
 ```
 
 Stages: `nanomodel_registry.yaml` → train → real gate test → `open_serve` publish → calibration (clinical) → export (ONNX / TorchScript / Hugging Face) → tarball with SHA-256.
@@ -167,12 +167,13 @@ Quantum hybrid models require PennyLane for inference; they ship as **native bun
 | Registry key | Architecture | Dataset | Status |
 |--------------|--------------|---------|--------|
 | `large_nano_mlp_synthea` | LargeNanoMLP (~1.17M) | Synthea CV | train ✅ · ship ✅ |
+| `large_nano_mlp_synthea_calibrated` | LargeNanoMLP + isotonic | Synthea CV | ship ✅ (exp_043) |
 | `large_nano_mlp_higgs` | LargeNanoMLP | HIGGS 1M | train ✅ · ship ✅ |
 | `quantum_nano_bc` | HybridSandwich 4q | Breast cancer | train ✅ · ship ✅ |
 | `large_nano_hybrid_higgs` | Frozen MLP + QNN head | HIGGS | exp_037 · ship 🔲 |
 | `quantum_nano_champion` | Fused Q training recipe | Multi-bench | exp_058 · ship 🔲 |
 
-Internal playbook: `.local/RESEARCH_ROADMAP.md` → **Phase S** (factory) + **Phase Q** (quantum training hypotheses).
+Internal playbook: `.local/RESEARCH_ROADMAP.md` → **Phase Q** (quantum training hypotheses).
 
 ### Quantum training hypotheses → shippable models
 
