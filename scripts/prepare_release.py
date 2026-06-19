@@ -227,6 +227,16 @@ def prepare_release(dist_dir: Path = DEFAULT_DIST) -> list[Path]:
 
     artifacts.extend(_copy_static_artifacts(dist_dir))
 
+    serve_models_src = ROOT / "dist" / "serve_models"
+    if serve_models_src.is_dir() and any(serve_models_src.iterdir()):
+        serve_dest = dist_dir / "serve_models"
+        if serve_dest.exists():
+            shutil.rmtree(serve_dest)
+        shutil.copytree(serve_models_src, serve_dest)
+        for path in sorted(serve_dest.rglob("*")):
+            if path.is_file():
+                artifacts.append(path)
+
     manifest = dist_dir / "MANIFEST.txt"
     manifest.write_text(build_manifest_text(artifacts, dist_dir), encoding="utf-8")
     artifacts.append(manifest)

@@ -1,4 +1,4 @@
-.PHONY: dev test test-watch lint lint-fix typecheck coverage dashboard dashboard-local experiment experiment-large repro export-results hpo figures latex-tables release release-check paper-sync paper-build paper-build-publication arxiv-bundle replay-publication replay-publication-artifacts repro-publication-ci open-science-preflight power-analysis microqml-bench publish-leaderboard publish-leaderboard-check check check-real health health-gpu docker-build docker-test docker-lint clean install train-demo nano-parity-bench nano-parity-download nano-parity-publication api api-demo e2e reviewer-repro citation-ready citation-ready-full finalize-citation dvc-check dvc-setup dvc-push model-card exp-026 exp-026-publication exp-024-publication exp-025-publication exp-027 exp-027-publication exp-028 exp-028-publication exp-029 exp-029-publication exp-030 exp-030-publication exp-031 exp-031-publication continuous-train batch-predict data-open-higgs data-open-synthea-cv data-open-verify exp-032 exp-032-publication exp-033 exp-033-publication exp-034 exp-034-publication exp-035 exp-035-publication exp-036 exp-036-publication exp-037 exp-037-publication exp-038 exp-038-publication exp-039 exp-039-publication exp-040 exp-040-publication phase-c-publication phase-d-preflight phase-v1.1.0-preflight phase-v1.2.0-preflight
+.PHONY: dev test test-watch lint lint-fix typecheck coverage dashboard dashboard-local experiment experiment-large repro export-results hpo figures latex-tables release release-check paper-sync paper-build paper-build-publication arxiv-bundle replay-publication replay-publication-artifacts repro-publication-ci open-science-preflight power-analysis microqml-bench publish-leaderboard publish-leaderboard-check check check-real health health-gpu docker-build docker-test docker-lint clean install train-demo nano-parity-bench nano-parity-download nano-parity-publication api api-demo e2e reviewer-repro citation-ready citation-ready-full finalize-citation dvc-check dvc-setup dvc-push model-card exp-026 exp-026-publication exp-024-publication exp-025-publication exp-027 exp-027-publication exp-028 exp-028-publication exp-029 exp-029-publication exp-030 exp-030-publication exp-031 exp-031-publication continuous-train batch-predict data-open-higgs data-open-synthea-cv data-open-verify exp-032 exp-032-publication exp-033 exp-033-publication exp-034 exp-034-publication exp-035 exp-035-publication exp-036 exp-036-publication exp-037 exp-037-publication exp-038 exp-038-publication exp-039 exp-039-publication exp-040 exp-040-publication phase-c-publication phase-d-preflight phase-v1.1.0-preflight phase-v1.2.0-preflight ship download-model ship-all-p0
 
 PYTHON ?= $(shell test -x .venv/bin/python && echo .venv/bin/python || echo python3)
 
@@ -355,6 +355,24 @@ export-reference-datasets:
 
 model-card:
 	$(PYTHON) scripts/generate_model_card.py
+
+ship:
+	@test -n "$(MODEL)" || (echo "Usage: make ship MODEL=large_nano_mlp_synthea [PROFILE=publication] [RETRAIN=1] [SKIP_TRAIN=1] [SKIP_GATE=1]" && exit 1)
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m scripts.qml_ship --model $(MODEL) \
+		$(if $(PROFILE),--profile $(PROFILE),) \
+		$(if $(RETRAIN),--retrain,) \
+		$(if $(SKIP_TRAIN),--skip-train,) \
+		$(if $(SKIP_GATE),--skip-gate,)
+
+download-model:
+	@test -n "$(MODEL)" || (echo "Usage: make download-model MODEL=large_nano_mlp_synthea" && exit 1)
+	MLFLOW_DISABLE=1 $(PYTHON) -m scripts.qml_download --model $(MODEL)
+
+ship-all-p0:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m scripts.qml_ship --model large_nano_mlp_synthea --profile ci --skip-train --skip-gate
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m scripts.qml_ship --model large_nano_mlp_higgs --profile ci --skip-train --skip-gate
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m scripts.qml_ship --model quantum_nano_bc --profile ci --skip-train --skip-gate
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m scripts.qml_ship --model large_nano_mlp_synthea_calibrated --profile ci --skip-train --skip-gate
 
 experiments-new:
 	MLFLOW_DISABLE=1 $(PYTHON) scripts/run_exp_011_015.py --profile publication

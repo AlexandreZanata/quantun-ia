@@ -114,6 +114,72 @@ make dashboard-local   # Streamlit → Nano Trainer page
 
 See [Nano Trainer](docs/nanotrainer.md) for supported model × dataset pairs.
 
+## Shippable Nano Models (train → download → run)
+
+Goal: **many real, reproducible nanomodels** — classical and quantum — that anyone can download and run locally. Each model goes through the full pipeline (train, gate, export); **quality over speed** (hours per model is expected).
+
+### One-command ship pipeline (planned)
+
+```bash
+# Full pipeline: train → gate → publish serve artifact → export → model card
+qml-ship --model large_nano_mlp_synthea --profile publication_large
+
+# Makefile wrapper
+make ship MODEL=large_nano_mlp_synthea
+make ship MODEL=quantum_nano_bc PROFILE=publication
+make ship-all-p0    # Synthea + HIGGS + QuantumNano-BC (once scaffold lands)
+```
+
+Stages: `nanomodel_registry.yaml` → train → real gate test → `open_serve` publish → calibration (clinical) → export (ONNX / TorchScript / Hugging Face) → tarball with SHA-256.
+
+### Download and run (end users, no GPU)
+
+```bash
+pip install -e .
+qml-download --model large_nano_mlp_synthea   # from release / DVC / HF Hub
+
+# CPU inference smoke
+python dist/serve_models/large_nano_mlp_synthea/inference/predict.py \
+  --input tests/fixtures/synthea_patient_row.json
+
+# Interactive clinic (uses serve checkpoint)
+streamlit run dashboard/pages/03_cv_risk_clinic.py
+
+# REST API
+make api
+curl -X POST http://127.0.0.1:8000/api/v1/predictions ...
+```
+
+### Export formats & local platforms
+
+| Format | Best for | Models |
+|--------|----------|--------|
+| **Native serve bundle** (`best.pt` + `scaler.joblib` + `config.json`) | quantun-ia API, Streamlit | All, including QNN |
+| **ONNX** | ONNX Runtime, edge deploy | Classical / MLP only |
+| **TorchScript** | PyTorch-only runners | All PyTorch architectures |
+| **Hugging Face Hub** | Community download | All shippable models |
+| **LM Studio (adjacent)** | Local sidecar via ONNX + schema JSON | Tabular classical — not chat LLMs |
+
+Quantum hybrid models require PennyLane for inference; they ship as **native bundles**, not ONNX.
+
+### Shippable model catalog (target)
+
+| Registry key | Architecture | Dataset | Status |
+|--------------|--------------|---------|--------|
+| `large_nano_mlp_synthea` | LargeNanoMLP (~1.17M) | Synthea CV | train ✅ · ship ✅ |
+| `large_nano_mlp_higgs` | LargeNanoMLP | HIGGS 1M | train ✅ · ship ✅ |
+| `quantum_nano_bc` | HybridSandwich 4q | Breast cancer | train ✅ · ship ✅ |
+| `large_nano_hybrid_higgs` | Frozen MLP + QNN head | HIGGS | exp_037 · ship 🔲 |
+| `quantum_nano_champion` | Fused Q training recipe | Multi-bench | exp_058 · ship 🔲 |
+
+Internal playbook: `.local/RESEARCH_ROADMAP.md` → **Phase S** (factory) + **Phase Q** (quantum training hypotheses).
+
+### Quantum training hypotheses → shippable models
+
+Novel quantum **training methods** (warm-start, entanglement schedule, GV-ALR head, noise regularization, re-upload curriculum) are tested on **open benchmarks** (HIGGS, NIHR, GoBug, breast cancer). Only hypotheses that pass pre-registered gates become registry entries and get `qml-ship` — failures go to [Negative Results](docs/negative_results.md).
+
+See [Experiments](docs/experiments.md) exp_051–061 and Phase Q in the internal roadmap.
+
 ## REST API
 
 ```bash
@@ -139,6 +205,9 @@ make nas                  # Optuna NAS + holdout (exp_016)
 make poison-topology      # hybrid × poisoning (exp_017)
 make fusion               # Transformer → QNN (exp_018)
 make train-demo           # Nano Trainer CI demo (exp_019 path)
+make ship MODEL=...       # train → gate → export shippable nanomodel
+make download-model MODEL=...  # install bundle from dist/serve_models/
+make ship-all-p0          # ship Synthea + HIGGS + QuantumNano-BC bundles
 make api                  # REST API server (exp_020 path)
 make api-demo             # API smoke test
 make experiments-new    # publication runs exp_011–015
@@ -166,6 +235,7 @@ Paper draft skeleton: `paper/main.tex`.
 | [Getting Started](docs/getting-started.md) | Full setup, Makefile, workflow |
 | [Experiments](docs/experiments.md) | All 25 experiments + ablations |
 | [Nano Trainer](docs/nanotrainer.md) | CLI + Streamlit mini training app |
+| [Nano Model Factory](docs/nanomodel_factory.md) | Download, ship, and export shippable models |
 | [API](docs/api.md) | REST API + benchmark PWA |
 | [Literature Review](docs/literature_review.md) | Phase 4 research context |
 | [Method: Adaptive LR](docs/method_adaptive_lr.md) | GV-ALR algorithm, config, exp_015 linkage |
@@ -183,11 +253,15 @@ Paper draft skeleton: `paper/main.tex`.
 ```
 quantun-ia/
 ├── src/              # Models, data, training utilities
-├── experiments/      # exp_001 – exp_024 + template
-├── config/           # experiments.yaml, nanotrainer.yaml
-├── dashboard/        # Streamlit monitor + static PWA
+│   └── application/  # predict, ship, export, human scorers
+├── experiments/      # exp_001 – exp_065 + template
+├── config/           # experiments.yaml, nanotrainer.yaml, nanomodel_registry.yaml
+├── artifacts/        # Training checkpoints (gitignored — ship to release/DVC/HF)
+├── dist/serve_models/ # Downloadable shippable bundles
+├── dashboard/        # Streamlit monitor + CV Risk Clinic
 ├── logs/             # experiments.jsonl (append-only)
-├── tests/            # Unit + smoke tests
+├── model_cards/      # One card per shippable model
+├── tests/            # Unit + smoke + real GPU gates
 └── docs/             # Full documentation
 ```
 
@@ -199,6 +273,8 @@ quantun-ia/
 - **Holdout eval:** 30% test split before training (all classification experiments)
 - **Multi-seed:** 10 seeds in `config/experiments.yaml` (`publication` profile)
 - Config overrides live in `config/experiments.yaml`, not hardcoded in `run.py`
+- **Shippable models:** every promoted nanomodel needs a registry entry, gate test, model card, and downloadable bundle (see **Shippable Nano Models** above)
+- **Quantum training hypotheses:** write `hypothesis.md` first; ship only after MicroQML + serve parity gates pass
 
 ## Citation
 
@@ -222,7 +298,8 @@ Full arXiv upload details: [docs/arxiv.md](docs/arxiv.md) · LaTeX skeleton: [pa
 | Claim | Evidence | Artifact |
 |-------|----------|----------|
 | Holdout-fair QML benchmark | exp_021 / exp_022 multi-seed holdout | `experiments/exp_021_*/results.md` |
-| Open-data serve models | HIGGS + Synthea checkpoints | `make model-lab` |
+| Open-data serve models | HIGGS + Synthea checkpoints | `make model-lab` · `qml-ship` *(planned)* |
+| Downloadable nanomodels | Native + ONNX + HF bundles | `qml-download` *(planned)* · GitHub Release |
 | Human-interpretable CV ranking | 8 literature cases, Spearman ρ ≥ 0.85 | `make exp-041-publication` |
 | Sample-size stability | Precision/AUC curve n=100→2000 | `make exp-042-publication` |
 

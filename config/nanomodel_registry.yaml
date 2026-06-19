@@ -1,0 +1,91 @@
+# Shippable nanomodel registry — one entry per downloadable model bundle.
+# Train/ship: qml-ship --model <registry_key>
+# Install:     qml-download --model <registry_key>
+
+defaults:
+  seed: 42
+  profile: publication
+  root: .
+
+models:
+  large_nano_mlp_synthea:
+    description: "LargeNanoMLP (~1.17M) on Synthea CV — clinical ranking serve model"
+    train_model: large_nano_mlp
+    dataset: synthea_cv_risk_v1
+    exp_id: exp_034
+    seed: 42
+    profile: publication
+    serve:
+      kind: open_large_nano
+    train:
+      kind: experiment
+      experiment_key: exp_034_large_nano_synthea
+    gate_test: tests/real/test_exp_034_large_nano_gate.py
+    calibration_exp_id: exp_043
+    exports: [native, onnx, torchscript]
+    model_card: model_cards/large_nano_mlp_synthea.md
+
+  large_nano_mlp_synthea_calibrated:
+    description: "LargeNanoMLP Synthea with isotonic calibration (exp_043)"
+    train_model: large_nano_mlp
+    dataset: synthea_cv_risk_v1
+    exp_id: exp_034
+    seed: 42
+    profile: publication
+    serve:
+      kind: open_large_nano
+    train:
+      kind: none
+    gate_test: tests/real/test_exp_043_calibration_gate.py
+    calibration_exp_id: exp_043
+    exports: [native, onnx, torchscript]
+    model_card: model_cards/large_nano_mlp_synthea.md
+    depends_on: large_nano_mlp_synthea
+
+  large_nano_mlp_higgs:
+    description: "LargeNanoMLP (~1.14M) on HIGGS open tabular"
+    train_model: large_nano_mlp
+    dataset: higgs_v1
+    exp_id: exp_032
+    seed: 42
+    profile: publication
+    serve:
+      kind: open_large_nano
+    train:
+      kind: experiment
+      experiment_key: exp_032_large_nano_higgs
+    gate_test: tests/real/test_exp_032_large_nano_gate.py
+    exports: [native, onnx, torchscript]
+    model_card: model_cards/large_nano_mlp_higgs.md
+
+  quantum_nano_bc:
+    description: "HybridSandwich 4q re-upload on Wisconsin Breast Cancer (QuantumNano-BC)"
+    train_model: hybrid_sandwich
+    dataset: breast_cancer
+    exp_id: quantum_nano_bc_app
+    seed: 42
+    profile: publication
+    serve:
+      kind: nanotrainer
+    train:
+      kind: nanotrainer
+    gate_test: null
+    exports: [native, torchscript]
+    model_card: model_cards/quantum_nano_bc.md
+
+  large_nano_hybrid_higgs:
+    description: "Frozen LargeNanoMLP + 4-qubit QNN head on HIGGS"
+    train_model: large_nano_hybrid
+    dataset: higgs_v1
+    exp_id: exp_037
+    seed: 42
+    profile: publication
+    serve:
+      kind: open_hybrid
+    train:
+      kind: experiment
+      experiment_key: exp_037_hybrid_nano_higgs
+    gate_test: tests/real/test_exp_037_hybrid_gate.py
+    exports: [native, torchscript]
+    model_card: model_cards/large_nano_hybrid_higgs.md
+    depends_on: large_nano_mlp_higgs
