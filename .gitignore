@@ -25,6 +25,8 @@ data/open/nihr_cv_synthetic/raw/
 data/open/nihr_cv_synthetic/processed/v1/
 data/open/code_defects_gobug/raw/
 data/open/code_defects_gobug/processed/v1/
+data/open/acyd_soy_brazil/raw/
+data/open/acyd_soy_brazil/processed/v1/
 data/*.db
 figures/
 dist/

@@ -135,6 +135,22 @@ def test_gobug_build_script_registered_in_makefile():
     assert "data-open-gobug" in makefile
 
 
+def test_acyd_build_script_registered_in_makefile():
+    makefile = (ROOT / "Makefile").read_text(encoding="utf-8")
+    assert "data-open-acyd-soy" in makefile
+
+
+def test_manifest_acyd_soy_brazil_v1_metadata():
+    manifest = _load_manifest()
+    acyd = _dataset_by_id(manifest, "acyd_soy_brazil_v1")
+    assert acyd["n_features"] == 37
+    assert acyd["build_script"] == "scripts/build_open_acyd_soy.py"
+    assert Path(ROOT / acyd["build_script"]).is_file()
+    assert Path(ROOT / "scripts/download_acyd_brazil.py").is_file()
+    assert acyd["ready"] is True
+    assert acyd["row_counts"]["train"] == 50_107
+
+
 @pytest.mark.parametrize(
     ("dataset_id", "split_name", "expected_rows", "n_features"),
     [
@@ -150,6 +166,9 @@ def test_gobug_build_script_registered_in_makefile():
         ("code_defects_gobug_v1", "train", 27_172, 23),
         ("code_defects_gobug_v1", "val", 5_822, 23),
         ("code_defects_gobug_v1", "test", 5_824, 23),
+        ("acyd_soy_brazil_v1", "train", 50_107, 37),
+        ("acyd_soy_brazil_v1", "val", 5_830, 37),
+        ("acyd_soy_brazil_v1", "test", 5_856, 37),
     ],
 )
 def test_open_dataset_splits_when_ready(
@@ -209,7 +228,7 @@ def test_ready_datasets_stratified_balance():
         if not stats_path.is_file():
             pytest.skip(f"missing stats: {stats_path}")
         stats = json.loads(stats_path.read_text(encoding="utf-8"))
-        if stats.get("split_method") == "temporal_sha_order":
+        if stats.get("split_method") in ("temporal_sha_order", "temporal_crop_year"):
             continue
         errors = verify_stratified_balance(stats, tolerance=0.01)
         assert errors == [], f"{dataset['id']}: {errors}"

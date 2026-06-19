@@ -158,6 +158,18 @@ exp-032:
 exp-032-publication:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_032_large_nano_higgs/run.py --profile publication --write-results
 
+exp-060:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_060_large_nano_acyd_soy/run.py --profile ci
+
+exp-060-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_060_large_nano_acyd_soy/run.py --profile publication --write-results
+
+exp-061:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_061_conventional_acyd_baselines/run.py --profile ci
+
+exp-061-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_061_conventional_acyd_baselines/run.py --profile publication --write-results
+
 exp-033:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_033_higgs_serve_parity/run.py --profile ci
 
@@ -302,8 +314,22 @@ data-open-nihr-cv:
 data-open-gobug:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) scripts/build_gobug_subset.py
 
+data-open-acyd-download:
+	MLFLOW_DISABLE=1 $(PYTHON) scripts/download_acyd_brazil.py --crop soybean
+
+data-open-acyd-soy: data-open-acyd-download
+	MLFLOW_DISABLE=1 $(PYTHON) scripts/build_open_acyd_soy.py
+
+data-open-acyd-dvc:
+	@if $(PYTHON) -m dvc --version >/dev/null 2>&1; then \
+		$(PYTHON) -m dvc add data/open/acyd_soy_brazil/processed/v1; \
+	else \
+		echo "ERROR: DVC not installed. Run: $(PYTHON) -m pip install dvc && make data-open-acyd-dvc"; \
+		exit 1; \
+	fi
+
 data-open-verify:
-	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) scripts/validate_open_data.py
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) scripts/validate_open_data.py $(if $(DATASET),--dataset $(DATASET),)
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m pytest tests/contracts/test_open_data_manifest.py -q
 
 phase-c-publication: exp-024-publication exp-025-publication
@@ -437,8 +463,12 @@ download-model:
 ship-all-p0:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m scripts.qml_ship --model large_nano_mlp_synthea --profile ci --skip-train --skip-gate
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m scripts.qml_ship --model large_nano_mlp_higgs --profile ci --skip-train --skip-gate
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m scripts.qml_ship --model large_nano_mlp_acyd_soy --profile ci --skip-train --skip-gate
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m scripts.qml_ship --model quantum_nano_bc --profile ci --skip-train --skip-gate
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m scripts.qml_ship --model large_nano_mlp_synthea_calibrated --profile ci --skip-train --skip-gate
+
+ship-acyd-soy:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m scripts.qml_ship --model large_nano_mlp_acyd_soy --profile publication --skip-train
 
 ship-hybrid-higgs:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m scripts.qml_ship --model large_nano_hybrid_higgs --profile publication --skip-train

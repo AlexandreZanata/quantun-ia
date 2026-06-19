@@ -58,6 +58,22 @@ models:
     exports: [native, onnx, torchscript]
     model_card: model_cards/large_nano_mlp_higgs.md
 
+  large_nano_mlp_acyd_soy:
+    description: "LargeNanoMLP (~1.16M) on ACYD Brazil soybean open tabular (C4 anchor)"
+    train_model: large_nano_mlp
+    dataset: acyd_soy_brazil_v1
+    exp_id: exp_060
+    seed: 42
+    profile: publication
+    serve:
+      kind: open_large_nano
+    train:
+      kind: experiment
+      experiment_key: exp_060_large_nano_acyd_soy
+    gate_test: tests/real/test_exp_060_large_nano_gate.py
+    exports: [native, onnx, torchscript]
+    model_card: model_cards/large_nano_mlp_acyd_soy.md
+
   quantum_nano_bc:
     description: "HybridSandwich 4q re-upload on Wisconsin Breast Cancer (QuantumNano-BC)"
     train_model: hybrid_sandwich

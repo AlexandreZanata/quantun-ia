@@ -257,6 +257,23 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `python experiments/exp_058_conventional_higgs_baselines/run.py --profile publication --write-results`  
 **Shortcut:** `python scripts/compare_higgs_conventional.py --profile ci`
 
+### EXP 060 — LargeNanoMLP on ACYD Brazil soybean (C4 anchor)
+
+**Models:** `LargeNanoMLP` (~1.16M params) vs `LogisticRegression`  
+**Dataset:** `acyd_soy_brazil_v1` (50,107 train / 5,830 val, 37 features, temporal split)  
+**Claim:** Val ROC-AUC ≥ logistic + 2.0 pp  
+**Verdict:** Accepted — 0.6777 vs 0.6391 (+3.86 pp)  
+**Command:** `QML_DEVICE=cuda python experiments/exp_060_large_nano_acyd_soy/run.py --profile publication --write-results`  
+**Ship:** `qml-ship --model large_nano_mlp_acyd_soy --skip-train`
+
+### EXP 061 — Conventional ACYD baselines
+
+**Models:** exp_060 `LargeNanoMLP` vs sklearn `LogisticRegression`, `MLPClassifier`, `HistGradientBoosting`, `XGBoost`  
+**Dataset:** `acyd_soy_brazil_v1` (same temporal split/scaler as exp_060)  
+**Claim:** LargeNanoMLP ≥ best conventional + 0.5 pp val ROC-AUC  
+**Verdict:** Rejected — HistGradientBoosting 0.6941 vs nano 0.6777 (−1.64 pp); beats logistic (+3.86 pp, exp_060)  
+**Command:** `QML_DEVICE=cuda python experiments/exp_061_conventional_acyd_baselines/run.py --profile publication --write-results`
+
 ## Publication Profiles
 
 | Profile | `n_samples` | Seeds | Command |

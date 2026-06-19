@@ -20,7 +20,9 @@ from src.training.config import load_experiment_config
 from src.training.trainer import count_parameters
 
 EXP_032_KEY = "exp_032_large_nano_higgs"
-DEFAULT_SERVE_DIR = Path("dist/serve_models/large_nano_mlp_higgs")
+EXP_060_KEY = "exp_060_large_nano_acyd_soy"
+DEFAULT_HIGGS_SERVE_DIR = Path("dist/serve_models/large_nano_mlp_higgs")
+DEFAULT_ACYD_ARTIFACT_DIR = Path("artifacts/exp_060/large_nano_mlp/seed_42")
 
 
 @dataclass(frozen=True)
@@ -72,11 +74,16 @@ def _eval_torch(
     return float(roc_auc_score(y, proba)), float(accuracy_score(y, preds))
 
 
-def _load_shipped_nano(input_dim: int, serve_dir: Path, device: torch.device) -> LargeNanoMLP:
-    weights = serve_dir / "best.pt"
+def _load_nano_checkpoint(
+    input_dim: int,
+    weights_dir: Path,
+    device: torch.device,
+    *,
+    missing_hint: str,
+) -> LargeNanoMLP:
+    weights = weights_dir / "best.pt"
     if not weights.is_file():
-        msg = f"Shipped LargeNanoMLP not found at {weights} — run qml-ship --model large_nano_mlp_higgs"
-        raise FileNotFoundError(msg)
+        raise FileNotFoundError(f"LargeNanoMLP checkpoint not found at {weights} — {missing_hint}")
     model = LargeNanoMLP(input_dim=input_dim)
     state = torch.load(weights, map_location="cpu", weights_only=True)
     model.load_state_dict(state)
@@ -84,19 +91,33 @@ def _load_shipped_nano(input_dim: int, serve_dir: Path, device: torch.device) ->
     return model.to(device)
 
 
-def run_conventional_higgs_comparison(
+def _load_shipped_nano(input_dim: int, serve_dir: Path, device: torch.device) -> LargeNanoMLP:
+    return _load_nano_checkpoint(
+        input_dim,
+        serve_dir,
+        device,
+        missing_hint="run qml-ship --model large_nano_mlp_higgs",
+    )
+
+
+def _run_conventional_open_comparison(
     root: Path,
     *,
-    profile: str = "ci",
-    serve_dir: Path | None = None,
-    checkpoint_exp_key: str = EXP_032_KEY,
+    dataset_id: str,
+    profile: str,
+    train_exp_key: str,
+    cmp_exp_key: str,
+    nano_weights_dir: Path,
+    max_train_rows: int,
+    max_val_rows: int,
+    xgb_exp_id: str,
 ) -> ConventionalComparisonResult:
-    """Compare shipped LargeNanoMLP vs conventional tabular baselines on HIGGS val."""
-    cfg = load_experiment_config(checkpoint_exp_key, profile=profile)
-    cmp_cfg = load_experiment_config("exp_058_conventional_higgs_baselines", profile=profile)
+    """Compare a LargeNanoMLP checkpoint vs conventional tabular baselines on val split."""
+    cfg = load_experiment_config(train_exp_key, profile=profile)
+    cmp_cfg = load_experiment_config(cmp_exp_key, profile=profile)
     seed = int(cfg.get("seed", 42))
-    n_train = _resolve_row_cap(cfg.get("n_train_rows"), 805_000)
-    n_val = _resolve_row_cap(cfg.get("n_val_rows"), 172_500)
+    n_train = _resolve_row_cap(cfg.get("n_train_rows"), max_train_rows)
+    n_val = _resolve_row_cap(cfg.get("n_val_rows"), max_val_rows)
     epochs = int(cfg.get("epochs", 12))
     batch_size = int(cfg.get("batch_size", 2048))
     lr = float(cfg.get("learning_rate", 0.001))
@@ -105,12 +126,13 @@ def run_conventional_higgs_comparison(
     xgb_lr = float(cmp_cfg.get("xgboost_learning_rate", 0.1))
     xgb_estimators = int(cmp_cfg.get("xgboost_n_estimators", 50))
     hgb_max_iter = int(cmp_cfg.get("histgb_max_iter", 100))
+    hidden1 = int(cfg.get("hidden1", 2048))
+    hidden2 = int(cfg.get("hidden2", 512))
+    hidden3 = int(cfg.get("hidden3", 64))
 
-    bundle_dir = serve_dir or (root / DEFAULT_SERVE_DIR)
     t0 = time.perf_counter()
-
     x_train, y_train, x_val, y_val, _, _, _ = load_open_parquet_splits(
-        "higgs_v1",
+        dataset_id,
         root,
         n_train_rows=n_train,
         n_val_rows=n_val,
@@ -121,7 +143,12 @@ def run_conventional_higgs_comparison(
     scores: list[ConventionalBaselineScore] = []
 
     t_model = time.perf_counter()
-    nano = _load_shipped_nano(input_dim, bundle_dir, device)
+    nano = _load_nano_checkpoint(
+        input_dim,
+        nano_weights_dir,
+        device,
+        missing_hint=f"train {train_exp_key} first",
+    )
     auc, acc = _eval_torch(nano, x_val, y_val, device)
     scores.append(
         ConventionalBaselineScore(
@@ -131,7 +158,7 @@ def run_conventional_higgs_comparison(
             accuracy=acc,
             n_params=count_parameters(nano),
             train_s=time.perf_counter() - t_model,
-            source=str(bundle_dir / "best.pt"),
+            source=str(nano_weights_dir / "best.pt"),
         )
     )
 
@@ -153,7 +180,7 @@ def run_conventional_higgs_comparison(
 
     t_model = time.perf_counter()
     sklearn_mlp = MLPClassifier(
-        hidden_layer_sizes=(2048, 512, 64),
+        hidden_layer_sizes=(hidden1, hidden2, hidden3),
         activation="relu",
         solver="adam",
         alpha=weight_decay,
@@ -170,7 +197,7 @@ def run_conventional_higgs_comparison(
     scores.append(
         ConventionalBaselineScore(
             model_key="sklearn_mlp_matched",
-            display_name="MLPClassifier (sklearn, 2048-512-64)",
+            display_name=f"MLPClassifier (sklearn, {hidden1}-{hidden2}-{hidden3})",
             roc_auc=auc,
             accuracy=acc,
             n_params=int(n_mlp_params),
@@ -210,7 +237,7 @@ def run_conventional_higgs_comparison(
     xgb.train(
         torch.tensor(x_train, dtype=torch.float32),
         torch.tensor(y_train, dtype=torch.float32),
-        "exp_058",
+        xgb_exp_id,
         "xgboost_shallow",
         seed=seed,
         profile=profile,
@@ -244,6 +271,50 @@ def run_conventional_higgs_comparison(
         advantage_vs_best_conventional_pp=advantage_pp,
         min_advantage_pp=min_advantage_pp,
         elapsed_s=round(time.perf_counter() - t0, 3),
+    )
+
+
+def run_conventional_higgs_comparison(
+    root: Path,
+    *,
+    profile: str = "ci",
+    serve_dir: Path | None = None,
+    checkpoint_exp_key: str = EXP_032_KEY,
+) -> ConventionalComparisonResult:
+    """Compare shipped LargeNanoMLP vs conventional tabular baselines on HIGGS val."""
+    bundle_dir = serve_dir or (root / DEFAULT_HIGGS_SERVE_DIR)
+    return _run_conventional_open_comparison(
+        root,
+        dataset_id="higgs_v1",
+        profile=profile,
+        train_exp_key=checkpoint_exp_key,
+        cmp_exp_key="exp_058_conventional_higgs_baselines",
+        nano_weights_dir=bundle_dir,
+        max_train_rows=805_000,
+        max_val_rows=172_500,
+        xgb_exp_id="exp_058",
+    )
+
+
+def run_conventional_acyd_comparison(
+    root: Path,
+    *,
+    profile: str = "ci",
+    weights_dir: Path | None = None,
+    checkpoint_exp_key: str = EXP_060_KEY,
+) -> ConventionalComparisonResult:
+    """Compare exp_060 LargeNanoMLP vs conventional tabular baselines on ACYD val."""
+    artifact_dir = weights_dir or (root / DEFAULT_ACYD_ARTIFACT_DIR)
+    return _run_conventional_open_comparison(
+        root,
+        dataset_id="acyd_soy_brazil_v1",
+        profile=profile,
+        train_exp_key=checkpoint_exp_key,
+        cmp_exp_key="exp_061_conventional_acyd_baselines",
+        nano_weights_dir=artifact_dir,
+        max_train_rows=50_107,
+        max_val_rows=5_830,
+        xgb_exp_id="exp_061",
     )
 
 

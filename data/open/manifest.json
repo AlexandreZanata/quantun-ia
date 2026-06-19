@@ -120,6 +120,34 @@
         "test": "abc347e6d77792d6eb5b2b059faac5da0d60b8f96df37b43440960ce98f40e32",
         "stats": "89231067b4c9e1a97cb987da839c5dab2805c7b9a6c2d4fa312e78a219bbaa10"
       }
+    },
+    {
+      "id": "acyd_soy_brazil_v1",
+      "path": "acyd_soy_brazil/processed/v1",
+      "description": "ACYD Brazil soybean \u2014 municipality\u00d7year climate/soil vs low-yield label (temporal split)",
+      "license": "CC-BY-4.0 (stack; see README)",
+      "source_url": "https://huggingface.co/datasets/notadib/ACYD",
+      "ready": true,
+      "row_counts": {
+        "total": 61793,
+        "train": 50107,
+        "val": 5830,
+        "test": 5856
+      },
+      "n_features": 37,
+      "files": {
+        "train": "train.parquet",
+        "val": "val.parquet",
+        "test": "test.parquet",
+        "stats": "stats.json"
+      },
+      "build_script": "scripts/build_open_acyd_soy.py",
+      "checksums": {
+        "train": "ef86d859be7f18b0b27960a7a2eb810d6aef4aa03180359d1a1342a52e38dc04",
+        "val": "24fdd7577e839239aeaf1fa4eec3963ec66ff7dc28e8caa4b287f60552d6dfd4",
+        "test": "78b890f9796aa9b90799ed96bb683c0b520a49093b9869d8c8c4114611399fad",
+        "stats": "77848eddc298b7ed9a3b1b5ff188c1bf533be6051ef02d172c10d1dea916bc43"
+      }
     }
   ]
 }

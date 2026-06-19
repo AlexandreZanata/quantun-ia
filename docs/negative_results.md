@@ -23,6 +23,7 @@ Each entry links to the experiment `results.md` and the statistical test outcome
 | exp_056 | Re-upload depth curriculum wins ≥2/3 ladder rungs | **Rejected** | 1/3 wins (PCA-MNIST only); BC/HIGGS losses |
 | exp_057 | Parameter-shift within 1 pp + ≥2× lower grad variance | **Rejected** | Δ holdout = 20.99 pp; var ratio = 0.08 (param-shift higher) |
 | exp_058 | LargeNanoMLP ≥ best conventional + 0.5 pp (HIGGS) | **Rejected** | sklearn MLP 0.8429 vs nano 0.8358 (−0.71 pp full val) |
+| exp_061 | LargeNanoMLP ≥ best conventional + 0.5 pp (ACYD) | **Rejected** | HistGB 0.6941 vs nano 0.6777 (−1.64 pp temporal val) |
 
 ---
 
@@ -281,6 +282,26 @@ retrain PyTorch nano or adopt sklearn MLP when matched-topology CPU training win
 favored LargeNanoMLP (+4.14 pp) — slice size matters for headline claims.
 
 See: `experiments/exp_058_conventional_higgs_baselines/results.md`
+
+---
+
+## exp_061 — Conventional ACYD baselines vs LargeNanoMLP
+
+**Profile:** acyd_soy_brazil_v1, 50,107 train / 5,830 val, seed 42, RTX 4060
+
+| Model | Val ROC-AUC | Train (s) |
+|-------|-------------|-----------|
+| HistGradientBoosting (sklearn) | **0.6941** | 0.4 |
+| XGBoost shallow | 0.6882 | 0.7 |
+| LargeNanoMLP (exp_060 checkpoint) | 0.6777 | 0.1 |
+| MLPClassifier (sklearn, 2048-512-64) | 0.6736 | 29.6 |
+| LogisticRegression | 0.6391 | 2.9 |
+
+**Gate:** LargeNanoMLP ≥ best conventional + 0.5 pp → **failed** (−1.64 pp).
+
+**Interpretation:** On ACYD temporal val, gradient boosting beats the deep nano anchor despite exp_060 beating logistic by +3.86 pp. Honest negative for “nano beats all classical” claims on agro-climate tabular; C4 anchor still valid vs logistic gate.
+
+See: `experiments/exp_061_conventional_acyd_baselines/results.md`
 
 ---
 
