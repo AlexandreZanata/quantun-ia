@@ -418,6 +418,23 @@ See: `experiments/exp_072_quantum_warmstart_nihr/results.md`
 
 ---
 
+## exp_073 — Quantum warm-start on GoBug (C3 replication)
+
+**Profile:** code_defects_gobug_v1, 27,172 train / 5,822 val, seeds 42/123/456, RTX 4060
+
+| Condition | Mean val PR-AUC |
+|-----------|-----------------|
+| End-to-end hybrid | 0.3032 |
+| Warm-start hybrid | 0.3067 |
+
+**Gate:** warm-start ≥ e2e + 0.5 pp → **failed** (+0.35 pp; Wilcoxon p=0.75).
+
+**Interpretation:** Warm-start shows a small positive delta on GoBug but does not meet the publication gate; H-Q2 remains a cross-domain honest negative.
+
+See: `experiments/exp_073_quantum_warmstart_gobug/results.md`
+
+---
+
 ## How we use negative results
 
 1. **Applicability gates** (`src/training/protocol.py`) prevent running expensive techniques on tasks where baselines already fail.

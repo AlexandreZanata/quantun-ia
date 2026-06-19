@@ -76,9 +76,11 @@ recipes:
     source_exp:
       higgs: exp_052
       nihr: exp_072
+      gobug: exp_073
     delta_pp:
       higgs: -0.42
       nihr: -0.35
+      gobug: 0.35
 
   gv_alr_head:
     label: GV-ALR vs fixed-LR hybrid head

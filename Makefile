@@ -321,6 +321,12 @@ exp-072:
 exp-072-publication:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_072_quantum_warmstart_nihr/run.py --profile publication --write-results
 
+exp-073:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_073_quantum_warmstart_gobug/run.py --profile ci
+
+exp-073-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_073_quantum_warmstart_gobug/run.py --profile publication --write-results
+
 exp-053:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_053_entangle_schedule_bc/run.py
 

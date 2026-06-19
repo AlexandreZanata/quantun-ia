@@ -375,7 +375,16 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `QML_DEVICE=cuda python experiments/exp_072_quantum_warmstart_nihr/run.py --profile publication --write-results`  
 **Lesson:** H-Q2 warm-start failure on HIGGS replicates on NIHR clinical tabular.
 
-**Next:** Phase 3 continuation — exp_073 GoBug warm-start; exp_074–075 cross-domain Q replication.
+### EXP 073 — Quantum warm-start on GoBug hybrid (C3 replication)
+
+**Models:** `HybridSandwich` end-to-end vs classical-first warm-start (70/30 epoch split)  
+**Dataset:** `code_defects_gobug_v1` (27,172 train / 5,822 val, 3 seeds)  
+**Claim:** Warm-start val PR-AUC ≥ e2e hybrid + 0.5 pp  
+**Verdict:** Honest negative — mean e2e 0.3032 vs warm-start 0.3067 (+0.35 pp); 2/3 paired wins (gate not met)  
+**Command:** `QML_DEVICE=cuda python experiments/exp_073_quantum_warmstart_gobug/run.py --profile publication --write-results`  
+**Lesson:** Marginal warm-start gain on GoBug does not clear +0.5 pp gate — H-Q2 remains inconclusive on software tabular.
+
+**Next:** Phase 3 continuation — exp_074–075 cross-domain Q replication; exp_068b compound stress (ACYD).
 
 ## Publication Profiles
 
