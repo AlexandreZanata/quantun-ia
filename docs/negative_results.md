@@ -19,6 +19,7 @@ Each entry links to the experiment `results.md` and the statistical test outcome
 | exp_045 | PR-AUC ≥ 0.55 on temporal GoBug val | **Rejected** | PR-AUC ≈ 0.31 (chance); temporal holdout defeats tabular nano |
 | exp_052 | Warm-start hybrid beats e2e by ≥0.5 pp AUC on HIGGS | **Rejected** | Δ = −0.42 pp (3 seeds); Wilcoxon p = 0.5 |
 | exp_053 | Dynamic entanglement schedule beats fixed by ≥1.0 pp | **Rejected** | Δ = −0.78 pp vs `none` (3 seeds); Wilcoxon p = 0.75 |
+| exp_055 | Depolarizing noise beats noiseless hybrid by ≥0.5 pp PR-AUC | **Rejected** | Δ = +0.50 pp on temporal test (inconclusive vs gate) |
 
 ---
 
@@ -194,6 +195,25 @@ Paired wins: 1/3 · Wilcoxon p = 0.75.
 weights are preserved — fixed `none` remains best on this cohort.
 
 See: `experiments/exp_053_entangle_schedule_bc/results.md`
+
+---
+
+## exp_055 — Depolarizing noise on GoBug hybrid QNN
+
+**Profile:** GoBug file-level, HybridSandwich 4q×2L, p=0.03, full train, temporal test split, RTX 4060
+
+| Model | Temporal test PR-AUC |
+|-------|----------------------|
+| Noiseless hybrid | 0.3231 |
+| Noisy hybrid (p=0.03) | **0.3281** |
+
+**Finding:** Noise improves PR-AUC by **+0.50 pp** but gate requires **≥ +0.5 pp** strictly — **inconclusive /
+honest negative** (rounded advantage 0.498).
+
+**Lesson:** Depolarizing regularization does not materially help temporal generalization on GoBug;
+hybrid QNN remains near chance on sha-order test (~0.32 PR-AUC).
+
+See: `experiments/exp_055_noise_reg_gobug/results.md`
 
 ---
 

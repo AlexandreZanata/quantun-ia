@@ -1202,6 +1202,38 @@ experiments:
         min_advantage_pp: 1.0
         save_checkpoints: true
 
+  exp_055_noise_reg_gobug:
+    description: "Depolarizing noise vs noiseless HybridSandwich on GoBug temporal test PR-AUC"
+    exp_id: exp_055
+    dataset_id: code_defects_gobug_v1
+    seed: 42
+    n_qubits: 4
+    n_layers: 2
+    reupload: true
+    depolarizing_p: 0.03
+    batch_size: 512
+    learning_rate: 0.01
+    weight_decay: 0.0001
+    epochs: 8
+    min_pr_advantage_pp: 0.5
+    save_checkpoints: false
+    profile_overrides:
+      ci:
+        n_train_rows: 5000
+        n_val_rows: 1500
+        epochs: 4
+        batch_size: 256
+        depolarizing_p: 0.03
+        min_pr_advantage_pp: -10.0
+      publication:
+        n_train_rows: 0
+        n_val_rows: 0
+        epochs: 10
+        batch_size: 512
+        depolarizing_p: 0.03
+        min_pr_advantage_pp: 0.5
+        save_checkpoints: true
+
   exp_046_model_scale_curve:
     description: "LargeNanoMLP scale ablation nano_s→nano_xxl on HIGGS — VRAM + AUC curve"
     exp_id: exp_046

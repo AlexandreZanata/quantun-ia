@@ -260,6 +260,12 @@ exp-053:
 exp-053-publication:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_053_entangle_schedule_bc/run.py --profile publication --write-results
 
+exp-055:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_055_noise_reg_gobug/run.py
+
+exp-055-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_055_noise_reg_gobug/run.py --profile publication --write-results
+
 exp-046:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_046_model_scale_curve/run.py
 
