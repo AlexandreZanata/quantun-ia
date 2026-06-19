@@ -1,0 +1,362 @@
+{
+  "report_type": "model_results_summary",
+  "version": "1.0",
+  "generated_at": "2026-06-19T00:11:49.459288+00:00",
+  "hardware": {
+    "qml_device": "cuda",
+    "cuda_available": true,
+    "gpu_name": "NVIDIA GeForce RTX 4060 Laptop GPU"
+  },
+  "evaluation_config": {
+    "split": "val",
+    "n_rows_per_model": 5000,
+    "chunk_size": 2048
+  },
+  "serve_models": [
+    {
+      "exp_id": "exp_032",
+      "model_name": "large_nano_mlp",
+      "dataset": "higgs_v1",
+      "seed": 42,
+      "split": "val",
+      "n_rows": 5000,
+      "roc_auc": 0.8331,
+      "accuracy": 0.753,
+      "accuracy_pct": 75.3,
+      "brier_score": 0.1669,
+      "mean_probability": 0.5486,
+      "positive_rate": 0.5762,
+      "confusion": {
+        "true_negative": 1617,
+        "false_positive": 733,
+        "false_negative": 502,
+        "true_positive": 2148
+      },
+      "checkpoint_path": "artifacts/exp_032/large_nano_mlp_higgs_v1/seed_42",
+      "sample_predictions": [
+        {
+          "row": 0,
+          "probability": 0.0557,
+          "predicted": 0,
+          "actual": 0,
+          "correct": 1
+        },
+        {
+          "row": 1,
+          "probability": 0.9725,
+          "predicted": 1,
+          "actual": 1,
+          "correct": 1
+        },
+        {
+          "row": 2,
+          "probability": 0.2669,
+          "predicted": 0,
+          "actual": 0,
+          "correct": 1
+        },
+        {
+          "row": 3,
+          "probability": 0.7879,
+          "predicted": 1,
+          "actual": 1,
+          "correct": 1
+        },
+        {
+          "row": 4,
+          "probability": 0.0814,
+          "predicted": 0,
+          "actual": 0,
+          "correct": 1
+        }
+      ],
+      "label": "LargeNanoMLP \u2014 HIGGS"
+    },
+    {
+      "exp_id": "exp_037",
+      "model_name": "large_nano_hybrid",
+      "dataset": "higgs_v1",
+      "seed": 42,
+      "split": "val",
+      "n_rows": 5000,
+      "roc_auc": 0.8332,
+      "accuracy": 0.7534,
+      "accuracy_pct": 75.34,
+      "brier_score": 0.167,
+      "mean_probability": 0.5516,
+      "positive_rate": 0.5574,
+      "confusion": {
+        "true_negative": 1665,
+        "false_positive": 685,
+        "false_negative": 548,
+        "true_positive": 2102
+      },
+      "checkpoint_path": "artifacts/exp_037/large_nano_hybrid_higgs_v1/seed_42",
+      "sample_predictions": [
+        {
+          "row": 0,
+          "probability": 0.0823,
+          "predicted": 0,
+          "actual": 0,
+          "correct": 1
+        },
+        {
+          "row": 1,
+          "probability": 0.9196,
+          "predicted": 1,
+          "actual": 1,
+          "correct": 1
+        },
+        {
+          "row": 2,
+          "probability": 0.343,
+          "predicted": 0,
+          "actual": 0,
+          "correct": 1
+        },
+        {
+          "row": 3,
+          "probability": 0.8609,
+          "predicted": 1,
+          "actual": 1,
+          "correct": 1
+        },
+        {
+          "row": 4,
+          "probability": 0.1517,
+          "predicted": 0,
+          "actual": 0,
+          "correct": 1
+        }
+      ],
+      "label": "LargeNano Hybrid \u2014 HIGGS"
+    },
+    {
+      "exp_id": "exp_034",
+      "model_name": "large_nano_mlp",
+      "dataset": "synthea_cv_risk_v1",
+      "seed": 42,
+      "split": "val",
+      "n_rows": 5000,
+      "roc_auc": 0.7814,
+      "accuracy": 0.9964,
+      "accuracy_pct": 99.64,
+      "brier_score": 0.0036,
+      "mean_probability": 0.997,
+      "positive_rate": 1.0,
+      "confusion": {
+        "true_negative": 0,
+        "false_positive": 18,
+        "false_negative": 0,
+        "true_positive": 4982
+      },
+      "checkpoint_path": "artifacts/exp_034/large_nano_mlp_synthea_cv_risk_v1/seed_42",
+      "sample_predictions": [
+        {
+          "row": 0,
+          "probability": 0.9999,
+          "predicted": 1,
+          "actual": 1,
+          "correct": 1
+        },
+        {
+          "row": 1,
+          "probability": 0.9958,
+          "predicted": 1,
+          "actual": 1,
+          "correct": 1
+        },
+        {
+          "row": 2,
+          "probability": 0.9993,
+          "predicted": 1,
+          "actual": 1,
+          "correct": 1
+        },
+        {
+          "row": 3,
+          "probability": 1.0,
+          "predicted": 1,
+          "actual": 1,
+          "correct": 1
+        },
+        {
+          "row": 4,
+          "probability": 0.9986,
+          "predicted": 1,
+          "actual": 1,
+          "correct": 1
+        }
+      ],
+      "label": "LargeNanoMLP \u2014 Synthea CV"
+    }
+  ],
+  "human_clinic_scenarios": [
+    {
+      "scenario_id": "young_healthy_vs_elderly_smoker",
+      "type": "comparison",
+      "patient_a": {
+        "summary": "32y male, BMI 24.0, BP 118/78 mmHg",
+        "risk_percent": 99.52,
+        "risk_band": "high",
+        "probability": 0.9952,
+        "profile": {
+          "age_years": 32,
+          "sex_male": true,
+          "bmi": 24,
+          "systolic_bp": 118,
+          "smoker": false,
+          "diabetes": false,
+          "prior_mi": false
+        }
+      },
+      "patient_b": {
+        "summary": "78y male, BMI 31.0, BP 165/78 mmHg, smoker, diabetes, prior heart attack",
+        "risk_percent": 100.0,
+        "risk_band": "high",
+        "probability": 1.0,
+        "profile": {
+          "age_years": 78,
+          "sex_male": true,
+          "bmi": 31,
+          "systolic_bp": 165,
+          "smoker": true,
+          "diabetes": true,
+          "prior_mi": true
+        }
+      },
+      "higher_risk": "B",
+      "delta_risk_pp": 0.48
+    },
+    {
+      "scenario_id": "same_age_lifestyle_contrast",
+      "type": "comparison",
+      "patient_a": {
+        "summary": "55y female, BMI 23.0, BP 120/78 mmHg",
+        "risk_percent": 99.47,
+        "risk_band": "high",
+        "probability": 0.9947,
+        "profile": {
+          "age_years": 55,
+          "sex_male": false,
+          "bmi": 23,
+          "systolic_bp": 120,
+          "smoker": false,
+          "diabetes": false,
+          "prior_mi": false
+        }
+      },
+      "patient_b": {
+        "summary": "55y male, BMI 34.0, BP 152/78 mmHg, smoker, diabetes",
+        "risk_percent": 99.99,
+        "risk_band": "high",
+        "probability": 0.9999,
+        "profile": {
+          "age_years": 55,
+          "sex_male": true,
+          "bmi": 34,
+          "systolic_bp": 152,
+          "smoker": true,
+          "diabetes": true,
+          "prior_mi": false
+        }
+      },
+      "higher_risk": "B",
+      "delta_risk_pp": 0.52
+    },
+    {
+      "scenario_id": "baseline_patient",
+      "type": "single_patient",
+      "patient": {
+        "summary": "55y female, BMI 28.0, BP 128/78 mmHg",
+        "risk_percent": 99.7,
+        "risk_band": "high",
+        "probability": 0.997,
+        "profile": {
+          "age_years": 55,
+          "sex_male": false,
+          "bmi": 28,
+          "systolic_bp": 128,
+          "smoker": false,
+          "diabetes": false,
+          "prior_mi": false
+        }
+      }
+    }
+  ],
+  "errors": [],
+  "benchmark_holdout": [
+    {
+      "exp_id": "exp_027",
+      "model": "hybrid_sandwich_breast_cancer",
+      "accuracy_pct": 94.7,
+      "loss": 0.3879,
+      "elapsed_s": 0.31,
+      "eval_set": "holdout_test",
+      "source": "single_seed"
+    },
+    {
+      "exp_id": "exp_030",
+      "model": "hybrid_sandwich",
+      "accuracy_pct": 63.3,
+      "loss": 0.6254,
+      "elapsed_s": 1.48,
+      "eval_set": "holdout_test",
+      "source": "single_seed"
+    },
+    {
+      "exp_id": "exp_031",
+      "model": "curriculum_random",
+      "accuracy_pct": 97.1,
+      "loss": 0.1011,
+      "elapsed_s": 0.77,
+      "eval_set": "holdout_test",
+      "source": "single_seed"
+    },
+    {
+      "exp_id": "exp_031",
+      "model": "curriculum_margin_batches",
+      "accuracy_pct": 97.1,
+      "loss": 0.1699,
+      "elapsed_s": 0.67,
+      "eval_set": "holdout_test",
+      "source": "single_seed"
+    },
+    {
+      "exp_id": "exp_011",
+      "model": "hpo_perceptron",
+      "accuracy_pct": 93.0,
+      "loss": 0.2795,
+      "elapsed_s": 0.0,
+      "eval_set": "holdout_test",
+      "source": "single_seed"
+    },
+    {
+      "exp_id": "exp_032",
+      "model": "logistic_baseline",
+      "accuracy_pct": 64.2,
+      "loss": 0.6367,
+      "elapsed_s": 1.58,
+      "eval_set": "holdout_test",
+      "source": "single_seed"
+    },
+    {
+      "exp_id": "exp_034",
+      "model": "logistic_baseline",
+      "accuracy_pct": 99.6,
+      "loss": 0.0213,
+      "elapsed_s": 0.87,
+      "eval_set": "holdout_test",
+      "source": "single_seed"
+    },
+    {
+      "exp_id": "exp_039",
+      "model": "logistic_baseline",
+      "accuracy_pct": 99.6,
+      "loss": 0.0213,
+      "elapsed_s": 1.42,
+      "eval_set": "holdout_test",
+      "source": "single_seed"
+    }
+  ]
+}

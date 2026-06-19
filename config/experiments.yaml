@@ -965,3 +965,14 @@ experiments:
         min_auc_advantage_pp: -2.0
         min_improvement_vs_exp_034_pp: 0.0
         save_checkpoints: true
+
+  exp_041_human_cv_clinical_cases:
+    description: "Literature-backed clinical case validation — 8 human profiles vs exp_034 model"
+    exp_id: exp_041
+    model_exp_id: exp_034
+    model_name: large_nano_mlp
+    dataset_id: synthea_cv_risk_v1
+    seed: 42
+    n_cases: 8
+    min_spearman_rho: 0.85
+    require_separation: true

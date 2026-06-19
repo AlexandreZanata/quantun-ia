@@ -62,6 +62,15 @@ demo-open-predict:
 demo-open-predict-hybrid:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) scripts/demo_open_predict.py --exp-id exp_037 --model-name large_nano_hybrid --rows 5000
 
+demo-cv-clinic:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) scripts/demo_cv_clinic.py
+
+demo-cv-game:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) scripts/demo_cv_clinic.py --game
+
+export-model-results:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) scripts/export_model_results.py --rows 5000
+
 experiment:
 	docker compose run --rm experiment
 
@@ -196,6 +205,12 @@ exp-040:
 
 exp-040-publication:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_040_full_scale_ablation_higgs/run.py --write-results
+
+exp-041:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_041_human_cv_clinical_cases/run.py
+
+exp-041-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_041_human_cv_clinical_cases/run.py --write-results
 
 batch-predict:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) scripts/batch_predict.py \

@@ -21,6 +21,7 @@ from dashboard.benchmark_data import (
     to_leaderboard_rows,
 )
 from dashboard.terminal_report import print_benchmark_report
+from src.application.model_results_report import DEFAULT_REPORT_PATH, load_model_results_report
 
 RETRO_CSS = """
 @import url('https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap');
@@ -90,6 +91,45 @@ h1, h2, h3 {
     padding: 0.1rem 0.55rem;
     font-size: 0.85rem;
     letter-spacing: 2px;
+}
+
+.clinic-nav {
+    margin: -0.15rem 0 0.75rem 0;
+    text-align: right;
+}
+
+.clinic-nav [data-testid="stPageLink"] a {
+    color: #050805 !important;
+    background: #ffb000 !important;
+    padding: 0.35rem 0.85rem !important;
+    font-family: 'VT323', monospace !important;
+    font-size: 1.05rem !important;
+    letter-spacing: 2px !important;
+    border: 2px solid #ffb000 !important;
+    border-radius: 0 !important;
+    box-shadow: 0 0 14px rgba(255, 176, 0, 0.5) !important;
+    text-decoration: none !important;
+}
+
+.clinic-nav [data-testid="stPageLink"] a:hover {
+    background: #ffd040 !important;
+    border-color: #ffd040 !important;
+}
+
+.clinic-nav-fallback .stButton > button {
+    background: #ffb000 !important;
+    color: #050805 !important;
+    border: 2px solid #ffb000 !important;
+    box-shadow: 0 0 14px rgba(255, 176, 0, 0.5) !important;
+    font-family: 'VT323', monospace !important;
+    font-size: 1.05rem !important;
+    letter-spacing: 2px !important;
+}
+
+.clinic-nav-fallback .stButton > button:hover {
+    background: #ffd040 !important;
+    border-color: #ffd040 !important;
+    color: #050805 !important;
 }
 
 .monitor-body {
@@ -192,13 +232,26 @@ NEON_COLORS = ["#33ff66", "#ffb000", "#00e5ff", "#ff3366", "#cc66ff", "#ffff33"]
 
 def retro_header(*, run_count: int, best_model: str | None, best_acc: float | None) -> None:
     best_label = f"{best_model} ({best_acc:.1f}%)" if best_model and best_acc is not None else "—"
+    st.markdown('<div class="monitor-header">', unsafe_allow_html=True)
+    bar_left, bar_link, bar_badge = st.columns([2.8, 1.35, 0.55])
+    with bar_left:
+        st.markdown(
+            '<p class="title" style="margin:0;padding:0.55rem 0 0.55rem 1rem;">'
+            "◈ QUANTUN-IA BENCHMARK MONITOR</p>",
+            unsafe_allow_html=True,
+        )
+    with bar_link:
+        st.markdown('<div class="clinic-nav" style="margin:0.35rem 0;text-align:center;">', unsafe_allow_html=True)
+        st.page_link("pages/03_cv_risk_clinic.py", label="❤ HUMAN CLINIC DEMO")
+        st.markdown("</div>", unsafe_allow_html=True)
+    with bar_badge:
+        st.markdown(
+            '<p style="margin:0;padding:0.55rem 1rem 0.55rem 0;text-align:right;">'
+            '<span class="badge">v1.0 · ONLINE</span></p>',
+            unsafe_allow_html=True,
+        )
     st.markdown(
         f"""
-<div class="monitor-header">
-  <div class="monitor-titlebar">
-    <span class="title">◈ QUANTUN-IA BENCHMARK MONITOR</span>
-    <span class="badge">v1.0 · ONLINE</span>
-  </div>
   <div class="monitor-body">
     <div class="monitor-stat">
       <div class="label">Data source</div>
@@ -336,6 +389,44 @@ def main() -> None:
         best_model=best["model"] if best else None,
         best_acc=best["accuracy"] if best else None,
     )
+
+    summary = load_model_results_report()
+    with st.expander("◈ ALL MODEL RESULTS (single file)", expanded=False):
+        if summary is None:
+            st.markdown(
+                '<p class="retro-amber">&gt; No report yet — run '
+                '<code>make export-model-results</code> on RTX 4060.</p>',
+                unsafe_allow_html=True,
+            )
+        else:
+            st.caption(
+                f"`{DEFAULT_REPORT_PATH}` · generated {summary.get('generated_at', '?')} · "
+                f"{len(summary.get('serve_models', []))} serve models · "
+                f"{len(summary.get('human_clinic_scenarios', []))} human scenarios"
+            )
+            if summary.get("serve_models"):
+                st.dataframe(
+                    pd.DataFrame(summary["serve_models"])[
+                        ["label", "roc_auc", "accuracy_pct", "brier_score", "n_rows", "dataset"]
+                    ],
+                    use_container_width=True,
+                    hide_index=True,
+                )
+            report_json = DEFAULT_REPORT_PATH.read_text(encoding="utf-8") if DEFAULT_REPORT_PATH.is_file() else "{}"
+            st.download_button(
+                label="[ DOWNLOAD model_results_summary.json ]",
+                data=report_json,
+                file_name="model_results_summary.json",
+                mime="application/json",
+            )
+        if st.button("[ REGENERATE ALL MODEL RESULTS ]", key="regen_model_results"):
+            from src.application.model_results_report import write_model_results_report
+
+            with st.spinner("Evaluating all serve models on RTX 4060…"):
+                write_model_results_report(n_rows=5000)
+            st.cache_data.clear()
+            st.rerun()
+
     st.markdown("## ◈ BENCHMARK RESULTS")
 
     if not rows:
