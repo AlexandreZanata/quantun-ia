@@ -17,6 +17,7 @@ Each entry links to the experiment `results.md` and the statistical test outcome
 | exp_046 | nano_xl beats nano_l by ≥0.3 pp AUC on HIGGS 805K | **Rejected** | nano_xl − nano_l = −0.03 pp; plateau at ~1.14M params |
 | exp_044 | LargeNanoMLP beats logistic by ≥0.5 pp on NIHR val | **Rejected** | AUC 0.831 passes; nano − logistic = −0.16 pp |
 | exp_045 | PR-AUC ≥ 0.55 on temporal GoBug val | **Rejected** | PR-AUC ≈ 0.31 (chance); temporal holdout defeats tabular nano |
+| exp_052 | Warm-start hybrid beats e2e by ≥0.5 pp AUC on HIGGS | **Rejected** | Δ = −0.42 pp (3 seeds); Wilcoxon p = 0.5 |
 
 ---
 
@@ -154,6 +155,25 @@ PR-AUC ≈ **0.31** — at prevalence baseline (~27–32% on val). Pre-registere
 code metrics for controlled ablations before re-attempting full GoBug scale.
 
 See: `experiments/exp_045_code_defect_gobug/results.md`
+
+---
+
+## exp_052 — Quantum warm-start on HIGGS hybrid sandwich
+
+**Profile:** HIGGS 50k train / 10k val, HybridSandwich 4q×2L re-upload, 3 seeds, RTX 4060
+
+| Method | Mean val ROC-AUC |
+|--------|------------------|
+| end-to-end hybrid | **0.7541** |
+| classical-first warm-start (70/30) | 0.7499 |
+
+**Finding:** Warm-start underperforms end-to-end by **−0.42 pp** (gate ≥ +0.5 pp).
+Paired wins: 1/3 · Wilcoxon p = 0.5.
+
+**Lesson:** Freezing QNN while training pre/post does not transfer better than joint
+optimization on million-row tabular HIGGS — schedule hypothesis rejected for HybridSandwich.
+
+See: `experiments/exp_052_quantum_warmstart_higgs/results.md`
 
 ---
 

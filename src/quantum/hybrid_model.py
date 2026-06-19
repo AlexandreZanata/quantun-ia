@@ -30,13 +30,20 @@ class HybridSandwich(TrainableMixin, nn.Module):
 
     def __init__(self, input_dim, n_qubits=4, n_layers=2, *, reupload: bool = False):
         super().__init__()
+        self.n_qubits = n_qubits
         self.pre = nn.Sequential(nn.Linear(input_dim, n_qubits), nn.Tanh())
         self.qlayer = make_quantum_layer(n_qubits, n_layers, reupload=reupload)
         self.post = nn.Sequential(nn.Linear(n_qubits, 1), nn.Sigmoid())
+        self._quantum_enabled = True
+
+    def set_quantum_enabled(self, enabled: bool) -> None:
+        """Bypass PennyLane block during classical warm-start phase."""
+        self._quantum_enabled = enabled
 
     def forward(self, x):
         x = self.pre(x)
-        x = self.qlayer(x)
+        if self._quantum_enabled:
+            x = self.qlayer(x)
         return self.post(x).squeeze()
 
 
