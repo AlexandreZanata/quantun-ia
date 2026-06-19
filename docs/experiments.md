@@ -384,7 +384,16 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `QML_DEVICE=cuda python experiments/exp_073_quantum_warmstart_gobug/run.py --profile publication --write-results`  
 **Lesson:** Marginal warm-start gain on GoBug does not clear +0.5 pp gate — H-Q2 remains inconclusive on software tabular.
 
-**Next:** Phase 3 continuation — exp_074–075 cross-domain Q replication; exp_068b compound stress (ACYD).
+### EXP 074 — Dynamic entanglement schedule on NIHR (C2 replication)
+
+**Models:** `QuantumNetEntangled` curriculum none→chain→ring vs fixed topologies  
+**Dataset:** `nihr_cv_synthetic_v1` (10,000 train / 3,000 val, 3 seeds)  
+**Claim:** Schedule val PR-AUC ≥ best fixed + 0.5 pp  
+**Verdict:** Honest negative — mean schedule 0.1963 vs best fixed (ring) 0.2329 (−3.66 pp); 0/3 paired wins  
+**Command:** `QML_DEVICE=cuda python experiments/exp_074_entangle_schedule_nihr/run.py --profile publication --write-results`  
+**Lesson:** H-Q3 dynamic entanglement failure on breast cancer replicates on NIHR clinical tabular.
+
+**Next:** Phase 3 continuation — exp_075 GV-ALR on NIHR; exp_068b compound stress (ACYD).
 
 ## Publication Profiles
 

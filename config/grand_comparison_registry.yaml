@@ -91,6 +91,15 @@ recipes:
     delta_pp:
       higgs: 0.01
 
+  entangle_schedule:
+    label: Dynamic entanglement schedule vs best fixed
+    kind: quantum_ablation
+    quantum: true
+    source_exp:
+      nihr: exp_074
+    delta_pp:
+      nihr: -3.66
+
   noise_reg_gobug:
     label: Depolarizing noise reg vs noiseless hybrid (test)
     kind: quantum_ablation

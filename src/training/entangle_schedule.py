@@ -7,7 +7,31 @@ from collections.abc import Callable, Sequence
 import torch
 
 from src.quantum.qnn_entangled import QuantumNetEntangled
-from src.training.trainer import evaluate, train_model
+from src.training.trainer import evaluate, predict, train_model
+
+_HOLDOUT_METRICS = frozenset({"accuracy", "pr_auc"})
+
+
+def holdout_score(
+    model: QuantumNetEntangled,
+    x_holdout: torch.Tensor,
+    y_holdout: torch.Tensor,
+    *,
+    metric: str = "accuracy",
+) -> float:
+    """Return holdout accuracy or PR-AUC for a trained entangled QNN."""
+    if metric not in _HOLDOUT_METRICS:
+        raise ValueError(f"metric must be one of {sorted(_HOLDOUT_METRICS)}")
+    if metric == "pr_auc":
+        from src.application.balanced_metrics import pr_auc
+
+        device = next(model.parameters()).device
+        with torch.no_grad():
+            probs = predict(model, x_holdout.to(device)).detach().cpu().numpy()
+        labels = y_holdout.detach().cpu().numpy()
+        score = pr_auc(labels, probs)
+        return float(score) if score is not None else 0.5
+    return float(evaluate(model, x_holdout, y_holdout)["accuracy"])
 
 DEFAULT_ENTANGLEMENT_LADDER: tuple[str, ...] = ("none", "chain", "ring")
 
@@ -48,9 +72,10 @@ def train_entangled_schedule(
     lr: float = 0.02,
     seed: int | None = None,
     profile: str | None = None,
+    metric: str = "accuracy",
 ) -> float:
     """
-    Train with increasing entanglement over stages; return holdout accuracy.
+    Train with increasing entanglement over stages; return holdout score.
 
     Each stage swaps the PennyLane topology and continues from prior weights.
     """
@@ -80,7 +105,7 @@ def train_entangled_schedule(
             save_checkpoints=False,
         )
 
-    return float(evaluate(model, x_holdout, y_holdout)["accuracy"])
+    return holdout_score(model, x_holdout, y_holdout, metric=metric)
 
 
 def train_fixed_entangled(
@@ -98,6 +123,7 @@ def train_fixed_entangled(
     lr: float = 0.02,
     seed: int | None = None,
     profile: str | None = None,
+    metric: str = "accuracy",
 ) -> float:
     """Epoch-matched fixed-topology baseline (same total epochs as schedule)."""
     total_epochs = _total_schedule_epochs(n_stages, epochs_per_stage)
@@ -116,4 +142,4 @@ def train_fixed_entangled(
         profile=profile,
         save_checkpoints=False,
     )
-    return float(evaluate(model, x_holdout, y_holdout)["accuracy"])
+    return holdout_score(model, x_holdout, y_holdout, metric=metric)
