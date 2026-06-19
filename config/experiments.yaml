@@ -1176,6 +1176,39 @@ experiments:
         min_vs_e2e_pp: 0.5
         save_checkpoints: true
 
+  exp_072_quantum_warmstart_nihr:
+    description: "Quantum warm-start vs end-to-end HybridSandwich on NIHR — val PR-AUC gate (C2 replication)"
+    exp_id: exp_072
+    dataset_id: nihr_cv_synthetic_v1
+    seed: 42
+    seeds: [42]
+    n_qubits: 4
+    n_layers: 2
+    reupload: true
+    batch_size: 512
+    learning_rate: 0.01
+    weight_decay: 0.0001
+    epochs: 6
+    classical_fraction: 0.7
+    min_vs_e2e_pp: 0.5
+    save_checkpoints: false
+    profile_overrides:
+      ci:
+        n_train_rows: 5000
+        n_val_rows: 2000
+        epochs: 4
+        batch_size: 256
+        seeds: [42]
+        min_vs_e2e_pp: -10.0
+      publication:
+        n_train_rows: 50000
+        n_val_rows: 15000
+        epochs: 10
+        batch_size: 512
+        seeds: [42, 123, 456]
+        min_vs_e2e_pp: 0.5
+        save_checkpoints: true
+
   exp_053_entangle_schedule_bc:
     description: "Dynamic entanglement schedule vs fixed topologies on breast cancer"
     exp_id: exp_053

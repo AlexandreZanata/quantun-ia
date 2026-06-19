@@ -357,8 +357,6 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `QML_DEVICE=cuda python experiments/exp_071_hybrid_nano_gobug/run.py --profile publication --write-results`  
 **Checkpoint:** `artifacts/exp_071/large_nano_hybrid_gobug/seed_42/best.pt`
 
-**Next:** Phase 3 continuation — exp_072–075 cross-domain Q replication; exp_068b compound stress.
-
 ### EXP 068a — Seasonal angle encoding on ACYD (H-Q8)
 
 **Models:** Frozen C4 classical head vs seasonal **angle** QNN vs seasonal **amplitude** QNN (4 cyclic features from in-season weather)  
@@ -367,6 +365,17 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Verdict:** Honest negative — classical 0.6777 vs angle 0.4979 (−17.98 pp) vs amplitude 0.5137 (−1.58 pp angle−amp)  
 **Command:** `QML_DEVICE=cuda python experiments/exp_068a_angle_encoding_acyd/run.py --profile publication --write-results`  
 **Lesson:** Seasonal-only QNN head without backbone hidden state loses C4 representation; angle encoding does not rescue agro-climate tabular.
+
+### EXP 072 — Quantum warm-start on NIHR hybrid (C2 replication)
+
+**Models:** `HybridSandwich` end-to-end vs classical-first warm-start (70/30 epoch split)  
+**Dataset:** `nihr_cv_synthetic_v1` (50,000 train / 15,000 val, 3 seeds)  
+**Claim:** Warm-start val PR-AUC ≥ e2e hybrid + 0.5 pp  
+**Verdict:** Honest negative — mean e2e 0.2343 vs warm-start 0.2307 (−0.35 pp); 1/3 paired wins  
+**Command:** `QML_DEVICE=cuda python experiments/exp_072_quantum_warmstart_nihr/run.py --profile publication --write-results`  
+**Lesson:** H-Q2 warm-start failure on HIGGS replicates on NIHR clinical tabular.
+
+**Next:** Phase 3 continuation — exp_073 GoBug warm-start; exp_074–075 cross-domain Q replication.
 
 ## Publication Profiles
 

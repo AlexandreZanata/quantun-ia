@@ -401,6 +401,23 @@ See: `experiments/exp_068a_angle_encoding_acyd/results.md`
 
 ---
 
+## exp_072 — Quantum warm-start on NIHR (C2 replication)
+
+**Profile:** nihr_cv_synthetic_v1, 50,000 train / 15,000 val, seeds 42/123/456, RTX 4060
+
+| Condition | Mean val PR-AUC |
+|-----------|-----------------|
+| End-to-end hybrid | 0.2343 |
+| Warm-start hybrid | 0.2307 |
+
+**Gate:** warm-start ≥ e2e + 0.5 pp → **failed** (−0.35 pp; Wilcoxon p=0.5).
+
+**Interpretation:** Classical-first schedule does not help NIHR HybridSandwich — confirms exp_052 honest negative cross-domain.
+
+See: `experiments/exp_072_quantum_warmstart_nihr/results.md`
+
+---
+
 ## How we use negative results
 
 1. **Applicability gates** (`src/training/protocol.py`) prevent running expensive techniques on tasks where baselines already fail.
