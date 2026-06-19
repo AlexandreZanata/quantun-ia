@@ -303,7 +303,15 @@ vim experiments/exp_003_entanglement_effect/results.md
 | C3 GoBug | `large_nano_mlp_gobug` | exp_070 | PR-AUC +0.03 pp vs logistic | Rejected (shipped) |
 | C4 ACYD | `large_nano_mlp_acyd_soy` | exp_060 | ROC-AUC +3.86 pp vs logistic | Accepted |
 
-**Next:** Phase 2 conventional sweeps (exp_076 NIHR, exp_077 GoBug) · Phase 3 quantum heads (exp_062 ACYD).
+**Next:** Phase 2 conventional sweep GoBug (exp_077) · Phase 3 quantum heads (exp_062 ACYD).
+
+### EXP 076 — Conventional NIHR baselines
+
+**Models:** exp_069 `LargeNanoMLP` vs sklearn `LogisticRegression`, `MLPClassifier`, `HistGradientBoosting`, `XGBoost`  
+**Dataset:** `nihr_cv_synthetic_v1` (70K train / 15K val, 13 features, ~8% prevalence)  
+**Claim:** Val PR-AUC ≥ best conventional + 0.5 pp  
+**Verdict:** Rejected — logistic 0.2382 vs nano 0.2393 (+0.12 pp); nano ranks first but below gate  
+**Command:** `QML_DEVICE=cuda python experiments/exp_076_conventional_nihr_baselines/run.py --profile publication --write-results`
 
 ## Publication Profiles
 

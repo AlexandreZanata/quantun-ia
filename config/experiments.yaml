@@ -1395,6 +1395,27 @@ experiments:
         histgb_max_iter: 100
         xgboost_n_estimators: 50
 
+  exp_076_conventional_nihr_baselines:
+    description: "LargeNanoMLP vs sklearn/XGBoost conventional baselines on NIHR val PR-AUC"
+    exp_id: exp_076
+    dataset_id: nihr_cv_synthetic_v1
+    checkpoint_exp_key: exp_069_large_nano_nihr
+    primary_metric: pr_auc
+    seed: 42
+    min_advantage_pp: 0.5
+    xgboost_learning_rate: 0.1
+    xgboost_n_estimators: 50
+    histgb_max_iter: 100
+    profile_overrides:
+      ci:
+        min_advantage_pp: 0.0
+        histgb_max_iter: 50
+        xgboost_n_estimators: 30
+      publication:
+        min_advantage_pp: 0.5
+        histgb_max_iter: 100
+        xgboost_n_estimators: 50
+
   exp_069_large_nano_nihr:
     description: "LargeNanoMLP ~1.11M params on NIHR synthetic CV — val PR-AUC vs logistic (C2)"
     exp_id: exp_069

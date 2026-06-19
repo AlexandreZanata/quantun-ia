@@ -10,7 +10,7 @@ import numpy as np
 import torch
 from sklearn.ensemble import HistGradientBoostingClassifier
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, roc_auc_score
+from sklearn.metrics import accuracy_score, average_precision_score, roc_auc_score
 from sklearn.neural_network import MLPClassifier
 
 from src.classical.large_nano_mlp import LargeNanoMLP
@@ -21,8 +21,10 @@ from src.training.trainer import count_parameters
 
 EXP_032_KEY = "exp_032_large_nano_higgs"
 EXP_060_KEY = "exp_060_large_nano_acyd_soy"
+EXP_069_KEY = "exp_069_large_nano_nihr"
 DEFAULT_HIGGS_SERVE_DIR = Path("dist/serve_models/large_nano_mlp_higgs")
 DEFAULT_ACYD_ARTIFACT_DIR = Path("artifacts/exp_060/large_nano_mlp/seed_42")
+DEFAULT_NIHR_ARTIFACT_DIR = Path("artifacts/exp_069/large_nano_mlp/seed_42")
 
 
 @dataclass(frozen=True)
@@ -61,16 +63,27 @@ def _eval_sklearn(estimator, x: np.ndarray, y: np.ndarray) -> tuple[float, float
     return float(roc_auc_score(y, proba)), float(accuracy_score(y, preds))
 
 
+def _eval_sklearn_pr(estimator, x: np.ndarray, y: np.ndarray) -> tuple[float, float]:
+    proba = estimator.predict_proba(x)[:, 1]
+    preds = (proba >= 0.5).astype(np.float32)
+    pr = average_precision_score(y, proba)
+    return float(pr), float(accuracy_score(y, preds))
+
+
 @torch.no_grad()
 def _eval_torch(
     model: torch.nn.Module,
     x: np.ndarray,
     y: np.ndarray,
     device: torch.device,
+    *,
+    primary_metric: str = "roc_auc",
 ) -> tuple[float, float]:
     xt = torch.tensor(x, dtype=torch.float32, device=device)
     proba = model(xt).detach().cpu().numpy().reshape(-1)
     preds = (proba >= 0.5).astype(np.float32)
+    if primary_metric == "pr_auc":
+        return float(average_precision_score(y, proba)), float(accuracy_score(y, preds))
     return float(roc_auc_score(y, proba)), float(accuracy_score(y, preds))
 
 
@@ -111,6 +124,7 @@ def _run_conventional_open_comparison(
     max_train_rows: int,
     max_val_rows: int,
     xgb_exp_id: str,
+    primary_metric: str = "roc_auc",
 ) -> ConventionalComparisonResult:
     """Compare a LargeNanoMLP checkpoint vs conventional tabular baselines on val split."""
     cfg = load_experiment_config(train_exp_key, profile=profile)
@@ -129,6 +143,8 @@ def _run_conventional_open_comparison(
     hidden1 = int(cfg.get("hidden1", 2048))
     hidden2 = int(cfg.get("hidden2", 512))
     hidden3 = int(cfg.get("hidden3", 64))
+    metric = str(cmp_cfg.get("primary_metric", primary_metric))
+    eval_sklearn = _eval_sklearn_pr if metric == "pr_auc" else _eval_sklearn
 
     t0 = time.perf_counter()
     x_train, y_train, x_val, y_val, _, _, _ = load_open_parquet_splits(
@@ -149,7 +165,7 @@ def _run_conventional_open_comparison(
         device,
         missing_hint=f"train {train_exp_key} first",
     )
-    auc, acc = _eval_torch(nano, x_val, y_val, device)
+    auc, acc = _eval_torch(nano, x_val, y_val, device, primary_metric=metric)
     scores.append(
         ConventionalBaselineScore(
             model_key="large_nano_mlp",
@@ -165,7 +181,7 @@ def _run_conventional_open_comparison(
     t_model = time.perf_counter()
     logistic = LogisticRegression(max_iter=500, random_state=seed)
     logistic.fit(x_train, y_train)
-    auc, acc = _eval_sklearn(logistic, x_val, y_val)
+    auc, acc = eval_sklearn(logistic, x_val, y_val)
     scores.append(
         ConventionalBaselineScore(
             model_key="logistic_regression",
@@ -192,7 +208,7 @@ def _run_conventional_open_comparison(
         verbose=False,
     )
     sklearn_mlp.fit(x_train, y_train)
-    auc, acc = _eval_sklearn(sklearn_mlp, x_val, y_val)
+    auc, acc = eval_sklearn(sklearn_mlp, x_val, y_val)
     n_mlp_params = sum(w.size for w in sklearn_mlp.coefs_) + sum(b.size for b in sklearn_mlp.intercepts_)
     scores.append(
         ConventionalBaselineScore(
@@ -214,7 +230,7 @@ def _run_conventional_open_comparison(
         random_state=seed,
     )
     histgb.fit(x_train, y_train)
-    auc, acc = _eval_sklearn(histgb, x_val, y_val)
+    auc, acc = eval_sklearn(histgb, x_val, y_val)
     scores.append(
         ConventionalBaselineScore(
             model_key="hist_gradient_boosting",
@@ -243,7 +259,7 @@ def _run_conventional_open_comparison(
         profile=profile,
         save_checkpoints=False,
     )
-    auc, acc = _eval_sklearn(xgb.estimator, x_val, y_val)
+    auc, acc = eval_sklearn(xgb.estimator, x_val, y_val)
     scores.append(
         ConventionalBaselineScore(
             model_key="xgboost_shallow",
@@ -315,6 +331,29 @@ def run_conventional_acyd_comparison(
         max_train_rows=50_107,
         max_val_rows=5_830,
         xgb_exp_id="exp_061",
+    )
+
+
+def run_conventional_nihr_comparison(
+    root: Path,
+    *,
+    profile: str = "ci",
+    weights_dir: Path | None = None,
+    checkpoint_exp_key: str = EXP_069_KEY,
+) -> ConventionalComparisonResult:
+    """Compare exp_069 LargeNanoMLP vs conventional tabular baselines on NIHR val (PR-AUC)."""
+    artifact_dir = weights_dir or (root / DEFAULT_NIHR_ARTIFACT_DIR)
+    return _run_conventional_open_comparison(
+        root,
+        dataset_id="nihr_cv_synthetic_v1",
+        profile=profile,
+        train_exp_key=checkpoint_exp_key,
+        cmp_exp_key="exp_076_conventional_nihr_baselines",
+        nano_weights_dir=artifact_dir,
+        max_train_rows=70_000,
+        max_val_rows=15_000,
+        xgb_exp_id="exp_076",
+        primary_metric="pr_auc",
     )
 
 

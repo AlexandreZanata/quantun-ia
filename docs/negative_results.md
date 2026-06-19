@@ -25,6 +25,7 @@ Each entry links to the experiment `results.md` and the statistical test outcome
 | exp_058 | LargeNanoMLP ≥ best conventional + 0.5 pp (HIGGS) | **Rejected** | sklearn MLP 0.8429 vs nano 0.8358 (−0.71 pp full val) |
 | exp_061 | LargeNanoMLP ≥ best conventional + 0.5 pp (ACYD) | **Rejected** | HistGB 0.6941 vs nano 0.6777 (−1.64 pp temporal val) |
 | exp_069 | LargeNanoMLP ≥ logistic + 1.0 pp PR-AUC (NIHR) | **Rejected** | logistic 0.2382 vs nano 0.2370 (−0.12 pp) |
+| exp_076 | LargeNanoMLP ≥ best conventional + 0.5 pp PR-AUC (NIHR) | **Rejected** | logistic 0.2382 vs nano 0.2393 (+0.12 pp) |
 | exp_070 | LargeNanoMLP ≥ logistic + 2.0 pp PR-AUC (GoBug) | **Rejected** | logistic 0.3097 vs nano 0.3100 (+0.03 pp) |
 
 ---
@@ -321,6 +322,26 @@ See: `experiments/exp_061_conventional_acyd_baselines/results.md`
 **Interpretation:** At ~8% prevalence, logistic remains a strong ceiling on PR-AUC; deep nano does not beat it on this synthetic cohort. C2 checkpoint still ships for hybrid/QNN ablations (exp_051+).
 
 See: `experiments/exp_069_large_nano_nihr/results.md`
+
+---
+
+## exp_076 — Conventional NIHR baselines vs LargeNanoMLP
+
+**Profile:** nihr_cv_synthetic_v1, 70K train / 15K val, seed 42, RTX 4060
+
+| Model | Val PR-AUC | Train (s) |
+|-------|------------|-----------|
+| LargeNanoMLP (exp_069 checkpoint) | **0.2393** | 0.1 |
+| LogisticRegression (sklearn) | 0.2382 | 0.2 |
+| XGBoost shallow | 0.2344 | 0.7 |
+| MLPClassifier (sklearn, 2048-512-64) | 0.2327 | 38.0 |
+| HistGradientBoosting | 0.2304 | 0.2 |
+
+**Gate:** LargeNanoMLP ≥ best conventional + 0.5 pp PR-AUC → **failed** (+0.12 pp vs logistic).
+
+**Interpretation:** Nano barely edges logistic on PR-AUC but does not clear the 0.5 pp conventional sweep gate; sklearn matched MLP underperforms. C2 anchor remains the comparison floor for quantum heads.
+
+See: `experiments/exp_076_conventional_nihr_baselines/results.md`
 
 ---
 

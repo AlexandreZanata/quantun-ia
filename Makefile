@@ -170,6 +170,12 @@ exp-061:
 exp-061-publication:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_061_conventional_acyd_baselines/run.py --profile publication --write-results
 
+exp-076:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_076_conventional_nihr_baselines/run.py --profile ci
+
+exp-076-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_076_conventional_nihr_baselines/run.py --profile publication --write-results
+
 exp-069:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_069_large_nano_nihr/run.py --profile ci
 
