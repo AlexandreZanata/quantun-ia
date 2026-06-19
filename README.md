@@ -305,6 +305,7 @@ Full arXiv upload details: [docs/arxiv.md](docs/arxiv.md) · LaTeX skeleton: [pa
 | Sample-size stability | Precision/AUC curve n=100→2000 | `make exp-042-publication` |
 | HIGGS model scale ceiling | nano_s→nano_xxl on 805K rows; plateau at nano_l | `make exp-046-publication` |
 | NIHR clinical baseline | LargeNanoMLP vs logistic on 100k Zenodo cohort | `make exp-044-publication` |
+| GoBug defect baseline | File-level PR-AUC on temporal GoBug split | `make exp-045-publication` |
 
 Write `hypothesis.md` **before** each new experiment; fill `results.md` **after** GPU runs.
 All metrics must go through `ExperimentLogger` → `logs/experiments.jsonl`.

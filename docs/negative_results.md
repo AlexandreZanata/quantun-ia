@@ -16,6 +16,7 @@ Each entry links to the experiment `results.md` and the statistical test outcome
 | exp_009 | Entanglement helps basic QNN (no re-upload) | **Rejected** | All topologies cluster 56–61%; no Holm significance |
 | exp_046 | nano_xl beats nano_l by ≥0.3 pp AUC on HIGGS 805K | **Rejected** | nano_xl − nano_l = −0.03 pp; plateau at ~1.14M params |
 | exp_044 | LargeNanoMLP beats logistic by ≥0.5 pp on NIHR val | **Rejected** | AUC 0.831 passes; nano − logistic = −0.16 pp |
+| exp_045 | PR-AUC ≥ 0.55 on temporal GoBug val | **Rejected** | PR-AUC ≈ 0.31 (chance); temporal holdout defeats tabular nano |
 
 ---
 
@@ -132,6 +133,27 @@ positive), a simple logistic baseline is a strong ceiling for the current MLP ar
 million-param MLP beats logistic on low-dimensional epidemiological features without ablation.
 
 See: `experiments/exp_044_nihr_cv_baseline/results.md`
+
+---
+
+## exp_045 — GoBug file-level defect baseline
+
+**Profile:** GoBug 27k train / 5.8k temporal val, 12 epochs, seed 42, RTX 4060
+
+| Model | Val PR-AUC |
+|-------|------------|
+| Logistic | 0.3097 |
+| LargeNanoMLP (~82k) | 0.3097 |
+
+**Finding:** Under **commit-order temporal split** (sha-sorted 70/15/15), both models score
+PR-AUC ≈ **0.31** — at prevalence baseline (~27–32% on val). Pre-registered gate (≥ 0.55)
+**rejected**. Tabular nano MLP does not generalize to later commits without drift-aware training.
+
+**Lesson:** Phase 2 programming domain needs commit timestamps + proper temporal CV
+(go-bug-collector methodology), not sha-lexicographic proxy alone. Consider exp_048 synthetic
+code metrics for controlled ablations before re-attempting full GoBug scale.
+
+See: `experiments/exp_045_code_defect_gobug/results.md`
 
 ---
 

@@ -41,6 +41,13 @@ EXPECTED_NIHR_COUNTS = {
     "test": 15_000,
 }
 
+EXPECTED_GOBUG_COUNTS = {
+    "total": 38_818,
+    "train": 27_172,
+    "val": 5_822,
+    "test": 5_824,
+}
+
 
 def _load_manifest() -> dict:
     assert MANIFEST_PATH.is_file(), "data/open/manifest.json must exist"
@@ -92,6 +99,15 @@ def test_manifest_nihr_cv_synthetic_v1_metadata():
     assert nihr["row_counts"] == EXPECTED_NIHR_COUNTS
 
 
+def test_manifest_code_defects_gobug_v1_metadata():
+    manifest = _load_manifest()
+    gobug = _dataset_by_id(manifest, "code_defects_gobug_v1")
+    assert gobug["n_features"] == 23
+    assert gobug["build_script"] == "scripts/build_gobug_subset.py"
+    assert Path(ROOT / gobug["build_script"]).is_file()
+    assert gobug["row_counts"] == EXPECTED_GOBUG_COUNTS
+
+
 def test_tabular_binary_schema_file_exists():
     assert SCHEMA_PATH.is_file()
     schema = json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
@@ -114,6 +130,11 @@ def test_nihr_build_script_registered_in_makefile():
     assert "data-open-nihr-cv" in makefile
 
 
+def test_gobug_build_script_registered_in_makefile():
+    makefile = (ROOT / "Makefile").read_text(encoding="utf-8")
+    assert "data-open-gobug" in makefile
+
+
 @pytest.mark.parametrize(
     ("dataset_id", "split_name", "expected_rows", "n_features"),
     [
@@ -126,6 +147,9 @@ def test_nihr_build_script_registered_in_makefile():
         ("nihr_cv_synthetic_v1", "train", 70_000, 13),
         ("nihr_cv_synthetic_v1", "val", 15_000, 13),
         ("nihr_cv_synthetic_v1", "test", 15_000, 13),
+        ("code_defects_gobug_v1", "train", 27_172, 23),
+        ("code_defects_gobug_v1", "val", 5_822, 23),
+        ("code_defects_gobug_v1", "test", 5_824, 23),
     ],
 )
 def test_open_dataset_splits_when_ready(
@@ -185,6 +209,8 @@ def test_ready_datasets_stratified_balance():
         if not stats_path.is_file():
             pytest.skip(f"missing stats: {stats_path}")
         stats = json.loads(stats_path.read_text(encoding="utf-8"))
+        if stats.get("split_method") == "temporal_sha_order":
+            continue
         errors = verify_stratified_balance(stats, tolerance=0.01)
         assert errors == [], f"{dataset['id']}: {errors}"
 

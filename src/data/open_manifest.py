@@ -136,7 +136,8 @@ def collect_open_data_issues(
     stats_path = out_dir / dataset["files"].get("stats", "stats.json")
     if stats_path.is_file():
         stats = json.loads(stats_path.read_text(encoding="utf-8"))
-        issues.extend(verify_stratified_balance(stats))
+        if stats.get("split_method") != "temporal_sha_order":
+            issues.extend(verify_stratified_balance(stats))
     else:
         issues.append(f"missing stats: {stats_path}")
 

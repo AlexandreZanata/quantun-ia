@@ -1,0 +1,28 @@
+"""Real gate — exp_045 GoBug defect baseline on RTX 4060."""
+
+from __future__ import annotations
+
+import pytest
+
+from experiments.exp_045_code_defect_gobug.run import gate_passed, run_exp_045
+
+pytestmark = pytest.mark.real
+
+
+def test_exp_045_gobug_ci_gate(tmp_path, monkeypatch):
+    import torch
+
+    if not torch.cuda.is_available():
+        pytest.skip("CUDA required for exp_045 real gate")
+
+    monkeypatch.setenv("QML_DEVICE", "cuda")
+    monkeypatch.setenv("MLFLOW_DISABLE", "1")
+    monkeypatch.setattr("src.training.metrics.LOGS_PATH", tmp_path / "experiments.jsonl")
+
+    result = run_exp_045(profile="ci", verbose=False, require_cuda=True)
+
+    assert result.n_train_rows == 10_000
+    assert result.n_val_rows == 3_000
+    assert result.n_params > 0
+    assert 0.3 < result.nano_val_pr_auc <= 1.0
+    assert gate_passed(result)

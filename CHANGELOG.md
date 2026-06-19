@@ -16,10 +16,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Phase 1 Step 1.1** — HIGGS model scale curve closed on RTX 4060; champion stays `large_nano_mlp` (nano_l)
 - **exp_044** — NIHR synthetic CV ingest + LargeNanoMLP baseline (val AUC 0.831; logistic ceiling on advantage gate)
 - **Phase 3 Step 3.1 (partial)** — `nihr_cv_synthetic_v1` open dataset + exp_044 baseline on RTX 4060
+- **exp_045** — GoBug file-level ingest + defect baseline; honest negative on temporal PR-AUC gate
+- **Phase 2 Step 2.1** — `code_defects_gobug_v1` open dataset + exp_045 on RTX 4060
 
 ### Changed
 
-- `make check-real` — **30/30** real GPU gates on RTX 4060 (incl. exp_044 NIHR + exp_046 scale curve)
+- `make check-real` — **31/31** real GPU gates on RTX 4060 (incl. exp_045 GoBug + exp_044 NIHR)
 - `batched_trainer` — batched validation eval to avoid CUDA OOM on 172K-row HIGGS val
 
 ## [1.2.0] - 2026-06-18

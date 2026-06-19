@@ -92,6 +92,34 @@
         "test": "00663131b29fd1f986345b1ab6a42b2c0992d86aee4412cc2f9ab05da95b4400",
         "stats": "4808efe4f908fc55826331a3c1496273a5a1f1775d835265af70b44746718a5a"
       }
+    },
+    {
+      "id": "code_defects_gobug_v1",
+      "path": "code_defects_gobug/processed/v1",
+      "description": "GoBug file-level defect metrics \u2014 go-bug-collector combined subset",
+      "license": "IEEE DataPort / go-bug-collector LICENSE-data",
+      "source_url": "https://doi.org/10.21227/bk5q-fs89",
+      "ready": true,
+      "row_counts": {
+        "total": 38818,
+        "train": 27172,
+        "val": 5822,
+        "test": 5824
+      },
+      "n_features": 23,
+      "files": {
+        "train": "train.parquet",
+        "val": "val.parquet",
+        "test": "test.parquet",
+        "stats": "stats.json"
+      },
+      "build_script": "scripts/build_gobug_subset.py",
+      "checksums": {
+        "train": "613dbedde1943d89d0140662a1a6c227eca7894b80efe643e0ecd652c7ce972e",
+        "val": "ff176b4d41554d2d5e05188908d6a3ec526115350fc47d12947da9fd419b3636",
+        "test": "abc347e6d77792d6eb5b2b059faac5da0d60b8f96df37b43440960ce98f40e32",
+        "stats": "89231067b4c9e1a97cb987da839c5dab2805c7b9a6c2d4fa312e78a219bbaa10"
+      }
     }
   ]
 }

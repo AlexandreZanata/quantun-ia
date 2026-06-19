@@ -16,6 +16,7 @@ This folder holds **reproducible, license-clear** datasets for large-scale nano 
 | `higgs_v1` | `higgs/processed/v1/` | 1,150,000 | 28 | CC0 (UCI) | `ready` (DVC: `processed/v1.dvc`) |
 | `synthea_cv_risk_v1` | `synthea_cv_risk/processed/v1/` | 1,000,000 | 40 | MIT (Synthea) | `ready` (DVC: `processed/v1.dvc`) |
 | `nihr_cv_synthetic_v1` | `nihr_cv_synthetic/processed/v1/` | 100,000 | 13 | CC0 (Zenodo) | `ready` (DVC: `processed/v1.dvc`) |
+| `code_defects_gobug_v1` | `code_defects_gobug/processed/v1/` | ~39,000 | 23 | IEEE/go-bug-collector | `ready` (DVC: `processed/v1.dvc`) |
 
 See `manifest.json` for checksums and split counts once built.
 
