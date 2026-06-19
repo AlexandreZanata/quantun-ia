@@ -292,6 +292,19 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `QML_DEVICE=cuda python experiments/exp_070_large_nano_gobug/run.py --profile publication --write-results`  
 **Ship:** `qml-ship --model large_nano_mlp_gobug --skip-train --skip-gate`
 
+### Phase 1 closure — four classical nano anchors (C1–C4)
+
+**Status:** Closed 2026-06-19 (RTX 4060, publication profile, `make ship-all-p0`).
+
+| Anchor | Registry key | Experiment | Primary metric | Verdict |
+|--------|--------------|------------|----------------|---------|
+| C1 HIGGS | `large_nano_mlp_higgs` | exp_032 | ROC-AUC +14 pp vs logistic | Accepted |
+| C2 NIHR | `large_nano_mlp_nihr` | exp_069 | PR-AUC −0.12 pp vs logistic | Rejected (shipped) |
+| C3 GoBug | `large_nano_mlp_gobug` | exp_070 | PR-AUC +0.03 pp vs logistic | Rejected (shipped) |
+| C4 ACYD | `large_nano_mlp_acyd_soy` | exp_060 | ROC-AUC +3.86 pp vs logistic | Accepted |
+
+**Next:** Phase 2 conventional sweeps (exp_076 NIHR, exp_077 GoBug) · Phase 3 quantum heads (exp_062 ACYD).
+
 ## Publication Profiles
 
 | Profile | `n_samples` | Seeds | Command |
