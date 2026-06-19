@@ -411,7 +411,16 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `QML_DEVICE=cuda python experiments/exp_068b_compound_stress_acyd/run.py --profile publication --write-results`  
 **Lesson:** QNN head does not capture drought∧heat interaction better than logistic on compound stress labels.
 
-**Next:** Phase 4 — exp_078 Agro Risk Lab dashboard + human validation cases.
+### EXP 078 — Agro Risk Lab human validation (8 Brazilian cases)
+
+**Models:** `exp_060` LargeNanoMLP (C4) on hand-crafted municipality scenarios  
+**Dataset:** `acyd_soy_brazil_v1` (inference only — no retrain)  
+**Claim:** Spearman ρ ≥ 0.85 and min(H) − max(L) separation > 0  
+**Verdict:** Accepted — ρ=0.9762; separation +23.08 pp; dashboard `06_agro_risk_lab.py`  
+**Command:** `QML_DEVICE=cuda python experiments/exp_078_agro_clinical_cases/run.py --write-results`  
+**Lesson:** C4 ranks Brazilian drought/heat scenarios in agronomically sensible order for human-facing Agro Risk Lab.
+
+**Next:** Phase 6 — publication artifacts (`make citation-ready`) or gated exp_080 fusion if eligible.
 
 ## Publication Profiles
 

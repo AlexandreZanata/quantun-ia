@@ -48,6 +48,15 @@ datasets:
   synthea_cv_risk_v1:
     kind: tabular
     n_features: 40
+  nihr_cv_synthetic_v1:
+    kind: tabular
+    n_features: 13
+  code_defects_gobug_v1:
+    kind: tabular
+    n_features: 23
+  acyd_soy_brazil_v1:
+    kind: tabular
+    n_features: 37
   sequential_binary:
     kind: sequence
     seq_len: 8
@@ -134,6 +143,8 @@ pairs:
     dataset: higgs_v1
   - model: large_nano_mlp
     dataset: synthea_cv_risk_v1
+  - model: large_nano_mlp
+    dataset: acyd_soy_brazil_v1
   - model: large_nano_hybrid
     dataset: higgs_v1
   - model: transformer_mini

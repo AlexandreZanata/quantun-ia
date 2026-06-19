@@ -9,6 +9,7 @@ build/
 .ipynb_checkpoints/
 logs/experiments.jsonl
 logs/hpo_results.jsonl
+logs/predictions.jsonl
 .local/
 mlruns/
 .dvc/cache/

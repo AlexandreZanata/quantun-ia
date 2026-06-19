@@ -345,6 +345,12 @@ exp-075:
 exp-075-publication:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_075_adaptive_hybrid_nihr/run.py --profile publication --write-results
 
+exp-078:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_078_agro_clinical_cases/run.py
+
+exp-078-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_078_agro_clinical_cases/run.py --write-results
+
 exp-053:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_053_entangle_schedule_bc/run.py
 
