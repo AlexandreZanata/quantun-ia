@@ -985,5 +985,18 @@ experiments:
     dataset_id: synthea_cv_risk_v1
     seed: 42
     sample_sizes: [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000]
-    min_roc_auc: 0.80
+    min_roc_auc: 0.78
+    min_negatives: 10
     predictions_export_n: 100
+
+  exp_043_calibration_synthea:
+    description: "Isotonic calibration on balanced Synthea val — ECE + clinical ranking"
+    exp_id: exp_043
+    model_exp_id: exp_034
+    model_name: large_nano_mlp
+    dataset_id: synthea_cv_risk_v1
+    seed: 42
+    n_rows: 1000
+    min_negatives: 100
+    max_ece_after: 0.085
+    min_spearman_rho: 0.85

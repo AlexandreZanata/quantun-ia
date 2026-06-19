@@ -13,8 +13,9 @@ validation rows — and what does a fixed **100-prediction** export look like in
 
 ## What I expect to happen
 
-- Val split has **~0.36% negatives** (534 / 150 000) — at n=100 stratified draw may have **0 negatives**.
-- **Accuracy / precision** will look high (~99%+) because of class imbalance; report **Neg/Pos counts** per n.
+- Val split has **~0.36% negatives** — stratified n=100 yields **0 negatives**; balanced fallback enforces **≥10**.
+- For n≥200, stratified subsample keeps natural prevalence (e.g. 7 neg @ n=2000).
+- **Accuracy / precision** will look high (~99%+) because of class imbalance; report **Neg/Pos counts**, **PR-AUC**, and **ECE** per n.
 - **ROC-AUC @ n=2000** should match Model Lab (~**0.81**) with gate ≥ **0.78**.
 - The **100-row export** should match the n=100 point on the curve (same seed, stratified draw).
 

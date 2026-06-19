@@ -128,6 +128,8 @@ def load_open_split_labeled(
     split: str = "val",
     n_rows: int | None = None,
     random_state: int = 42,
+    min_negatives: int = 0,
+    force_balanced: bool = False,
 ) -> tuple[list[list[float]], list[int]]:
     """Load raw (unscaled) features and integer labels from an open dataset split."""
     if split not in {"train", "val", "test"}:
@@ -148,12 +150,33 @@ def load_open_split_labeled(
 
     if n_rows is not None and n_rows < len(labels):
         indices = np.arange(len(labels))
-        selected, _ = train_test_split(
+        stratified, _ = train_test_split(
             indices,
             train_size=n_rows,
             stratify=labels,
             random_state=random_state,
         )
+        stratified_neg = int(np.sum(labels[stratified] == 0))
+        if force_balanced and min_negatives > 0:
+            from src.application.balanced_metrics import balanced_subsample_indices
+
+            selected = balanced_subsample_indices(
+                labels,
+                n_rows,
+                min_negatives=min_negatives,
+                random_state=random_state,
+            )
+        elif stratified_neg == 0 and min_negatives > 0:
+            from src.application.balanced_metrics import balanced_subsample_indices
+
+            selected = balanced_subsample_indices(
+                labels,
+                n_rows,
+                min_negatives=min_negatives,
+                random_state=random_state,
+            )
+        else:
+            selected = stratified
         features = features[selected]
         labels = labels[selected]
 

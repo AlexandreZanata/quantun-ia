@@ -30,18 +30,20 @@ def test_curve_to_dict_serializes_points():
         points=(
             SampleScalePoint(
                 n_rows=100,
-                n_negatives=0,
-                n_positives=100,
+                n_negatives=10,
+                n_positives=90,
                 accuracy=0.99,
                 precision=0.99,
                 recall=0.99,
                 f1=0.99,
                 roc_auc=0.85,
+                pr_auc=0.88,
                 brier_score=0.01,
-                true_positive=99,
-                true_negative=0,
+                ece=0.05,
+                true_positive=89,
+                true_negative=9,
                 false_positive=1,
-                false_negative=0,
+                false_negative=1,
             ),
         ),
     )
@@ -49,7 +51,7 @@ def test_curve_to_dict_serializes_points():
     assert payload["exp_id"] == "exp_034"
     assert payload["points"][0]["n_rows"] == 100
     assert payload["points"][0]["roc_auc"] == 0.85
-    assert payload["points"][0]["confusion"]["tp"] == 99
+    assert payload["points"][0]["confusion"]["tp"] == 89
 
 
 def test_predictions_to_dict_serializes_rows():

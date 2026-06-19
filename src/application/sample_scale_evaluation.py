@@ -24,6 +24,12 @@ from src.application.open_serve import (
     DEFAULT_SERVE_MODEL,
     DEFAULT_SERVE_SEED,
 )
+from src.application.balanced_metrics import (
+    brier_score as balanced_brier_score,
+    expected_calibration_error,
+    pr_auc,
+    roc_auc as balanced_roc_auc,
+)
 from src.shared.result import Fail, Ok, Result, fail, ok
 from src.training.structured_log import init_correlation_id, log_event
 
@@ -51,7 +57,9 @@ class SampleScalePoint:
     recall: float
     f1: float
     roc_auc: float
+    pr_auc: float
     brier_score: float
+    ece: float
     true_positive: int
     true_negative: int
     false_positive: int
@@ -106,6 +114,7 @@ class SampleScaleEvaluationDTO:
     split: str = "val"
     sample_sizes: tuple[int, ...] = SAMPLE_SCALE_SIZES
     chunk_size: int = 2048
+    min_negatives: int = 10
 
 
 @dataclass(frozen=True)
@@ -117,22 +126,23 @@ class HoldoutPredictionsDTO:
     split: str = "val"
     n_rows: int = 100
     chunk_size: int = 2048
+    min_negatives: int = 10
 
 
 def _classification_metrics(
     y_true: list[int],
     y_pred: list[int],
     probs: list[float],
-) -> tuple[float, float, float, float, float, float]:
-    from sklearn.metrics import brier_score_loss, roc_auc_score
-
+) -> tuple[float, float, float, float, float, float, float, float]:
     accuracy = float(accuracy_score(y_true, y_pred))
     precision = float(precision_score(y_true, y_pred, zero_division=0))
     recall = float(recall_score(y_true, y_pred, zero_division=0))
     f1 = float(f1_score(y_true, y_pred, zero_division=0))
-    roc_auc = float(roc_auc_score(y_true, probs)) if len(set(y_true)) > 1 else 0.5
-    brier = float(brier_score_loss(y_true, probs))
-    return accuracy, precision, recall, f1, roc_auc, brier
+    auc = balanced_roc_auc(y_true, probs)
+    pr = pr_auc(y_true, probs)
+    brier = balanced_brier_score(y_true, probs)
+    ece = expected_calibration_error(y_true, probs)
+    return accuracy, precision, recall, f1, auc if auc is not None else 0.5, pr if pr is not None else 0.0, brier, ece
 
 
 def _predict_holdout(
@@ -154,6 +164,7 @@ def _predict_holdout(
             split=dto.split,
             n_rows=n_rows,
             random_state=dto.seed,
+            min_negatives=dto.min_negatives,
         )
     except (FileNotFoundError, ValueError) as exc:
         return fail(SampleScaleEvaluationError("DATA_ERROR", str(exc)))
@@ -193,7 +204,7 @@ def run_sample_scale_curve(
             return outcome
 
         y_true, y_pred, probs, _ = outcome.value
-        accuracy, precision, recall, f1, roc_auc, brier = _classification_metrics(
+        accuracy, precision, recall, f1, roc_auc_val, pr_auc_val, brier, ece = _classification_metrics(
             y_true, y_pred, probs
         )
         confusion = _confusion_stats(y_true, y_pred)
@@ -208,8 +219,10 @@ def run_sample_scale_curve(
                 precision=precision,
                 recall=recall,
                 f1=f1,
-                roc_auc=roc_auc,
+                roc_auc=roc_auc_val,
+                pr_auc=pr_auc_val,
                 brier_score=brier,
+                ece=ece,
                 true_positive=confusion.true_positive,
                 true_negative=confusion.true_negative,
                 false_positive=confusion.false_positive,
@@ -248,7 +261,7 @@ def export_holdout_predictions(
         return outcome
 
     y_true, y_pred, probs, _ = outcome.value
-    accuracy, precision, recall, f1, roc_auc, _ = _classification_metrics(
+    accuracy, precision, recall, f1, roc_auc_val, _, _, _ = _classification_metrics(
         y_true, y_pred, probs
     )
     n_neg = sum(1 for y in y_true if y == 0)
@@ -277,7 +290,7 @@ def export_holdout_predictions(
             precision=precision,
             recall=recall,
             f1=f1,
-            roc_auc=roc_auc,
+            roc_auc=roc_auc_val,
             rows=rows,
         )
     )
@@ -301,7 +314,9 @@ def curve_to_dict(result: SampleScaleCurveResult) -> dict:
                 "recall": round(p.recall, 6),
                 "f1": round(p.f1, 6),
                 "roc_auc": round(p.roc_auc, 6),
+                "pr_auc": round(p.pr_auc, 6),
                 "brier_score": round(p.brier_score, 6),
+                "ece": round(p.ece, 6),
                 "confusion": {
                     "tp": p.true_positive,
                     "tn": p.true_negative,

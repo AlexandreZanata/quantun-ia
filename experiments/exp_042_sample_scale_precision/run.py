@@ -36,6 +36,7 @@ from src.training.structured_log import init_correlation_id, log_event
 EXP_ID = "exp_042"
 MODEL_NAME = "large_nano_mlp_sample_scale"
 MIN_ROC_AUC = 0.78
+MIN_NEGATIVES = 10
 GATE_SAMPLE_SIZE = 2000
 LOCAL_OUT = Path(__file__).resolve().parents[2] / ".local" / "out"
 PREDICTIONS_PATH = LOCAL_OUT / "predictions_100_synthea_cv.json"
@@ -75,13 +76,17 @@ def run_exp_042(*, verbose: bool = True, require_cuda: bool = True) -> Exp042Res
         print(f"EXP {EXP_ID} — Sample-scale precision (100→2000, step 100)")
         print(f"{'=' * 60}\n")
 
-    curve_outcome = run_sample_scale_curve(SampleScaleEvaluationDTO())
+    curve_outcome = run_sample_scale_curve(
+        SampleScaleEvaluationDTO(min_negatives=MIN_NEGATIVES)
+    )
     if isinstance(curve_outcome, Fail):
         raise RuntimeError(f"{curve_outcome.error.code}: {curve_outcome.error.message}")
     assert isinstance(curve_outcome, Ok)
     curve = curve_outcome.value
 
-    pred_outcome = export_holdout_predictions(HoldoutPredictionsDTO(n_rows=100))
+    pred_outcome = export_holdout_predictions(
+        HoldoutPredictionsDTO(n_rows=100, min_negatives=MIN_NEGATIVES)
+    )
     if isinstance(pred_outcome, Fail):
         raise RuntimeError(f"{pred_outcome.error.code}: {pred_outcome.error.message}")
     assert isinstance(pred_outcome, Ok)
@@ -180,7 +185,7 @@ def _build_results_md(result: Exp042Result) -> str:
         "|--------|-------|------|",
         f"| Sample sizes | **100 → 2000 (step 100)** | 20 points |",
         f"| ROC-AUC @ n={GATE_SAMPLE_SIZE} | **{result.min_roc_auc:.4f}** | ≥ {MIN_ROC_AUC} |",
-        f"| 100-row negatives / positives | see curve table | ~0 / 100 |",
+        f"| 100-row negatives / positives | **{result.curve_points[0].n_negatives} / {result.curve_points[0].n_positives}** | min {MIN_NEGATIVES} neg |",
         f"| 100-row accuracy | **{result.predictions_accuracy:.4f}** | — |",
         f"| 100-row precision | **{result.predictions_precision:.4f}** | — |",
         f"| 100-row recall | **{result.predictions_recall:.4f}** | — |",
@@ -193,14 +198,14 @@ def _build_results_md(result: Exp042Result) -> str:
         "",
         "## Sample-scale curve",
         "",
-        "| n | Neg | Pos | Accuracy | Precision | Recall | F1 | ROC-AUC | Brier |",
-        "|---|-----|-----|----------|-----------|--------|-----|---------|-------|",
+        "| n | Neg | Pos | Accuracy | Precision | Recall | F1 | ROC-AUC | PR-AUC | Brier | ECE |",
+        "|---|-----|-----|----------|-----------|--------|-----|---------|--------|-------|-----|",
     ]
     for p in result.curve_points:
         lines.append(
             f"| {p.n_rows} | {p.n_negatives} | {p.n_positives} | {p.accuracy:.4f} | "
             f"{p.precision:.4f} | {p.recall:.4f} | "
-            f"{p.f1:.4f} | {p.roc_auc:.4f} | {p.brier_score:.4f} |"
+            f"{p.f1:.4f} | {p.roc_auc:.4f} | {p.pr_auc:.4f} | {p.brier_score:.4f} | {p.ece:.4f} |"
         )
     lines.extend(
         [
@@ -214,7 +219,8 @@ def _build_results_md(result: Exp042Result) -> str:
             "",
             "- Synthea v1 val split has ~99% positive prevalence → accuracy is inflated.",
             "- **Precision / recall / F1** and **ROC-AUC** are the primary metrics for paper tables.",
-            "- Each n uses an independent stratified subsample (seed 42).",
+            "- Each n uses balanced subsampling with **min 10 negatives** (seed 42).",
+            "- At n=100: 10 negatives + 90 positives — ROC-AUC and PR-AUC are meaningful.",
             "",
             "## Limitations",
             "",
