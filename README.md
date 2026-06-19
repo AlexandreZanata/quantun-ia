@@ -168,7 +168,7 @@ Quantum hybrid models require PennyLane for inference; they ship as **native bun
 |--------------|--------------|---------|--------|
 | `large_nano_mlp_synthea` | LargeNanoMLP (~1.17M) | Synthea CV | train ✅ · ship ✅ |
 | `large_nano_mlp_synthea_calibrated` | LargeNanoMLP + isotonic | Synthea CV | ship ✅ (exp_043) |
-| `large_nano_mlp_higgs` | LargeNanoMLP | HIGGS 1M | train ✅ · ship ✅ |
+| `large_nano_mlp_higgs` | LargeNanoMLP (~1.17M, nano_l) | HIGGS 1M | train ✅ · ship ✅ · exp_046 champion |
 | `quantum_nano_bc` | HybridSandwich 4q | Breast cancer | train ✅ · ship ✅ |
 | `large_nano_hybrid_higgs` | Frozen MLP + QNN head | HIGGS | exp_037 · ship 🔲 |
 | `quantum_nano_champion` | Fused Q training recipe | Multi-bench | exp_058 · ship 🔲 |
@@ -303,6 +303,7 @@ Full arXiv upload details: [docs/arxiv.md](docs/arxiv.md) · LaTeX skeleton: [pa
 | Downloadable nanomodels | Native + ONNX + HF bundles | `qml-download` *(planned)* · GitHub Release |
 | Human-interpretable CV ranking | 8 literature cases, Spearman ρ ≥ 0.85 | `make exp-041-publication` |
 | Sample-size stability | Precision/AUC curve n=100→2000 | `make exp-042-publication` |
+| HIGGS model scale ceiling | nano_s→nano_xxl on 805K rows; plateau at nano_l | `make exp-046-publication` |
 
 Write `hypothesis.md` **before** each new experiment; fill `results.md` **after** GPU runs.
 All metrics must go through `ExperimentLogger` → `logs/experiments.jsonl`.

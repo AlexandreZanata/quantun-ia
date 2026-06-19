@@ -13,10 +13,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Scientific integrity (Phase 0)** — `balanced_metrics.py`, `calibration.py`, exp_042 sample-scale curve, exp_043 isotonic calibration
 - **Human CV validation (Phase M)** — exp_041 clinical ranking gate, CV Risk Clinic dashboard
 - **exp_046** — LargeNanoMLP scale curve (nano_s→nano_xxl) on HIGGS; honest negative at nano_l plateau
+- **Phase 1 Step 1.1** — HIGGS model scale curve closed on RTX 4060; champion stays `large_nano_mlp` (nano_l)
 
 ### Changed
 
-- `make check-real` — nanomodel ship P0 gate + exp_041/042/043 gates on RTX 4060
+- `make check-real` — **29/29** real GPU gates on RTX 4060 (incl. exp_046 scale curve + nanomodel ship P0)
 - `batched_trainer` — batched validation eval to avoid CUDA OOM on 172K-row HIGGS val
 
 ## [1.2.0] - 2026-06-18
