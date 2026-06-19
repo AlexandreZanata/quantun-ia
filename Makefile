@@ -212,6 +212,12 @@ exp-041:
 exp-041-publication:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_041_human_cv_clinical_cases/run.py --write-results
 
+exp-042:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_042_sample_scale_precision/run.py
+
+exp-042-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_042_sample_scale_precision/run.py --write-results
+
 batch-predict:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) scripts/batch_predict.py \
 		--input tests/fixtures/breast_cancer_holdout.csv \

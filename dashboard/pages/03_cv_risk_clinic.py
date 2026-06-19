@@ -5,6 +5,7 @@ from __future__ import annotations
 import os
 import random
 import sys
+from dataclasses import replace
 from pathlib import Path
 
 import plotly.graph_objects as go
@@ -13,6 +14,10 @@ import streamlit as st
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(PROJECT_ROOT))
 
+from src.application.data_provenance_check import (
+    check_dataset_provenance,
+    validate_patient_profile,
+)
 from src.application.evaluate_serve_model import load_open_split_labeled
 from src.application.human_cv_scorer import (
     RESEARCH_DISCLAIMER,
@@ -22,23 +27,73 @@ from src.application.human_cv_scorer import (
     profile_summary,
     score_patient,
 )
+from src.shared.result import Fail, Ok
 
 st.set_page_config(page_title="CV Risk Clinic", page_icon="❤️", layout="wide")
 
 os.environ.setdefault("MLFLOW_DISABLE", "1")
 os.environ.setdefault("QML_DEVICE", "cuda")
 
+DATASET_ID = "synthea_cv_risk_v1"
 BAND_COLORS = {"low": "#33ff66", "moderate": "#ffb000", "high": "#ff3366"}
 
 
-def _risk_gauge(percent: float, band: str) -> go.Figure:
+def _provenance_banner() -> None:
+    prov = check_dataset_provenance(DATASET_ID, root=PROJECT_ROOT)
+    badge_color = "#4a2000" if prov.is_synthetic else "#0a2a10"
+    st.markdown(
+        f"""
+        <div style="background:{badge_color};border:2px solid #ffb000;border-radius:8px;
+        padding:12px 16px;margin-bottom:12px;">
+        <strong>{prov.badge_label}</strong> — {prov.badge_help}<br/>
+        <small>Manifest verified: {'✅ yes' if prov.verified else '⚠️ no'} ·
+        source: {prov.source_mode or 'n/a'} · license {prov.license_name}</small>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def _how_to_read_box() -> None:
+    with st.expander("How to read this clinic (30 seconds)", expanded=True):
+        st.markdown(
+            """
+            **This is a research demo — not a doctor.**
+
+            1. **Enter a patient profile** (age, BP, smoking, etc.) — same fields a nurse would chart.
+            2. **The AI returns a risk %** — probability of a heart/stroke event in 12 months *in the Synthea simulator*.
+            3. **Ignore the absolute number** — the training cohort is ~99% positive, so almost everyone scores high.
+            4. **Use comparisons** — who is *higher* vs *lower* risk (mini game, what-if, science cases).
+
+            ✅ **Good use:** "Patient B looks riskier than Patient A" · "Quitting smoking lowered the score"  
+            ❌ **Bad use:** "This person has exactly 97% chance of a heart attack in real life"
+            """
+        )
+
+
+def _show_profile_validation(profile: PatientProfile) -> None:
+    validation = validate_patient_profile(profile)
+    if validation.trust_level == "implausible":
+        st.error(f"⚠️ Input check: {validation.summary}")
+        for w in validation.warnings:
+            st.caption(f"• {w}")
+    elif validation.trust_level == "review":
+        st.warning(f"Input check: {validation.summary}")
+        for w in validation.warnings:
+            st.caption(f"• {w}")
+    else:
+        st.success(f"✅ Input check: {validation.summary} ({validation.checks_passed}/{validation.checks_total})")
+
+
+def _risk_gauge(percent: float, band: str, *, subtitle: str = "") -> go.Figure:
     color = BAND_COLORS.get(band, "#888")
+    title = {"text": "Relative risk score" + (f"<br><sup>{subtitle}</sup>" if subtitle else "")}
     fig = go.Figure(
         go.Indicator(
-            mode="gauge+number+delta",
+            mode="gauge+number",
             value=percent,
             number={"suffix": "%", "font": {"size": 42}},
-            title={"text": "12-month CV event risk"},
+            title=title,
             gauge={
                 "axis": {"range": [0, 100]},
                 "bar": {"color": color},
@@ -47,22 +102,21 @@ def _risk_gauge(percent: float, band: str) -> go.Figure:
                     {"range": [40, 70], "color": "#2a2008"},
                     {"range": [70, 100], "color": "#2a0810"},
                 ],
-                "threshold": {"line": {"color": "white", "width": 2}, "value": percent},
             },
         )
     )
     fig.update_layout(
         paper_bgcolor="#050805",
         font={"color": "#33ff66"},
-        height=280,
-        margin=dict(l=20, r=20, t=50, b=10),
+        height=260,
+        margin=dict(l=20, r=20, t=60, b=10),
     )
     return fig
 
 
 def _profile_form(key: str, defaults: PatientProfile | None = None) -> PatientProfile:
     d = defaults or PatientProfile()
-    st.markdown(f"**Patient profile** `{key}`")
+    st.caption("Fill in values as you would on a clinic form.")
     c1, c2, c3 = st.columns(3)
     with c1:
         age = st.slider("Age (years)", 25, 95, int(d.age_years), key=f"{key}_age")
@@ -99,36 +153,41 @@ def _profile_form(key: str, defaults: PatientProfile | None = None) -> PatientPr
 
 
 def _show_score(result, *, title: str = "Result") -> None:
-    st.plotly_chart(_risk_gauge(result.risk_percent, result.risk_band), use_container_width=True)
-    st.markdown(f"### {title}: {result.risk_label}")
+    st.plotly_chart(
+        _risk_gauge(result.risk_percent, result.risk_band, subtitle="compare patients, not absolute %"),
+        use_container_width=True,
+    )
+    st.markdown(f"**{title}** — band: **{result.risk_label}**")
     st.markdown(result.human_summary)
-    st.caption(f"Model probability = {result.probability:.4f} · checkpoint `{result.checkpoint_path}`")
+    st.caption(
+        f"Model probability = {result.probability:.4f} · "
+        f"checkpoint `{Path(result.checkpoint_path).name}` · **synthetic cohort**"
+    )
 
 
+# ── Page header ───────────────────────────────────────────────────────────────
 st.title("❤️ Cardiovascular Risk Clinic")
-st.markdown(
-    "Score **real patient profiles** with the trained **LargeNanoMLP** (~1.2M params, `exp_034`). "
-    "You enter values humans understand — the model returns a **12-month heart/stroke risk %**."
-)
-st.warning(RESEARCH_DISCLAIMER)
-st.info(
-    "**How to read the score:** This synthetic cohort has a very high baseline event rate (~99%), "
-    "so absolute percentages look high for most profiles. What matters for humans: "
-    "**(1)** comparing two patients (mini game), **(2)** before/after what-if changes in percentage points, "
-    "**(3)** whether the model agrees with the recorded outcome (random patient tab)."
-)
+_provenance_banner()
+_how_to_read_box()
+st.caption(RESEARCH_DISCLAIMER)
 
 tab_score, tab_whatif, tab_game, tab_random, tab_science = st.tabs(
-    ["Score a patient", "What-if scenario", "Mini game: Who is higher risk?", "Random real patient", "Science validation (exp_041)"]
+    [
+        "1 · Score a patient",
+        "2 · What-if (before/after)",
+        "3 · Mini game",
+        "4 · Random record",
+        "5 · Science check",
+    ]
 )
 
 # ── Tab 1: Score ─────────────────────────────────────────────────────────────
 with tab_score:
+    st.markdown("Enter a profile and see how the model ranks this patient **relative to others**.")
     profile = _profile_form("main")
-    if st.button("CALCULATE MY RISK", type="primary"):
+    _show_profile_validation(profile)
+    if st.button("Calculate risk score", type="primary"):
         outcome = score_patient(profile)
-        from src.shared.result import Fail, Ok
-
         if isinstance(outcome, Fail):
             st.error(f"{outcome.error.code}: {outcome.error.message}")
         else:
@@ -141,8 +200,8 @@ with tab_score:
 # ── Tab 2: What-if ───────────────────────────────────────────────────────────
 with tab_whatif:
     st.markdown(
-        "**See how one change affects risk.** Start with a baseline profile, "
-        "then flip a lifestyle or clinical factor and compare percentages side by side."
+        "Pick one change (quit smoking, new diabetes, etc.) and see **how many percentage points** "
+        "the model score moves — that's the meaningful number here."
     )
     base = _profile_form("whatif_base")
     change = st.selectbox(
@@ -156,7 +215,7 @@ with tab_whatif:
         ],
     )
 
-    if st.button("COMPARE BEFORE / AFTER", type="primary"):
+    if st.button("Compare before / after", type="primary"):
         modified = base
         if change == "Quits smoking":
             modified = replace(base, smoker=False)
@@ -174,8 +233,6 @@ with tab_whatif:
             modified = replace(base, bmi=max(16.0, base.bmi - 5.0))
             before_label, after_label = f"BMI {base.bmi:.1f}", f"BMI {modified.bmi:.1f}"
 
-        from src.shared.result import Fail, Ok
-
         before_out = score_patient(base)
         after_out = score_patient(modified)
         if isinstance(before_out, Fail) or isinstance(after_out, Fail):
@@ -188,17 +245,19 @@ with tab_whatif:
             c1.metric(before_label, f"{b.risk_percent:.1f}%")
             c2.metric(after_label, f"{a.risk_percent:.1f}%")
             c3.metric("Change", f"{delta:+.1f} pp", delta_color="inverse")
-            st.info(
-                f"Changing **{change.lower()}** moved risk from **{b.risk_percent:.1f}%** "
-                f"to **{a.risk_percent:.1f}%** ({delta:+.1f} percentage points)."
-            )
+            if abs(delta) < 0.05:
+                st.info("Almost no change — both profiles sit near the model ceiling on this synthetic cohort.")
+            else:
+                st.success(
+                    f"**{change}** moved the score **{delta:+.1f} percentage points** "
+                    f"({b.risk_percent:.1f}% → {a.risk_percent:.1f}%)."
+                )
 
 # ── Tab 3: Mini game ─────────────────────────────────────────────────────────
 with tab_game:
     st.markdown(
-        "### 🎮 Doctor's challenge\n"
-        "Two patients walk in. **You** pick who has the **higher** 12-month cardiovascular risk. "
-        "Then the AI scores both — you see if your clinical intuition matches the model."
+        "**Who is higher risk?** Pick A or B, then reveal the model. "
+        "You're testing whether your clinical intuition matches the AI **ranking**."
     )
 
     presets = {
@@ -223,7 +282,7 @@ with tab_game:
             ),
             PatientProfile(
                 age_years=71, sex_male=False, bmi=27, systolic_bp=138,
-                prior_mi=True, afib=True, family_history_cvd=True,
+                prior_mi=True, atrial_fibrillation=True, family_history_cvd=True,
             ),
         ),
     }
@@ -241,9 +300,7 @@ with tab_game:
 
     guess = st.radio("Who has HIGHER risk?", ["Patient A", "Patient B", "Equal / unsure"], horizontal=True)
 
-    if st.button("REVEAL AI SCORES", type="primary"):
-        from src.shared.result import Fail, Ok
-
+    if st.button("Reveal AI scores", type="primary"):
         outcome = compare_profiles(patient_a, patient_b)
         if isinstance(outcome, Fail):
             st.error(outcome.error.message)
@@ -266,24 +323,24 @@ with tab_game:
             diff_pp = abs(ra.risk_percent - rb.risk_percent)
             if correct:
                 st.success(
-                    f"✅ Correct! Patient **{higher}** is higher risk "
-                    f"({ra.risk_percent:.1f}% vs {rb.risk_percent:.1f}%, Δ={diff_pp:.1f} pp)."
+                    f"Correct — Patient **{higher}** ranks higher "
+                    f"({ra.risk_percent:.1f}% vs {rb.risk_percent:.1f}%, gap {diff_pp:.1f} pp)."
                 )
             else:
                 st.error(
-                    f"❌ Not quite — Patient **{higher}** is higher risk "
-                    f"({ra.risk_percent:.1f}% vs {rb.risk_percent:.1f}%, Δ={diff_pp:.1f} pp)."
+                    f"Not quite — Patient **{higher}** ranks higher "
+                    f"({ra.risk_percent:.1f}% vs {rb.risk_percent:.1f}%, gap {diff_pp:.1f} pp)."
                 )
 
 # ── Tab 4: Random from dataset ───────────────────────────────────────────────
 with tab_random:
     st.markdown(
-        "Load a **real row** from the Synthea validation set, see the human profile, "
-        "and check what the model predicts vs what actually happened in the synthetic record."
+        "Load one row from the **Synthea validation set** (synthetic EHR, not a real person). "
+        "See whether the model prediction matches the **simulated** outcome label."
     )
-    if st.button("LOAD RANDOM PATIENT", type="primary"):
+    if st.button("Load random synthetic record", type="primary"):
         rows, labels = load_open_split_labeled(
-            "synthea_cv_risk_v1",
+            DATASET_ID,
             PROJECT_ROOT,
             split="val",
             n_rows=1,
@@ -292,38 +349,41 @@ with tab_random:
         profile = features_to_profile(rows[0])
         actual = labels[0]
         outcome = score_patient(profile)
-        from src.shared.result import Fail, Ok
-
         if isinstance(outcome, Fail):
             st.error(outcome.error.message)
         else:
             assert isinstance(outcome, Ok)
             r = outcome.value
-            st.session_state["random_demo"] = (r, actual)
+            st.session_state["random_demo"] = (r, actual, profile)
 
     if "random_demo" in st.session_state:
-        r, actual = st.session_state["random_demo"]
+        r, actual, profile = st.session_state["random_demo"]
+        st.info("🧪 **Synthetic record** — generated by Synthea, not from a real hospital.")
+        _show_profile_validation(profile)
         _show_score(r, title="Model prediction")
-        actual_text = "CV event within 12 months" if actual == 1 else "No CV event"
+        actual_text = "Simulated CV event in 12 months" if actual == 1 else "No simulated CV event"
         predicted_text = "event predicted" if r.probability >= 0.5 else "no event predicted"
         match = (r.probability >= 0.5) == (actual == 1)
-        st.markdown(f"**What actually happened (synthetic record):** {actual_text}")
+        st.markdown(f"**Simulated outcome in dataset:** {actual_text}")
         icon = "✅" if match else "⚠️"
         st.markdown(
-            f"{icon} Model threshold (50%): **{predicted_text}** — "
-            f"{'matches' if match else 'differs from'} the recorded outcome."
+            f"{icon} At 50% threshold: model **{predicted_text}** — "
+            f"{'matches' if match else 'differs from'} the synthetic label."
         )
 
 # ── Tab 5: Science validation (exp_041) ───────────────────────────────────────
 with tab_science:
     st.markdown(
-        "### 📋 Literature-backed cases (EXP 041)\n"
-        "Eight fixed profiles ranked by cardiovascular epidemiology. "
-        "Run `make exp-041-publication` to regenerate."
+        "Eight profiles from cardiovascular epidemiology (Framingham / ACC-AHA). "
+        "We check whether the model **orders** low-risk below high-risk cases."
     )
     from src.application.clinical_validation_cases import CLINICAL_VALIDATION_CASES
 
-    if st.button("RUN ALL 8 SCIENCE CASES", type="primary"):
+    with st.expander("Case list (L = low expected risk, H = high)"):
+        for case in CLINICAL_VALIDATION_CASES:
+            st.caption(f"**{case.case_id}** ({case.expected_tier}): {case.title}")
+
+    if st.button("Run all 8 science cases", type="primary"):
         from experiments.exp_041_human_cv_clinical_cases.run import run_exp_041
 
         st.session_state["science_result"] = run_exp_041(verbose=False)
@@ -331,19 +391,19 @@ with tab_science:
     if "science_result" in st.session_state:
         res = st.session_state["science_result"]
         c1, c2, c3 = st.columns(3)
-        c1.metric("Spearman ρ", f"{res.spearman_rho:.3f}")
-        c2.metric("Tier separation", f"{res.separation_pp:+.2f} pp")
-        c3.metric("Verdict", "PASS" if res.passed else "FAIL")
+        c1.metric("Rank agreement (Spearman ρ)", f"{res.spearman_rho:.3f}", help="≥ 0.85 = pass")
+        c2.metric("Low vs high separation", f"{res.separation_pp:+.2f} pp")
+        c3.metric("Verdict", "PASS ✅" if res.passed else "FAIL ❌")
 
         import pandas as pd
 
         rows = [
             {
-                "ID": c.case_id,
-                "Rank": c.expected_rank,
-                "Tier": c.expected_tier,
-                "Risk %": round(c.risk_percent, 2),
-                "Title": c.title,
+                "Case": c.case_id,
+                "Expected order": c.expected_rank,
+                "Epidemiology tier": c.expected_tier.replace("_", " "),
+                "Model score %": round(c.risk_percent, 2),
+                "Profile": c.title,
             }
             for c in sorted(res.case_scores, key=lambda x: x.expected_rank)
         ]
@@ -351,7 +411,19 @@ with tab_science:
         st.caption("Full report: `experiments/exp_041_human_cv_clinical_cases/results.md`")
 
 st.markdown("---")
+if st.button("Verify dataset is synthetic (checksum + manifest)"):
+    prov = check_dataset_provenance(DATASET_ID, root=PROJECT_ROOT)
+    if prov.verified and prov.is_synthetic:
+        st.success(
+            f"✅ **{prov.badge_label}** — checksums match manifest. "
+            f"Source mode: `{prov.source_mode or 'n/a'}`. No real patient data."
+        )
+    elif prov.is_synthetic:
+        st.warning(f"Synthetic dataset identified but verification issues: {', '.join(prov.issues) or 'unknown'}")
+    else:
+        st.error(f"Unexpected origin: {prov.origin}")
+
 st.caption(
-    "Model: `exp_034` · LargeNanoMLP · 700K Synthea CV train rows · RTX 4060 · "
-    "[Model Lab](/Model_Lab) for technical metrics"
+    "Model: exp_034 LargeNanoMLP · Synthea CV v1 · "
+    "Technical metrics → open **Model Lab** from the sidebar"
 )

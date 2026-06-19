@@ -212,6 +212,82 @@ See [docs/citation_loop.md](docs/citation_loop.md) for the unified checklist.
 2. Tag and push; copy DOI into `CITATION.cff`
 3. Validate: `pytest tests/contracts/test_citation_cff.py -v`
 
+## Academic paper — step-by-step
+
+Use this workflow to turn lab results into a **real submission** (workshop, journal, or arXiv).
+Full arXiv upload details: [docs/arxiv.md](docs/arxiv.md) · LaTeX skeleton: [paper/README.md](paper/README.md).
+
+### 1. Lock the scientific claims
+
+| Claim | Evidence | Artifact |
+|-------|----------|----------|
+| Holdout-fair QML benchmark | exp_021 / exp_022 multi-seed holdout | `experiments/exp_021_*/results.md` |
+| Open-data serve models | HIGGS + Synthea checkpoints | `make model-lab` |
+| Human-interpretable CV ranking | 8 literature cases, Spearman ρ ≥ 0.85 | `make exp-041-publication` |
+| Sample-size stability | Precision/AUC curve n=100→2000 | `make exp-042-publication` |
+
+Write `hypothesis.md` **before** each new experiment; fill `results.md` **after** GPU runs.
+All metrics must go through `ExperimentLogger` → `logs/experiments.jsonl`.
+
+### 2. Run publication-profile experiments
+
+```bash
+source .venv/bin/activate
+source .local/env.sh          # CUDA workstation only
+make check                    # unit + integration green
+make check-real               # RTX 4060 real gates
+make exp-041-publication      # clinical case validation
+make exp-042-publication      # sample-scale precision curve
+make export-model-results     # consolidated JSON (local logs/)
+```
+
+Copy headline numbers from:
+
+- `experiments/exp_041_human_cv_clinical_cases/results.md`
+- `experiments/exp_042_sample_scale_precision/results.md`
+
+For Synthea CV: report **ROC-AUC @ n=2000** (not n=100 — zero negatives in stratified draw).
+For human clinic: report **Spearman ρ** and case ordering, not absolute risk %.
+
+### 3. Build the LaTeX paper
+
+```bash
+make paper-build              # latex-tables + figures + sync + pdflatex/bibtex
+make arxiv-bundle             # dist/arxiv/quantun-ia-paper.tar.gz
+```
+
+| Path | Purpose |
+|------|---------|
+| `paper/main.tex` | Entry point |
+| `paper/sections/` | Intro, methods, experiments, results, limitations |
+| `paper/tables/` | Auto-generated from `make latex-tables` |
+| `paper/references.bib` | Bibliography (ACC/AHA, Framingham, Synthea) |
+| `paper/arxiv_metadata.yaml` | Title, abstract, categories |
+
+Add a **Human validation** subsection citing exp_041 (rank correlation) and exp_042 (sample-scale table).
+State clearly: synthetic Synthea cohort, not clinical deployment.
+
+### 4. Pre-submission checklist
+
+- [ ] `make paper-build` succeeds locally and in CI (`paper-build` job)
+- [ ] exp_041 + exp_042 `results.md` filled with GPU run dates and hardware
+- [ ] Limitations section mentions ~99% label prevalence and ranking vs calibration
+- [ ] `CITATION.cff` Zenodo DOI set after release tag ([docs/zenodo.md](docs/zenodo.md))
+- [ ] Figures synced: `make figures && make paper-sync`
+
+### 5. Submit
+
+**arXiv:** upload `dist/arxiv/quantun-ia-paper.tar.gz` → categories `cs.LG` + `quant-ph`  
+**Journal/workshop:** follow venue template; attach Zenodo archive of code + checkpoints
+
+After moderation, record `arxiv_id` in `paper/arxiv_metadata.yaml` and commit.
+
+### 6. Post-publication
+
+1. Paste DOI / arXiv ID into README and `CITATION.cff`
+2. Open a release on GitHub with the Zenodo badge
+3. Propose ablations (see exp_041/exp_042 limitations sections)
+
 ## CI
 
 GitHub Actions: ruff lint, mypy, pytest (coverage ≥ 80%), integration/contracts smoke, e2e API tests, weekly cron, paper-build (optional).
