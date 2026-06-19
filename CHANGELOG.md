@@ -21,11 +21,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **exp_051** — Frozen NIHR backbone + 4-qubit hybrid head; PR-AUC within −1.0 pp of classical head
 - **Phase Q H-Q1** — `exp_051_quantum_head_nihr` on RTX 4060 (accepted; +0.02 pp PR-AUC)
 - **Ship `large_nano_hybrid_higgs`** — publication `qml-ship` + real bundle gate on RTX 4060
+- **exp_054** — GV-ALR on frozen hybrid QNN head; 5ep matches 8ep AUC in 59% wall-time
+- **Phase Q H-Q4** — `exp_054_adaptive_hybrid_higgs` on RTX 4060 (accepted)
 
 ### Changed
 
-- `make check-real` — **32/32** real GPU gates on RTX 4060 (incl. exp_051 NIHR QNN head)
+- `make check-real` — **33/33** real GPU gates on RTX 4060 (incl. exp_054 GV-ALR hybrid head)
 - `make ship-hybrid-higgs` — publication ship for frozen MLP + QNN head on HIGGS
+- `batched_trainer.train_model_batched_adaptive` — GV-ALR mini-batch loop for hybrid head training
 - `batched_trainer` — batched validation eval to avoid CUDA OOM on 172K-row HIGGS val
 
 ## [1.2.0] - 2026-06-18

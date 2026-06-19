@@ -10,6 +10,7 @@ import torch.nn as nn
 from sklearn.metrics import roc_auc_score
 from torch.utils.data import DataLoader, TensorDataset
 
+from src.training.adaptive_lr import AdaptiveLRConfig, compute_lr_scale, step_gradient_variance
 from src.training.checkpoints import save_best_checkpoint
 from src.training.device import resolve_device
 from src.training.metrics import ExperimentLogger
@@ -204,5 +205,166 @@ def train_model_batched(
         elapsed_s=round(elapsed, 1),
         n_params=n_params,
         val_roc_auc=finish_extra.get("val_roc_auc"),
+    )
+    return log
+
+
+def train_model_batched_adaptive(
+    model: nn.Module,
+    X: torch.Tensor,
+    y: torch.Tensor,
+    exp_id: str,
+    model_name: str,
+    *,
+    epochs: int = 10,
+    adaptive_config: AdaptiveLRConfig | None = None,
+    batch_size: int = 2048,
+    weight_decay: float = 1e-4,
+    log_every: int = 1,
+    X_val: torch.Tensor | None = None,
+    y_val: torch.Tensor | None = None,
+    seed: int | None = None,
+    profile: str | None = None,
+    save_checkpoints: bool = False,
+    device: str | None = None,
+) -> ExperimentLogger:
+    """Mini-batch training with gradient-variance LR scaling (GV-ALR)."""
+    cfg = adaptive_config or AdaptiveLRConfig()
+    if seed is not None:
+        set_global_seed(seed)
+
+    dev = resolve_device(device, model=model)
+    model = model.to(dev)
+    if X_val is not None:
+        X_val = X_val.to(dev)
+    if y_val is not None:
+        y_val = y_val.to(dev)
+
+    init_correlation_id()
+    current_lr = cfg.base_lr
+    trainable = [p for p in model.parameters() if p.requires_grad]
+    optimizer = torch.optim.Adam(trainable, lr=current_lr, weight_decay=weight_decay)
+    criterion = nn.BCELoss()
+    log = ExperimentLogger(exp_id, model_name, seed=seed, profile=profile)
+    log._tracker.log_params(
+        {
+            "epochs": epochs,
+            "lr": cfg.base_lr,
+            "adaptive_lr": True,
+            "var_target": cfg.var_target,
+            "batch_size": batch_size,
+            "weight_decay": weight_decay,
+            "seed": seed,
+            "profile": profile,
+            "device": str(dev),
+        }
+    )
+
+    dataset = TensorDataset(X, y)
+    loader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
+    eval_batch_size = 8192
+
+    def _val_metrics() -> dict:
+        if X_val is None or y_val is None:
+            return {}
+        if len(y_val) > eval_batch_size:
+            return evaluate_with_auc_batched(model, X_val, y_val, batch_size=eval_batch_size)
+        return evaluate_with_auc(model, X_val, y_val)
+
+    best_val_auc: float | None = None
+    t0 = time.time()
+    for epoch in range(epochs):
+        model.train()
+        epoch_loss = 0.0
+        epoch_acc = 0.0
+        n_batches = 0
+        for x_batch, y_batch in loader:
+            x_batch = x_batch.to(dev)
+            y_batch = y_batch.to(dev)
+            optimizer.zero_grad()
+            pred = model(x_batch)
+            loss = criterion(pred, y_batch)
+            loss.backward()
+            optimizer.step()
+            epoch_loss += loss.item()
+            epoch_acc += ((pred > 0.5) == y_batch.bool()).float().mean().item()
+            n_batches += 1
+
+        grad_var = 0.0
+        if epoch >= cfg.warmup_epochs and epoch % cfg.adapt_every == 0:
+            x_sample, y_sample = next(iter(loader))
+            grad_var = step_gradient_variance(model, x_sample.to(dev), y_sample.to(dev), criterion)
+            scale = compute_lr_scale(grad_var, cfg)
+            current_lr = cfg.base_lr * scale
+            for group in optimizer.param_groups:
+                group["lr"] = current_lr
+
+        epoch_metrics: dict = {
+            "loss": epoch_loss / max(n_batches, 1),
+            "accuracy": epoch_acc / max(n_batches, 1),
+            "learning_rate": current_lr,
+            "grad_variance": grad_var,
+        }
+        if X_val is not None and y_val is not None and (epoch % log_every == 0 or epoch == epochs - 1):
+            val_metrics = _val_metrics()
+            epoch_metrics["val_accuracy"] = val_metrics["accuracy"]
+            epoch_metrics["val_loss"] = val_metrics["loss"]
+            epoch_metrics["val_roc_auc"] = val_metrics["roc_auc"]
+            if save_checkpoints:
+                best_val_auc, ckpt_path = save_best_checkpoint(
+                    model,
+                    exp_id,
+                    model_name,
+                    seed,
+                    val_metrics["roc_auc"],
+                    best_metric=best_val_auc,
+                    higher_is_better=True,
+                    config={
+                        "epochs": epochs,
+                        "lr": cfg.base_lr,
+                        "adaptive_lr": True,
+                        "var_target": cfg.var_target,
+                        "batch_size": batch_size,
+                        "seed": seed,
+                        "profile": profile,
+                    },
+                    metadata={"val_roc_auc": val_metrics["roc_auc"], "epoch": epoch},
+                )
+                if ckpt_path is not None:
+                    log_event(
+                        "info",
+                        "checkpoint saved",
+                        exp_id=exp_id,
+                        model_name=model_name,
+                        seed=seed,
+                        path=str(ckpt_path),
+                        val_roc_auc=val_metrics["roc_auc"],
+                    )
+        log.log(epoch, **epoch_metrics)
+
+    elapsed = time.time() - t0
+    n_params = count_parameters(model)
+    finish_extra: dict = {"n_params": n_params, "adaptive_lr": True}
+    if X_val is not None and y_val is not None:
+        val_metrics = _val_metrics()
+        finish_extra.update(
+            {
+                "test_accuracy": val_metrics["accuracy"],
+                "test_loss": val_metrics["loss"],
+                "val_roc_auc": val_metrics["roc_auc"],
+                "eval_set": "validation",
+            }
+        )
+    log.finish(elapsed, **finish_extra)
+    log_event(
+        "info",
+        "batched adaptive training complete",
+        exp_id=exp_id,
+        model_name=model_name,
+        seed=seed,
+        elapsed_s=round(elapsed, 1),
+        n_params=n_params,
+        val_roc_auc=finish_extra.get("val_roc_auc"),
+        adaptive_lr=True,
     )
     return log

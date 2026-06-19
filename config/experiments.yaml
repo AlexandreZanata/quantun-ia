@@ -1099,6 +1099,50 @@ experiments:
         min_vs_classical_pp: -1.0
         save_checkpoints: true
 
+  exp_054_adaptive_hybrid_higgs:
+    description: "GV-ALR vs fixed LR on frozen hybrid QNN head — epoch efficiency gate"
+    exp_id: exp_054
+    dataset_id: higgs_v1
+    checkpoint_exp_id: exp_032
+    checkpoint_model_name: large_nano_mlp
+    seed: 42
+    hidden1: 2048
+    hidden2: 512
+    hidden3: 64
+    dropout: 0.3
+    n_qubits: 4
+    n_layers: 2
+    reupload: true
+    batch_size: 256
+    learning_rate: 0.01
+    weight_decay: 0.0001
+    adaptive_var_target: 0.015
+    fixed_epochs: 8
+    adaptive_epochs: 5
+    max_epoch_fraction: 0.7
+    max_auc_delta_pp: 0.3
+    save_checkpoints: false
+    adaptive_lr:
+      base_lr: 0.01
+      var_target: 0.015
+      warmup_epochs: 1
+      adapt_every: 1
+    profile_overrides:
+      ci:
+        n_train_rows: 8000
+        n_val_rows: 1500
+        fixed_epochs: 4
+        adaptive_epochs: 2
+        max_auc_delta_pp: 0.5
+      publication:
+        n_train_rows: 50000
+        n_val_rows: 10000
+        fixed_epochs: 8
+        adaptive_epochs: 5
+        batch_size: 512
+        max_auc_delta_pp: 0.3
+        save_checkpoints: true
+
   exp_046_model_scale_curve:
     description: "LargeNanoMLP scale ablation nano_s→nano_xxl on HIGGS — VRAM + AUC curve"
     exp_id: exp_046
