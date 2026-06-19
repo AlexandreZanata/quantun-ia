@@ -474,6 +474,9 @@ paper-build-publication:
 	cp tests/contracts/fixtures/publication_experiments.jsonl logs/experiments.jsonl
 	$(MAKE) paper-artifacts
 
+phase-6-publication: citation-ready exp-068-publication paper-artifacts paper-build
+	@echo "Phase 6 complete — paper/main.pdf + citation-ready (skip-release)"
+
 repro-publication-ci:
 	MLFLOW_DISABLE=1 bash scripts/repro_publication_ci.sh
 

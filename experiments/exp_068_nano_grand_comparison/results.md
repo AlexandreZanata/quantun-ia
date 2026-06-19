@@ -7,11 +7,13 @@
 
 - JSON leaderboard: `dist/leaderboards/nano_grand_comparison.json`
 - LaTeX table: `paper/tables/grand_comparison.tex`
-- Recipes: **6** · Domains: **4**
+- Recipes: **8** · Domains: **4**
 - Elapsed: **0.004s**
 
 ## Quantum recipe wins (≥ +0.5 pp)
 
+- `compound_stress_acyd`: **0** domain wins
+- `entangle_schedule`: **0** domain wins
 - `gv_alr_head`: **0** domain wins
 - `large_nano_vs_conventional`: **0** domain wins
 - `large_nano_vs_logistic`: **0** domain wins

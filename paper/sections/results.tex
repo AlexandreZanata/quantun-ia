@@ -78,6 +78,22 @@ weights by 0.71~pp; retraining the PyTorch nano or ensembling remains future wor
 This experiment does \textbf{not} involve quantum circuits --- it validates the
 classical nano backbone against industry-standard tabular tooling.
 
+\subsection{Four-anchor grand comparison (exp\_068)}
+\label{sec:grand_comparison}
+
+We synthesize publication $\Delta$~pp metrics across four classical nano anchors
+(C1 HIGGS, C2 NIHR, C3 GoBug, C4 ACYD soybean) and quantum replication recipes
+frozen on each anchor (Table~\ref{tab:grand_comparison}).
+No quantum recipe simultaneously wins on $\geq 3/4$ domains at the pre-registered
++0.5~pp gate --- confirming the exp\_068 hypothesis.
+LargeNanoMLP beats logistic on HIGGS (+14.09~pp) and ACYD (+3.86~pp) but not on
+NIHR/GoBug PR-AUC gates; sklearn HistGradientBoosting edges the nano on ACYD val
+($-$1.64~pp, exp\_061).
+The QNN 4-qubit head remains within 1~pp of the frozen classical head on all four
+domains (best: +0.04~pp HIGGS).
+
+\input{tables/grand_comparison}
+
 \subsection{Key findings}
 
 On synthetic 2D tasks, parameter-matched classical MLPs remain competitive with

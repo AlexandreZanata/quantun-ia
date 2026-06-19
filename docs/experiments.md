@@ -420,7 +420,7 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `QML_DEVICE=cuda python experiments/exp_078_agro_clinical_cases/run.py --write-results`  
 **Lesson:** C4 ranks Brazilian drought/heat scenarios in agronomically sensible order for human-facing Agro Risk Lab.
 
-**Next:** Phase 6 — publication artifacts (`make citation-ready`) or gated exp_080 fusion if eligible.
+**Next:** Gated exp_080 quantum champion fusion (only if ≥2 Q wins on same domain); optional exp_081/082 agro extensions.
 
 ## Publication Profiles
 

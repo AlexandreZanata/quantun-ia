@@ -27,8 +27,9 @@ def test_introduction_defers_innovation_tracks():
 
 def test_results_cover_headline_experiments():
     text = RESULTS.read_text(encoding="utf-8")
-    for marker in ("exp_021", "exp_022", "exp_011"):
-        assert marker in text, f"results missing headline marker: {marker}"
+    normalized = text.replace("\\", "")
+    for marker in ("exp_021", "exp_022", "exp_011", "exp_068"):
+        assert marker in normalized, f"results missing headline marker: {marker}"
 
 
 def test_results_do_not_claim_deferred_methods():
