@@ -240,6 +240,23 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Seeds:** 30 (publication profile)  
 **Command:** `QML_DEVICE=cuda python experiments/exp_025_pima_generalization/run.py --profile publication --write-results`
 
+### EXP 032 — LargeNanoMLP on HIGGS (Phase L)
+
+**Models:** `LargeNanoMLP` (~1.14M params) vs `LogisticRegression`  
+**Dataset:** `higgs_v1` (805K train / 172.5K val, 28 features)  
+**Claim:** Val ROC-AUC ≥ logistic + 1.0 pp  
+**Verdict:** Accepted — 0.8258 vs 0.6849 (+14.09 pp)  
+**Command:** `QML_DEVICE=cuda python experiments/exp_032_large_nano_higgs/run.py --profile publication --write-results`
+
+### EXP 058 — Conventional HIGGS baselines
+
+**Models:** Shipped `LargeNanoMLP` vs sklearn `LogisticRegression`, `MLPClassifier`, `HistGradientBoosting`, `XGBoost`  
+**Dataset:** `higgs_v1` (same split/scaler as exp_032)  
+**Claim:** LargeNanoMLP ≥ best conventional + 0.5 pp val ROC-AUC  
+**Verdict:** Rejected on publication (sklearn MLP 0.8429 vs nano 0.8358, −0.71 pp); CI slice accepted (+4.14 pp)  
+**Command:** `python experiments/exp_058_conventional_higgs_baselines/run.py --profile publication --write-results`  
+**Shortcut:** `python scripts/compare_higgs_conventional.py --profile ci`
+
 ## Publication Profiles
 
 | Profile | `n_samples` | Seeds | Command |

@@ -17,6 +17,19 @@ Cite these works in `results.md` when comparing holdout metrics.
 | Breast Cancer Wisconsin | SVM / MLP | ~95–97% (full dataset, CV) | exp_011 (30% holdout, 10 seeds) |
 | Wine (binary subset) | Logistic regression | ~95%+ | Available via `wine_binary` loader |
 | Iris (binary subset) | Perceptron | ~90%+ | Available via `iris_binary` loader |
+| HIGGS (UCI open) | Logistic / GBDT / MLP | AUC varies by protocol | exp_032, exp_058 (val ROC-AUC, train-only scaler) |
+
+### Conventional sklearn/XGBoost stack (exp_058)
+
+| Model | Library | Role in exp_058 |
+|-------|---------|-----------------|
+| LogisticRegression | sklearn | Linear tabular baseline |
+| MLPClassifier (2048→512→64) | sklearn | Matched-topology deep baseline |
+| HistGradientBoostingClassifier | sklearn | Strong default GBDT on CPU |
+| XGBClassifier (depth 3, 50 trees) | xgboost | Shallow boosted trees |
+| LargeNanoMLP | PyTorch (quantun-ia) | Shipped exp_032 checkpoint |
+
+Run: `python experiments/exp_058_conventional_higgs_baselines/run.py --profile publication --write-results`
 
 > **Note:** Published UCI scores often use cross-validation on the full dataset.
 > Our holdout protocol (30% test, multi-seed) yields lower absolute numbers but

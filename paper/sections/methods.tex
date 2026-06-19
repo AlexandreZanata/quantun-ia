@@ -40,6 +40,42 @@ and \texttt{ci} (fast smoke, 1 seed).
 Barren-plateau diagnostics (exp\_006) and adaptive learning-rate schedules (exp\_015)
 use gradient-variance telemetry from \texttt{src/training/adaptive\_lr.py}.
 
+\subsection{Conventional tabular comparison (exp\_058)}
+
+Experiment \texttt{exp\_058} isolates whether the shipped \textbf{LargeNanoMLP}
+(\texttt{exp\_032}) beats standard non-quantum stacks on open HIGGS tabular data.
+Both deep models share the \emph{same parameter budget} ($\sim$1.14\,M weights,
+topology $28{\rightarrow}2048{\rightarrow}512{\rightarrow}64{\rightarrow}1$); the
+comparison is therefore a \textbf{training-stack ablation}, not a capacity mismatch.
+
+\paragraph{Data protocol.}
+We use the preprocessed \texttt{higgs\_v1} parquet splits (805K train / 172.5K val /
+172.5K test). A \texttt{StandardScaler} is fit on train only and applied to val.
+Seed~42 controls any row subsampling in CI profiles. Test rows are never used for
+model selection.
+
+\paragraph{LargeNanoMLP (our model).}
+Implemented in PyTorch (\texttt{src/classical/large\_nano\_mlp.py}), trained in
+\texttt{exp\_032} with batched Adam ($\mathrm{lr}{=}10^{-3}$, batch 2048, 12 epochs,
+weight decay $10^{-4}$, dropout 0.3, binary cross-entropy). For \texttt{exp\_058} we
+load the frozen shipped checkpoint (\texttt{dist/serve\_models/large\_nano\_mlp\_higgs/best.pt})
+and report validation ROC-AUC without retraining.
+
+\paragraph{Conventional baselines.}
+We retrain four sklearn/XGBoost models on the \emph{same} scaled train matrix:
+(i)~\texttt{LogisticRegression} (linear baseline);
+(ii)~\texttt{MLPClassifier} with \texttt{hidden\_layer\_sizes=(2048,512,64)} --- the
+primary matched deep competitor;
+(iii)~\texttt{HistGradientBoostingClassifier} (default GBDT on CPU);
+(iv)~shallow \texttt{XGBClassifier} (depth~3, 50 trees).
+All baselines use seed~42; hyperparameters are documented in
+\texttt{config/experiments.yaml} under \texttt{exp\_058\_conventional\_higgs\_baselines}.
+
+\paragraph{Success gate.}
+Pre-registered in \texttt{hypothesis.md}: LargeNanoMLP val ROC-AUC $\geq$ best
+conventional + \textbf{0.5 percentage points}. Single-seed infrastructure comparison;
+multi-seed Wilcoxon deferred.
+
 \subsection{Reproducibility artifacts}
 
 Figures and tables are regenerated from JSONL logs via \texttt{make figures} and

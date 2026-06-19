@@ -1325,6 +1325,26 @@ experiments:
         epochs: 20
         save_checkpoints: true
 
+  exp_058_conventional_higgs_baselines:
+    description: "LargeNanoMLP vs sklearn/XGBoost conventional baselines on HIGGS val ROC-AUC"
+    exp_id: exp_058
+    dataset_id: higgs_v1
+    checkpoint_exp_key: exp_032_large_nano_higgs
+    seed: 42
+    min_advantage_pp: 0.5
+    xgboost_learning_rate: 0.1
+    xgboost_n_estimators: 50
+    histgb_max_iter: 100
+    profile_overrides:
+      ci:
+        min_advantage_pp: 0.0
+        histgb_max_iter: 50
+        xgboost_n_estimators: 30
+      publication:
+        min_advantage_pp: 0.5
+        histgb_max_iter: 100
+        xgboost_n_estimators: 50
+
   exp_046_model_scale_curve:
     description: "LargeNanoMLP scale ablation nano_s→nano_xxl on HIGGS — VRAM + AUC curve"
     exp_id: exp_046

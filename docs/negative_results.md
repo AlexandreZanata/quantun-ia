@@ -22,6 +22,7 @@ Each entry links to the experiment `results.md` and the statistical test outcome
 | exp_055 | Depolarizing noise beats noiseless hybrid by ≥0.5 pp PR-AUC | **Rejected** | Δ = +0.50 pp on temporal test (inconclusive vs gate) |
 | exp_056 | Re-upload depth curriculum wins ≥2/3 ladder rungs | **Rejected** | 1/3 wins (PCA-MNIST only); BC/HIGGS losses |
 | exp_057 | Parameter-shift within 1 pp + ≥2× lower grad variance | **Rejected** | Δ holdout = 20.99 pp; var ratio = 0.08 (param-shift higher) |
+| exp_058 | LargeNanoMLP ≥ best conventional + 0.5 pp (HIGGS) | **Rejected** | sklearn MLP 0.8429 vs nano 0.8358 (−0.71 pp full val) |
 
 ---
 
@@ -256,6 +257,30 @@ adds ~19 min/seed wall time with no accuracy benefit.
 (exp_006). Do not set `QML_GRADIENT_METHOD=parameter_shift` in `nanotrainer.yaml`.
 
 See: `experiments/exp_057_param_shift_ablation/results.md`
+
+---
+
+## exp_058 — Conventional HIGGS baselines vs LargeNanoMLP
+
+**Profile:** HIGGS v1, 805K train / 172.5K val, seed 42, RTX 4060
+
+| Model | Val ROC-AUC | Train (s) |
+|-------|-------------|-----------|
+| MLPClassifier (sklearn, 2048-512-64) | **0.8429** | 679 |
+| LargeNanoMLP (shipped exp_032) | 0.8358 | 0.2 |
+| HistGradientBoosting | 0.8097 | 3.3 |
+| XGBoost shallow | 0.7773 | 2.2 |
+| LogisticRegression | 0.6849 | 0.8 |
+
+**Finding:** Matched-topology sklearn MLP **beats** the shipped LargeNanoMLP checkpoint by **0.71 pp**
+on full val (gate requires nano ≥ best conventional + 0.5 pp). LargeNanoMLP still beats logistic
+(+15.1 pp), HistGradientBoosting (+2.6 pp), and XGBoost (+5.8 pp).
+
+**Lesson:** Do not claim universal superiority over all conventional stacks on million-row tabular;
+retrain PyTorch nano or adopt sklearn MLP when matched-topology CPU training wins. CI slice (50K rows)
+favored LargeNanoMLP (+4.14 pp) — slice size matters for headline claims.
+
+See: `experiments/exp_058_conventional_higgs_baselines/results.md`
 
 ---
 

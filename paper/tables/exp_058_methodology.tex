@@ -1,0 +1,30 @@
+\begin{table}[ht]
+\centering
+\caption{Methodology and model-size comparison: LargeNanoMLP (quantun-ia) vs matched
+sklearn \texttt{MLPClassifier} on HIGGS (exp\_058 / exp\_032). Both use the same
+feed-forward topology $28 \rightarrow 2048 \rightarrow 512 \rightarrow 64 \rightarrow 1$.}
+\label{tab:exp_058_methodology}
+\small
+\begin{tabular}{lll}
+\toprule
+ & \textbf{LargeNanoMLP} & \textbf{sklearn MLPClassifier} \\
+\midrule
+Experiment & exp\_032 (train) / exp\_058 (eval) & exp\_058 (retrain) \\
+Framework & PyTorch 2.x + CUDA & scikit-learn 1.x (CPU) \\
+Parameters & 1{,}141{,}377 & 1{,}141{,}377 (matched) \\
+Hidden layers & 2048, 512, 64 + ReLU & 2048, 512, 64 + ReLU \\
+Dropout & 0.3 after each hidden layer & none (sklearn default) \\
+Output & Sigmoid + BCE loss & logistic loss (sigmoid) \\
+Optimizer & Adam ($\mathrm{lr}{=}10^{-3}$) & Adam ($\mathrm{lr}{=}10^{-3}$) \\
+Regularization & weight decay $10^{-4}$ & L2 $\alpha{=}10^{-4}$ \\
+Batch size & 2048 (mini-batch) & 2048 \\
+Epochs / iterations & 12 epochs (exp\_032) & 12 \texttt{max\_iter} \\
+Train rows & 805{,}000 & 805{,}000 \\
+Scaler & \texttt{StandardScaler} (train-only fit) & same \\
+Eval split & 172{,}500 val (ROC-AUC) & same \\
+Checkpoint & shipped \texttt{best.pt} (frozen) & fit fresh each run \\
+Inference time (val) & 0.2\,s & n/a (eval only) \\
+Train wall time & $\sim$108\,s (exp\_032) & 679\,s (exp\_058) \\
+\bottomrule
+\end{tabular}
+\end{table}

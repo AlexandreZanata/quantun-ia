@@ -1,0 +1,37 @@
+\begin{table}[ht]
+\centering
+\caption{Pairwise validation ROC-AUC gains vs LargeNanoMLP on HIGGS
+(exp\_058 publication: 805K train / 172.5K val, seed 42).
+Positive $\Delta$~pp favours LargeNanoMLP; negative favours the baseline.}
+\label{tab:exp_058_gains}
+\begin{tabular}{lrrr}
+\toprule
+Baseline & Val ROC-AUC & $\Delta$~pp vs nano & Outcome \\
+\midrule
+LogisticRegression (sklearn) & 0.6849 & $+15.09$ & nano wins \\
+HistGradientBoosting (sklearn) & 0.8097 & $+2.61$ & nano wins \\
+XGBoost shallow (depth 3) & 0.7773 & $+5.85$ & nano wins \\
+MLPClassifier (2048-512-64) & 0.8429 & $-0.71$ & \textbf{baseline wins} \\
+\midrule
+LargeNanoMLP (quantun-ia) & 0.8358 & --- & reference \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{CI-slice reference (50K train / 10K val): LargeNanoMLP vs conventional baselines.
+Useful for smoke/regression; not the primary publication claim.}
+\label{tab:exp_058_ci}
+\begin{tabular}{lrr}
+\toprule
+Model & Val ROC-AUC & $\Delta$~pp vs nano \\
+\midrule
+LargeNanoMLP & 0.8328 & --- \\
+HistGradientBoosting & 0.7915 & $-4.14$ \\
+MLPClassifier & 0.7747 & $-5.82$ \\
+XGBoost shallow & 0.7600 & $-7.28$ \\
+LogisticRegression & 0.6788 & $-15.41$ \\
+\bottomrule
+\end{tabular}
+\end{table}
