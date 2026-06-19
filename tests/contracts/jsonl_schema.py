@@ -42,15 +42,24 @@ MULTI_SEED_SUMMARY_SCHEMA: dict = {
         "summary": {
             "type": "object",
             "additionalProperties": {
-                "type": "object",
-                "required": ["mean", "ci_low", "ci_high"],
-                "properties": {
-                    "mean": {"type": "number"},
-                    "std": {"type": "number"},
-                    "ci_low": {"type": "number"},
-                    "ci_high": {"type": "number"},
-                    "n_seeds": {"type": "integer"},
-                },
+                "anyOf": [
+                    {
+                        "type": "object",
+                        "required": ["mean", "ci_low", "ci_high"],
+                        "properties": {
+                            "mean": {"type": "number"},
+                            "std": {"type": "number"},
+                            "ci_low": {"type": "number"},
+                            "ci_high": {"type": "number"},
+                            "n_seeds": {"type": "integer"},
+                        },
+                    },
+                    {
+                        "type": "object",
+                        "not": {"required": ["mean"]},
+                        "additionalProperties": True,
+                    },
+                ]
             },
         },
     },

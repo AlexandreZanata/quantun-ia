@@ -1,0 +1,97 @@
+# Curated publication metrics for exp_068 grand comparison synthesis.
+# Sources: experiments/exp_NNN_*/results.md (RTX 4060 publication runs, 2026-06-19).
+
+domains:
+  higgs:
+    anchor: C1
+    label: HIGGS
+    metric: roc_auc
+    dataset_id: higgs_v1
+  nihr:
+    anchor: C2
+    label: NIHR
+    metric: pr_auc
+    dataset_id: nihr_cv_synthetic_v1
+  gobug:
+    anchor: C3
+    label: GoBug
+    metric: pr_auc
+    dataset_id: code_defects_gobug_v1
+  acyd:
+    anchor: C4
+    label: ACYD Soy
+    metric: roc_auc
+    dataset_id: acyd_soy_brazil_v1
+
+recipes:
+  large_nano_vs_logistic:
+    label: LargeNanoMLP vs logistic
+    kind: classical_nano
+    quantum: false
+    source_exp:
+      higgs: exp_032
+      nihr: exp_069
+      gobug: exp_070
+      acyd: exp_060
+    delta_pp:
+      higgs: 14.09
+      nihr: -0.12
+      gobug: 0.03
+      acyd: 3.86
+
+  large_nano_vs_conventional:
+    label: LargeNanoMLP vs best conventional
+    kind: classical_nano
+    quantum: false
+    source_exp:
+      higgs: exp_058
+      nihr: exp_076
+      gobug: exp_077
+      acyd: exp_061
+    delta_pp:
+      higgs: -0.71
+      nihr: 0.12
+      gobug: -1.02
+      acyd: -1.64
+
+  qnn_head_4q:
+    label: QNN head 4q vs classical head (frozen Ci)
+    kind: quantum_hybrid
+    quantum: true
+    source_exp:
+      higgs: exp_037
+      nihr: exp_051
+      gobug: null
+      acyd: exp_062
+    delta_pp:
+      higgs: 0.04
+      nihr: 0.02
+      gobug: null
+      acyd: -0.19
+
+  quantum_warmstart:
+    label: Quantum warm-start vs e2e hybrid
+    kind: quantum_ablation
+    quantum: true
+    source_exp:
+      higgs: exp_052
+    delta_pp:
+      higgs: -0.42
+
+  gv_alr_head:
+    label: GV-ALR vs fixed-LR hybrid head
+    kind: quantum_efficiency
+    quantum: true
+    source_exp:
+      higgs: exp_054
+    delta_pp:
+      higgs: 0.01
+
+  noise_reg_gobug:
+    label: Depolarizing noise reg vs noiseless hybrid (test)
+    kind: quantum_ablation
+    quantum: true
+    source_exp:
+      gobug: exp_055
+    delta_pp:
+      gobug: 0.50

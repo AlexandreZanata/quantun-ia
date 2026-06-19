@@ -339,7 +339,16 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `QML_DEVICE=cuda python experiments/exp_062_hybrid_nano_acyd_soy/run.py --profile publication --write-results`  
 **Checkpoint:** `artifacts/exp_062/large_nano_hybrid_acyd_soy/seed_42/best.pt`
 
-**Next:** Phase 3 continuation — exp_068 grand comparison synthesis; exp_071 GoBug hybrid QNN.
+### EXP 068 — Nano grand comparison synthesis (C1–C4)
+
+**Scope:** Curated aggregation of publication metrics — no new GPU training  
+**Domains:** HIGGS (C1), NIHR (C2), GoBug (C3), ACYD (C4)  
+**Claim:** No quantum recipe wins on ≥3/4 domains with Δ ≥ +0.5 pp  
+**Verdict:** Hypothesis **confirmed** — QNN head best +0.04 pp (HIGGS); GoBug QNN pending exp_071  
+**Artifacts:** `dist/leaderboards/nano_grand_comparison.json`, `paper/tables/grand_comparison.tex`  
+**Command:** `python experiments/exp_068_nano_grand_comparison/run.py --profile publication --write-results`
+
+**Next:** Phase 3 continuation — exp_071 GoBug hybrid QNN; exp_068a/b agro-specific quantum hypotheses.
 
 ## Publication Profiles
 

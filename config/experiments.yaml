@@ -1409,6 +1409,20 @@ experiments:
         min_vs_classical_pp: -1.0
         save_checkpoints: true
 
+  exp_068_nano_grand_comparison:
+    description: "C1–C4 grand comparison synthesis — classical vs quantum recipes (curated metrics)"
+    exp_id: exp_068
+    seed: 42
+    registry_path: config/grand_comparison_registry.yaml
+    json_out: dist/leaderboards/nano_grand_comparison.json
+    latex_out: paper/tables/grand_comparison.tex
+    claim_win_delta_pp: 0.5
+    profile_overrides:
+      ci:
+        claim_win_delta_pp: 0.5
+      publication:
+        claim_win_delta_pp: 0.5
+
   exp_061_conventional_acyd_baselines:
     description: "LargeNanoMLP vs sklearn/XGBoost conventional baselines on ACYD val ROC-AUC"
     exp_id: exp_061
