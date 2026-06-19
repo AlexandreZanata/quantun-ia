@@ -90,6 +90,22 @@ models:
     exports: [native, onnx, torchscript]
     model_card: model_cards/large_nano_mlp_nihr.md
 
+  large_nano_mlp_gobug:
+    description: "LargeNanoMLP (~1.14M) on GoBug code defects open tabular (C3 anchor)"
+    train_model: large_nano_mlp
+    dataset: code_defects_gobug_v1
+    exp_id: exp_070
+    seed: 42
+    profile: publication
+    serve:
+      kind: open_large_nano
+    train:
+      kind: experiment
+      experiment_key: exp_070_large_nano_gobug
+    gate_test: tests/real/test_exp_070_large_nano_gate.py
+    exports: [native, onnx, torchscript]
+    model_card: model_cards/large_nano_mlp_gobug.md
+
   quantum_nano_bc:
     description: "HybridSandwich 4q re-upload on Wisconsin Breast Cancer (QuantumNano-BC)"
     train_model: hybrid_sandwich

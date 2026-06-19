@@ -1425,6 +1425,36 @@ experiments:
         min_pr_advantage_pp: 1.0
         save_checkpoints: true
 
+  exp_070_large_nano_gobug:
+    description: "LargeNanoMLP ~1.14M params on GoBug defects — val PR-AUC vs logistic (C3)"
+    exp_id: exp_070
+    dataset_id: code_defects_gobug_v1
+    seed: 42
+    hidden1: 2048
+    hidden2: 512
+    hidden3: 64
+    dropout: 0.3
+    batch_size: 1024
+    learning_rate: 0.001
+    weight_decay: 0.0001
+    min_params: 1000000
+    min_pr_advantage_pp: 2.0
+    save_checkpoints: false
+    profile_overrides:
+      ci:
+        n_train_rows: 5000
+        n_val_rows: 1000
+        epochs: 5
+        batch_size: 512
+        min_pr_advantage_pp: -5.0
+      publication:
+        n_train_rows: 0
+        n_val_rows: 0
+        epochs: 12
+        batch_size: 1024
+        min_pr_advantage_pp: 2.0
+        save_checkpoints: true
+
   exp_046_model_scale_curve:
     description: "LargeNanoMLP scale ablation nano_s→nano_xxl on HIGGS — VRAM + AUC curve"
     exp_id: exp_046

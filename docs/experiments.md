@@ -283,6 +283,15 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `QML_DEVICE=cuda python experiments/exp_069_large_nano_nihr/run.py --profile publication --write-results`  
 **Ship:** `qml-ship --model large_nano_mlp_nihr --skip-train --skip-gate`
 
+### EXP 070 — LargeNanoMLP on GoBug code defects (C3 anchor)
+
+**Models:** `LargeNanoMLP` (~1.14M params) vs `LogisticRegression`  
+**Dataset:** `code_defects_gobug_v1` (27,172 train / 5,822 val, 23 features, temporal split)  
+**Claim:** Val PR-AUC ≥ logistic + 2.0 pp  
+**Verdict:** Rejected — logistic 0.3097 vs nano 0.3100 (+0.03 pp); checkpoint shipped for hybrid ablations  
+**Command:** `QML_DEVICE=cuda python experiments/exp_070_large_nano_gobug/run.py --profile publication --write-results`  
+**Ship:** `qml-ship --model large_nano_mlp_gobug --skip-train --skip-gate`
+
 ## Publication Profiles
 
 | Profile | `n_samples` | Seeds | Command |

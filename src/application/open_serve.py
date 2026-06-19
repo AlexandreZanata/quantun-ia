@@ -22,6 +22,7 @@ OPEN_DATASET_FEATURES: dict[str, int] = {
     "higgs_v1": 28,
     "synthea_cv_risk_v1": 40,
     "nihr_cv_synthetic_v1": 13,
+    "code_defects_gobug_v1": 23,
     "acyd_soy_brazil_v1": 37,
 }
 

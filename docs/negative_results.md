@@ -25,6 +25,7 @@ Each entry links to the experiment `results.md` and the statistical test outcome
 | exp_058 | LargeNanoMLP ≥ best conventional + 0.5 pp (HIGGS) | **Rejected** | sklearn MLP 0.8429 vs nano 0.8358 (−0.71 pp full val) |
 | exp_061 | LargeNanoMLP ≥ best conventional + 0.5 pp (ACYD) | **Rejected** | HistGB 0.6941 vs nano 0.6777 (−1.64 pp temporal val) |
 | exp_069 | LargeNanoMLP ≥ logistic + 1.0 pp PR-AUC (NIHR) | **Rejected** | logistic 0.2382 vs nano 0.2370 (−0.12 pp) |
+| exp_070 | LargeNanoMLP ≥ logistic + 2.0 pp PR-AUC (GoBug) | **Rejected** | logistic 0.3097 vs nano 0.3100 (+0.03 pp) |
 
 ---
 
@@ -320,6 +321,23 @@ See: `experiments/exp_061_conventional_acyd_baselines/results.md`
 **Interpretation:** At ~8% prevalence, logistic remains a strong ceiling on PR-AUC; deep nano does not beat it on this synthetic cohort. C2 checkpoint still ships for hybrid/QNN ablations (exp_051+).
 
 See: `experiments/exp_069_large_nano_nihr/results.md`
+
+---
+
+## exp_070 — LargeNanoMLP on GoBug code defects (C3 anchor)
+
+**Profile:** code_defects_gobug_v1, 27,172 train / 5,822 val, seed 42, RTX 4060
+
+| Model | Val PR-AUC |
+|-------|------------|
+| Logistic | 0.3097 |
+| LargeNanoMLP (2048-512-64, ~1.13M) | 0.3100 |
+
+**Gate:** LargeNanoMLP ≥ logistic + 2.0 pp → **failed** (+0.03 pp).
+
+**Interpretation:** Full nano template does not beat logistic on GoBug temporal val; matches exp_045 tie with reduced topology. C3 checkpoint shipped for hybrid ablations (exp_071+).
+
+See: `experiments/exp_070_large_nano_gobug/results.md`
 
 ---
 
