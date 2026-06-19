@@ -16,6 +16,7 @@ qml-download --model large_nano_mlp_synthea
 
 # Makefile shortcuts
 make ship-all-p0
+make ship-hybrid-higgs   # frozen MLP + QNN head (exp_037, publication gate)
 make ship MODEL=large_nano_mlp_higgs SKIP_TRAIN=1 SKIP_GATE=1
 make download-model MODEL=large_nano_mlp_synthea
 ```

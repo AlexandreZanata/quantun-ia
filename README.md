@@ -170,7 +170,7 @@ Quantum hybrid models require PennyLane for inference; they ship as **native bun
 | `large_nano_mlp_synthea_calibrated` | LargeNanoMLP + isotonic | Synthea CV | ship ✅ (exp_043) |
 | `large_nano_mlp_higgs` | LargeNanoMLP (~1.17M, nano_l) | HIGGS 1M | train ✅ · ship ✅ · exp_046 champion |
 | `quantum_nano_bc` | HybridSandwich 4q | Breast cancer | train ✅ · ship ✅ |
-| `large_nano_hybrid_higgs` | Frozen MLP + QNN head | HIGGS | exp_037 · ship 🔲 |
+| `large_nano_hybrid_higgs` | Frozen MLP + QNN head | HIGGS | exp_037 · ship ✅ |
 | `quantum_nano_champion` | Fused Q training recipe | Multi-bench | exp_058 · ship 🔲 |
 
 Internal playbook: `.local/RESEARCH_ROADMAP.md` → **Phase Q** (quantum training hypotheses).

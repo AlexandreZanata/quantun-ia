@@ -17,6 +17,7 @@ pytestmark = pytest.mark.real
     [
         "large_nano_mlp_synthea",
         "large_nano_mlp_higgs",
+        "large_nano_hybrid_higgs",
         "quantum_nano_bc",
     ],
 )
