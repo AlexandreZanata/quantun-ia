@@ -1176,6 +1176,32 @@ experiments:
         min_vs_e2e_pp: 0.5
         save_checkpoints: true
 
+  exp_053_entangle_schedule_bc:
+    description: "Dynamic entanglement schedule vs fixed topologies on breast cancer"
+    exp_id: exp_053
+    dataset: breast_cancer
+    reupload: true
+    n_qubits: 4
+    n_layers: 2
+    learning_rate: 0.02
+    n_stages: 5
+    epochs_per_stage: 10
+    entanglement_ladder: [none, chain, ring]
+    min_advantage_pp: 1.0
+    save_checkpoints: false
+    profile_overrides:
+      ci:
+        seeds: [42]
+        n_stages: 2
+        epochs_per_stage: 4
+        min_advantage_pp: -30.0
+      publication:
+        seeds: [42, 123, 456]
+        n_stages: 5
+        epochs_per_stage: 10
+        min_advantage_pp: 1.0
+        save_checkpoints: true
+
   exp_046_model_scale_curve:
     description: "LargeNanoMLP scale ablation nano_s→nano_xxl on HIGGS — VRAM + AUC curve"
     exp_id: exp_046

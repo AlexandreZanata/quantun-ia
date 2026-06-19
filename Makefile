@@ -254,6 +254,12 @@ exp-052:
 exp-052-publication:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_052_quantum_warmstart_higgs/run.py --profile publication --write-results
 
+exp-053:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_053_entangle_schedule_bc/run.py
+
+exp-053-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_053_entangle_schedule_bc/run.py --profile publication --write-results
+
 exp-046:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_046_model_scale_curve/run.py
 

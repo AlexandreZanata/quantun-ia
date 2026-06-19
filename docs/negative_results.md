@@ -18,6 +18,7 @@ Each entry links to the experiment `results.md` and the statistical test outcome
 | exp_044 | LargeNanoMLP beats logistic by ≥0.5 pp on NIHR val | **Rejected** | AUC 0.831 passes; nano − logistic = −0.16 pp |
 | exp_045 | PR-AUC ≥ 0.55 on temporal GoBug val | **Rejected** | PR-AUC ≈ 0.31 (chance); temporal holdout defeats tabular nano |
 | exp_052 | Warm-start hybrid beats e2e by ≥0.5 pp AUC on HIGGS | **Rejected** | Δ = −0.42 pp (3 seeds); Wilcoxon p = 0.5 |
+| exp_053 | Dynamic entanglement schedule beats fixed by ≥1.0 pp | **Rejected** | Δ = −0.78 pp vs `none` (3 seeds); Wilcoxon p = 0.75 |
 
 ---
 
@@ -174,6 +175,25 @@ Paired wins: 1/3 · Wilcoxon p = 0.5.
 optimization on million-row tabular HIGGS — schedule hypothesis rejected for HybridSandwich.
 
 See: `experiments/exp_052_quantum_warmstart_higgs/results.md`
+
+---
+
+## exp_053 — Dynamic entanglement schedule on breast cancer
+
+**Profile:** UCI Wisconsin breast cancer, re-upload QNN 4q×2L, 5 stages × 10 epochs, 3 seeds, RTX 4060
+
+| Method | Mean holdout |
+|--------|--------------|
+| Best fixed (`none`) | **96.69%** |
+| Dynamic schedule (none→chain→ring) | 95.91% |
+
+**Finding:** Growing entanglement underperforms best fixed topology by **−0.78 pp** (gate ≥ +1.0 pp).
+Paired wins: 1/3 · Wilcoxon p = 0.75.
+
+**Lesson:** Mid-training topology swaps disrupt learned post-head geometry even when QNN
+weights are preserved — fixed `none` remains best on this cohort.
+
+See: `experiments/exp_053_entangle_schedule_bc/results.md`
 
 ---
 

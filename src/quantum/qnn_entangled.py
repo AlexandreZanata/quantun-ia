@@ -65,9 +65,24 @@ class QuantumNetEntangled(TrainableMixin, nn.Module):
     ):
         super().__init__()
         self.n_qubits = n_qubits
+        self.n_layers = n_layers
+        self.entanglement = entanglement
+        self.reupload = reupload
         self.pre = nn.Linear(input_dim, n_qubits) if input_dim != n_qubits else nn.Identity()
         self.qlayer = make_entangled_circuit(n_qubits, n_layers, entanglement, reupload=reupload)
         self.post = nn.Linear(n_qubits, 1)
+
+    def set_entanglement(self, entanglement: str) -> None:
+        """Swap CNOT topology; preserve variational weights when shapes match."""
+        state = self.qlayer.state_dict()
+        self.entanglement = entanglement
+        self.qlayer = make_entangled_circuit(
+            self.n_qubits,
+            self.n_layers,
+            entanglement,
+            reupload=self.reupload,
+        )
+        self.qlayer.load_state_dict(state)
 
     def forward(self, x):
         x = self.pre(x) if not isinstance(self.pre, nn.Identity) else x

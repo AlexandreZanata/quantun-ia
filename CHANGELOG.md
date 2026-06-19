@@ -23,13 +23,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Ship `large_nano_hybrid_higgs`** — publication `qml-ship` + real bundle gate on RTX 4060
 - **exp_052** — Quantum warm-start on HIGGS HybridSandwich; honest negative (−0.42 pp vs e2e)
 - **Phase Q H-Q2** — `exp_052_quantum_warmstart_higgs` on RTX 4060 (rejected; warm-start ≤ e2e)
+- **exp_053** — Dynamic entanglement schedule on breast cancer; honest negative (−0.78 pp vs fixed)
+- **Phase Q H-Q3** — `exp_053_entangle_schedule_bc` on RTX 4060 (rejected)
 - **exp_054** — GV-ALR on frozen hybrid QNN head; 5ep matches 8ep AUC in 59% wall-time
 - **Phase Q H-Q4** — `exp_054_adaptive_hybrid_higgs` on RTX 4060 (accepted)
 
 ### Changed
 
-- `make check-real` — **34/34** real GPU gates on RTX 4060 (incl. exp_052 warm-start)
-- `src/training/quantum_warmstart.py` — classical-first schedule for HybridSandwich (frozen QNN phase)
+- `make check-real` — **35/35** real GPU gates on RTX 4060 (incl. exp_053 entangle schedule)
+- `src/training/entangle_schedule.py` — none→chain→ring curriculum for QuantumNetEntangled
+- `QuantumNetEntangled.set_entanglement()` — topology swap with weight preservation
 - `make ship-hybrid-higgs` — publication ship for frozen MLP + QNN head on HIGGS
 - `batched_trainer.train_model_batched_adaptive` — GV-ALR mini-batch loop for hybrid head training
 - `batched_trainer` — batched validation eval to avoid CUDA OOM on 172K-row HIGGS val
