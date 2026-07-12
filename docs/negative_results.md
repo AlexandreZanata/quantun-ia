@@ -31,6 +31,7 @@ Each entry links to the experiment `results.md` and the statistical test outcome
 | exp_077 | LargeNanoMLP ≥ best conventional + 0.5 pp PR-AUC (GoBug) | **Rejected** | HistGB 0.3276 vs nano 0.3174 (−1.02 pp) |
 | exp_070 | LargeNanoMLP ≥ logistic + 2.0 pp PR-AUC (GoBug) | **Rejected** | logistic 0.3097 vs nano 0.3100 (+0.03 pp) |
 | exp_080 | Fused ACYD champion ≥ best hybrid + 0.5 pp (and C4 −1.0 pp) | **Rejected** | champion 0.6709 vs hybrid 0.6771 (−0.62 pp); parity vs C4 OK (−0.68 pp) |
+| exp_079 | HIGGS→ACYD QNN head transfer beats scratch by ≥ +0.5 pp | **Rejected** | transfer +0.35 pp (below gate); honest-negative hypothesis confirmed |
 
 ---
 
@@ -504,6 +505,23 @@ See: `experiments/exp_068b_compound_stress_acyd/results.md`
 **Interpretation:** Stacking ACYD-validated components on `LargeNanoHybrid` does not beat the best single frozen-hybrid recipe — fusion is not free; keep winners as separate serve/ablation options.
 
 See: `experiments/exp_080_quantum_champion_fusion_acyd/results.md`
+
+---
+
+## exp_079 — Cross-domain quantum head transfer (HIGGS → ACYD / H-Q13)
+
+**Profile:** frozen C4 backbone; scratch vs `exp_037` HIGGS head init + fine-tune; 50,107 train / 5,830 val; RTX 4060
+
+| Condition | Val ROC-AUC |
+|-----------|-------------|
+| Scratch head on C4 | 0.6749 |
+| Transfer head (HIGGS → ACYD) | 0.6785 |
+
+**Gate:** transfer − scratch ≥ +0.5 pp → **failed** (+0.35 pp). Honest-negative hypothesis **confirmed**.
+
+**Interpretation:** Head-only quantum transfer across physics→agro tabular does not deliver a publication-scale win — do not market cross-domain QNN head reuse as a free boost.
+
+See: `experiments/exp_079_quantum_transfer_higgs_to_acyd/results.md`
 
 ---
 

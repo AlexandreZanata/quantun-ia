@@ -496,7 +496,16 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Artifact:** `artifacts/exp_082/large_nano_mlp_acyd_soy_brazil_v1/seed_42/calibration_isotonic.json`  
 **Lesson:** Isotonic improves Agro Risk Lab probability calibration without hurting ranking.
 
-**Next:** Optional exp_081 maize (needs ingest) · exp_079 quantum transfer (exploratory); Zenodo DOI + arXiv (external).
+### EXP 079 — Cross-domain quantum head transfer (HIGGS → ACYD / H-Q13)
+
+**Models:** Frozen C4 backbone + scratch QNN head vs HIGGS-pretrained head (`exp_037`) fine-tuned on ACYD  
+**Dataset:** `acyd_soy_brazil_v1` (50,107 train / 5,830 val)  
+**Claim:** Transfer does **not** beat scratch by ≥ +0.5 pp (honest-negative design)  
+**Verdict:** Honest negative confirmed — scratch 0.6749 vs transfer 0.6785 (+0.35 pp; below gate)  
+**Command:** `QML_DEVICE=cuda python experiments/exp_079_quantum_transfer_higgs_to_acyd/run.py --profile publication --write-results`  
+**Lesson:** Cross-domain QNN head transfer from physics to agro does not clear a +0.5 pp win — transfer hype unsupported.
+
+**Next:** Optional exp_081 maize (needs ingest); Zenodo DOI + arXiv (external).
 
 ## Publication Profiles
 

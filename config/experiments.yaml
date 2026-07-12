@@ -2055,6 +2055,44 @@ experiments:
         min_vs_best_hybrid_pp: 0.5
         save_checkpoints: true
 
+  exp_079_quantum_transfer_higgs_to_acyd:
+    description: "H-Q13 — HIGGS QNN head transfer to frozen ACYD C4 vs scratch head"
+    exp_id: exp_079
+    dataset_id: acyd_soy_brazil_v1
+    checkpoint_exp_id: exp_060
+    checkpoint_model_name: large_nano_mlp
+    source_exp_id: exp_037
+    source_model_name: large_nano_hybrid
+    source_seed: 42
+    seed: 42
+    hidden1: 2048
+    hidden2: 512
+    hidden3: 64
+    dropout: 0.3
+    n_qubits: 4
+    n_layers: 2
+    reupload: true
+    batch_size: 256
+    learning_rate: 0.01
+    weight_decay: 0.0001
+    epochs: 4
+    max_transfer_advantage_pp: 0.5
+    save_checkpoints: false
+    profile_overrides:
+      ci:
+        n_train_rows: 5000
+        n_val_rows: 1000
+        epochs: 3
+        batch_size: 256
+        max_transfer_advantage_pp: 50.0
+      publication:
+        n_train_rows: 0
+        n_val_rows: 0
+        epochs: 8
+        batch_size: 512
+        max_transfer_advantage_pp: 0.5
+        save_checkpoints: true
+
   exp_082_calibration_acyd:
     description: "Isotonic calibration on ACYD C4 LargeNanoMLP — ECE + agro ranking"
     exp_id: exp_082

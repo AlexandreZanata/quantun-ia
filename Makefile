@@ -382,6 +382,12 @@ exp-080:
 exp-080-publication:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_080_quantum_champion_fusion_acyd/run.py --profile publication --write-results
 
+exp-079:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_079_quantum_transfer_higgs_to_acyd/run.py --profile ci
+
+exp-079-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_079_quantum_transfer_higgs_to_acyd/run.py --profile publication --write-results
+
 exp-082:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_082_calibration_acyd/run.py --profile ci
 
