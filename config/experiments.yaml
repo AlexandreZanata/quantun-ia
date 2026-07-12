@@ -2002,6 +2002,59 @@ experiments:
         min_vs_logistic_pp: 1.0
         save_checkpoints: true
 
+  exp_080_quantum_champion_fusion_acyd:
+    description: "ACYD quantum champion fusion — frozen C4 + warm-start + noise + GV-ALR"
+    exp_id: exp_080
+    dataset_id: acyd_soy_brazil_v1
+    checkpoint_exp_id: exp_060
+    checkpoint_model_name: large_nano_mlp
+    seed: 42
+    hidden1: 2048
+    hidden2: 512
+    hidden3: 64
+    dropout: 0.3
+    n_qubits: 4
+    n_layers: 2
+    reupload: true
+    depolarizing_p: 0.03
+    classical_fraction: 0.375
+    total_head_epochs: 8
+    baseline_epochs: 8
+    batch_size: 512
+    learning_rate: 0.01
+    weight_decay: 0.0001
+    adaptive_var_target: 0.015
+    min_vs_classical_pp: -1.0
+    min_vs_best_hybrid_pp: 0.5
+    best_hybrid_ref_auc: 0.6771
+    save_checkpoints: false
+    adaptive_lr:
+      base_lr: 0.01
+      var_target: 0.015
+      warmup_epochs: 1
+      adapt_every: 1
+    profile_overrides:
+      ci:
+        n_train_rows: 5000
+        n_val_rows: 1000
+        total_head_epochs: 4
+        baseline_epochs: 2
+        classical_fraction: 0.5
+        batch_size: 256
+        best_hybrid_ref_auc: null
+        min_vs_classical_pp: -10.0
+        min_vs_best_hybrid_pp: -10.0
+      publication:
+        n_train_rows: 0
+        n_val_rows: 0
+        total_head_epochs: 8
+        classical_fraction: 0.375
+        batch_size: 512
+        best_hybrid_ref_auc: 0.6771
+        min_vs_classical_pp: -1.0
+        min_vs_best_hybrid_pp: 0.5
+        save_checkpoints: true
+
   exp_078_agro_clinical_cases:
     description: "Agro Risk Lab — 8 Brazilian soybean scenarios vs C4 human ranking"
     exp_id: exp_078

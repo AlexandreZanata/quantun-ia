@@ -376,6 +376,12 @@ exp-078:
 exp-078-publication:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_078_agro_clinical_cases/run.py --write-results
 
+exp-080:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_080_quantum_champion_fusion_acyd/run.py --profile ci
+
+exp-080-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_080_quantum_champion_fusion_acyd/run.py --profile publication --write-results
+
 exp-053:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_053_entangle_schedule_bc/run.py
 

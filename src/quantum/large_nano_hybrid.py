@@ -9,6 +9,7 @@ import torch.nn as nn
 
 from src.classical.large_nano_mlp import LargeNanoMLP
 from src.quantum.hybrid_model import make_quantum_layer
+from src.quantum.noise_regularized_qnn import make_noisy_quantum_layer
 from src.training.base_model import TrainableMixin
 
 
@@ -37,12 +38,16 @@ class LargeNanoHybrid(TrainableMixin, nn.Module):
         n_qubits: int = 4,
         n_layers: int = 2,
         reupload: bool = True,
+        depolarizing_p: float = 0.0,
         backbone_device: str | None = None,
     ):
         super().__init__()
         self.input_dim = input_dim
         self.hidden3 = hidden3
         self.n_qubits = n_qubits
+        self.n_layers = n_layers
+        self.reupload = reupload
+        self.depolarizing_p = float(depolarizing_p)
         self._backbone_device = _resolve_backbone_device(backbone_device)
         template = LargeNanoMLP(
             input_dim=input_dim,
@@ -53,11 +58,32 @@ class LargeNanoHybrid(TrainableMixin, nn.Module):
         )
         self.backbone = nn.Sequential(*list(template.net.children())[:-2])
         self.head_proj = nn.Linear(hidden3, n_qubits)
-        self.qlayer = make_quantum_layer(n_qubits, n_layers, reupload=reupload)
+        if self.depolarizing_p > 0.0:
+            self.qlayer = make_noisy_quantum_layer(
+                n_qubits,
+                n_layers,
+                reupload=reupload,
+                depolarizing_p=self.depolarizing_p,
+            )
+        else:
+            self.qlayer = make_quantum_layer(n_qubits, n_layers, reupload=reupload)
         self.post = nn.Sequential(nn.Linear(n_qubits, 1), nn.Sigmoid())
         self._backbone_frozen = False
         if self._backbone_device.type == "cuda":
             self.backbone.to(self._backbone_device)
+
+    def set_qlayer_trainable(self, *, enabled: bool) -> None:
+        """Freeze or unfreeze PennyLane TorchLayer weights (head warm-start)."""
+        for param in self.qlayer.parameters():
+            param.requires_grad = enabled
+
+    def export_noiseless_head_state(self) -> dict[str, torch.Tensor]:
+        """Return head weights compatible with a noiseless LargeNanoHybrid (p=0)."""
+        return {
+            k: v.detach().cpu().clone()
+            for k, v in self.state_dict().items()
+            if not k.startswith("backbone.")
+        }
 
     def freeze_backbone(self) -> None:
         """Stop gradient flow through the million-param classical trunk."""

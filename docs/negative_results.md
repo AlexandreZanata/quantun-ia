@@ -30,6 +30,7 @@ Each entry links to the experiment `results.md` and the statistical test outcome
 | exp_076 | LargeNanoMLP ≥ best conventional + 0.5 pp PR-AUC (NIHR) | **Rejected** | logistic 0.2382 vs nano 0.2393 (+0.12 pp) |
 | exp_077 | LargeNanoMLP ≥ best conventional + 0.5 pp PR-AUC (GoBug) | **Rejected** | HistGB 0.3276 vs nano 0.3174 (−1.02 pp) |
 | exp_070 | LargeNanoMLP ≥ logistic + 2.0 pp PR-AUC (GoBug) | **Rejected** | logistic 0.3097 vs nano 0.3100 (+0.03 pp) |
+| exp_080 | Fused ACYD champion ≥ best hybrid + 0.5 pp (and C4 −1.0 pp) | **Rejected** | champion 0.6709 vs hybrid 0.6771 (−0.62 pp); parity vs C4 OK (−0.68 pp) |
 
 ---
 
@@ -485,6 +486,24 @@ See: `experiments/exp_064_entangle_schedule_acyd/results.md`
 **Interpretation:** Compound stress label is highly imbalanced (5.5% train / 18.4% val positives); logistic dominates the frozen-backbone QNN head — H-Q12 interaction claim rejected.
 
 See: `experiments/exp_068b_compound_stress_acyd/results.md`
+
+---
+
+## exp_080 — Quantum champion fusion on ACYD (C4)
+
+**Profile:** acyd_soy_brazil_v1, frozen C4 + warm-start + noise p=0.03 + GV-ALR, 50,107 train / 5,830 val, RTX 4060
+
+| Condition | Val ROC-AUC |
+|-----------|-------------|
+| Classical C4 (exp_060) | 0.6777 |
+| Best frozen hybrid (exp_065 fixed) | 0.6771 |
+| Champion fusion (noiseless eval) | 0.6709 |
+
+**Gate:** ≥ classical − 1.0 pp **and** ≥ best hybrid + 0.5 pp → **failed** (parity −0.68 pp OK; lift −0.62 pp).
+
+**Interpretation:** Stacking ACYD-validated components on `LargeNanoHybrid` does not beat the best single frozen-hybrid recipe — fusion is not free; keep winners as separate serve/ablation options.
+
+See: `experiments/exp_080_quantum_champion_fusion_acyd/results.md`
 
 ---
 

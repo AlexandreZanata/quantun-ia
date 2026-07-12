@@ -1,13 +1,16 @@
-"""Classical-first warm-start schedule for hybrid sandwich models."""
+"""Classical-first warm-start schedule for hybrid sandwich / LargeNanoHybrid models."""
 
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Protocol
 
 import torch
 
 from src.quantum.hybrid_model import HybridSandwich
-from src.training.batched_trainer import train_model_batched
+from src.quantum.large_nano_hybrid import LargeNanoHybrid
+from src.training.adaptive_lr import AdaptiveLRConfig
+from src.training.batched_trainer import train_model_batched, train_model_batched_adaptive
 
 
 @dataclass(frozen=True)
@@ -24,6 +27,10 @@ class WarmStartConfig:
             raise ValueError("total_epochs must be >= 2 for warm-start")
 
 
+class _HasQlayer(Protocol):
+    qlayer: torch.nn.Module
+
+
 def split_warmstart_epochs(total_epochs: int, classical_fraction: float) -> tuple[int, int]:
     """Return (classical_epochs, quantum_epochs) that sum to total_epochs."""
     WarmStartConfig(classical_fraction=classical_fraction, total_epochs=total_epochs)
@@ -34,7 +41,7 @@ def split_warmstart_epochs(total_epochs: int, classical_fraction: float) -> tupl
     return classical_epochs, quantum_epochs
 
 
-def _set_qlayer_trainable(model: HybridSandwich, *, enabled: bool) -> None:
+def _set_qlayer_trainable(model: _HasQlayer, *, enabled: bool) -> None:
     for param in model.qlayer.parameters():
         param.requires_grad = enabled
 
@@ -102,6 +109,73 @@ def train_hybrid_warmstart(
         f"{model_name}_quantum",
         epochs=quantum_epochs,
         **train_kwargs,
+    )
+
+    return classical_epochs, quantum_epochs
+
+
+def train_large_nano_hybrid_warmstart_adaptive(
+    model: LargeNanoHybrid,
+    x_train: torch.Tensor,
+    y_train: torch.Tensor,
+    exp_id: str,
+    model_name: str,
+    *,
+    config: WarmStartConfig,
+    adaptive_config: AdaptiveLRConfig,
+    lr: float = 0.01,
+    batch_size: int = 512,
+    weight_decay: float = 1e-4,
+    x_val: torch.Tensor | None = None,
+    y_val: torch.Tensor | None = None,
+    seed: int | None = None,
+    profile: str | None = None,
+    save_checkpoints: bool = False,
+    device: str | None = None,
+) -> tuple[int, int]:
+    """
+    Head warm-start on LargeNanoHybrid: freeze QNN, train proj/post, then GV-ALR.
+
+    Backbone must already be frozen. Phase 1 uses fixed Adam; phase 2 uses
+    train_model_batched_adaptive with QNN trainable.
+    """
+    classical_epochs, quantum_epochs = split_warmstart_epochs(
+        config.total_epochs,
+        config.classical_fraction,
+    )
+    base_kwargs = dict(
+        batch_size=batch_size,
+        weight_decay=weight_decay,
+        X_val=x_val,
+        y_val=y_val,
+        seed=seed,
+        profile=profile,
+        save_checkpoints=save_checkpoints,
+        device=device,
+    )
+
+    model.set_qlayer_trainable(enabled=False)
+    train_model_batched(
+        model,
+        x_train,
+        y_train,
+        exp_id,
+        f"{model_name}_classical",
+        epochs=classical_epochs,
+        lr=lr,
+        **base_kwargs,
+    )
+
+    model.set_qlayer_trainable(enabled=True)
+    train_model_batched_adaptive(
+        model,
+        x_train,
+        y_train,
+        exp_id,
+        f"{model_name}_quantum",
+        epochs=quantum_epochs,
+        adaptive_config=adaptive_config,
+        **base_kwargs,
     )
 
     return classical_epochs, quantum_epochs

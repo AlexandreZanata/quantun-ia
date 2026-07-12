@@ -43,7 +43,7 @@ reported negative results.
 | exp_015 | Gradient-variance adaptive LR | [method_adaptive_lr.md](method_adaptive_lr.md) |
 | exp_016 | Hybrid NAS | `experiments/exp_016_hybrid_nas/` |
 | exp_018 | Feature fusion | `experiments/exp_018_feature_fusion/` |
-| exp_080 | Quantum champion fusion | Gated — requires ≥2 Q wins same domain |
+| exp_080 | Quantum champion fusion | Closed ❌ — honest negative (fusion −0.62 pp vs best hybrid) |
 
 ---
 

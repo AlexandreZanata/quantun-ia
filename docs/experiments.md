@@ -477,7 +477,16 @@ vim experiments/exp_003_entanglement_effect/results.md
 | exp_066 | Noise reg | Accepted | +0.99 pp vs noiseless |
 | exp_067 | Re-upload ladder | Accepted | 2/3 rung wins |
 
-**Next:** exp_080 quantum champion fusion is now **eligible** (≥2 Q wins on ACYD: warm-start, noise reg, re-upload, GV-ALR); optional exp_081/082 agro extensions.
+### EXP 080 — Quantum champion fusion on ACYD (C4)
+
+**Models:** Frozen C4 + fused recipe (head warm-start + depolarizing p=0.03 train-only + GV-ALR) vs C4 classical and best frozen hybrid (exp_065 fixed LR 0.6771)  
+**Dataset:** `acyd_soy_brazil_v1` (50,107 train / 5,830 val)  
+**Claim:** Champion ≥ classical − 1.0 pp **and** ≥ best hybrid + 0.5 pp  
+**Verdict:** Honest negative — classical 0.6777 vs champion 0.6709 (−0.68 pp parity OK); vs best hybrid −0.62 pp (lift gate failed)  
+**Command:** `QML_DEVICE=cuda python experiments/exp_080_quantum_champion_fusion_acyd/run.py --profile publication --write-results`  
+**Lesson:** Combining ACYD winners on the serve-compatible `LargeNanoHybrid` path does not beat the best single frozen-hybrid recipe; keep components as separate ablations.
+
+**Next:** Optional exp_081 maize / exp_082 calibration; Zenodo DOI + arXiv (external).
 
 ## Publication Profiles
 

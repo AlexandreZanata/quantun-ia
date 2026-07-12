@@ -43,3 +43,50 @@ def test_to_keeps_backbone_on_cuda_when_available(monkeypatch):
     )
     model.to(torch.device("cpu"))
     assert next(model.backbone.parameters()).device.type == "cuda"
+
+
+def test_large_nano_hybrid_depolarizing_forward_and_export():
+    noisy = LargeNanoHybrid(
+        input_dim=8,
+        hidden1=16,
+        hidden2=8,
+        hidden3=4,
+        n_qubits=2,
+        n_layers=1,
+        depolarizing_p=0.03,
+        reupload=True,
+    )
+    x = torch.randn(3, 8)
+    out = noisy(x)
+    assert out.shape == (3,)
+    head = noisy.export_noiseless_head_state()
+    assert any(k.startswith("qlayer.") for k in head)
+    noiseless = LargeNanoHybrid(
+        input_dim=8,
+        hidden1=16,
+        hidden2=8,
+        hidden3=4,
+        n_qubits=2,
+        n_layers=1,
+        depolarizing_p=0.0,
+        reupload=True,
+    )
+    noiseless.load_state_dict(head, strict=False)
+    out2 = noiseless(x)
+    assert out2.shape == (3,)
+
+
+def test_set_qlayer_trainable_toggles_requires_grad():
+    model = LargeNanoHybrid(
+        input_dim=8,
+        hidden1=16,
+        hidden2=8,
+        hidden3=4,
+        n_qubits=2,
+        n_layers=1,
+    )
+    model.set_qlayer_trainable(enabled=False)
+    assert all(not p.requires_grad for p in model.qlayer.parameters())
+    model.set_qlayer_trainable(enabled=True)
+    assert any(p.requires_grad for p in model.qlayer.parameters())
+

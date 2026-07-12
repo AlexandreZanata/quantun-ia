@@ -62,3 +62,37 @@ def test_train_hybrid_warmstart_runs_two_phases(tmp_path, monkeypatch):
     )
     assert classical + quantum == 4
     assert model._quantum_enabled is True
+
+
+def test_train_large_nano_hybrid_warmstart_adaptive_runs(tmp_path, monkeypatch):
+    monkeypatch.setattr("src.training.metrics.LOGS_PATH", tmp_path / "experiments.jsonl")
+    from src.quantum.large_nano_hybrid import LargeNanoHybrid
+    from src.training.adaptive_lr import AdaptiveLRConfig
+    from src.training.quantum_warmstart import train_large_nano_hybrid_warmstart_adaptive
+
+    model = LargeNanoHybrid(
+        input_dim=8,
+        hidden1=16,
+        hidden2=8,
+        hidden3=4,
+        n_qubits=2,
+        n_layers=1,
+        depolarizing_p=0.0,
+    )
+    model.freeze_backbone()
+    x = torch.randn(32, 8)
+    y = torch.randint(0, 2, (32,)).float()
+    classical, quantum = train_large_nano_hybrid_warmstart_adaptive(
+        model,
+        x,
+        y,
+        "exp_test",
+        "champion_warmstart",
+        config=WarmStartConfig(classical_fraction=0.5, total_epochs=4),
+        adaptive_config=AdaptiveLRConfig(base_lr=0.05, warmup_epochs=0),
+        lr=0.05,
+        batch_size=16,
+        seed=42,
+    )
+    assert classical + quantum == 4
+    assert any(p.requires_grad for p in model.qlayer.parameters())
