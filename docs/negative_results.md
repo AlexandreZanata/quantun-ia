@@ -333,6 +333,25 @@ See: `experiments/exp_083_conventional_acyd_maize_baselines/results.md`
 
 ---
 
+## exp_084 — Residual / FT-lite nano vs HistGB on ACYD maize (H-N1)
+
+**Profile:** acyd_maize_brazil_v1, 151,956 train / 13,566 val, seed 42, RTX 4060
+
+| Model | Val ROC-AUC | Params | Train (s) |
+|-------|-------------|--------|-----------|
+| HistGradientBoosting (sklearn) | **0.8178** | — | — |
+| ResidualNanoMLP | 0.8086 | 840,321 | 11.1 |
+| NarrowDeepNano | 0.8058 | 577,665 | 9.1 |
+| FTLiteNano | 0.5602 | 17,281 | 36.0 |
+
+**Gate:** best nano ≥ HistGB + 0.5 pp → **failed** (−0.92 pp).
+
+**Interpretation:** Residual and narrow-deep nanos match Cycle-1 LargeNanoMLP (~0.81) but do not close the HistGB gap. Tiny FT-lite underfits badly at d_token=32. Architecture search alone is insufficient — route Phase A reject to HistGB→nano distillation (exp_092).
+
+See: `experiments/exp_084_residual_ft_nano_maize/results.md`
+
+---
+
 ## exp_069 — LargeNanoMLP on NIHR synthetic CV (C2 anchor)
 
 **Profile:** nihr_cv_synthetic_v1, 70K train / 15K val, seed 42, RTX 4060

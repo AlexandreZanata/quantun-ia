@@ -523,7 +523,16 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `QML_DEVICE=cuda python experiments/exp_083_conventional_acyd_maize_baselines/run.py --profile publication --write-results`  
 **Lesson:** Mirrors soybean exp_061 — boosting beats nano on agro tabular while nano still dominates logistic.
 
-**Next:** Zenodo DOI + arXiv (external).
+### EXP 084 — Residual / NarrowDeep / FT-lite nano vs HistGB (Phase A H-N1)
+
+**Models:** ResidualNanoMLP, NarrowDeepNano, FTLiteNano vs HistGB  
+**Dataset:** `acyd_maize_brazil_v1` (151,956 train / 13,566 val)  
+**Claim:** Best nano ≥ HistGB + 0.5 pp ROC-AUC  
+**Verdict:** Honest negative — HistGB 0.8178 vs ResidualNano 0.8086 (−0.92 pp); FT-lite collapsed (0.5602)  
+**Command:** `QML_DEVICE=cuda python experiments/exp_084_residual_ft_nano_maize/run.py --profile publication --write-results`  
+**Lesson:** Architecture swaps alone do not close the agro boosting gap — prefer HistGB→nano distillation (exp_092).
+
+**Next:** Phase D distillation (exp_092) or sample-efficiency (exp_085).
 
 ## Publication Profiles
 

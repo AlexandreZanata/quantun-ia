@@ -1566,6 +1566,46 @@ experiments:
         histgb_max_iter: 100
         xgboost_n_estimators: 50
 
+  exp_084_residual_ft_nano_maize:
+    description: "ResidualNano / NarrowDeepNano / FT-lite vs HistGB on ACYD maize (Phase A H-N1)"
+    exp_id: exp_084
+    dataset_id: acyd_maize_brazil_v1
+    seed: 42
+    learning_rate: 0.001
+    weight_decay: 0.0001
+    batch_size: 2048
+    dropout: 0.2
+    residual_hidden: 512
+    residual_n_blocks: 3
+    residual_bottleneck: 64
+    narrow_width: 512
+    narrow_depth: 3
+    narrow_bottleneck: 64
+    ft_d_token: 32
+    ft_n_heads: 4
+    ft_n_layers: 2
+    ft_dropout: 0.1
+    histgb_max_iter: 100
+    min_auc_advantage_pp: 0.5
+    tie_tolerance_pp: 0.5
+    save_checkpoints: false
+    profile_overrides:
+      ci:
+        n_train_rows: 5000
+        n_val_rows: 1000
+        epochs: 3
+        batch_size: 1024
+        histgb_max_iter: 50
+        min_auc_advantage_pp: -100.0
+      publication:
+        n_train_rows: 0
+        n_val_rows: 0
+        epochs: 12
+        batch_size: 2048
+        histgb_max_iter: 100
+        min_auc_advantage_pp: 0.5
+        save_checkpoints: true
+
   exp_062_hybrid_nano_acyd_soy:
     description: "Frozen LargeNanoMLP (ACYD C4) + 4-qubit hybrid head — val ROC-AUC vs classical head"
     exp_id: exp_062
