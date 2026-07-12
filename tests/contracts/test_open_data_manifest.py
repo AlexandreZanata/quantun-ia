@@ -141,6 +141,24 @@ def test_acyd_build_script_registered_in_makefile():
     assert "data-open-acyd-maize" in makefile
 
 
+def test_cybench_build_script_registered_in_makefile():
+    makefile = (ROOT / "Makefile").read_text(encoding="utf-8")
+    assert "data-open-cybench-maize" in makefile
+
+
+def test_manifest_cybench_maize_us_v1_metadata():
+    manifest = _load_manifest()
+    ds = _dataset_by_id(manifest, "cybench_maize_us_v1")
+    assert ds["n_features"] == 26
+    assert ds["license"] == "EUPL-1.2"
+    assert ds["build_script"] == "scripts/build_open_cybench_maize.py"
+    assert Path(ROOT / ds["build_script"]).is_file()
+    assert ds["ready"] is True
+    assert ds["row_counts"]["train"] == 7170
+    assert ds["row_counts"]["val"] == 2185
+    assert ds["row_counts"]["test"] == 1952
+
+
 def test_manifest_acyd_soy_brazil_v1_metadata():
     manifest = _load_manifest()
     acyd = _dataset_by_id(manifest, "acyd_soy_brazil_v1")

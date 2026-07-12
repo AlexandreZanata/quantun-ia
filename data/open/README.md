@@ -67,7 +67,24 @@ Soy and maize share the same **37** climate/soil features and temporal cutoffs
 
 Loader: `src/data/multicrop_acyd.py`.
 
+## CY-Bench maize sample (Phase C / exp_095)
+
+External panel from AgML **CY-Bench** (EUPL-1.2). Full Zenodo archive is large
+(~6 GB); this lab uses the official `sample_data` US designed-feature tables.
+
+```bash
+make data-open-cybench-maize
+make data-open-verify DATASET=cybench_maize_us_v1
+```
+
+- Dataset ID: `cybench_maize_us_v1`
+- Features: AgML designed climate/RS/soil columns (excludes `adm_id`, `year`,
+  `yield`, and yield-lag / `yield_trend` columns to avoid label leakage)
+- Label: low-yield binary (yield ≤ train-period median, years ≤ 2011)
+- Splits: train ≤ 2011 · val 2012–2015 · test ≥ 2016
+
 ## Citations
 
 - **HIGGS:** Baldi, P., Sadowski, P., Whiteson, D. (2014). Searching for Exotic Particles in High-Energy Physics with Deep Learning. *Nature Communications*. UCI ML Repository.
 - **Synthea:** Walonoski, J. et al. Synthea: An approach, method, and software mechanism for generating synthetic patients and the standard medical data of a comprehensive lifetime journey. *JAMIA* (2018).
+- **CY-Bench:** Kallenberg et al. (2026). CY-Bench: a comprehensive benchmark dataset for sub-national crop yield forecasting. *ESSD* / Zenodo DOI [10.5281/zenodo.11502142](https://doi.org/10.5281/zenodo.11502142). Sample tables via [WUR-AI/sample_data](https://github.com/WUR-AI/sample_data).

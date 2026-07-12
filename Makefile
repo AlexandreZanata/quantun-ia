@@ -225,6 +225,12 @@ exp-094:
 exp-094-publication:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_094_hard_temporal_drift/run.py --profile publication --write-results
 
+exp-095:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_095_cybench_maize_slice/run.py --profile ci
+
+exp-095-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_095_cybench_maize_slice/run.py --profile publication --write-results
+
 exp-062:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_062_hybrid_nano_acyd_soy/run.py --profile ci
 
@@ -513,6 +519,12 @@ data-open-acyd-maize-download:
 
 data-open-acyd-maize: data-open-acyd-maize-download
 	MLFLOW_DISABLE=1 $(PYTHON) scripts/build_open_acyd_maize.py
+
+data-open-cybench-sample:
+	MLFLOW_DISABLE=1 $(PYTHON) scripts/download_cybench_sample.py
+
+data-open-cybench-maize: data-open-cybench-sample
+	MLFLOW_DISABLE=1 $(PYTHON) scripts/build_open_cybench_maize.py
 
 data-open-acyd-dvc:
 	@if $(PYTHON) -m dvc --version >/dev/null 2>&1; then \

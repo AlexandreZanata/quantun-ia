@@ -428,6 +428,23 @@ See: `experiments/exp_088_shadow_features_nano_maize/results.md`
 
 ---
 
+## exp_095 — CY-Bench maize US sample ResidualNano vs HistGB (C-T5)
+
+**Profile:** `cybench_maize_us_v1` (AgML sample US, 26 climate/RS/soil features; yield lags excluded), seed 42, RTX 4060
+
+| Model | Val ROC-AUC (2012–2015) |
+|-------|-------------------------|
+| HistGB | **0.7855** |
+| ResidualNanoMLP | 0.7474 |
+
+**Gate:** nano ≥ HistGB − 1.0 pp → **failed** (−3.80 pp).
+
+**Interpretation:** On the official AgML CY-Bench US sample (binary low-yield proxy), HistGB leads ResidualNano by 3.8 pp. External panel does not transfer the ACYD hard-drift near-parity story. Keep distill ResidualNano for ACYD maize serve; do not claim CY-Bench binary parity.
+
+See: `experiments/exp_095_cybench_maize_slice/results.md`
+
+---
+
 ## exp_090 — Multi-crop joint ResidualNano (soy + maize)
 
 **Profile:** soy 50,107 + maize 151,956 train / maize val 13,566, seed 42, RTX 4060

@@ -600,6 +600,15 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `QML_DEVICE=cuda python experiments/exp_094_hard_temporal_drift/run.py --profile publication --write-results`  
 **Lesson:** Under stronger year shift, ResidualNano still tracks HistGB within 1 pp; keep distill serve for standard split.
 
+### EXP 095 — CY-Bench maize US sample (ResidualNano vs HistGB)
+
+**Models:** HistGB · ResidualNanoMLP  
+**Dataset:** `cybench_maize_us_v1` (AgML sample US designed features, EUPL-1.2; yield lags excluded)  
+**Claim:** nano ≥ HistGB − 1.0 pp on temporal val (2012–2015)  
+**Verdict:** Honest negative — nano 0.7474 vs HistGB 0.7855 (−3.80 pp)  
+**Command:** `QML_DEVICE=cuda python experiments/exp_095_cybench_maize_slice/run.py --profile publication --write-results`  
+**Lesson:** External CY-Bench climate/RS features favor HistGB over ResidualNano under binary low-yield; keep ACYD distill as maize serve default.
+
 ### Phase F — Paper cycle 2 tables + arXiv bundle
 
 **Artifacts:** `paper/tables/boosting_frontier.tex`, `sample_efficiency.tex`, `quantum_v2.tex`, `multicrop.tex`, `hard_drift.tex`  

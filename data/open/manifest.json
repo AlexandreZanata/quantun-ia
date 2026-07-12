@@ -176,6 +176,34 @@
         "test": "284b240e52fd6d4db51002fad9e348d829e2b27d65d403d368cd674a762338bc",
         "stats": "ee4cf0ff79d4d0d951b8abc8081da2a6b61c5d79f7df6cff7c61f5edc092ebc9"
       }
+    },
+    {
+      "id": "cybench_maize_us_v1",
+      "path": "cybench_maize/processed/v1",
+      "description": "CY-Bench maize US sample slice (AgML) \u2014 designed features, low-yield binary label, temporal splits",
+      "license": "EUPL-1.2",
+      "source_url": "https://github.com/WUR-AI/sample_data (AgML CY-Bench sample; Zenodo DOI 10.5281/zenodo.11502142)",
+      "ready": true,
+      "row_counts": {
+        "total": 11307,
+        "train": 7170,
+        "val": 2185,
+        "test": 1952
+      },
+      "n_features": 26,
+      "files": {
+        "train": "train.parquet",
+        "val": "val.parquet",
+        "test": "test.parquet",
+        "stats": "stats.json"
+      },
+      "checksums": {
+        "train": "8964bbdb9da7de922717041e938a61317af724e0e60a4b925cc9fd4d9a9e4021",
+        "val": "6e723b7e1605a17184f0674a90dbb3960a763f0aa5fdb635e1185c43cc8d6801",
+        "test": "b4629a4cfab2963e5421e4bc3a858e5e646640637e32be0c16582915c3a08fa5",
+        "stats": "9cb00059ffe462bcd2db6bf8856201c5a2d9c530e34239602222e32ad719a1cc"
+      },
+      "build_script": "scripts/build_open_cybench_maize.py"
     }
   ]
 }
