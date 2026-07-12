@@ -31,6 +31,7 @@ data/open/acyd_soy_brazil/processed/v1/
 data/open/acyd_maize_brazil/raw/
 data/open/acyd_maize_brazil/processed/v1/
 data/open/acyd_maize_brazil/processed/hard_drift_v1/
+data/open/acyd_maize_brazil/processed/continual_v1/
 data/open/cybench_maize/raw/
 data/open/cybench_maize/processed/v1/
 data/*.db

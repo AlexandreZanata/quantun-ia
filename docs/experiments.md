@@ -605,6 +605,15 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `QML_DEVICE=cuda python experiments/exp_097_spei_curriculum_agro/run.py --profile publication --write-results`  
 **Lesson:** Drought-severity easy→hard batch order helps ResidualNano vs matched random stages; still below HistGB 0.8203.
 
+### EXP 098 — Continual crop-year fine-tune (D-T4)
+
+**Models:** ResidualNanoMLP joint · ResidualNanoMLP year-by-year continual · HistGB honesty  
+**Dataset:** ACYD maize with year column (`processed/continual_v1`, 37 train years ≤ 2018 / val 2019–2021)  
+**Claim:** Continual ≥ joint − 1.0 pp  
+**Verdict:** Honest negative — continual 0.7713 vs joint 0.8005 (**−2.91 pp**); backward mean 0.7078  
+**Command:** `QML_DEVICE=cuda python experiments/exp_098_continual_crop_year/run.py --profile publication --write-results`  
+**Lesson:** Naive year-by-year fine-tune forgets; prefer joint ResidualNano (or distill) over sequential crop-year training without replay/EWC.
+
 ### EXP 088 — Pauli/shadow features → NarrowDeepNano (H-Q2.3)
 
 **Models:** Logistic · NarrowDeepNano (raw 37-d) · NarrowDeepNano (64-d Pauli features) · HistGB honesty  

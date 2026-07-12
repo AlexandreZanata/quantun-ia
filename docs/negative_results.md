@@ -447,6 +447,25 @@ See: `experiments/exp_093_pqk_ridge_head/results.md`
 
 ---
 
+## exp_098 — Continual crop-year fine-tune vs joint ResidualNano (D-T4)
+
+**Profile:** ACYD maize continual_v1, 151,956 train / 13,566 val, 37 years ≤ 2018, seed 42, RTX 4060
+
+| Arm | Val ROC-AUC |
+|-----|-------------|
+| Joint ResidualNano (74 epochs) | **0.8005** |
+| Continual year-by-year (2 ep/year) | 0.7713 |
+| Backward mean (prior years) | 0.7078 |
+| HistGB (honesty) | 0.8203 |
+
+**Gate:** continual ≥ joint − 1.0 pp → **failed** (−2.91 pp).
+
+**Interpretation:** Naive chronological fine-tune loses nearly 3 pp vs joint training and shows clear forgetting on prior years. Prefer joint or distill ResidualNano; do not ship sequential crop-year fine-tune without replay/EWC.
+
+See: `experiments/exp_098_continual_crop_year/results.md`
+
+---
+
 ## exp_088 — Pauli/shadow features → NarrowDeepNano on maize (H-Q2.3)
 
 **Profile:** acyd_maize_brazil_v1, 20k train / 13,566 val, seed 42, RTX 4060
