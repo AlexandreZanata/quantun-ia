@@ -20,6 +20,7 @@ Each entry links to the experiment `results.md` and the statistical test outcome
 | exp_052 | Warm-start hybrid beats e2e by ≥0.5 pp AUC on HIGGS | **Rejected** | Δ = −0.42 pp (3 seeds); Wilcoxon p = 0.5 |
 | exp_053 | Dynamic entanglement schedule beats fixed by ≥1.0 pp | **Rejected** | Δ = −0.78 pp vs `none` (3 seeds); Wilcoxon p = 0.75 |
 | exp_074 | Dynamic entanglement schedule beats fixed by ≥0.5 pp PR-AUC (NIHR) | **Rejected** | Δ = −3.66 pp vs `ring` (3 seeds); Wilcoxon p = 0.25 |
+| exp_064 | Dynamic entanglement schedule beats fixed by ≥0.5 pp ROC-AUC (ACYD) | **Rejected** | Δ = −1.08 pp vs `none` (3 seeds); Wilcoxon p = 0.75 |
 | exp_055 | Depolarizing noise beats noiseless hybrid by ≥0.5 pp PR-AUC | **Rejected** | Δ = +0.50 pp on temporal test (inconclusive vs gate) |
 | exp_056 | Re-upload depth curriculum wins ≥2/3 ladder rungs | **Rejected** | 1/3 wins (PCA-MNIST only); BC/HIGGS losses |
 | exp_057 | Parameter-shift within 1 pp + ≥2× lower grad variance | **Rejected** | Δ holdout = 20.99 pp; var ratio = 0.08 (param-shift higher) |
@@ -450,6 +451,23 @@ See: `experiments/exp_073_quantum_warmstart_gobug/results.md`
 **Interpretation:** Growing entanglement underperforms fixed ring on NIHR — confirms exp_053 honest negative cross-domain.
 
 See: `experiments/exp_074_entangle_schedule_nihr/results.md`
+
+---
+
+## exp_064 — Dynamic entanglement schedule on ACYD (C4 / H-Q3)
+
+**Profile:** acyd_soy_brazil_v1, 10,000 train / 3,000 val, seeds 42/123/456, RTX 4060
+
+| Condition | Mean val ROC-AUC |
+|-----------|------------------|
+| Dynamic schedule | 0.6314 |
+| Best fixed (none) | 0.6422 |
+
+**Gate:** schedule ≥ best fixed + 0.5 pp → **failed** (−1.08 pp; Wilcoxon p=0.75).
+
+**Interpretation:** Growing entanglement underperforms fixed `none` on ACYD — confirms exp_053/exp_074 honest negative on agro-climate tabular.
+
+See: `experiments/exp_064_entangle_schedule_acyd/results.md`
 
 ---
 

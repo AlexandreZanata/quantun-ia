@@ -9,7 +9,7 @@ import torch
 from src.quantum.qnn_entangled import QuantumNetEntangled
 from src.training.trainer import evaluate, predict, train_model
 
-_HOLDOUT_METRICS = frozenset({"accuracy", "pr_auc"})
+_HOLDOUT_METRICS = frozenset({"accuracy", "pr_auc", "roc_auc"})
 
 
 def holdout_score(
@@ -19,7 +19,7 @@ def holdout_score(
     *,
     metric: str = "accuracy",
 ) -> float:
-    """Return holdout accuracy or PR-AUC for a trained entangled QNN."""
+    """Return holdout accuracy, PR-AUC, or ROC-AUC for a trained entangled QNN."""
     if metric not in _HOLDOUT_METRICS:
         raise ValueError(f"metric must be one of {sorted(_HOLDOUT_METRICS)}")
     if metric == "pr_auc":
@@ -31,6 +31,10 @@ def holdout_score(
         labels = y_holdout.detach().cpu().numpy()
         score = pr_auc(labels, probs)
         return float(score) if score is not None else 0.5
+    if metric == "roc_auc":
+        from src.training.batched_trainer import evaluate_with_auc
+
+        return float(evaluate_with_auc(model, x_holdout, y_holdout)["roc_auc"])
     return float(evaluate(model, x_holdout, y_holdout)["accuracy"])
 
 DEFAULT_ENTANGLEMENT_LADDER: tuple[str, ...] = ("none", "chain", "ring")

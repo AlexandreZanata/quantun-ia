@@ -1550,6 +1550,211 @@ experiments:
         min_vs_classical_pp: -1.0
         save_checkpoints: true
 
+  exp_063_quantum_warmstart_acyd:
+    description: "Quantum warm-start vs e2e HybridSandwich on ACYD — val ROC-AUC (C4 / H-Q9)"
+    exp_id: exp_063
+    dataset_id: acyd_soy_brazil_v1
+    seed: 42
+    seeds: [42]
+    n_qubits: 4
+    n_layers: 2
+    reupload: true
+    batch_size: 512
+    learning_rate: 0.01
+    weight_decay: 0.0001
+    epochs: 6
+    classical_fraction: 0.7
+    min_vs_e2e_pp: 0.5
+    save_checkpoints: false
+    profile_overrides:
+      ci:
+        n_train_rows: 5000
+        n_val_rows: 1000
+        epochs: 4
+        batch_size: 256
+        seeds: [42]
+        min_vs_e2e_pp: -10.0
+      publication:
+        n_train_rows: 0
+        n_val_rows: 0
+        epochs: 10
+        batch_size: 512
+        seeds: [42, 123, 456]
+        min_vs_e2e_pp: 0.5
+        save_checkpoints: true
+
+  exp_064_entangle_schedule_acyd:
+    description: "Dynamic entanglement schedule vs fixed on ACYD — val ROC-AUC (C4)"
+    exp_id: exp_064
+    dataset_id: acyd_soy_brazil_v1
+    holdout_metric: roc_auc
+    reupload: true
+    n_qubits: 4
+    n_layers: 2
+    learning_rate: 0.02
+    n_stages: 5
+    epochs_per_stage: 10
+    entanglement_ladder: [none, chain, ring]
+    min_advantage_pp: 0.5
+    save_checkpoints: false
+    profile_overrides:
+      ci:
+        n_train_rows: 2000
+        n_val_rows: 1000
+        seeds: [42]
+        n_stages: 2
+        epochs_per_stage: 3
+        min_advantage_pp: -10.0
+      publication:
+        n_train_rows: 10000
+        n_val_rows: 3000
+        seeds: [42, 123, 456]
+        n_stages: 5
+        epochs_per_stage: 10
+        min_advantage_pp: 0.5
+        save_checkpoints: true
+
+  exp_065_gv_alr_hybrid_acyd:
+    description: "GV-ALR vs fixed LR on frozen hybrid QNN head ACYD — ROC-AUC efficiency (C4 / H-Q4)"
+    exp_id: exp_065
+    dataset_id: acyd_soy_brazil_v1
+    checkpoint_exp_id: exp_060
+    checkpoint_model_name: large_nano_mlp
+    seed: 42
+    hidden1: 2048
+    hidden2: 512
+    hidden3: 64
+    dropout: 0.3
+    n_qubits: 4
+    n_layers: 2
+    reupload: true
+    batch_size: 256
+    learning_rate: 0.01
+    weight_decay: 0.0001
+    adaptive_var_target: 0.015
+    fixed_epochs: 8
+    adaptive_epochs: 5
+    max_epoch_fraction: 0.7
+    max_auc_delta_pp: 0.3
+    save_checkpoints: false
+    adaptive_lr:
+      base_lr: 0.01
+      var_target: 0.015
+      warmup_epochs: 1
+      adapt_every: 1
+    profile_overrides:
+      ci:
+        n_train_rows: 5000
+        n_val_rows: 1000
+        fixed_epochs: 4
+        adaptive_epochs: 2
+        max_auc_delta_pp: 0.5
+      publication:
+        n_train_rows: 0
+        n_val_rows: 0
+        fixed_epochs: 8
+        adaptive_epochs: 5
+        batch_size: 512
+        max_auc_delta_pp: 0.3
+        save_checkpoints: true
+
+  exp_066_noise_reg_acyd:
+    description: "Depolarizing noise vs noiseless HybridSandwich on ACYD temporal test ROC-AUC"
+    exp_id: exp_066
+    dataset_id: acyd_soy_brazil_v1
+    seed: 42
+    n_qubits: 4
+    n_layers: 2
+    reupload: true
+    depolarizing_p: 0.03
+    batch_size: 512
+    learning_rate: 0.01
+    weight_decay: 0.0001
+    epochs: 8
+    min_auc_advantage_pp: 0.5
+    save_checkpoints: false
+    profile_overrides:
+      ci:
+        n_train_rows: 5000
+        n_val_rows: 1000
+        epochs: 4
+        batch_size: 256
+        min_auc_advantage_pp: -10.0
+      publication:
+        n_train_rows: 0
+        n_val_rows: 0
+        epochs: 10
+        batch_size: 512
+        min_auc_advantage_pp: 0.5
+        save_checkpoints: true
+
+  exp_067_reupload_ladder_acyd:
+    description: "Re-upload depth curriculum on ACYD climate feature-block ladder (H-Q11)"
+    exp_id: exp_067
+    dataset_id: acyd_soy_brazil_v1
+    seed: 42
+    n_qubits: 4
+    max_layers: 3
+    layer_ladder: [1, 2, 3]
+    curriculum_stages: 3
+    epochs_per_stage: 8
+    learning_rate: 0.02
+    batch_size: 512
+    weight_decay: 0.0001
+    min_wins: 2
+    min_rung_advantage_pp: 0.3
+    save_checkpoints: false
+    rungs:
+      - id: temp_only
+        feature_slice: [13, 21]
+        metric: roc_auc
+        use_batched: true
+        n_train_rows: 20000
+        n_val_rows: 3000
+      - id: temp_precip
+        feature_slice: [9, 21]
+        metric: roc_auc
+        use_batched: true
+        n_train_rows: 20000
+        n_val_rows: 3000
+      - id: full_37
+        feature_slice: [0, 37]
+        metric: roc_auc
+        use_batched: true
+        n_train_rows: 20000
+        n_val_rows: 3000
+    profile_overrides:
+      ci:
+        curriculum_stages: 3
+        epochs_per_stage: 3
+        min_wins: 0
+        min_rung_advantage_pp: -10.0
+        rungs:
+          - id: temp_only
+            feature_slice: [13, 21]
+            metric: roc_auc
+            use_batched: true
+            n_train_rows: 2000
+            n_val_rows: 800
+          - id: temp_precip
+            feature_slice: [9, 21]
+            metric: roc_auc
+            use_batched: true
+            n_train_rows: 2000
+            n_val_rows: 800
+          - id: full_37
+            feature_slice: [0, 37]
+            metric: roc_auc
+            use_batched: true
+            n_train_rows: 2000
+            n_val_rows: 800
+      publication:
+        curriculum_stages: 3
+        epochs_per_stage: 8
+        min_wins: 2
+        min_rung_advantage_pp: 0.3
+        save_checkpoints: true
+
   exp_068_nano_grand_comparison:
     description: "C1–C4 grand comparison synthesis — classical vs quantum recipes (curated metrics)"
     exp_id: exp_068

@@ -420,7 +420,64 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `QML_DEVICE=cuda python experiments/exp_078_agro_clinical_cases/run.py --write-results`  
 **Lesson:** C4 ranks Brazilian drought/heat scenarios in agronomically sensible order for human-facing Agro Risk Lab.
 
-**Next:** Gated exp_080 quantum champion fusion (only if ≥2 Q wins on same domain); optional exp_081/082 agro extensions.
+### EXP 063 — Quantum warm-start on ACYD hybrid (C4 / H-Q9)
+
+**Models:** `HybridSandwich` end-to-end vs classical-first warm-start (70/30 epoch split)  
+**Dataset:** `acyd_soy_brazil_v1` (50,107 train / 5,830 val, 3 seeds)  
+**Claim:** Warm-start val ROC-AUC ≥ e2e hybrid + 0.5 pp  
+**Verdict:** Accepted — mean e2e 0.6574 vs warm-start 0.6680 (+1.06 pp); 3/3 paired wins  
+**Command:** `QML_DEVICE=cuda python experiments/exp_063_quantum_warmstart_acyd/run.py --profile publication --write-results`  
+**Lesson:** H-Q2 warm-start failure on HIGGS/NIHR does **not** replicate on agro-climate tabular — phenology-style classical-first helps on ACYD.
+
+### EXP 064 — Dynamic entanglement schedule on ACYD (C4 / H-Q3)
+
+**Models:** `QuantumNetEntangled` curriculum none→chain→ring vs fixed topologies  
+**Dataset:** `acyd_soy_brazil_v1` (10,000 train / 3,000 val, 3 seeds)  
+**Claim:** Schedule val ROC-AUC ≥ best fixed + 0.5 pp  
+**Verdict:** Honest negative — mean schedule 0.6314 vs best fixed (none) 0.6422 (−1.08 pp); 1/3 paired wins  
+**Command:** `QML_DEVICE=cuda python experiments/exp_064_entangle_schedule_acyd/run.py --profile publication --write-results`  
+**Lesson:** H-Q3 dynamic entanglement failure replicates on ACYD agro tabular.
+
+### EXP 065 — GV-ALR on frozen hybrid QNN head (ACYD C4 / H-Q4)
+
+**Models:** Frozen C4 backbone + QNN head — fixed LR vs GV-ALR  
+**Dataset:** `acyd_soy_brazil_v1` (50,107 train / 5,830 val)  
+**Claim:** |Δ ROC-AUC| ≤ 0.3 pp and adaptive epochs ≤ 70% of fixed  
+**Verdict:** Accepted — fixed 0.6771 vs GV-ALR 0.6763 (−0.08 pp); 5/8 epochs; wall-time ratio 1.08  
+**Command:** `QML_DEVICE=cuda python experiments/exp_065_gv_alr_hybrid_acyd/run.py --profile publication --write-results`  
+**Lesson:** H-Q4 GV-ALR efficiency win replicates on ACYD (metric parity; epoch budget met).
+
+### EXP 066 — Depolarizing noise reg on ACYD (H-Q10 / H-Q5)
+
+**Models:** `HybridSandwich` vs `NoiseRegularizedHybridSandwich` (p=0.03)  
+**Dataset:** `acyd_soy_brazil_v1` (50,107 train / 5,830 val / 5,856 temporal test ≥2022)  
+**Claim:** Noisy test ROC-AUC ≥ noiseless + 0.5 pp  
+**Verdict:** Accepted — noiseless 0.6293 vs noisy 0.6392 (+0.99 pp)  
+**Command:** `QML_DEVICE=cuda python experiments/exp_066_noise_reg_acyd/run.py --profile publication --write-results`  
+**Lesson:** Noise regularization that was inconclusive on GoBug **passes** on ACYD temporal test-year generalization.
+
+### EXP 067 — Re-upload climate feature-block ladder (ACYD / H-Q11)
+
+**Models:** `QuantumNetReupload` depth curriculum 1→2→3 vs fixed L=3 on climate feature masks  
+**Dataset:** `acyd_soy_brazil_v1` (rungs: temp-only, temp+precip, full 37-d)  
+**Claim:** Curriculum wins ≥ 2/3 rungs by ≥ +0.3 pp ROC-AUC  
+**Verdict:** Accepted — 2/3 wins (temp_only +1.08 pp; full_37 +4.21 pp; temp_precip −0.75 pp)  
+**Command:** `QML_DEVICE=cuda python experiments/exp_067_reupload_ladder_acyd/run.py --profile publication --write-results`  
+**Lesson:** Climate feature-block curriculum succeeds on ACYD where cross-domain ladder (exp_056) failed.
+
+### Phase 3 closure — ACYD quantum replications (C4)
+
+**Status:** Closed 2026-07-12 (RTX 4060, publication profile).
+
+| Exp | Method | Verdict | Δ / note |
+|-----|--------|---------|----------|
+| exp_063 | Warm-start | Accepted | +1.06 pp vs e2e |
+| exp_064 | Entangle schedule | Rejected | −1.08 pp vs none |
+| exp_065 | GV-ALR head | Accepted | −0.08 pp · 5/8 ep |
+| exp_066 | Noise reg | Accepted | +0.99 pp vs noiseless |
+| exp_067 | Re-upload ladder | Accepted | 2/3 rung wins |
+
+**Next:** exp_080 quantum champion fusion is now **eligible** (≥2 Q wins on ACYD: warm-start, noise reg, re-upload, GV-ALR); optional exp_081/082 agro extensions.
 
 ## Publication Profiles
 

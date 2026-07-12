@@ -6,6 +6,7 @@ from src.quantum.qnn_entangled import QuantumNetEntangled
 from src.training.entangle_schedule import (
     DEFAULT_ENTANGLEMENT_LADDER,
     entanglement_for_stage,
+    holdout_score,
     train_entangled_schedule,
     train_fixed_entangled,
 )
@@ -30,6 +31,37 @@ def test_quantum_net_entangled_set_entanglement_preserves_weights():
     after = model.qlayer.state_dict()["weights"]
     assert model.entanglement == "ring"
     assert torch.allclose(before, after)
+
+
+def test_holdout_score_accepts_roc_auc():
+    model = QuantumNetEntangled(
+        n_qubits=4,
+        n_layers=1,
+        entanglement="none",
+        input_dim=8,
+        reupload=True,
+    )
+    x_h = torch.randn(24, 8)
+    y_h = torch.randint(0, 2, (24,)).float()
+    score = holdout_score(model, x_h, y_h, metric="roc_auc")
+    assert 0.0 <= score <= 1.0
+
+
+def test_holdout_score_rejects_unknown_metric():
+    model = QuantumNetEntangled(
+        n_qubits=4,
+        n_layers=1,
+        entanglement="none",
+        input_dim=8,
+        reupload=True,
+    )
+    x_h = torch.randn(8, 8)
+    y_h = torch.randint(0, 2, (8,)).float()
+    try:
+        holdout_score(model, x_h, y_h, metric="f1")
+        raise AssertionError("expected ValueError")
+    except ValueError as exc:
+        assert "roc_auc" in str(exc)
 
 
 def test_train_entangled_schedule_smoke(tmp_path, monkeypatch):

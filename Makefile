@@ -171,6 +171,31 @@ exp-062:
 exp-062-publication:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_062_hybrid_nano_acyd_soy/run.py --profile publication --write-results
 
+exp-063:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_063_quantum_warmstart_acyd/run.py --profile ci
+exp-063-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_063_quantum_warmstart_acyd/run.py --profile publication --write-results
+
+exp-064:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_064_entangle_schedule_acyd/run.py --profile ci
+exp-064-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_064_entangle_schedule_acyd/run.py --profile publication --write-results
+
+exp-065:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_065_gv_alr_hybrid_acyd/run.py --profile ci
+exp-065-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_065_gv_alr_hybrid_acyd/run.py --profile publication --write-results
+
+exp-066:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_066_noise_reg_acyd/run.py --profile ci
+exp-066-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_066_noise_reg_acyd/run.py --profile publication --write-results
+
+exp-067:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_067_reupload_ladder_acyd/run.py --profile ci
+exp-067-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_067_reupload_ladder_acyd/run.py --profile publication --write-results
+
 exp-068:
 	MLFLOW_DISABLE=1 $(PYTHON) experiments/exp_068_nano_grand_comparison/run.py --profile ci --write-results
 

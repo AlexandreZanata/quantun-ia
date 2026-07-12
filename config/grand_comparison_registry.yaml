@@ -77,10 +77,12 @@ recipes:
       higgs: exp_052
       nihr: exp_072
       gobug: exp_073
+      acyd: exp_063
     delta_pp:
       higgs: -0.42
       nihr: -0.35
       gobug: 0.35
+      acyd: 1.06
 
   gv_alr_head:
     label: GV-ALR vs fixed-LR hybrid head
@@ -89,9 +91,11 @@ recipes:
     source_exp:
       higgs: exp_054
       nihr: exp_075
+      acyd: exp_065
     delta_pp:
       higgs: 0.01
       nihr: -0.24
+      acyd: -0.08
 
   entangle_schedule:
     label: Dynamic entanglement schedule vs best fixed
@@ -99,17 +103,30 @@ recipes:
     quantum: true
     source_exp:
       nihr: exp_074
+      acyd: exp_064
     delta_pp:
       nihr: -3.66
+      acyd: -1.08
 
-  noise_reg_gobug:
+  noise_reg:
     label: Depolarizing noise reg vs noiseless hybrid (test)
     kind: quantum_ablation
     quantum: true
     source_exp:
       gobug: exp_055
+      acyd: exp_066
     delta_pp:
       gobug: 0.50
+      acyd: 0.99
+
+  reupload_ladder_acyd:
+    label: Re-upload climate-block curriculum vs fixed L=3
+    kind: quantum_ablation
+    quantum: true
+    source_exp:
+      acyd: exp_067
+    delta_pp:
+      acyd: 4.21
 
   compound_stress_acyd:
     label: Compound stress hybrid vs logistic
