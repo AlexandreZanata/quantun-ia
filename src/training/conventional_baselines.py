@@ -21,10 +21,12 @@ from src.training.trainer import count_parameters
 
 EXP_032_KEY = "exp_032_large_nano_higgs"
 EXP_060_KEY = "exp_060_large_nano_acyd_soy"
+EXP_081_KEY = "exp_081_large_nano_acyd_maize"
 EXP_069_KEY = "exp_069_large_nano_nihr"
 EXP_070_KEY = "exp_070_large_nano_gobug"
 DEFAULT_HIGGS_SERVE_DIR = Path("dist/serve_models/large_nano_mlp_higgs")
 DEFAULT_ACYD_ARTIFACT_DIR = Path("artifacts/exp_060/large_nano_mlp/seed_42")
+DEFAULT_ACYD_MAIZE_ARTIFACT_DIR = Path("artifacts/exp_081/large_nano_mlp/seed_42")
 DEFAULT_NIHR_ARTIFACT_DIR = Path("artifacts/exp_069/large_nano_mlp/seed_42")
 DEFAULT_GOBUG_ARTIFACT_DIR = Path("artifacts/exp_070/large_nano_mlp/seed_42")
 
@@ -333,6 +335,28 @@ def run_conventional_acyd_comparison(
         max_train_rows=50_107,
         max_val_rows=5_830,
         xgb_exp_id="exp_061",
+    )
+
+
+def run_conventional_acyd_maize_comparison(
+    root: Path,
+    *,
+    profile: str = "ci",
+    weights_dir: Path | None = None,
+    checkpoint_exp_key: str = EXP_081_KEY,
+) -> ConventionalComparisonResult:
+    """Compare exp_081 LargeNanoMLP vs conventional tabular baselines on ACYD maize val."""
+    artifact_dir = weights_dir or (root / DEFAULT_ACYD_MAIZE_ARTIFACT_DIR)
+    return _run_conventional_open_comparison(
+        root,
+        dataset_id="acyd_maize_brazil_v1",
+        profile=profile,
+        train_exp_key=checkpoint_exp_key,
+        cmp_exp_key="exp_083_conventional_acyd_maize_baselines",
+        nano_weights_dir=artifact_dir,
+        max_train_rows=151_956,
+        max_val_rows=13_566,
+        xgb_exp_id="exp_083",
     )
 
 

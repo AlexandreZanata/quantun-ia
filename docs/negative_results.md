@@ -313,6 +313,26 @@ See: `experiments/exp_061_conventional_acyd_baselines/results.md`
 
 ---
 
+## exp_083 — Conventional ACYD maize baselines vs LargeNanoMLP (C4b)
+
+**Profile:** acyd_maize_brazil_v1, 151,956 train / 13,566 val, seed 42, RTX 4060
+
+| Model | Val ROC-AUC | Train (s) |
+|-------|-------------|-----------|
+| HistGradientBoosting (sklearn) | **0.8178** | 1.3 |
+| LargeNanoMLP (exp_081 checkpoint) | 0.8086 | 0.1 |
+| MLPClassifier (sklearn, 2048-512-64) | 0.8018 | 158.4 |
+| XGBoost shallow | 0.7706 | 1.2 |
+| LogisticRegression | 0.6983 | 4.5 |
+
+**Gate:** LargeNanoMLP ≥ best conventional + 0.5 pp → **failed** (−0.92 pp).
+
+**Interpretation:** Same agro pattern as exp_061 soybean — HistGB beats C4b nano on temporal val while nano still clears logistic by +11.03 pp (exp_081). Honest negative for “nano beats all classical” on maize; C4b anchor remains valid vs logistic.
+
+See: `experiments/exp_083_conventional_acyd_maize_baselines/results.md`
+
+---
+
 ## exp_069 — LargeNanoMLP on NIHR synthetic CV (C2 anchor)
 
 **Profile:** nihr_cv_synthetic_v1, 70K train / 15K val, seed 42, RTX 4060

@@ -1546,6 +1546,26 @@ experiments:
         min_auc_advantage_pp: 2.0
         save_checkpoints: true
 
+  exp_083_conventional_acyd_maize_baselines:
+    description: "LargeNanoMLP vs sklearn/XGBoost conventional baselines on ACYD maize val ROC-AUC"
+    exp_id: exp_083
+    dataset_id: acyd_maize_brazil_v1
+    checkpoint_exp_key: exp_081_large_nano_acyd_maize
+    seed: 42
+    min_advantage_pp: 0.5
+    xgboost_learning_rate: 0.1
+    xgboost_n_estimators: 50
+    histgb_max_iter: 100
+    profile_overrides:
+      ci:
+        min_advantage_pp: 0.0
+        histgb_max_iter: 50
+        xgboost_n_estimators: 30
+      publication:
+        min_advantage_pp: 0.5
+        histgb_max_iter: 100
+        xgboost_n_estimators: 50
+
   exp_062_hybrid_nano_acyd_soy:
     description: "Frozen LargeNanoMLP (ACYD C4) + 4-qubit hybrid head — val ROC-AUC vs classical head"
     exp_id: exp_062

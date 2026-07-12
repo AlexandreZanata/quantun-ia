@@ -15,6 +15,7 @@ from fastapi.responses import PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 
 from dashboard.benchmark_data import load_records, to_leaderboard_rows
+from src.application.agro_maize_predict import load_agro_maize_model_card, predict_agro_maize
 from src.application.agro_soy_predict import load_agro_soy_model_card, predict_agro_soy
 from src.application.create_training_job import CreateTrainingJobDTO
 from src.application.create_training_job import execute as create_job
@@ -37,6 +38,9 @@ from src.infrastructure.database.repositories.sqlite_training_job_repository imp
 from src.infrastructure.queue.training_job_worker import TrainingJobWorker
 from src.presentation.http.dependencies import TenantContext, resolve_tenant_context
 from src.presentation.http.schemas import (
+    AgroMaizeModelCardResponse,
+    AgroMaizePredictRequest,
+    AgroMaizePredictResponse,
     AgroSoyModelCardResponse,
     AgroSoyPredictRequest,
     AgroSoyPredictResponse,
@@ -336,6 +340,73 @@ def create_app() -> FastAPI:
     def get_agro_soy_model_card() -> AgroSoyModelCardResponse:
         card = load_agro_soy_model_card()
         return AgroSoyModelCardResponse(
+            model_id=card.model_id,
+            dataset_id=card.dataset_id,
+            exp_id=card.exp_id,
+            seed=card.seed,
+            markdown=card.markdown,
+        )
+
+    @app.post("/api/v1/predict/agro/maize", response_model=AgroMaizePredictResponse)
+    def post_predict_agro_maize(
+        body: AgroMaizePredictRequest,
+        tenant: TenantContext = Depends(resolve_tenant_context),
+    ) -> AgroMaizePredictResponse:
+        _ = tenant
+        os.environ.setdefault("MLFLOW_DISABLE", "1")
+        profile = AgroMunicipalityProfile(
+            municipality=body.municipality,
+            state=body.state.upper(),
+            crop_year=body.crop_year,
+            latitude=body.latitude,
+            longitude=body.longitude,
+            area_harvested_ha=body.area_harvested_ha,
+            precipitation=WeatherBlockStats(
+                body.precip_mean,
+                1.0,
+                max(0.1, body.precip_mean * 0.3),
+                body.precip_mean * 2.0,
+            ),
+            t2m_max=WeatherBlockStats(
+                body.tmax_peak_k - 3.0,
+                2.0,
+                body.tmax_peak_k - 6.0,
+                body.tmax_peak_k,
+            ),
+            ndvi=WeatherBlockStats(
+                body.ndvi_mean,
+                0.4,
+                max(0.5, body.ndvi_mean - 0.8),
+                body.ndvi_mean + 0.8,
+            ),
+        )
+        outcome = predict_agro_maize(profile, log_prediction=True)
+        if isinstance(outcome, Fail):
+            status = 404 if outcome.error.code == "CHECKPOINT_NOT_FOUND" else 422
+            raise HTTPException(
+                status_code=status,
+                detail={"code": outcome.error.code, "message": outcome.error.message},
+            )
+        assert isinstance(outcome, Ok)
+        result = outcome.value
+        return AgroMaizePredictResponse(
+            probability=result.probability,
+            risk_tier=result.risk_tier,
+            risk_label=result.risk_label,
+            model_id="large_nano_mlp_acyd_maize",
+            crop_year=body.crop_year,
+            municipality=body.municipality,
+            state=body.state.upper(),
+            top_drivers=[
+                {"name": d.name, "direction": d.direction, "detail": d.detail}
+                for d in result.top_drivers
+            ],
+        )
+
+    @app.get("/api/v1/models/agro/maize/card", response_model=AgroMaizeModelCardResponse)
+    def get_agro_maize_model_card() -> AgroMaizeModelCardResponse:
+        card = load_agro_maize_model_card()
+        return AgroMaizeModelCardResponse(
             model_id=card.model_id,
             dataset_id=card.dataset_id,
             exp_id=card.exp_id,

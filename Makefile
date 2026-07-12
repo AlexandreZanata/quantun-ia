@@ -171,6 +171,12 @@ exp-081:
 exp-081-publication:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_081_large_nano_acyd_maize/run.py --profile publication --write-results
 
+exp-083:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_083_conventional_acyd_maize_baselines/run.py --profile ci
+
+exp-083-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_083_conventional_acyd_maize_baselines/run.py --profile publication --write-results
+
 exp-062:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_062_hybrid_nano_acyd_soy/run.py --profile ci
 
@@ -614,6 +620,9 @@ ship-all-p0:
 
 ship-acyd-soy:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m scripts.qml_ship --model large_nano_mlp_acyd_soy --profile publication --skip-train
+
+ship-acyd-maize:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m scripts.qml_ship --model large_nano_mlp_acyd_maize --profile ci --skip-train --skip-gate
 
 ship-nihr:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m scripts.qml_ship --model large_nano_mlp_nihr --profile ci --skip-train --skip-gate

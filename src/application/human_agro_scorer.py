@@ -209,8 +209,9 @@ def score_municipality(
     seed: int = DEFAULT_SEED,
     log_prediction: bool = False,
     root: Path | None = None,
+    log_domain: str = "agro_soy",
 ) -> Result[HumanAgroScoreResult, HumanAgroScoreError]:
-    """Score one municipality profile through the C4 LargeNanoMLP serve checkpoint."""
+    """Score one municipality profile through a LargeNanoMLP serve checkpoint."""
     features = profile_to_features(profile)
     outcome = predict_execute(
         PredictNanomodelDTO(
@@ -233,7 +234,7 @@ def score_municipality(
     if log_prediction:
         append_prediction_log(
             {
-                "domain": "agro_soy",
+                "domain": log_domain,
                 "model_id": f"{exp_id}/{model_name}",
                 "dataset": dataset,
                 "municipality": profile.municipality,

@@ -516,6 +516,17 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `QML_DEVICE=cuda python experiments/exp_081_large_nano_acyd_maize/run.py --profile publication --write-results`  
 **Lesson:** Same LargeNanoMLP recipe as C4 soybean transfers strongly to maize (corn) on the shared climate/soil feature panel.
 
+### EXP 083 — Conventional baselines vs LargeNanoMLP on ACYD maize (C4b floor)
+
+**Models:** Logistic / sklearn MLP / HistGB / XGBoost vs `exp_081` LargeNanoMLP checkpoint  
+**Dataset:** `acyd_maize_brazil_v1` (151,956 train / 13,566 val)  
+**Claim:** Nano ≥ best conventional + 0.5 pp ROC-AUC  
+**Verdict:** Honest negative — HistGB 0.8178 vs nano 0.8086 (−0.92 pp)  
+**Command:** `QML_DEVICE=cuda python experiments/exp_083_conventional_acyd_maize_baselines/run.py --profile publication --write-results`  
+**Lesson:** Mirrors soybean exp_061 — boosting beats nano on agro tabular while nano still dominates logistic.
+
+**Next:** Zenodo DOI + arXiv (external).
+
 ## Publication Profiles
 
 | Profile | `n_samples` | Seeds | Command |

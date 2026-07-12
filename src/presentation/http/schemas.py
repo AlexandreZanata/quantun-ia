@@ -68,6 +68,37 @@ class AgroSoyModelCardResponse(BaseModel):
     markdown: str
 
 
+class AgroMaizePredictRequest(BaseModel):
+    municipality: str = Field(..., min_length=1)
+    state: str = Field(..., min_length=2, max_length=2)
+    crop_year: int = Field(..., ge=2000, le=2035)
+    latitude: float
+    longitude: float
+    area_harvested_ha: float = Field(..., gt=0)
+    precip_mean: float = Field(default=3.5)
+    tmax_peak_k: float = Field(default=304.0)
+    ndvi_mean: float = Field(default=3.0)
+
+
+class AgroMaizePredictResponse(BaseModel):
+    probability: float
+    risk_tier: str
+    risk_label: str
+    model_id: str
+    crop_year: int
+    municipality: str
+    state: str
+    top_drivers: list[dict[str, str]]
+
+
+class AgroMaizeModelCardResponse(BaseModel):
+    model_id: str
+    dataset_id: str
+    exp_id: str
+    seed: int
+    markdown: str
+
+
 class IssueTokenRequest(BaseModel):
     tenant_id: str = Field(..., min_length=1)
     api_key: str = Field(..., min_length=1)
