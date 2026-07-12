@@ -81,7 +81,7 @@ def sample_efficiency_latex(registry: dict[str, Any]) -> str:
 def quantum_v2_latex(registry: dict[str, Any]) -> str:
     block = registry["quantum_v2"]
     lines = [
-        "% Auto-generated Cycle v2 quantum recipes (exp_086 / exp_087 / exp_088)",
+        "% Auto-generated Cycle v2 quantum recipes (exp_086 / exp_087 / exp_088 / exp_091)",
         "\\begin{table}[ht]",
         "\\centering",
         f"\\caption{{{block['caption']}}}",

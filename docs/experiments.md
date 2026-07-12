@@ -578,6 +578,15 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `QML_DEVICE=cuda python experiments/exp_089_measurement_dropout_cal/run.py --profile publication --write-results`  
 **Lesson:** Stochastic measurement masking hurts calibration on this hybrid; keep classical isotonic (exp_082) for ECE.
 
+### EXP 091 — Circuit-cut effective 6q head (H-Q2.5)
+
+**Models:** Frozen exp_092 distill backbone · classical bottleneck head · plain 4q · circuit-cut 2×4q (effective 6q)  
+**Dataset:** `acyd_maize_brazil_v1` (30k hybrid fine-tune / 13,566 val)  
+**Claim:** Circuit-cut ≥ classical head − 1.0 pp  
+**Verdict:** Accepted — cut 0.8125 vs classical 0.8129 (−0.03 pp); plain 4q 0.8128  
+**Command:** `QML_DEVICE=cuda python experiments/exp_091_circuit_cut_6q/run.py --profile publication --write-results`  
+**Lesson:** Soft overlapping 4q fragments reach classical parity on a 4060; no AUC lift vs plain 4q (−0.03 pp).
+
 ### EXP 088 — Pauli/shadow features → NarrowDeepNano (H-Q2.3)
 
 **Models:** Logistic · NarrowDeepNano (raw 37-d) · NarrowDeepNano (64-d Pauli features) · HistGB honesty  
@@ -624,7 +633,7 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Registry:** `config/cycle_v2_paper.yaml` (curated from RTX 4060 `results.md`)  
 **Commands:** `make cycle-v2-tables` · `make paper-build` · `make arxiv-bundle`  
 **Bundle:** `dist/arxiv/quantun-ia-paper.tar.gz` (F-T4 local ready; paste `arxiv_id` / Zenodo DOI after upload)  
-**Status:** closed — Cycle v2 accepts (exp_092, exp_094) + honest negatives (incl. exp_087) in paper + arXiv tarball
+**Status:** closed — Cycle v2 accepts (exp_092, exp_091, exp_094) + honest negatives (incl. exp_087) in paper + arXiv tarball
 
 ### Phase E — Agro Maize Lab + uncertainty (E-T3)
 
