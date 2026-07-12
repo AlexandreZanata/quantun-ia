@@ -582,6 +582,15 @@ vim experiments/exp_003_entanglement_effect/results.md
 
 **Next:** Paper cycle 2 synthesis and/or hard temporal drift (`exp_094`).
 
+### EXP 094 — Hard temporal drift ResidualNano vs HistGB
+
+**Models:** HistGB · ResidualNanoMLP  
+**Dataset:** ACYD maize hard drift (train ≤ 2016 / val 2017–2018 / test ≥ 2022)  
+**Claim:** nano ≥ HistGB − 1.0 pp on hard-drift val  
+**Verdict:** Accepted — HistGB 0.8246 vs nano 0.8185 (−0.61 pp)  
+**Command:** `QML_DEVICE=cuda python experiments/exp_094_hard_temporal_drift/run.py --profile publication --write-results`  
+**Lesson:** Under stronger year shift, ResidualNano still tracks HistGB within 1 pp; keep distill serve for standard split.
+
 ### Phase F — Paper cycle 2 tables
 
 **Artifacts:** `paper/tables/boosting_frontier.tex`, `sample_efficiency.tex`, `quantum_v2.tex`, `multicrop.tex`  

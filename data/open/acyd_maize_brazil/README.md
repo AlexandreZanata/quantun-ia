@@ -29,6 +29,18 @@ Verify redistribution before publishing processed parquet outside this repo.
 | val | 2019–2021 |
 | test | ≥ 2022 |
 
+### Hard temporal drift (Phase C / exp_094)
+
+Stress protocol (rebuild from raw; not the default processed v1):
+
+| Split | Years |
+|-------|-------|
+| train | ≤ 2016 |
+| val | 2017–2018 |
+| test | ≥ 2022 |
+
+Artifacts: `processed/hard_drift_v1/` via `src/data/hard_drift_acyd.py`.
+
 ## Reproduce
 
 ```bash
