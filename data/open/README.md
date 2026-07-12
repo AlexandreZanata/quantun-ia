@@ -55,6 +55,18 @@ make data-open-acyd-maize
 make data-open-verify DATASET=acyd_maize_brazil_v1
 ```
 
+## Multi-crop joint protocol (Phase C / exp_090)
+
+Soy and maize share the same **37** climate/soil features and temporal cutoffs
+(train ≤ 2018, val 2019–2021, test ≥ 2022). For joint training:
+
+1. Concatenate train rows from `acyd_soy_brazil_v1` + `acyd_maize_brazil_v1`.
+2. Fit `StandardScaler` on the **joint** climate features only (no year leakage; years are not in processed parquet).
+3. Append a crop indicator after scaling (`0=soy`, `1=maize`) → **38-d** input.
+4. Evaluate maize-only and soy-only temporal val separately.
+
+Loader: `src/data/multicrop_acyd.py`.
+
 ## Citations
 
 - **HIGGS:** Baldi, P., Sadowski, P., Whiteson, D. (2014). Searching for Exotic Particles in High-Energy Physics with Deep Learning. *Nature Communications*. UCI ML Repository.

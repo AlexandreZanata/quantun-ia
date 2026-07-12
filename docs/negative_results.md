@@ -408,6 +408,25 @@ See: `experiments/exp_088_shadow_features_nano_maize/results.md`
 
 ---
 
+## exp_090 — Multi-crop joint ResidualNano (soy + maize)
+
+**Profile:** soy 50,107 + maize 151,956 train / maize val 13,566, seed 42, RTX 4060
+
+| Model | Val ROC-AUC |
+|-------|-------------|
+| HistGB maize (honesty) | 0.8203 |
+| Maize-solo ResidualNano | **0.8073** |
+| Joint ResidualNano (maize val) | 0.7938 |
+| Joint ResidualNano (soy val) | 0.6758 |
+
+**Gate:** joint ≥ solo − 0.5 pp → **failed** (−1.34 pp).
+
+**Interpretation:** Concatenating soy into a shared ResidualNano trunk with a crop indicator still costs >0.5 pp on maize temporal val. Cross-crop climate transfer is not free; keep maize distill serve model crop-specific. Hard temporal drift (`exp_094`) remains a separate stress test.
+
+See: `experiments/exp_090_multicrop_joint_nano/results.md`
+
+---
+
 ## exp_069 — LargeNanoMLP on NIHR synthetic CV (C2 anchor)
 
 **Profile:** nihr_cv_synthetic_v1, 70K train / 15K val, seed 42, RTX 4060

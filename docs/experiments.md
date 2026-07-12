@@ -571,6 +571,17 @@ vim experiments/exp_003_entanglement_effect/results.md
 
 **Next:** Phase C multi-crop / hard drift (`exp_090` / `exp_094`).
 
+### EXP 090 — Multi-crop joint ResidualNano (soy + maize)
+
+**Models:** Maize-solo ResidualNano · Joint ResidualNano (38-d + crop bit) · HistGB maize honesty  
+**Dataset:** `acyd_soy_brazil_v1` + `acyd_maize_brazil_v1` (full temporal splits)  
+**Claim:** Joint maize val ≥ solo − 0.5 pp  
+**Verdict:** Honest negative — joint 0.7938 vs solo 0.8073 (−1.34 pp); soy val 0.6758  
+**Command:** `QML_DEVICE=cuda python experiments/exp_090_multicrop_joint_nano/run.py --profile publication --write-results`  
+**Lesson:** Shared soy+maize trunk hurts maize ranking; keep crop-specific (maize distill) models for serve.
+
+**Next:** Paper cycle 2 synthesis and/or hard temporal drift (`exp_094`).
+
 ## Publication Profiles
 
 | Profile | `n_samples` | Seeds | Command |
