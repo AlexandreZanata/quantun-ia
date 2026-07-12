@@ -505,8 +505,6 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `QML_DEVICE=cuda python experiments/exp_079_quantum_transfer_higgs_to_acyd/run.py --profile publication --write-results`  
 **Lesson:** Cross-domain QNN head transfer from physics to agro does not clear a +0.5 pp win — transfer hype unsupported.
 
-**Next:** Zenodo DOI + arXiv (external).
-
 ### EXP 081 — LargeNanoMLP on ACYD Brazil maize (C4b)
 
 **Models:** `LargeNanoMLP` (~1.16M) vs logistic  
