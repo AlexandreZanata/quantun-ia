@@ -532,7 +532,16 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `QML_DEVICE=cuda python experiments/exp_084_residual_ft_nano_maize/run.py --profile publication --write-results`  
 **Lesson:** Architecture swaps alone do not close the agro boosting gap — prefer HistGB→nano distillation (exp_092).
 
-**Next:** Phase D distillation (exp_092) or sample-efficiency (exp_085).
+### EXP 092 — HistGB → ResidualNano soft-label distillation (Phase D H-N3)
+
+**Models:** HistGB teacher · hard ResidualNano control · soft-label ResidualNano student  
+**Dataset:** `acyd_maize_brazil_v1` (151,956 train / 13,566 val)  
+**Claim:** Distill student ≥ HistGB − 1.0 pp ROC-AUC  
+**Verdict:** Accepted — HistGB 0.8178 vs distill 0.8130 (−0.48 pp); distill beats hard control by +0.55 pp  
+**Command:** `QML_DEVICE=cuda python experiments/exp_092_histgb_distill_nano_maize/run.py --profile publication --write-results`  
+**Lesson:** Soft BCE distillation closes most of the agro boosting gap without beating HistGB outright.
+
+**Next:** Sample-efficiency (exp_085) or Quantum 2.0 on distilled backbone (exp_086).
 
 ## Publication Profiles
 

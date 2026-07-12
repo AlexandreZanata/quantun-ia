@@ -1606,6 +1606,39 @@ experiments:
         min_auc_advantage_pp: 0.5
         save_checkpoints: true
 
+  exp_092_histgb_distill_nano_maize:
+    description: "HistGB soft-label distillation into ResidualNano on ACYD maize (Phase D H-N3)"
+    exp_id: exp_092
+    dataset_id: acyd_maize_brazil_v1
+    seed: 42
+    learning_rate: 0.001
+    weight_decay: 0.0001
+    batch_size: 2048
+    dropout: 0.2
+    residual_hidden: 512
+    residual_n_blocks: 3
+    residual_bottleneck: 64
+    histgb_max_iter: 100
+    distill_alpha: 1.0
+    min_teacher_gap_pp: 1.0
+    save_checkpoints: false
+    profile_overrides:
+      ci:
+        n_train_rows: 5000
+        n_val_rows: 1000
+        epochs: 3
+        batch_size: 1024
+        histgb_max_iter: 50
+        min_teacher_gap_pp: 100.0
+      publication:
+        n_train_rows: 0
+        n_val_rows: 0
+        epochs: 12
+        batch_size: 2048
+        histgb_max_iter: 100
+        min_teacher_gap_pp: 1.0
+        save_checkpoints: true
+
   exp_062_hybrid_nano_acyd_soy:
     description: "Frozen LargeNanoMLP (ACYD C4) + 4-qubit hybrid head — val ROC-AUC vs classical head"
     exp_id: exp_062

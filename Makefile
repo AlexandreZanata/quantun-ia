@@ -183,6 +183,12 @@ exp-084:
 exp-084-publication:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_084_residual_ft_nano_maize/run.py --profile publication --write-results
 
+exp-092:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_092_histgb_distill_nano_maize/run.py --profile ci
+
+exp-092-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_092_histgb_distill_nano_maize/run.py --profile publication --write-results
+
 exp-062:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_062_hybrid_nano_acyd_soy/run.py --profile ci
 

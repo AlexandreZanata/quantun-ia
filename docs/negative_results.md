@@ -346,7 +346,7 @@ See: `experiments/exp_083_conventional_acyd_maize_baselines/results.md`
 
 **Gate:** best nano ≥ HistGB + 0.5 pp → **failed** (−0.92 pp).
 
-**Interpretation:** Residual and narrow-deep nanos match Cycle-1 LargeNanoMLP (~0.81) but do not close the HistGB gap. Tiny FT-lite underfits badly at d_token=32. Architecture search alone is insufficient — route Phase A reject to HistGB→nano distillation (exp_092).
+**Interpretation:** Residual and narrow-deep nanos match Cycle-1 LargeNanoMLP (~0.81) but do not close the HistGB gap. Tiny FT-lite underfits badly at d_token=32. Architecture search alone is insufficient — follow-up exp_092 soft-label distillation **accepted** (−0.48 pp vs HistGB).
 
 See: `experiments/exp_084_residual_ft_nano_maize/results.md`
 
