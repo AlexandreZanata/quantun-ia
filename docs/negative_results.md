@@ -389,6 +389,26 @@ See: `experiments/exp_086_residual_qnn_head_maize/results.md`
 
 ---
 
+## exp_087 — Fourier re-upload vs flat angle head on maize distill backbone (H-Q2.2)
+
+**Profile:** acyd_maize_brazil_v1, 30k hybrid fine-tune / 13,566 val, seed 42, RTX 4060
+
+| Layers | Flat AUC | Fourier AUC | Δ pp |
+|--------|----------|-------------|------|
+| 1 | **0.8127** | 0.8121 | −0.07 |
+| 2 | **0.8128** | 0.8106 | −0.22 |
+| 3 | **0.8128** | 0.8107 | −0.21 |
+
+Classical distill ResidualNano: **0.8130**. Rung wins: **0/3** (gate ≥ 2).
+
+**Gate:** Fourier ≥ flat on ≥ 2/3 rungs → **failed**. Parity (≥ classical − 1.0 pp) **held**.
+
+**Interpretation:** Sin/cos Fourier features into a 4q re-upload head do not improve ranking over a flat tanh→angle map on frozen distill bottleneck features. Prefer classical distill nano; remaining quantum arms (H-Q2.4+) stay optional.
+
+See: `experiments/exp_087_fourier_reupload_climate/results.md`
+
+---
+
 ## exp_088 — Pauli/shadow features → NarrowDeepNano on maize (H-Q2.3)
 
 **Profile:** acyd_maize_brazil_v1, 20k train / 13,566 val, seed 42, RTX 4060

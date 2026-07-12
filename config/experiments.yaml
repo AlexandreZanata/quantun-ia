@@ -1713,6 +1713,46 @@ experiments:
         min_vs_classical_pp: -1.0
         save_checkpoints: true
 
+  exp_087_fourier_reupload_climate:
+    description: "Fourier sin/cos re-upload vs flat angle head on frozen distill ResidualNano (ACYD maize H-Q2.2)"
+    exp_id: exp_087
+    dataset_id: acyd_maize_brazil_v1
+    checkpoint_exp_id: exp_092
+    checkpoint_model_name: residual_nano_distill
+    seed: 42
+    residual_hidden: 512
+    residual_n_blocks: 3
+    residual_bottleneck: 64
+    dropout: 0.2
+    n_qubits: 4
+    n_frequencies: 2
+    reupload_layers: [1, 2, 3]
+    learning_rate: 0.01
+    weight_decay: 0.0001
+    batch_size: 256
+    min_rung_wins: 2
+    min_vs_classical_pp: -1.0
+    save_checkpoints: false
+    profile_overrides:
+      ci:
+        n_train_rows: 50
+        n_val_rows: 50
+        epochs: 1
+        batch_size: 32
+        reupload_layers: [1, 2]
+        min_rung_wins: 0
+        min_vs_classical_pp: -100.0
+      publication:
+        # Hybrid fine-tune budget (6 arms × QNN TorchLayer CPU-bound)
+        n_train_rows: 30000
+        n_val_rows: 0
+        epochs: 4
+        batch_size: 256
+        reupload_layers: [1, 2, 3]
+        min_rung_wins: 2
+        min_vs_classical_pp: -1.0
+        save_checkpoints: true
+
   exp_088_shadow_features_nano_maize:
     description: "Pauli/shadow 64-d features → NarrowDeepNano vs classical head (ACYD maize H-Q2.3)"
     exp_id: exp_088

@@ -560,6 +560,15 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `QML_DEVICE=cuda python experiments/exp_086_residual_qnn_head_maize/run.py --profile publication --write-results`  
 **Lesson:** Classical skip around QNN does not unlock a ≥0.5 pp lift; hybrids already sit at classical parity.
 
+### EXP 087 — Fourier re-upload vs flat angle head (H-Q2.2)
+
+**Models:** Frozen exp_092 distill backbone · flat tanh→AngleEmbedding · Fourier sin/cos→AngleEmbedding · layers {1,2,3}  
+**Dataset:** `acyd_maize_brazil_v1` (30k hybrid fine-tune / 13,566 val)  
+**Claim:** Fourier wins ≥ 2/3 re-upload depth rungs vs flat  
+**Verdict:** Honest negative — 0/3 rung wins; deepest Fourier −0.24 pp vs classical 0.8130 (parity OK)  
+**Command:** `QML_DEVICE=cuda python experiments/exp_087_fourier_reupload_climate/run.py --profile publication --write-results`  
+**Lesson:** Seasonal Fourier map into re-upload does not beat flat angle encoding on maize distill features.
+
 ### EXP 088 — Pauli/shadow features → NarrowDeepNano (H-Q2.3)
 
 **Models:** Logistic · NarrowDeepNano (raw 37-d) · NarrowDeepNano (64-d Pauli features) · HistGB honesty  
