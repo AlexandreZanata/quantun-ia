@@ -569,6 +569,15 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `QML_DEVICE=cuda python experiments/exp_087_fourier_reupload_climate/run.py --profile publication --write-results`  
 **Lesson:** Seasonal Fourier map into re-upload does not beat flat angle encoding on maize distill features.
 
+### EXP 089 — Measurement-dropout QNN calibration (H-Q2.4)
+
+**Models:** Frozen exp_092 distill backbone · plain 4q re-upload · measurement-dropout 4q (p=0.2, MC=16)  
+**Dataset:** `acyd_maize_brazil_v1` (30k hybrid fine-tune / 13,566 val)  
+**Claim:** ECE relative ≥ 20% vs plain without AUC drop > 0.5 pp  
+**Verdict:** Honest negative — ECE 0.0242→0.0374 (−54.8% rel.); AUC −0.08 pp (floor held)  
+**Command:** `QML_DEVICE=cuda python experiments/exp_089_measurement_dropout_cal/run.py --profile publication --write-results`  
+**Lesson:** Stochastic measurement masking hurts calibration on this hybrid; keep classical isotonic (exp_082) for ECE.
+
 ### EXP 088 — Pauli/shadow features → NarrowDeepNano (H-Q2.3)
 
 **Models:** Logistic · NarrowDeepNano (raw 37-d) · NarrowDeepNano (64-d Pauli features) · HistGB honesty  

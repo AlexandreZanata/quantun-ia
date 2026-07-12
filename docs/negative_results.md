@@ -409,6 +409,24 @@ See: `experiments/exp_087_fourier_reupload_climate/results.md`
 
 ---
 
+## exp_089 — Measurement-dropout QNN vs plain QNN on maize distill backbone (H-Q2.4)
+
+**Profile:** acyd_maize_brazil_v1, 30k hybrid fine-tune / 13,566 val, seed 42, RTX 4060
+
+| Arm | Val ROC-AUC | ECE |
+|-----|-------------|-----|
+| Classical distill ResidualNano | **0.8130** | — |
+| Plain QNN head | 0.8125 | **0.0242** |
+| Measurement-dropout QNN (p=0.2, MC=16) | 0.8117 | 0.0374 |
+
+**Gate:** ECE relative ≥ 20% → **failed** (−54.8%). AUC floor (≥ plain − 0.5 pp) **held** (−0.08 pp).
+
+**Interpretation:** Bernoulli masking of Pauli-Z expectations degrades calibration while barely moving AUC. Prefer classical isotonic calibration (exp_082); do not claim quantum measurement-dropout ECE gains on maize.
+
+See: `experiments/exp_089_measurement_dropout_cal/results.md`
+
+---
+
 ## exp_088 — Pauli/shadow features → NarrowDeepNano on maize (H-Q2.3)
 
 **Profile:** acyd_maize_brazil_v1, 20k train / 13,566 val, seed 42, RTX 4060

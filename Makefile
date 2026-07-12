@@ -207,6 +207,12 @@ exp-087:
 exp-087-publication:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_087_fourier_reupload_climate/run.py --profile publication --write-results
 
+exp-089:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_089_measurement_dropout_cal/run.py --profile ci
+
+exp-089-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_089_measurement_dropout_cal/run.py --profile publication --write-results
+
 exp-088:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_088_shadow_features_nano_maize/run.py --profile ci
 
