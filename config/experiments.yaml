@@ -2055,6 +2055,40 @@ experiments:
         min_vs_best_hybrid_pp: 0.5
         save_checkpoints: true
 
+  exp_082_calibration_acyd:
+    description: "Isotonic calibration on ACYD C4 LargeNanoMLP — ECE + agro ranking"
+    exp_id: exp_082
+    model_exp_id: exp_060
+    model_name: large_nano_mlp
+    dataset_id: acyd_soy_brazil_v1
+    seed: 42
+    split: val
+    n_rows: 2000
+    min_negatives: 50
+    fit_fraction: 0.8
+    chunk_size: 2048
+    force_balanced: false
+    max_ece_after: 0.08
+    min_spearman_rho: 0.85
+    min_auc_delta: -0.005
+    require_ece_improved: true
+    require_brier_improved: true
+    profile_overrides:
+      ci:
+        n_rows: 800
+        max_ece_after: 0.15
+        min_spearman_rho: 0.5
+        require_ece_improved: false
+        require_brier_improved: false
+        min_auc_delta: -0.05
+      publication:
+        n_rows: 0
+        max_ece_after: 0.08
+        min_spearman_rho: 0.85
+        require_ece_improved: true
+        require_brier_improved: true
+        min_auc_delta: -0.005
+
   exp_078_agro_clinical_cases:
     description: "Agro Risk Lab — 8 Brazilian soybean scenarios vs C4 human ranking"
     exp_id: exp_078

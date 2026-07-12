@@ -65,6 +65,7 @@ models:
     exp_id: exp_060
     seed: 42
     profile: publication
+    calibration_exp_id: exp_082
     serve:
       kind: open_large_nano
     train:

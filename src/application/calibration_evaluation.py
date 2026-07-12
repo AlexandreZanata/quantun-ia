@@ -5,10 +5,13 @@ from __future__ import annotations
 import json
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Literal
 
+from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import train_test_split
 
-from src.application.balanced_metrics import expected_calibration_error
+from src.application.agro_validation_cases import AGRO_VALIDATION_CASES
+from src.application.balanced_metrics import brier_score, expected_calibration_error
 from src.application.batch_predict import BatchPredictDTO, run_batch_predict
 from src.application.calibration import (
     CalibrationArtifact,
@@ -18,6 +21,7 @@ from src.application.calibration import (
 )
 from src.application.clinical_validation_cases import CLINICAL_VALIDATION_CASES
 from src.application.evaluate_serve_model import _ensure_serve_artifact, load_open_split_labeled
+from src.application.human_agro_scorer import score_municipality
 from src.application.human_cv_scorer import score_patient
 from src.application.open_serve import DEFAULT_SERVE_MODEL, DEFAULT_SERVE_SEED
 from src.shared.result import Fail, Ok, Result, fail, ok
@@ -27,6 +31,7 @@ ROOT = Path(__file__).resolve().parents[2]
 
 DEFAULT_CV_DATASET = "synthea_cv_risk_v1"
 DEFAULT_CV_EXP_ID = "exp_034"
+RankingDomain = Literal["clinical", "agro"]
 
 
 @dataclass(frozen=True)
@@ -46,6 +51,9 @@ class CalibrationEvaluationDTO:
     min_negatives: int = 100
     fit_fraction: float = 0.8
     chunk_size: int = 2048
+    force_balanced: bool = True
+    ranking_domain: RankingDomain = "clinical"
+    artifact_exp_id: str | None = None
 
 
 @dataclass(frozen=True)
@@ -59,6 +67,10 @@ class CalibrationEvaluationResult:
     n_positives: int
     ece_before: float
     ece_after: float
+    brier_before: float
+    brier_after: float
+    roc_auc_before: float
+    roc_auc_after: float
     spearman_rho: float
     artifact_path: str
     passed: bool
@@ -95,14 +107,65 @@ def load_calibration_artifact(path: Path) -> CalibrationArtifact | None:
     return CalibrationArtifact.from_dict(payload)
 
 
+def _roc_auc(labels: list[int], probs: list[float]) -> float:
+    if len(set(labels)) < 2:
+        return 0.5
+    return float(roc_auc_score(labels, probs))
+
+
+def _ranking_spearman(
+    artifact: CalibrationArtifact,
+    *,
+    ranking_domain: RankingDomain,
+    exp_id: str,
+    model_name: str,
+    dataset: str,
+    seed: int,
+) -> Result[float, CalibrationEvaluationError]:
+    raw_probs: list[float] = []
+    cal_probs: list[float] = []
+
+    if ranking_domain == "agro":
+        for case in AGRO_VALIDATION_CASES:
+            scored = score_municipality(
+                case.profile,
+                exp_id=exp_id,
+                model_name=model_name,
+                dataset=dataset,
+                seed=seed,
+            )
+            if isinstance(scored, Fail):
+                return fail(CalibrationEvaluationError(scored.error.code, scored.error.message))
+            assert isinstance(scored, Ok)
+            raw = scored.value.probability
+            raw_probs.append(raw)
+            cal_probs.append(apply_isotonic([raw], artifact)[0])
+    else:
+        for case in CLINICAL_VALIDATION_CASES:
+            scored = score_patient(case.profile)
+            if isinstance(scored, Fail):
+                return fail(CalibrationEvaluationError(scored.error.code, scored.error.message))
+            assert isinstance(scored, Ok)
+            raw = scored.value.probability
+            raw_probs.append(raw)
+            cal_probs.append(apply_isotonic([raw], artifact)[0])
+
+    return ok(spearman_rank_correlation(raw_probs, cal_probs))
+
+
 def run_calibration_evaluation(
     dto: CalibrationEvaluationDTO | None = None,
     *,
     min_spearman_rho: float = 0.85,
     max_ece_after: float = 0.08,
+    require_ece_improved: bool = False,
+    require_brier_improved: bool = False,
+    min_auc_delta: float = -1.0,
 ) -> Result[CalibrationEvaluationResult, CalibrationEvaluationError]:
     init_correlation_id()
     dto = dto or CalibrationEvaluationDTO()
+    artifact_exp = dto.artifact_exp_id or "exp_043"
+    n_rows = None if dto.n_rows is None or dto.n_rows <= 0 else dto.n_rows
 
     try:
         _ensure_serve_artifact(
@@ -116,10 +179,10 @@ def run_calibration_evaluation(
             dto.dataset,
             ROOT,
             split=dto.split,
-            n_rows=dto.n_rows,
+            n_rows=n_rows,
             random_state=dto.seed,
             min_negatives=dto.min_negatives,
-            force_balanced=True,
+            force_balanced=dto.force_balanced,
         )
     except (FileNotFoundError, ValueError) as exc:
         return fail(CalibrationEvaluationError("DATA_ERROR", str(exc)))
@@ -173,23 +236,27 @@ def run_calibration_evaluation(
 
     ece_before = expected_calibration_error(eval_labels, eval_probs)
     ece_after = expected_calibration_error(eval_labels, calibrated_eval)
+    brier_before = brier_score(eval_labels, eval_probs)
+    brier_after = brier_score(eval_labels, calibrated_eval)
+    auc_before = _roc_auc(eval_labels, eval_probs)
+    auc_after = _roc_auc(eval_labels, calibrated_eval)
 
-    clinical_raw: list[float] = []
-    clinical_cal: list[float] = []
-    for case in CLINICAL_VALIDATION_CASES:
-        scored = score_patient(case.profile)
-        if isinstance(scored, Fail):
-            return fail(CalibrationEvaluationError(scored.error.code, scored.error.message))
-        assert isinstance(scored, Ok)
-        raw_prob = scored.value.probability
-        clinical_raw.append(raw_prob)
-        clinical_cal.append(apply_isotonic([raw_prob], artifact)[0])
-
-    spearman = spearman_rank_correlation(clinical_raw, clinical_cal)
+    spearman_outcome = _ranking_spearman(
+        artifact,
+        ranking_domain=dto.ranking_domain,
+        exp_id=dto.exp_id,
+        model_name=dto.model_name,
+        dataset=dto.dataset,
+        seed=dto.seed,
+    )
+    if isinstance(spearman_outcome, Fail):
+        return spearman_outcome
+    assert isinstance(spearman_outcome, Ok)
+    spearman = spearman_outcome.value
 
     artifact_path = calibration_artifact_path(
         ROOT,
-        exp_id="exp_043",
+        exp_id=artifact_exp,
         model_name=dto.model_name,
         dataset=dto.dataset,
         seed=dto.seed,
@@ -198,6 +265,13 @@ def run_calibration_evaluation(
 
     n_neg = sum(1 for y in labels if y == 0)
     passed = ece_after <= max_ece_after and spearman >= min_spearman_rho
+    if require_ece_improved:
+        passed = passed and ece_after < ece_before
+    if require_brier_improved:
+        passed = passed and brier_after <= brier_before + 1e-9
+    if (auc_after - auc_before) < min_auc_delta:
+        passed = False
+
     result = CalibrationEvaluationResult(
         exp_id=dto.exp_id,
         model_name=dto.model_name,
@@ -208,6 +282,10 @@ def run_calibration_evaluation(
         n_positives=len(labels) - n_neg,
         ece_before=ece_before,
         ece_after=ece_after,
+        brier_before=brier_before,
+        brier_after=brier_after,
+        roc_auc_before=auc_before,
+        roc_auc_after=auc_after,
         spearman_rho=spearman,
         artifact_path=str(artifact_path),
         passed=passed,
@@ -216,8 +294,12 @@ def run_calibration_evaluation(
         "info",
         "calibration evaluation complete",
         exp_id=dto.exp_id,
+        artifact_exp_id=artifact_exp,
+        ranking_domain=dto.ranking_domain,
         ece_before=round(ece_before, 4),
         ece_after=round(ece_after, 4),
+        brier_before=round(brier_before, 4),
+        brier_after=round(brier_after, 4),
         spearman_rho=round(spearman, 4),
         passed=passed,
         record_source="calibration_evaluation",

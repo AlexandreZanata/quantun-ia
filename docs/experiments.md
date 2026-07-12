@@ -486,7 +486,17 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `QML_DEVICE=cuda python experiments/exp_080_quantum_champion_fusion_acyd/run.py --profile publication --write-results`  
 **Lesson:** Combining ACYD winners on the serve-compatible `LargeNanoHybrid` path does not beat the best single frozen-hybrid recipe; keep components as separate ablations.
 
-**Next:** Optional exp_081 maize / exp_082 calibration; Zenodo DOI + arXiv (external).
+### EXP 082 — Isotonic calibration on ACYD C4 (agro)
+
+**Model:** `exp_060` LargeNanoMLP · isotonic on temporal val  
+**Dataset:** `acyd_soy_brazil_v1` (5,830 val rows; fit 80% / eval 20%)  
+**Claim:** ECE ≤ 0.08 and improved; Brier not worse; AUC Δ ≥ −0.005; agro Spearman ρ ≥ 0.85  
+**Verdict:** Accepted — ECE 0.0538→0.0355; Brier 0.2282→0.2237; AUC 0.6789→0.6767; ρ=0.9820  
+**Command:** `QML_DEVICE=cuda python experiments/exp_082_calibration_acyd/run.py --profile publication --write-results`  
+**Artifact:** `artifacts/exp_082/large_nano_mlp_acyd_soy_brazil_v1/seed_42/calibration_isotonic.json`  
+**Lesson:** Isotonic improves Agro Risk Lab probability calibration without hurting ranking.
+
+**Next:** Optional exp_081 maize (needs ingest) · exp_079 quantum transfer (exploratory); Zenodo DOI + arXiv (external).
 
 ## Publication Profiles
 
