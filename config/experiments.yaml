@@ -2384,6 +2384,20 @@ experiments:
         min_rung_advantage_pp: 0.3
         save_checkpoints: true
 
+  exp_100_cycle2_grand_leaderboard:
+    description: "Cycle v2 grand leaderboard synthesis (exp_084–099 curated RTX 4060 metrics)"
+    exp_id: exp_100
+    seed: 42
+    registry_path: config/cycle2_grand_leaderboard_registry.yaml
+    json_out: dist/leaderboards/cycle2_grand_leaderboard.json
+    latex_out: paper/tables/cycle2_grand_leaderboard.tex
+    claim_win_delta_pp: 0.5
+    profile_overrides:
+      ci:
+        claim_win_delta_pp: 0.5
+      publication:
+        claim_win_delta_pp: 0.5
+
   exp_068_nano_grand_comparison:
     description: "C1–C4 grand comparison synthesis — classical vs quantum recipes (curated metrics)"
     exp_id: exp_068

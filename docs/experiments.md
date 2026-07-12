@@ -680,6 +680,15 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Bundle:** `dist/arxiv/quantun-ia-paper.tar.gz` (F-T4 local ready; paste `arxiv_id` / Zenodo DOI after upload)  
 **Status:** closed — Cycle v2 accepts (exp_092, exp_091, exp_094) + honest negatives (incl. exp_087) in paper + arXiv tarball
 
+### EXP 100 — Cycle v2 grand leaderboard (synthesis)
+
+**Models:** N/A (curated scorecard)  
+**Dataset:** Aggregates `exp_084`–`exp_099` RTX 4060 `results.md`  
+**Claim:** No quantum arm ≥ +0.5 pp vs classical floor; accepts = {091, 092, 094, 096, 097}  
+**Artifacts:** `dist/leaderboards/cycle2_grand_leaderboard.json`, `paper/tables/cycle2_grand_leaderboard.tex`  
+**Command:** `python experiments/exp_100_cycle2_grand_leaderboard/run.py --profile publication --write-results`  
+**Lesson:** Full Cycle v2 scorecard closes research synthesis; remaining work is external citation paste only.
+
 ### Phase E — Agro Maize Lab + uncertainty (E-T3)
 
 **Dashboard:** `dashboard/pages/07_agro_maize_lab.py`  
