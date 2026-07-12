@@ -596,6 +596,15 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `QML_DEVICE=cuda python experiments/exp_093_pqk_ridge_head/run.py --profile publication --write-results`  
 **Lesson:** 1-local projected quantum features destroy ranking vs raw logistic; close Phase B quantum backlog.
 
+### EXP 097 — SPEI-proxy curriculum (D-T3)
+
+**Models:** ResidualNanoMLP · random staged curriculum · SPEI easy→hard staged curriculum · HistGB honesty  
+**Dataset:** `acyd_maize_brazil_v1` (full train / 13,566 val)  
+**Claim:** SPEI curriculum ≥ random + 0.5 pp  
+**Verdict:** Accepted — SPEI 0.8025 vs random 0.7942 (**+0.83 pp**)  
+**Command:** `QML_DEVICE=cuda python experiments/exp_097_spei_curriculum_agro/run.py --profile publication --write-results`  
+**Lesson:** Drought-severity easy→hard batch order helps ResidualNano vs matched random stages; still below HistGB 0.8203.
+
 ### EXP 088 — Pauli/shadow features → NarrowDeepNano (H-Q2.3)
 
 **Models:** Logistic · NarrowDeepNano (raw 37-d) · NarrowDeepNano (64-d Pauli features) · HistGB honesty  

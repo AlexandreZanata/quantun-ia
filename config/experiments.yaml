@@ -1819,6 +1819,43 @@ experiments:
         feature_progress_every: 2500
         min_vs_logistic_pp: 0.5
 
+  exp_097_spei_curriculum_agro:
+    description: "SPEI-proxy easy→hard curriculum vs random staged ResidualNano on ACYD maize (D-T3)"
+    exp_id: exp_097
+    dataset_id: acyd_maize_brazil_v1
+    seed: 42
+    learning_rate: 0.001
+    weight_decay: 0.0001
+    batch_size: 2048
+    dropout: 0.2
+    residual_hidden: 512
+    residual_n_blocks: 3
+    residual_bottleneck: 64
+    curriculum_stages: 4
+    epochs_per_stage: 2
+    refine_epochs: 4
+    histgb_max_iter: 100
+    min_vs_random_pp: 0.5
+    profile_overrides:
+      ci:
+        n_train_rows: 50
+        n_val_rows: 50
+        curriculum_stages: 2
+        epochs_per_stage: 1
+        refine_epochs: 1
+        batch_size: 32
+        histgb_max_iter: 20
+        min_vs_random_pp: -100.0
+      publication:
+        n_train_rows: 0
+        n_val_rows: 0
+        curriculum_stages: 4
+        epochs_per_stage: 2
+        refine_epochs: 4
+        batch_size: 2048
+        histgb_max_iter: 100
+        min_vs_random_pp: 0.5
+
   exp_087_fourier_reupload_climate:
     description: "Fourier sin/cos re-upload vs flat angle head on frozen distill ResidualNano (ACYD maize H-Q2.2)"
     exp_id: exp_087
