@@ -219,6 +219,12 @@ exp-091:
 exp-091-publication:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_091_circuit_cut_6q/run.py --profile publication --write-results
 
+exp-093:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_093_pqk_ridge_head/run.py --profile ci
+
+exp-093-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_093_pqk_ridge_head/run.py --profile publication --write-results
+
 exp-088:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_088_shadow_features_nano_maize/run.py --profile ci
 

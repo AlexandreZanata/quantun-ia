@@ -427,6 +427,26 @@ See: `experiments/exp_089_measurement_dropout_cal/results.md`
 
 ---
 
+## exp_093 — Projected quantum kernel ridge head on maize (H-Q2.6)
+
+**Profile:** acyd_maize_brazil_v1, 15k train / 13,566 val, seed 42, RTX 4060
+
+| Arm | Val ROC-AUC |
+|-----|-------------|
+| LogisticRegression (raw 37-d) | **0.6972** |
+| LogisticRegression (12-d φ projections) | 0.5082 |
+| KernelRidge RBF on φ | 0.5307 |
+| Nyström→logistic | 0.5193 |
+| HistGB (honesty) | 0.7866 |
+
+**Gate:** KernelRidge ≥ logistic + 0.5 pp → **failed** (−16.65 pp).
+
+**Interpretation:** 1-local Pauli projections of a fixed 4q angle circuit erase agro ranking signal (near-chance logistic on φ). Classical RBF KernelRidge cannot recover; same failure mode family as exp_088 shadow banks. Prefer raw-feature classical heads; Phase B H-Q2.x backlog closed.
+
+See: `experiments/exp_093_pqk_ridge_head/results.md`
+
+---
+
 ## exp_088 — Pauli/shadow features → NarrowDeepNano on maize (H-Q2.3)
 
 **Profile:** acyd_maize_brazil_v1, 20k train / 13,566 val, seed 42, RTX 4060

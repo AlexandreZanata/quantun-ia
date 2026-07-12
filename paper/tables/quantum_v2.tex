@@ -1,7 +1,7 @@
-% Auto-generated Cycle v2 quantum recipes (exp_086 / exp_087 / exp_088 / exp_091)
+% Auto-generated Cycle v2 quantum recipes (exp_086 / exp_087 / exp_088 / exp_091 / exp_093)
 \begin{table}[ht]
 \centering
-\caption{Quantum recipes 2.0 on ACYD maize (exp\_086 residual QNN; exp\_087 Fourier; exp\_088 shadow; exp\_091 circuit-cut).}
+\caption{Quantum recipes 2.0 on ACYD maize (exp\_086–\_091; exp\_093 PQK).}
 \label{tab:quantum_v2}
 \begin{tabular}{llrl}
 \toprule
@@ -18,6 +18,9 @@ exp_088 & LogisticRegression & 0.6960 & --- \\
 exp_091 & Classical bottleneck head & 0.8129 & 0.00 \\
 exp_091 & Plain 4q re-upload & 0.8128 & -0.03 \\
 exp_091 & Circuit-cut 2×4q (effective 6q) & 0.8125 & -0.03 \\
+exp_093 & LogisticRegression (raw) & 0.6972 & 0.00 \\
+exp_093 & KernelRidge RBF on 1-local φ & 0.5307 & -16.65 \\
+exp_093 & Nyström→logistic & 0.5193 & -17.79 \\
 \bottomrule
 \end{tabular}
 \end{table}

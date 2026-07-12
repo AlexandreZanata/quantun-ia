@@ -587,6 +587,15 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `QML_DEVICE=cuda python experiments/exp_091_circuit_cut_6q/run.py --profile publication --write-results`  
 **Lesson:** Soft overlapping 4q fragments reach classical parity on a 4060; no AUC lift vs plain 4q (−0.03 pp).
 
+### EXP 093 — Projected quantum kernel ridge head (H-Q2.6)
+
+**Models:** LogisticRegression · KernelRidge RBF on 1-local 4q projections · Nyström→logistic · HistGB honesty  
+**Dataset:** `acyd_maize_brazil_v1` (15k train / 13,566 val)  
+**Claim:** KernelRidge(PQK) ≥ logistic + 0.5 pp  
+**Verdict:** Honest negative — KernelRidge 0.5307 vs logistic 0.6972 (−16.65 pp); φ logistic 0.5082  
+**Command:** `QML_DEVICE=cuda python experiments/exp_093_pqk_ridge_head/run.py --profile publication --write-results`  
+**Lesson:** 1-local projected quantum features destroy ranking vs raw logistic; close Phase B quantum backlog.
+
 ### EXP 088 — Pauli/shadow features → NarrowDeepNano (H-Q2.3)
 
 **Models:** Logistic · NarrowDeepNano (raw 37-d) · NarrowDeepNano (64-d Pauli features) · HistGB honesty  

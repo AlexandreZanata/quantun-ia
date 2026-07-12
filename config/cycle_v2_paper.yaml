@@ -63,7 +63,7 @@ sample_efficiency:
       distill_nano: 0.8130
 
 quantum_v2:
-  caption: "Quantum recipes 2.0 on ACYD maize (exp\\_086 residual QNN; exp\\_087 Fourier; exp\\_088 shadow; exp\\_091 circuit-cut)."
+  caption: "Quantum recipes 2.0 on ACYD maize (exp\\_086–\\_091; exp\\_093 PQK)."
   label: tab:quantum_v2
   rows:
     - experiment: exp_086
@@ -121,6 +121,21 @@ quantum_v2:
       roc_auc: 0.8125
       delta_pp: -0.03
       verdict: accepted
+    - experiment: exp_093
+      arm: LogisticRegression (raw)
+      roc_auc: 0.6972
+      delta_pp: 0.0
+      verdict: floor
+    - experiment: exp_093
+      arm: KernelRidge RBF on 1-local φ
+      roc_auc: 0.5307
+      delta_pp: -16.65
+      verdict: rejected
+    - experiment: exp_093
+      arm: Nyström→logistic
+      roc_auc: 0.5193
+      delta_pp: -17.79
+      verdict: rejected
 
 multicrop:
   caption: "Multi-crop joint ResidualNano vs maize-solo (exp\\_090)."
