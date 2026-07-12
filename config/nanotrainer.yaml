@@ -57,6 +57,9 @@ datasets:
   acyd_soy_brazil_v1:
     kind: tabular
     n_features: 37
+  acyd_maize_brazil_v1:
+    kind: tabular
+    n_features: 37
   sequential_binary:
     kind: sequence
     seq_len: 8
@@ -145,6 +148,8 @@ pairs:
     dataset: synthea_cv_risk_v1
   - model: large_nano_mlp
     dataset: acyd_soy_brazil_v1
+  - model: large_nano_mlp
+    dataset: acyd_maize_brazil_v1
   - model: large_nano_hybrid
     dataset: higgs_v1
   - model: transformer_mini

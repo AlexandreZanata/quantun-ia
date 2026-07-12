@@ -2,7 +2,7 @@
   "schema_version": "1",
   "project": "quantun-ia",
   "phase": "L",
-  "updated_at": "2026-06-19",
+  "updated_at": "2026-07-12",
   "hardware_target": "NVIDIA RTX 4060 Laptop GPU (8 GB VRAM)",
   "model_target_params": {
     "min": 1000000,
@@ -147,6 +147,34 @@
         "val": "24fdd7577e839239aeaf1fa4eec3963ec66ff7dc28e8caa4b287f60552d6dfd4",
         "test": "78b890f9796aa9b90799ed96bb683c0b520a49093b9869d8c8c4114611399fad",
         "stats": "77848eddc298b7ed9a3b1b5ff188c1bf533be6051ef02d172c10d1dea916bc43"
+      }
+    },
+    {
+      "id": "acyd_maize_brazil_v1",
+      "path": "acyd_maize_brazil/processed/v1",
+      "description": "ACYD Brazil maize (corn) \u2014 municipality\u00d7year climate/soil vs low-yield label (temporal split)",
+      "license": "CC-BY-4.0 (stack; see README)",
+      "source_url": "https://huggingface.co/datasets/notadib/ACYD",
+      "ready": true,
+      "row_counts": {
+        "total": 179059,
+        "train": 151956,
+        "val": 13566,
+        "test": 13537
+      },
+      "n_features": 37,
+      "files": {
+        "train": "train.parquet",
+        "val": "val.parquet",
+        "test": "test.parquet",
+        "stats": "stats.json"
+      },
+      "build_script": "scripts/build_open_acyd_maize.py",
+      "checksums": {
+        "train": "f9fbbf74bea653ab7c17e71d5faa1cac248678d0dab7c2c8c831ec7b94fb87a9",
+        "val": "012c97c5d93047c9907c87f96dbe513c617dfe3bd2bad474d68b763df31e387b",
+        "test": "284b240e52fd6d4db51002fad9e348d829e2b27d65d403d368cd674a762338bc",
+        "stats": "ee4cf0ff79d4d0d951b8abc8081da2a6b61c5d79f7df6cff7c61f5edc092ebc9"
       }
     }
   ]

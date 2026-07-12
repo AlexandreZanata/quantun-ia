@@ -24,6 +24,7 @@ OPEN_DATASET_FEATURES: dict[str, int] = {
     "nihr_cv_synthetic_v1": 13,
     "code_defects_gobug_v1": 23,
     "acyd_soy_brazil_v1": 37,
+    "acyd_maize_brazil_v1": 37,
 }
 
 DEFAULT_SERVE_EXP_ID = "exp_032"

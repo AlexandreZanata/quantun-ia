@@ -165,6 +165,12 @@ exp-060:
 exp-060-publication:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_060_large_nano_acyd_soy/run.py --profile publication --write-results
 
+exp-081:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_081_large_nano_acyd_maize/run.py --profile ci
+
+exp-081-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_081_large_nano_acyd_maize/run.py --profile publication --write-results
+
 exp-062:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_062_hybrid_nano_acyd_soy/run.py --profile ci
 
@@ -447,6 +453,12 @@ data-open-acyd-download:
 
 data-open-acyd-soy: data-open-acyd-download
 	MLFLOW_DISABLE=1 $(PYTHON) scripts/build_open_acyd_soy.py
+
+data-open-acyd-maize-download:
+	MLFLOW_DISABLE=1 $(PYTHON) scripts/download_acyd_brazil.py --crop maize
+
+data-open-acyd-maize: data-open-acyd-maize-download
+	MLFLOW_DISABLE=1 $(PYTHON) scripts/build_open_acyd_maize.py
 
 data-open-acyd-dvc:
 	@if $(PYTHON) -m dvc --version >/dev/null 2>&1; then \

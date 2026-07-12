@@ -505,7 +505,16 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `QML_DEVICE=cuda python experiments/exp_079_quantum_transfer_higgs_to_acyd/run.py --profile publication --write-results`  
 **Lesson:** Cross-domain QNN head transfer from physics to agro does not clear a +0.5 pp win — transfer hype unsupported.
 
-**Next:** Optional exp_081 maize (needs ingest); Zenodo DOI + arXiv (external).
+**Next:** Zenodo DOI + arXiv (external).
+
+### EXP 081 — LargeNanoMLP on ACYD Brazil maize (C4b)
+
+**Models:** `LargeNanoMLP` (~1.16M) vs logistic  
+**Dataset:** `acyd_maize_brazil_v1` (151,956 train / 13,566 val / 13,537 temporal test ≥2022)  
+**Claim:** Val ROC-AUC ≥ logistic + 2.0 pp  
+**Verdict:** Accepted — logistic 0.6983 vs nano 0.8086 (+11.03 pp)  
+**Command:** `QML_DEVICE=cuda python experiments/exp_081_large_nano_acyd_maize/run.py --profile publication --write-results`  
+**Lesson:** Same LargeNanoMLP recipe as C4 soybean transfers strongly to maize (corn) on the shared climate/soil feature panel.
 
 ## Publication Profiles
 

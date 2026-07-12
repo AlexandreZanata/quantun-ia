@@ -138,6 +138,7 @@ def test_gobug_build_script_registered_in_makefile():
 def test_acyd_build_script_registered_in_makefile():
     makefile = (ROOT / "Makefile").read_text(encoding="utf-8")
     assert "data-open-acyd-soy" in makefile
+    assert "data-open-acyd-maize" in makefile
 
 
 def test_manifest_acyd_soy_brazil_v1_metadata():
@@ -149,6 +150,19 @@ def test_manifest_acyd_soy_brazil_v1_metadata():
     assert Path(ROOT / "scripts/download_acyd_brazil.py").is_file()
     assert acyd["ready"] is True
     assert acyd["row_counts"]["train"] == 50_107
+
+
+def test_manifest_acyd_maize_brazil_v1_metadata():
+    manifest = _load_manifest()
+    acyd = _dataset_by_id(manifest, "acyd_maize_brazil_v1")
+    assert acyd["n_features"] == 37
+    assert acyd["build_script"] == "scripts/build_open_acyd_maize.py"
+    assert Path(ROOT / acyd["build_script"]).is_file()
+    assert Path(ROOT / "data/open/acyd_maize_brazil/README.md").is_file()
+    assert acyd["ready"] is True
+    assert acyd["row_counts"]["train"] == 151_956
+    assert acyd["row_counts"]["val"] == 13_566
+    assert acyd["row_counts"]["test"] == 13_537
 
 
 @pytest.mark.parametrize(
@@ -169,6 +183,9 @@ def test_manifest_acyd_soy_brazil_v1_metadata():
         ("acyd_soy_brazil_v1", "train", 50_107, 37),
         ("acyd_soy_brazil_v1", "val", 5_830, 37),
         ("acyd_soy_brazil_v1", "test", 5_856, 37),
+        ("acyd_maize_brazil_v1", "train", 151_956, 37),
+        ("acyd_maize_brazil_v1", "val", 13_566, 37),
+        ("acyd_maize_brazil_v1", "test", 13_537, 37),
     ],
 )
 def test_open_dataset_splits_when_ready(

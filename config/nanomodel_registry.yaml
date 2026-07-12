@@ -75,6 +75,21 @@ models:
     exports: [native, onnx, torchscript]
     model_card: model_cards/large_nano_mlp_acyd_soy.md
 
+  large_nano_mlp_acyd_maize:
+    description: "LargeNanoMLP (~1.16M) on ACYD Brazil maize open tabular (C4b anchor)"
+    train_model: large_nano_mlp
+    dataset: acyd_maize_brazil_v1
+    exp_id: exp_081
+    seed: 42
+    profile: publication
+    serve:
+      kind: open_large_nano
+    train:
+      kind: experiment
+      experiment_key: exp_081_large_nano_acyd_maize
+    exports: [native, onnx, torchscript]
+    model_card: model_cards/large_nano_mlp_acyd_maize.md
+
   large_nano_mlp_nihr:
     description: "LargeNanoMLP (~1.11M) on NIHR synthetic CV open tabular (C2 anchor)"
     train_model: large_nano_mlp

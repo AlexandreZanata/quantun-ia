@@ -68,7 +68,28 @@ def _synthetic_features() -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def test_binary_label_below_state_median():
+def test_binary_label_maize_below_state_median():
+    frame = pd.DataFrame(
+        {
+            "country": ["Brazil", "Brazil"],
+            "admin_level_1": ["SP", "SP"],
+            "admin_level_2": ["A", "B"],
+            "year": [2019, 2019],
+            "corn_yield": [2000.0, 3000.0],
+            "area_harvested": [50.0, 60.0],
+        }
+    )
+    labels = build_binary_labels_below_state_median(frame, yield_column="corn_yield")
+    assert labels.tolist() == [1, 0]
+
+
+def test_normalize_crop_aliases():
+    from src.data.open_acyd import crop_spec, normalize_crop
+
+    assert normalize_crop("corn") == "maize"
+    assert crop_spec("maize")["yield_column"] == "corn_yield"
+    assert crop_spec("maize")["dataset_id"] == "acyd_maize_brazil_v1"
+
     frame = _synthetic_yield()
     frame = pd.concat(
         [

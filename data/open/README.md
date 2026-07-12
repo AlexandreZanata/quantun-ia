@@ -17,7 +17,8 @@ This folder holds **reproducible, license-clear** datasets for large-scale nano 
 | `synthea_cv_risk_v1` | `synthea_cv_risk/processed/v1/` | 1,000,000 | 40 | MIT (Synthea) | `ready` (DVC: `processed/v1.dvc`) |
 | `nihr_cv_synthetic_v1` | `nihr_cv_synthetic/processed/v1/` | 100,000 | 13 | CC0 (Zenodo) | `ready` (DVC: `processed/v1.dvc`) |
 | `code_defects_gobug_v1` | `code_defects_gobug/processed/v1/` | ~39,000 | 23 | IEEE/go-bug-collector | `ready` (DVC: `processed/v1.dvc`) |
-| `acyd_soy_brazil_v1` | `acyd_soy_brazil/processed/v1/` | TBD | 37 | CC BY stack (ACYD) | `ready=false` until built |
+| `acyd_soy_brazil_v1` | `acyd_soy_brazil/processed/v1/` | ~62K | 37 | CC BY stack (ACYD) | `ready` |
+| `acyd_maize_brazil_v1` | `acyd_maize_brazil/processed/v1/` | ~179K | 37 | CC BY stack (ACYD) | `ready` |
 
 See `manifest.json` for checksums and split counts once built.
 
@@ -48,6 +49,10 @@ make data-open-verify
 # ACYD Brazil soybean (agro-climate — exp_060)
 make data-open-acyd-soy
 make data-open-verify DATASET=acyd_soy_brazil_v1
+
+# ACYD Brazil maize (agro-climate — exp_081 / C4b)
+make data-open-acyd-maize
+make data-open-verify DATASET=acyd_maize_brazil_v1
 ```
 
 ## Citations

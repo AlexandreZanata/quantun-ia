@@ -28,6 +28,8 @@ data/open/code_defects_gobug/raw/
 data/open/code_defects_gobug/processed/v1/
 data/open/acyd_soy_brazil/raw/
 data/open/acyd_soy_brazil/processed/v1/
+data/open/acyd_maize_brazil/raw/
+data/open/acyd_maize_brazil/processed/v1/
 data/*.db
 figures/
 dist/

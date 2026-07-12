@@ -1,4 +1,4 @@
-"""ACYD Brazil open dataset builder — soybean yield + climate tabular features."""
+"""ACYD Brazil open dataset builder — crop yield + climate tabular features."""
 
 from __future__ import annotations
 
@@ -19,6 +19,7 @@ ACYD_HF_BASE = f"https://huggingface.co/datasets/{ACYD_HF_REPO}/resolve/main"
 ACYD_SOURCE_URL = "https://huggingface.co/datasets/notadib/ACYD"
 ACYD_LICENSE = "CC-BY-4.0 (components; see data/open/acyd_soy_brazil/README.md)"
 ACYD_DATASET_ID = "acyd_soy_brazil_v1"
+ACYD_MAIZE_DATASET_ID = "acyd_maize_brazil_v1"
 N_FEATURES = 37
 LABEL_COLUMN = "label"
 FEATURE_COLUMNS = [f"feature_{i}" for i in range(N_FEATURES)]
@@ -27,6 +28,38 @@ YIELD_FILE = "crop_soybean_yield.csv"
 FEATURE_CHUNK_PATTERN = "features_chunk_{:03d}.csv"
 FEATURE_CHUNK_COUNT = 100
 SEASON_WEEKS = tuple(range(10, 41))
+
+# maize aliases to ACYD's corn yield file
+CROP_SPECS: dict[str, dict[str, str]] = {
+    "soybean": {
+        "yield_file": "crop_soybean_yield.csv",
+        "yield_column": "soybean_yield",
+        "hf_yield_rel": "brazil/final/crop/crop_soybean_yield.csv",
+        "dataset_id": ACYD_DATASET_ID,
+    },
+    "maize": {
+        "yield_file": "crop_corn_yield.csv",
+        "yield_column": "corn_yield",
+        "hf_yield_rel": "brazil/final/crop/crop_corn_yield.csv",
+        "dataset_id": ACYD_MAIZE_DATASET_ID,
+    },
+}
+CROP_ALIASES = {"corn": "maize", "soy": "soybean"}
+
+
+def normalize_crop(crop: str) -> str:
+    """Map crop aliases to canonical crop keys."""
+    key = CROP_ALIASES.get(crop, crop)
+    if key not in CROP_SPECS:
+        msg = f"unsupported crop {crop!r}; expected one of {sorted(CROP_SPECS)}"
+        raise ValueError(msg)
+    return key
+
+
+def crop_spec(crop: str) -> dict[str, str]:
+    """Return ACYD crop specification for a canonical or aliased crop name."""
+    return CROP_SPECS[normalize_crop(crop)]
+
 
 SOIL_COLUMNS = [
     "organic_carbon_0_5cm",
@@ -61,52 +94,94 @@ def download_file(url: str, dest: Path) -> Path:
     return dest
 
 
+def _link_or_copy_features(source_dir: Path, dest_dir: Path) -> None:
+    """Reuse climate feature chunks via symlink when possible."""
+    dest_dir.parent.mkdir(parents=True, exist_ok=True)
+    if dest_dir.exists() or dest_dir.is_symlink():
+        return
+    try:
+        dest_dir.symlink_to(source_dir.resolve(), target_is_directory=True)
+    except OSError:
+        dest_dir.mkdir(parents=True, exist_ok=True)
+        for path in sorted(source_dir.glob("features_chunk_*.csv")):
+            target = dest_dir / path.name
+            if not target.exists():
+                target.write_bytes(path.read_bytes())
+
+
 def download_acyd_brazil_raw(
     raw_dir: Path,
     *,
     crop: str = "soybean",
     max_feature_chunks: int | None = None,
+    reuse_features_from: Path | None = None,
 ) -> dict[str, Path]:
     """Download ACYD Brazil raw CSVs (yield + feature chunks) into raw_dir."""
-    if crop != "soybean":
-        msg = f"only soybean is supported in v1, got {crop!r}"
-        raise ValueError(msg)
-
+    spec = crop_spec(crop)
     paths: dict[str, Path] = {}
-    yield_rel = "brazil/final/crop/crop_soybean_yield.csv"
-    yield_path = raw_dir / YIELD_FILE
-    download_file(acyd_hf_url(yield_rel), yield_path)
+    yield_path = raw_dir / spec["yield_file"]
+    download_file(acyd_hf_url(spec["hf_yield_rel"]), yield_path)
     paths["yield"] = yield_path
 
-    chunk_limit = FEATURE_CHUNK_COUNT if max_feature_chunks is None else min(
-        max_feature_chunks,
-        FEATURE_CHUNK_COUNT,
-    )
     feature_dir = raw_dir / "features"
-    feature_dir.mkdir(parents=True, exist_ok=True)
-    chunk_paths: list[Path] = []
-    for idx in range(1, chunk_limit + 1):
-        rel = f"brazil/final/features/{FEATURE_CHUNK_PATTERN.format(idx)}"
-        dest = feature_dir / FEATURE_CHUNK_PATTERN.format(idx)
-        download_file(acyd_hf_url(rel), dest)
-        chunk_paths.append(dest)
+    if reuse_features_from is not None:
+        source = Path(reuse_features_from)
+        if not source.is_dir():
+            msg = f"reuse_features_from is not a directory: {source}"
+            raise FileNotFoundError(msg)
+        _link_or_copy_features(source, feature_dir)
+        chunk_paths = sorted(feature_dir.glob("features_chunk_*.csv"))
+        if max_feature_chunks is not None:
+            chunk_paths = chunk_paths[:max_feature_chunks]
+    else:
+        chunk_limit = FEATURE_CHUNK_COUNT if max_feature_chunks is None else min(
+            max_feature_chunks,
+            FEATURE_CHUNK_COUNT,
+        )
+        feature_dir.mkdir(parents=True, exist_ok=True)
+        chunk_paths = []
+        for idx in range(1, chunk_limit + 1):
+            rel = f"brazil/final/features/{FEATURE_CHUNK_PATTERN.format(idx)}"
+            dest = feature_dir / FEATURE_CHUNK_PATTERN.format(idx)
+            download_file(acyd_hf_url(rel), dest)
+            chunk_paths.append(dest)
+
     paths["feature_chunks"] = feature_dir
     paths["feature_chunk_files"] = chunk_paths  # type: ignore[assignment]
     return paths
 
 
-def load_soybean_yield(yield_path: Path) -> pd.DataFrame:
-    """Load and validate soybean yield table."""
+def load_crop_yield(yield_path: Path, *, crop: str = "soybean") -> pd.DataFrame:
+    """Load and validate an ACYD crop yield table."""
+    spec = crop_spec(crop)
+    yield_column = spec["yield_column"]
     frame = pd.read_csv(yield_path)
-    required = {"country", "admin_level_1", "admin_level_2", "year", "soybean_yield", "area_harvested"}
+    required = {
+        "country",
+        "admin_level_1",
+        "admin_level_2",
+        "year",
+        yield_column,
+        "area_harvested",
+    }
     missing = required - set(frame.columns)
     if missing:
         msg = f"yield CSV missing columns: {sorted(missing)}"
         raise ValueError(msg)
-    frame = frame.dropna(subset=["soybean_yield", "area_harvested"])
+    frame = frame.dropna(subset=[yield_column, "area_harvested"])
     frame = frame[frame["area_harvested"] > 0]
     frame["year"] = frame["year"].astype(int)
     return frame.reset_index(drop=True)
+
+
+def load_soybean_yield(yield_path: Path) -> pd.DataFrame:
+    """Load and validate soybean yield table."""
+    return load_crop_yield(yield_path, crop="soybean")
+
+
+def load_maize_yield(yield_path: Path) -> pd.DataFrame:
+    """Load and validate maize (corn) yield table."""
+    return load_crop_yield(yield_path, crop="maize")
 
 
 def load_feature_chunks(chunk_paths: list[Path]) -> pd.DataFrame:
@@ -188,11 +263,29 @@ def extract_acyd_feature_matrix(frame: pd.DataFrame) -> np.ndarray:
     return out
 
 
-def build_binary_labels_below_state_median(yield_frame: pd.DataFrame) -> np.ndarray:
+def _resolve_yield_column(yield_frame: pd.DataFrame, yield_column: str | None) -> str:
+    if yield_column is not None:
+        if yield_column not in yield_frame.columns:
+            msg = f"yield column missing: {yield_column}"
+            raise ValueError(msg)
+        return yield_column
+    for candidate in ("soybean_yield", "corn_yield"):
+        if candidate in yield_frame.columns:
+            return candidate
+    msg = "yield frame has no recognized yield column (soybean_yield / corn_yield)"
+    raise ValueError(msg)
+
+
+def build_binary_labels_below_state_median(
+    yield_frame: pd.DataFrame,
+    *,
+    yield_column: str | None = None,
+) -> np.ndarray:
     """Label 1 when municipal yield is below state-year median."""
-    grouped = yield_frame.groupby(["admin_level_1", "year"])["soybean_yield"]
+    column = _resolve_yield_column(yield_frame, yield_column)
+    grouped = yield_frame.groupby(["admin_level_1", "year"])[column]
     medians = grouped.transform("median")
-    return (yield_frame["soybean_yield"] < medians).astype(np.int32).to_numpy()
+    return (yield_frame[column] < medians).astype(np.int32).to_numpy()
 
 
 def count_season_weeks_above(
@@ -326,6 +419,7 @@ def build_stats_payload(
     train_max_year: int,
     val_years: tuple[int, ...],
     test_min_year: int,
+    dataset_id: str = ACYD_DATASET_ID,
 ) -> dict[str, Any]:
     """Build stats.json for ACYD temporal split."""
 
@@ -340,7 +434,7 @@ def build_stats_payload(
         }
 
     return {
-        "dataset_id": ACYD_DATASET_ID,
+        "dataset_id": dataset_id,
         "license": ACYD_LICENSE,
         "source_url": ACYD_SOURCE_URL,
         "n_features": N_FEATURES,
@@ -359,18 +453,20 @@ def build_stats_payload(
     }
 
 
-def build_acyd_soy_processed(
+def build_acyd_crop_processed(
     raw_dir: Path,
     out_dir: Path,
     *,
+    crop: str = "soybean",
     label_mode: str = "below_state_median",
     train_max_year: int = 2018,
     val_years: tuple[int, ...] = (2019, 2020, 2021),
     test_min_year: int = 2022,
     max_feature_chunks: int | None = None,
 ) -> dict[str, Path]:
-    """Build parquet splits from downloaded ACYD raw files."""
-    yield_path = raw_dir / YIELD_FILE
+    """Build parquet splits from downloaded ACYD raw files for a crop."""
+    spec = crop_spec(crop)
+    yield_path = raw_dir / spec["yield_file"]
     feature_dir = raw_dir / "features"
     if not yield_path.is_file():
         msg = f"yield file missing: {yield_path}"
@@ -383,7 +479,7 @@ def build_acyd_soy_processed(
         msg = f"no feature chunks under {feature_dir}"
         raise FileNotFoundError(msg)
 
-    yield_frame = load_soybean_yield(yield_path)
+    yield_frame = load_crop_yield(yield_path, crop=crop)
     feature_frame = load_feature_chunks(chunk_paths)
     merged = join_yield_features(yield_frame, feature_frame)
 
@@ -391,7 +487,9 @@ def build_acyd_soy_processed(
         msg = f"unsupported label_mode: {label_mode}"
         raise ValueError(msg)
 
-    labels = build_binary_labels_below_state_median(merged)
+    labels = build_binary_labels_below_state_median(
+        merged, yield_column=spec["yield_column"]
+    )
     features = extract_acyd_feature_matrix(merged)
     export = build_export_frame(features, labels)
     valid_mask = ~export.replace([np.inf, -np.inf], np.nan).isna().any(axis=1).to_numpy()
@@ -424,11 +522,58 @@ def build_acyd_soy_processed(
         train_max_year=train_max_year,
         val_years=val_years,
         test_min_year=test_min_year,
+        dataset_id=spec["dataset_id"],
     )
     stats_path = out_dir / "stats.json"
     stats_path.write_text(json.dumps(stats, indent=2) + "\n", encoding="utf-8")
     paths["stats"] = stats_path
     return paths
+
+
+def build_acyd_soy_processed(
+    raw_dir: Path,
+    out_dir: Path,
+    *,
+    label_mode: str = "below_state_median",
+    train_max_year: int = 2018,
+    val_years: tuple[int, ...] = (2019, 2020, 2021),
+    test_min_year: int = 2022,
+    max_feature_chunks: int | None = None,
+) -> dict[str, Path]:
+    """Build parquet splits from downloaded ACYD soybean raw files."""
+    return build_acyd_crop_processed(
+        raw_dir,
+        out_dir,
+        crop="soybean",
+        label_mode=label_mode,
+        train_max_year=train_max_year,
+        val_years=val_years,
+        test_min_year=test_min_year,
+        max_feature_chunks=max_feature_chunks,
+    )
+
+
+def build_acyd_maize_processed(
+    raw_dir: Path,
+    out_dir: Path,
+    *,
+    label_mode: str = "below_state_median",
+    train_max_year: int = 2018,
+    val_years: tuple[int, ...] = (2019, 2020, 2021),
+    test_min_year: int = 2022,
+    max_feature_chunks: int | None = None,
+) -> dict[str, Path]:
+    """Build parquet splits from downloaded ACYD maize (corn) raw files."""
+    return build_acyd_crop_processed(
+        raw_dir,
+        out_dir,
+        crop="maize",
+        label_mode=label_mode,
+        train_max_year=train_max_year,
+        val_years=val_years,
+        test_min_year=test_min_year,
+        max_feature_chunks=max_feature_chunks,
+    )
 
 
 def load_acyd_compound_stress_splits(
