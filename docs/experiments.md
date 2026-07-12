@@ -551,7 +551,16 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Artifact:** `artifacts/exp_085/curves_publication.json`  
 **Lesson:** HistGB remains more sample-efficient than distill nano on agro tabular; distill still helps vs hard labels at mid/full budgets.
 
-**Next:** Quantum 2.0 on distilled backbone (exp_086) or ship distill nano (Phase E).
+### EXP 086 — Residual-skip QNN vs plain QNN on distill ResidualNano (H-Q2.1)
+
+**Models:** Frozen exp_092 distill backbone · plain 4q re-upload · residual-skip 4q  
+**Dataset:** `acyd_maize_brazil_v1` (50k hybrid fine-tune / 13,566 val)  
+**Claim:** Residual-skip ≥ plain + 0.5 pp; both ≥ classical − 1.0 pp  
+**Verdict:** Honest negative — residual +0.07 pp vs plain; parity OK (plain −0.09 / residual −0.02 pp vs classical 0.8129)  
+**Command:** `QML_DEVICE=cuda python experiments/exp_086_residual_qnn_head_maize/run.py --profile publication --write-results`  
+**Lesson:** Classical skip around QNN does not unlock a ≥0.5 pp lift; hybrids already sit at classical parity.
+
+**Next:** Ship distill nano (Phase E) or try shadow features (H-Q2.3 / exp_088).
 
 ## Publication Profiles
 

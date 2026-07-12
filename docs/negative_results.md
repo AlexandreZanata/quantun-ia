@@ -371,6 +371,24 @@ See: `experiments/exp_085_sample_efficiency_agro/results.md`
 
 ---
 
+## exp_086 — Residual-skip QNN vs plain QNN on maize distill backbone (H-Q2.1)
+
+**Profile:** acyd_maize_brazil_v1, 50k hybrid fine-tune / 13,566 val, seed 42, RTX 4060
+
+| Arm | Val ROC-AUC | Δ vs classical |
+|-----|-------------|----------------|
+| Classical distill ResidualNano | **0.8129** | — |
+| Plain QNN head | 0.8120 | −0.09 pp |
+| Residual-skip QNN head | 0.8127 | −0.02 pp |
+
+**Gate:** residual ≥ plain + 0.5 pp → **failed** (+0.07 pp). Parity (≥ classical − 1.0 pp) **held**.
+
+**Interpretation:** Skip-around-QNN is not a meaningful agro lift once the distill trunk already encodes the ranking. Hybrids match classical within noise; do not claim quantum advantage. Prefer shipping classical distill nano; next quantum try should be a different mechanism (e.g. shadows H-Q2.3).
+
+See: `experiments/exp_086_residual_qnn_head_maize/results.md`
+
+---
+
 ## exp_069 — LargeNanoMLP on NIHR synthetic CV (C2 anchor)
 
 **Profile:** nihr_cv_synthetic_v1, 70K train / 15K val, seed 42, RTX 4060

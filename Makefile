@@ -195,6 +195,12 @@ exp-085:
 exp-085-publication:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_085_sample_efficiency_agro/run.py --profile publication --write-results
 
+exp-086:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_086_residual_qnn_head_maize/run.py --profile ci
+
+exp-086-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_086_residual_qnn_head_maize/run.py --profile publication --write-results
+
 exp-062:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_062_hybrid_nano_acyd_soy/run.py --profile ci
 

@@ -1674,6 +1674,45 @@ experiments:
         fractions: [0.01, 0.05, 0.2, 1.0]
         min_budget_wins: 2
 
+  exp_086_residual_qnn_head_maize:
+    description: "Residual-skip QNN vs plain QNN on frozen distill ResidualNano (ACYD maize H-Q2.1)"
+    exp_id: exp_086
+    dataset_id: acyd_maize_brazil_v1
+    checkpoint_exp_id: exp_092
+    checkpoint_model_name: residual_nano_distill
+    seed: 42
+    residual_hidden: 512
+    residual_n_blocks: 3
+    residual_bottleneck: 64
+    dropout: 0.2
+    n_qubits: 4
+    n_layers: 2
+    reupload: true
+    learning_rate: 0.01
+    weight_decay: 0.0001
+    batch_size: 256
+    min_residual_vs_plain_pp: 0.5
+    min_vs_classical_pp: -1.0
+    save_checkpoints: false
+    profile_overrides:
+      ci:
+        n_train_rows: 2000
+        n_val_rows: 500
+        epochs: 2
+        batch_size: 128
+        n_layers: 1
+        min_residual_vs_plain_pp: -100.0
+        min_vs_classical_pp: -100.0
+      publication:
+        # Soy-scale hybrid fine-tune budget (QNN TorchLayer is CPU-bound)
+        n_train_rows: 50000
+        n_val_rows: 0
+        epochs: 6
+        batch_size: 256
+        min_residual_vs_plain_pp: 0.5
+        min_vs_classical_pp: -1.0
+        save_checkpoints: true
+
   exp_062_hybrid_nano_acyd_soy:
     description: "Frozen LargeNanoMLP (ACYD C4) + 4-qubit hybrid head — val ROC-AUC vs classical head"
     exp_id: exp_062
