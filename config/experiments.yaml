@@ -1639,6 +1639,41 @@ experiments:
         min_teacher_gap_pp: 1.0
         save_checkpoints: true
 
+  exp_085_sample_efficiency_agro:
+    description: "Sample-efficiency curves HistGB vs ResidualNano (hard+distill) on ACYD maize"
+    exp_id: exp_085
+    dataset_id: acyd_maize_brazil_v1
+    seed: 42
+    learning_rate: 0.001
+    weight_decay: 0.0001
+    batch_size: 2048
+    dropout: 0.2
+    residual_hidden: 512
+    residual_n_blocks: 3
+    residual_bottleneck: 64
+    histgb_max_iter: 100
+    distill_alpha: 1.0
+    fractions: [0.01, 0.05, 0.2, 1.0]
+    min_budget_wins: 2
+    save_checkpoints: false
+    profile_overrides:
+      ci:
+        n_train_rows: 5000
+        n_val_rows: 1000
+        epochs: 2
+        batch_size: 1024
+        histgb_max_iter: 40
+        fractions: [0.2, 1.0]
+        min_budget_wins: 0
+      publication:
+        n_train_rows: 0
+        n_val_rows: 0
+        epochs: 12
+        batch_size: 2048
+        histgb_max_iter: 100
+        fractions: [0.01, 0.05, 0.2, 1.0]
+        min_budget_wins: 2
+
   exp_062_hybrid_nano_acyd_soy:
     description: "Frozen LargeNanoMLP (ACYD C4) + 4-qubit hybrid head — val ROC-AUC vs classical head"
     exp_id: exp_062

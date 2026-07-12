@@ -189,6 +189,12 @@ exp-092:
 exp-092-publication:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_092_histgb_distill_nano_maize/run.py --profile publication --write-results
 
+exp-085:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_085_sample_efficiency_agro/run.py --profile ci
+
+exp-085-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_085_sample_efficiency_agro/run.py --profile publication --write-results
+
 exp-062:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_062_hybrid_nano_acyd_soy/run.py --profile ci
 

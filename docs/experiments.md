@@ -541,7 +541,17 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `QML_DEVICE=cuda python experiments/exp_092_histgb_distill_nano_maize/run.py --profile publication --write-results`  
 **Lesson:** Soft BCE distillation closes most of the agro boosting gap without beating HistGB outright.
 
-**Next:** Sample-efficiency (exp_085) or Quantum 2.0 on distilled backbone (exp_086).
+### EXP 085 — Sample-efficiency curves (HistGB vs distill nano)
+
+**Models:** HistGB · hard ResidualNano · distill ResidualNano at 1/5/20/100% stratified row budgets  
+**Dataset:** `acyd_maize_brazil_v1` (full temporal val)  
+**Claim:** Distill ≥ HistGB on ≥ 2/4 budgets  
+**Verdict:** Honest negative — 0/4 wins; AULC distill 0.7831 < HistGB 0.7973  
+**Command:** `QML_DEVICE=cuda python experiments/exp_085_sample_efficiency_agro/run.py --profile publication --write-results`  
+**Artifact:** `artifacts/exp_085/curves_publication.json`  
+**Lesson:** HistGB remains more sample-efficient than distill nano on agro tabular; distill still helps vs hard labels at mid/full budgets.
+
+**Next:** Quantum 2.0 on distilled backbone (exp_086) or ship distill nano (Phase E).
 
 ## Publication Profiles
 

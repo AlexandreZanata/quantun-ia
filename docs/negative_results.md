@@ -352,6 +352,25 @@ See: `experiments/exp_084_residual_ft_nano_maize/results.md`
 
 ---
 
+## exp_085 — Sample-efficiency curves on ACYD maize (H-N2)
+
+**Profile:** acyd_maize_brazil_v1, stratified row budgets, seed 42, RTX 4060
+
+| Budget | HistGB | Hard nano | Distill nano | Distill ≥ HistGB |
+|--------|--------|-----------|--------------|------------------|
+| 1% | **0.6935** | 0.6916 | 0.6508 | no |
+| 5% | **0.7807** | 0.7436 | 0.7461 | no |
+| 20% | **0.8046** | 0.7749 | 0.7874 | no |
+| 100% | **0.8178** | 0.8079 | 0.8130 | no |
+
+**Gate:** distill wins ≥ 2/4 budgets → **failed** (0/4). AULC distill 0.7831 < HistGB 0.7973.
+
+**Interpretation:** HistGB dominates the learning curve. Distillation helps vs hard labels at 5–100% but never crosses the teacher. H-N2 sample-efficiency claim rejected; prefer shipping distill nano for latency/serve, not for low-data superiority.
+
+See: `experiments/exp_085_sample_efficiency_agro/results.md`
+
+---
+
 ## exp_069 — LargeNanoMLP on NIHR synthetic CV (C2 anchor)
 
 **Profile:** nihr_cv_synthetic_v1, 70K train / 15K val, seed 42, RTX 4060
