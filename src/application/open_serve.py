@@ -8,6 +8,7 @@ from pathlib import Path
 import torch
 
 from src.classical.large_nano_mlp import LargeNanoMLP
+from src.classical.residual_nano_mlp import ResidualNanoMLP
 from src.data.open_parquet import load_open_parquet_splits
 from src.quantum.large_nano_hybrid import LargeNanoHybrid
 from src.training.checkpoints import (
@@ -254,6 +255,89 @@ def ensure_large_nano_serve_artifact(
     if (target_dir / "best.pt").is_file() and (target_dir / "scaler.joblib").is_file():
         return target_dir
     return publish_large_nano_serve_artifact(
+        root,
+        exp_id=exp_id,
+        model_name=model_name,
+        dataset_id=dataset_id,
+        seed=seed,
+    )
+
+
+def publish_residual_nano_serve_artifact(
+    root: Path,
+    *,
+    exp_id: str = "exp_092",
+    model_name: str = "residual_nano_distill",
+    dataset_id: str = "acyd_maize_brazil_v1",
+    seed: int = DEFAULT_SERVE_SEED,
+    hidden: int = 512,
+    n_blocks: int = 3,
+    bottleneck: int = 64,
+    dropout: float = 0.2,
+) -> Path:
+    """Publish ResidualNanoMLP training weights + ACYD scaler for API serve."""
+    source_dir = checkpoint_path(exp_id, model_name, seed)
+    weights_path = source_dir / "best.pt"
+    if not weights_path.is_file():
+        msg = f"training checkpoint missing: {weights_path}"
+        raise FileNotFoundError(msg)
+
+    n_features = open_dataset_feature_count(dataset_id)
+    x_train, _, _, _, _, _, scaler = load_open_parquet_splits(
+        dataset_id,
+        root,
+        random_state=seed,
+    )
+    if int(x_train.shape[1]) != n_features:
+        msg = f"expected {n_features} features, got {x_train.shape[1]}"
+        raise ValueError(msg)
+
+    config_path = source_dir / "config.json"
+    if config_path.is_file():
+        payload = json.loads(config_path.read_text(encoding="utf-8"))
+        config = dict(payload.get("config", {}))
+        metadata = dict(payload.get("metadata", {}))
+    else:
+        config = {}
+        metadata = {}
+    config["input_dim"] = n_features
+    config["dataset_id"] = dataset_id
+    config["hidden"] = hidden
+    config["n_blocks"] = n_blocks
+    config["bottleneck"] = bottleneck
+    config["dropout"] = dropout
+    metadata["serve_published"] = True
+    metadata["architecture"] = "ResidualNanoMLP"
+
+    model = ResidualNanoMLP(
+        input_dim=n_features,
+        hidden=hidden,
+        n_blocks=n_blocks,
+        bottleneck=bottleneck,
+        dropout=dropout,
+    )
+    state_dict = torch.load(weights_path, map_location="cpu", weights_only=True)
+    model.load_state_dict(state_dict)
+
+    target_dir = resolve_checkpoint_dir(exp_id, model_name, dataset_id, seed=seed)
+    save_checkpoint(model, target_dir, config=config, metadata=metadata)
+    save_scaler(scaler, target_dir)
+    return target_dir
+
+
+def ensure_residual_nano_serve_artifact(
+    root: Path,
+    *,
+    exp_id: str = "exp_092",
+    model_name: str = "residual_nano_distill",
+    dataset_id: str = "acyd_maize_brazil_v1",
+    seed: int = DEFAULT_SERVE_SEED,
+) -> Path:
+    """Return ResidualNano serve dir, publishing from exp_092 distill weights if needed."""
+    target_dir = resolve_checkpoint_dir(exp_id, model_name, dataset_id, seed=seed)
+    if (target_dir / "best.pt").is_file() and (target_dir / "scaler.joblib").is_file():
+        return target_dir
+    return publish_residual_nano_serve_artifact(
         root,
         exp_id=exp_id,
         model_name=model_name,

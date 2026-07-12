@@ -90,6 +90,20 @@ models:
     exports: [native, onnx, torchscript]
     model_card: model_cards/large_nano_mlp_acyd_maize.md
 
+  residual_nano_distill_acyd_maize:
+    description: "HistGB-distilled ResidualNanoMLP on ACYD Brazil maize (Cycle v2 Phase E ship)"
+    train_model: residual_nano_distill
+    dataset: acyd_maize_brazil_v1
+    exp_id: exp_092
+    seed: 42
+    profile: publication
+    serve:
+      kind: open_residual_nano
+    train:
+      kind: none
+    exports: [native, onnx, torchscript]
+    model_card: model_cards/residual_nano_distill_acyd_maize.md
+
   large_nano_mlp_nihr:
     description: "LargeNanoMLP (~1.11M) on NIHR synthetic CV open tabular (C2 anchor)"
     train_model: large_nano_mlp

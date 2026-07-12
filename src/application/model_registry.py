@@ -10,6 +10,7 @@ from src.application.nanotrainer_config import load_nanotrainer_config, model_ki
 from src.classical.large_nano_mlp import LargeNanoMLP
 from src.classical.mlp import ClassicalNet
 from src.classical.perceptron import Perceptron
+from src.classical.residual_nano_mlp import ResidualNanoMLP
 from src.classical.transformer_mini import TransformerMini
 from src.quantum.hybrid_model import HybridSandwich
 from src.quantum.qnn_amplitude import QuantumNetAmplitude
@@ -119,6 +120,17 @@ def build_model(
                 hidden2=int(mc.get("hidden2", 512)),
                 hidden3=int(mc.get("hidden3", 64)),
                 dropout=float(mc.get("dropout", 0.3)),
+            ),
+            lr,
+        )
+    if name in {"residual_nano_mlp", "residual_nano_distill"}:
+        return (
+            ResidualNanoMLP(
+                input_dim=input_dim,
+                hidden=int(mc.get("hidden", 512)),
+                n_blocks=int(mc.get("n_blocks", 3)),
+                bottleneck=int(mc.get("bottleneck", 64)),
+                dropout=float(mc.get("dropout", 0.2)),
             ),
             lr,
         )

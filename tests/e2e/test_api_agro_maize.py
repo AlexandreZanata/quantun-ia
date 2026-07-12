@@ -11,14 +11,19 @@ from src.presentation.http.app import create_app
 
 ROOT = Path(__file__).resolve().parents[2]
 ACYD_CKPT = (
-    ROOT / "artifacts" / "exp_081" / "large_nano_mlp_acyd_maize_brazil_v1" / "seed_42" / "best.pt"
+    ROOT
+    / "artifacts"
+    / "exp_092"
+    / "residual_nano_distill_acyd_maize_brazil_v1"
+    / "seed_42"
+    / "best.pt"
 )
 
 
 @pytest.mark.e2e
 def test_agro_maize_predict_and_model_card(tmp_path, monkeypatch):
     if not ACYD_CKPT.is_file():
-        pytest.skip("exp_081 ACYD maize serve checkpoint missing — run qml-ship")
+        pytest.skip("exp_092 distill maize serve checkpoint missing — run make ship-residual-maize")
 
     monkeypatch.setenv("DATABASE_PATH", str(tmp_path / "api.db"))
     monkeypatch.setenv("MLFLOW_DISABLE", "1")
@@ -28,7 +33,7 @@ def test_agro_maize_predict_and_model_card(tmp_path, monkeypatch):
     with TestClient(app) as client:
         card = client.get("/api/v1/models/agro/maize/card")
         assert card.status_code == 200
-        assert card.json()["model_id"] == "large_nano_mlp_acyd_maize"
+        assert card.json()["model_id"] == "residual_nano_distill_acyd_maize"
 
         predict = client.post(
             "/api/v1/predict/agro/maize",
@@ -49,4 +54,5 @@ def test_agro_maize_predict_and_model_card(tmp_path, monkeypatch):
         body = predict.json()
         assert 0.0 <= body["probability"] <= 1.0
         assert body["risk_tier"] in {"low", "moderate", "high"}
+        assert body["model_id"] == "residual_nano_distill_acyd_maize"
         assert len(body["top_drivers"]) == 3

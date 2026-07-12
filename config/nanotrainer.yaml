@@ -102,6 +102,20 @@ models:
     hidden2: 512
     hidden3: 64
     dropout: 0.3
+  residual_nano_mlp:
+    kind: tabular
+    learning_rate: 0.001
+    hidden: 512
+    n_blocks: 3
+    bottleneck: 64
+    dropout: 0.2
+  residual_nano_distill:
+    kind: tabular
+    learning_rate: 0.001
+    hidden: 512
+    n_blocks: 3
+    bottleneck: 64
+    dropout: 0.2
   large_nano_hybrid:
     kind: tabular
     learning_rate: 0.01
@@ -149,6 +163,10 @@ pairs:
   - model: large_nano_mlp
     dataset: acyd_soy_brazil_v1
   - model: large_nano_mlp
+    dataset: acyd_maize_brazil_v1
+  - model: residual_nano_mlp
+    dataset: acyd_maize_brazil_v1
+  - model: residual_nano_distill
     dataset: acyd_maize_brazil_v1
   - model: large_nano_hybrid
     dataset: higgs_v1

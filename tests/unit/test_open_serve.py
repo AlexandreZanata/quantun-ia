@@ -14,9 +14,11 @@ from src.application.open_serve import (
     open_dataset_feature_count,
     publish_large_nano_hybrid_serve_artifact,
     publish_large_nano_serve_artifact,
+    publish_residual_nano_serve_artifact,
     verify_serve_artifact,
 )
 from src.classical.large_nano_mlp import LargeNanoMLP
+from src.classical.residual_nano_mlp import ResidualNanoMLP
 from src.quantum.large_nano_hybrid import LargeNanoHybrid
 from src.training.checkpoints import checkpoint_path, save_checkpoint
 
@@ -94,6 +96,39 @@ def test_load_open_holdout_rows_subsample(tmp_path: Path, monkeypatch):
     rows = load_open_holdout_rows("higgs_v1", tmp_path, n_rows=20, random_state=42)
     assert len(rows) == 20
     assert all(len(row) == 28 for row in rows)
+
+
+def _write_residual_training_checkpoint(
+    root: Path, *, exp_id: str, seed: int, n_features: int = 28
+) -> None:
+    source_dir = checkpoint_path(exp_id, "residual_nano_distill", seed)
+    model = ResidualNanoMLP(input_dim=n_features, hidden=32, n_blocks=1, bottleneck=8)
+    save_checkpoint(
+        model,
+        source_dir,
+        config={"input_dim": n_features, "hidden": 32, "n_blocks": 1, "bottleneck": 8},
+        metadata={"source": "unit_test"},
+    )
+
+
+def test_publish_residual_nano_serve_artifact(tmp_path: Path, monkeypatch):
+    monkeypatch.setattr("src.training.checkpoints.ARTIFACTS_ROOT", tmp_path / "artifacts")
+    _write_higgs_bundle(tmp_path)
+    _write_residual_training_checkpoint(tmp_path, exp_id="exp_092", seed=42)
+
+    target = publish_residual_nano_serve_artifact(
+        tmp_path,
+        exp_id="exp_092",
+        model_name="residual_nano_distill",
+        dataset_id="higgs_v1",
+        seed=42,
+        hidden=32,
+        n_blocks=1,
+        bottleneck=8,
+    )
+    assert (target / "best.pt").is_file()
+    assert (target / "scaler.joblib").is_file()
+    verify_serve_artifact("exp_092", "residual_nano_distill", "higgs_v1", seed=42)
 
 
 def test_publish_large_nano_serve_artifact(tmp_path: Path, monkeypatch):

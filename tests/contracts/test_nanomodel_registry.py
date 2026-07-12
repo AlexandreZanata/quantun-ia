@@ -15,6 +15,16 @@ def test_registry_loads_p0_models():
     assert "large_nano_mlp_synthea" in keys
     assert "large_nano_mlp_higgs" in keys
     assert "quantum_nano_bc" in keys
+    assert "residual_nano_distill_acyd_maize" in keys
+
+
+def test_residual_distill_maize_registry_entry():
+    spec = get_nanomodel_spec("residual_nano_distill_acyd_maize")
+    assert spec.train_model == "residual_nano_distill"
+    assert spec.dataset == "acyd_maize_brazil_v1"
+    assert spec.exp_id == "exp_092"
+    assert spec.serve_kind == "open_residual_nano"
+    assert spec.train_kind == "none"
 
 
 def test_registry_entry_fields():
@@ -36,7 +46,12 @@ def test_registry_contract_required_fields():
         assert spec.train_model
         assert spec.dataset
         assert spec.exp_id
-        assert spec.serve_kind in {"open_large_nano", "open_hybrid", "nanotrainer"}
+        assert spec.serve_kind in {
+            "open_large_nano",
+            "open_hybrid",
+            "open_residual_nano",
+            "nanotrainer",
+        }
         assert spec.bundle_dir.name == key
 
 

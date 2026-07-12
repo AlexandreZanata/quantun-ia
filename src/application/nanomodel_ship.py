@@ -17,6 +17,7 @@ from src.application.nanomodel_registry import NanomodelSpec, get_nanomodel_spec
 from src.application.open_serve import (
     ensure_large_nano_hybrid_serve_artifact,
     ensure_large_nano_serve_artifact,
+    ensure_residual_nano_serve_artifact,
     verify_serve_artifact,
 )
 from src.application.train_nanomodel import execute as train_execute
@@ -53,7 +54,7 @@ class ShipNanomodelResult:
 def _training_checkpoint_exists(spec: NanomodelSpec) -> bool:
     if spec.train_kind == "none":
         return True
-    if spec.serve_kind in {"open_large_nano", "open_hybrid"}:
+    if spec.serve_kind in {"open_large_nano", "open_hybrid", "open_residual_nano"}:
         raw = checkpoint_path(spec.exp_id, spec.train_model, spec.seed) / "best.pt"
         return raw.is_file()
     serve = resolve_checkpoint_dir(spec.exp_id, spec.train_model, spec.dataset, seed=spec.seed)
@@ -157,6 +158,14 @@ def _publish_serve(spec: NanomodelSpec, root: Path) -> Path:
         )
     if spec.serve_kind == "open_hybrid":
         return ensure_large_nano_hybrid_serve_artifact(
+            root,
+            exp_id=spec.exp_id,
+            model_name=spec.train_model,
+            dataset_id=spec.dataset,
+            seed=spec.seed,
+        )
+    if spec.serve_kind == "open_residual_nano":
+        return ensure_residual_nano_serve_artifact(
             root,
             exp_id=spec.exp_id,
             model_name=spec.train_model,

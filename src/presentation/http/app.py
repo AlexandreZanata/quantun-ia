@@ -393,7 +393,7 @@ def create_app() -> FastAPI:
             probability=result.probability,
             risk_tier=result.risk_tier,
             risk_label=result.risk_label,
-            model_id="large_nano_mlp_acyd_maize",
+            model_id="residual_nano_distill_acyd_maize",
             crop_year=body.crop_year,
             municipality=body.municipality,
             state=body.state.upper(),

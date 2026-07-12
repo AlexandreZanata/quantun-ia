@@ -26,6 +26,14 @@ def test_build_perceptron_tabular():
     assert lr == 0.02
 
 
+def test_build_residual_nano_distill():
+    model, lr = build_model("residual_nano_distill", input_dim=37)
+    out = model(torch.randn(3, 37))
+    assert out.shape == (3,)
+    assert lr == 0.001
+    assert model.hidden == 512
+
+
 def test_build_transformer_fusion_sequence():
     model, lr = build_model(
         "transformer_qnn_fusion",
