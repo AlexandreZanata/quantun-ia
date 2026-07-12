@@ -560,7 +560,16 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `QML_DEVICE=cuda python experiments/exp_086_residual_qnn_head_maize/run.py --profile publication --write-results`  
 **Lesson:** Classical skip around QNN does not unlock a ≥0.5 pp lift; hybrids already sit at classical parity.
 
-**Next:** Ship distill nano (Phase E) or try shadow features (H-Q2.3 / exp_088).
+### EXP 088 — Pauli/shadow features → NarrowDeepNano (H-Q2.3)
+
+**Models:** Logistic · NarrowDeepNano (raw 37-d) · NarrowDeepNano (64-d Pauli features) · HistGB honesty  
+**Dataset:** `acyd_maize_brazil_v1` (20k train / 13,566 val)  
+**Claim:** Shadow nano ≥ classical − 0.5 pp and ≥ logistic + 2.0 pp  
+**Verdict:** Honest negative — shadow 0.6050 vs classical 0.7610 (−15.60 pp); vs logistic −9.11 pp  
+**Command:** `QML_DEVICE=cuda python experiments/exp_088_shadow_features_nano_maize/run.py --profile publication --write-results`  
+**Lesson:** Fixed 4q Pauli/shadow feature map loses ranking signal vs raw climate columns; do not claim quantum feature advantage on maize.
+
+**Next:** Phase C multi-crop / hard drift (`exp_090` / `exp_094`).
 
 ## Publication Profiles
 

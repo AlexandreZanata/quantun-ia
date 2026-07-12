@@ -1713,6 +1713,48 @@ experiments:
         min_vs_classical_pp: -1.0
         save_checkpoints: true
 
+  exp_088_shadow_features_nano_maize:
+    description: "Pauli/shadow 64-d features → NarrowDeepNano vs classical head (ACYD maize H-Q2.3)"
+    exp_id: exp_088
+    dataset_id: acyd_maize_brazil_v1
+    seed: 42
+    learning_rate: 0.001
+    weight_decay: 0.0001
+    batch_size: 2048
+    dropout: 0.2
+    narrow_width: 512
+    narrow_depth: 3
+    narrow_bottleneck: 64
+    n_qubits: 4
+    n_layers: 1
+    n_shadow_features: 64
+    histgb_max_iter: 100
+    min_vs_classical_pp: -0.5
+    min_vs_logistic_pp: 2.0
+    feature_progress_every: 0
+    save_checkpoints: false
+    profile_overrides:
+      ci:
+        n_train_rows: 50
+        n_val_rows: 50
+        epochs: 2
+        batch_size: 32
+        histgb_max_iter: 20
+        n_layers: 1
+        min_vs_classical_pp: -100.0
+        min_vs_logistic_pp: -100.0
+      publication:
+        # Cap train for Pauli feature extract wall-time on 4060 (~15ms/row)
+        n_train_rows: 20000
+        n_val_rows: 0
+        epochs: 12
+        batch_size: 2048
+        histgb_max_iter: 100
+        feature_progress_every: 2500
+        min_vs_classical_pp: -0.5
+        min_vs_logistic_pp: 2.0
+        save_checkpoints: true
+
   exp_062_hybrid_nano_acyd_soy:
     description: "Frozen LargeNanoMLP (ACYD C4) + 4-qubit hybrid head — val ROC-AUC vs classical head"
     exp_id: exp_062

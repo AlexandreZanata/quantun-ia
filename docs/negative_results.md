@@ -389,6 +389,25 @@ See: `experiments/exp_086_residual_qnn_head_maize/results.md`
 
 ---
 
+## exp_088 — Pauli/shadow features → NarrowDeepNano on maize (H-Q2.3)
+
+**Profile:** acyd_maize_brazil_v1, 20k train / 13,566 val, seed 42, RTX 4060
+
+| Model | Val ROC-AUC |
+|-------|-------------|
+| LogisticRegression | 0.6960 |
+| NarrowDeepNano (raw 37-d) | **0.7610** |
+| NarrowDeepNano (64-d Pauli/shadow) | 0.6050 |
+| HistGB (honesty) | 0.7990 |
+
+**Gate:** shadow ≥ classical − 0.5 pp **and** ≥ logistic + 2.0 pp → **failed** (−15.60 / −9.11 pp).
+
+**Interpretation:** Analytic Pauli bank on a fixed 4-qubit angle circuit destroys agro ranking relative to raw features (and even loses to logistic). Classical-shadow-style feature maps are not a maize win; keep shipped distill ResidualNano; next research = harder benchmarks (multi-crop / drift), not more Pauli banks.
+
+See: `experiments/exp_088_shadow_features_nano_maize/results.md`
+
+---
+
 ## exp_069 — LargeNanoMLP on NIHR synthetic CV (C2 anchor)
 
 **Profile:** nihr_cv_synthetic_v1, 70K train / 15K val, seed 42, RTX 4060
