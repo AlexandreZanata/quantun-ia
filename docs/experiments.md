@@ -623,6 +623,15 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `QML_DEVICE=cuda python experiments/exp_099_ssl_climate_pretrain/run.py --profile publication --write-results`  
 **Lesson:** Masked weather SSL helps slightly but not enough for a +0.5 pp claim; keep distill ResidualNano as serve default.
 
+### EXP 096 — GoBug streaming ResidualNano (C-T6)
+
+**Models:** LogisticRegression · ResidualNanoMLP joint · ResidualNanoMLP chronological streaming  
+**Dataset:** `code_defects_gobug_v1` (27,172 train / 5,822 val, sha-ordered)  
+**Claim:** Streaming ≥ joint − 1.0 pp PR-AUC  
+**Verdict:** Accepted — streaming 0.3069 vs joint 0.2995 (**+0.75 pp**); logistic 0.3097  
+**Command:** `QML_DEVICE=cuda python experiments/exp_096_gobug_streaming_nano/run.py --profile publication --write-results`  
+**Lesson:** Commit-time chronological fine-tune matches/beats matched-budget joint on GoBug PR-AUC; still near logistic.
+
 ### EXP 088 — Pauli/shadow features → NarrowDeepNano (H-Q2.3)
 
 **Models:** Logistic · NarrowDeepNano (raw 37-d) · NarrowDeepNano (64-d Pauli features) · HistGB honesty  

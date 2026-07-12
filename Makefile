@@ -243,6 +243,12 @@ exp-099:
 exp-099-publication:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_099_ssl_climate_pretrain/run.py --profile publication --write-results
 
+exp-096:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_096_gobug_streaming_nano/run.py --profile ci
+
+exp-096-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_096_gobug_streaming_nano/run.py --profile publication --write-results
+
 exp-088:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_088_shadow_features_nano_maize/run.py --profile ci
 

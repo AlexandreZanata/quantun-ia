@@ -1926,6 +1926,38 @@ experiments:
         histgb_max_iter: 100
         min_vs_scratch_pp: 0.5
 
+  exp_096_gobug_streaming_nano:
+    description: "GoBug chronological streaming ResidualNano vs joint train (C-T6)"
+    exp_id: exp_096
+    dataset_id: code_defects_gobug_v1
+    seed: 42
+    learning_rate: 0.001
+    weight_decay: 0.0001
+    batch_size: 2048
+    dropout: 0.2
+    residual_hidden: 512
+    residual_n_blocks: 3
+    residual_bottleneck: 64
+    n_stream_batches: 8
+    epochs_per_batch: 2
+    min_vs_joint_pp: -1.0
+    profile_overrides:
+      ci:
+        n_train_rows: 200
+        n_val_rows: 100
+        n_stream_batches: 4
+        epochs_per_batch: 1
+        joint_epochs: 4
+        batch_size: 64
+        min_vs_joint_pp: -100.0
+      publication:
+        n_train_rows: 0
+        n_val_rows: 0
+        n_stream_batches: 8
+        epochs_per_batch: 2
+        batch_size: 2048
+        min_vs_joint_pp: -1.0
+
   exp_087_fourier_reupload_climate:
     description: "Fourier sin/cos re-upload vs flat angle head on frozen distill ResidualNano (ACYD maize H-Q2.2)"
     exp_id: exp_087
