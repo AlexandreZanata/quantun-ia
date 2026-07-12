@@ -11,8 +11,11 @@ abstract: >
   bootstrap confidence intervals, and Holm-Bonferroni corrected Wilcoxon tests.
   Publication-profile runs on UCI tabular data show backend parity between PennyLane
   simulators (exp_021) and inconclusive quantum-vs-classical gaps at matched parameter
-  budgets (exp_022). The repository ships a reproducible pipeline exporting figures,
-  LaTeX tables, Zenodo release bundles, and MicroQML Bench v1 for external replication.
+  budgets (exp_022). Research Cycle v2 on ACYD Brazil maize (RTX 4060) accepts
+  HistGB-distilled ResidualNano (exp_092) and hard temporal drift ResidualNano (exp_094),
+  while residual QNN, Fourier re-upload, and Pauli/shadow feature recipes are honest
+  negatives. The repository ships a reproducible pipeline exporting figures, LaTeX
+  tables, Zenodo release bundles, and MicroQML Bench v1 for external replication.
 
 authors:
   - name: "Alexandre Zanata"
@@ -24,10 +27,10 @@ categories:
   - quant-ph
 
 comments: >
-  8 pages, 3 figures. Code and data pipeline:
+  Cycle v2 tables included. Code and data pipeline:
   https://github.com/AlexandreZanata/quantun-ia
 
-# Set after arXiv moderation (Phase 19b manual step):
+# Set after arXiv moderation (manual step after upload):
 arxiv_id: null
 
 journal_ref: null

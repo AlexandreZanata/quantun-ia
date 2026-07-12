@@ -81,7 +81,7 @@ def sample_efficiency_latex(registry: dict[str, Any]) -> str:
 def quantum_v2_latex(registry: dict[str, Any]) -> str:
     block = registry["quantum_v2"]
     lines = [
-        "% Auto-generated Cycle v2 quantum recipes (exp_086 / exp_088)",
+        "% Auto-generated Cycle v2 quantum recipes (exp_086 / exp_087 / exp_088)",
         "\\begin{table}[ht]",
         "\\centering",
         f"\\caption{{{block['caption']}}}",
@@ -123,6 +123,27 @@ def multicrop_latex(registry: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def hard_drift_latex(registry: dict[str, Any]) -> str:
+    block = registry["hard_drift"]
+    lines = [
+        "% Auto-generated Cycle v2 hard temporal drift (exp_094)",
+        "\\begin{table}[ht]",
+        "\\centering",
+        f"\\caption{{{block['caption']}}}",
+        f"\\label{{{block['label']}}}",
+        "\\begin{tabular}{lrl}",
+        "\\toprule",
+        "Model & Val ROC-AUC & Notes \\\\",
+        "\\midrule",
+    ]
+    for row in block["rows"]:
+        lines.append(
+            f"{row['model']} & {_fmt_auc(float(row['roc_auc']))} & {row['notes']} \\\\"
+        )
+    lines.extend(["\\bottomrule", "\\end{tabular}", "\\end{table}", ""])
+    return "\n".join(lines)
+
+
 def export_cycle_v2_tables(
     *,
     registry_path: Path = DEFAULT_REGISTRY,
@@ -136,6 +157,7 @@ def export_cycle_v2_tables(
         "sample_efficiency.tex": sample_efficiency_latex,
         "quantum_v2.tex": quantum_v2_latex,
         "multicrop.tex": multicrop_latex,
+        "hard_drift.tex": hard_drift_latex,
     }
     created: list[Path] = []
     for name, fn in writers.items():

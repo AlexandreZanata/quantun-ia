@@ -63,7 +63,7 @@ sample_efficiency:
       distill_nano: 0.8130
 
 quantum_v2:
-  caption: "Quantum recipes 2.0 on ACYD maize (exp\\_086 residual QNN; exp\\_088 Pauli/shadow features)."
+  caption: "Quantum recipes 2.0 on ACYD maize (exp\\_086 residual QNN; exp\\_087 Fourier re-upload; exp\\_088 Pauli/shadow)."
   label: tab:quantum_v2
   rows:
     - experiment: exp_086
@@ -80,6 +80,16 @@ quantum_v2:
       arm: Residual-skip 4q QNN head
       roc_auc: 0.8127
       delta_pp: -0.02
+      verdict: rejected
+    - experiment: exp_087
+      arm: Flat re-upload (L=3)
+      roc_auc: 0.8128
+      delta_pp: -0.03
+      verdict: floor
+    - experiment: exp_087
+      arm: Fourier re-upload (L=3)
+      roc_auc: 0.8107
+      delta_pp: -0.24
       verdict: rejected
     - experiment: exp_088
       arm: NarrowDeepNano (raw 37-d)
@@ -113,3 +123,14 @@ multicrop:
     - model: Joint ResidualNano (soy val)
       roc_auc: 0.6758
       notes: secondary
+
+hard_drift:
+  caption: "Hard temporal drift ResidualNano vs HistGB on ACYD maize (exp\\_094)."
+  label: tab:hard_drift
+  rows:
+    - model: HistGB (hard-drift val)
+      roc_auc: 0.8246
+      notes: train ≤ 2016 / val 2017–2018
+    - model: ResidualNanoMLP
+      roc_auc: 0.8185
+      notes: "accepted (−0.61 pp vs HistGB)"

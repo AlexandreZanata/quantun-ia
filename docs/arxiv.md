@@ -1,7 +1,7 @@
 # arXiv Submission Guide
 
 This guide describes how to submit the quantun-ia paper draft to [arXiv](https://arxiv.org)
-(cs.LG + quant-ph). Software version **v0.9.13** (Phase 19b).
+(cs.LG + quant-ph). Software version **v1.2.0** (Research Cycle v2 tables included).
 
 ---
 

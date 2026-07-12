@@ -99,11 +99,13 @@ domains (best: +0.04~pp HIGGS).
 
 Cycle~v2 publication runs on ACYD Brazil maize (RTX~4060) stress-tested nano
 architectures against HistGradientBoosting, soft-label distillation, residual QNN
-heads, Pauli/shadow feature maps, and soy{+}maize joint training.
-Tables~\ref{tab:boosting_frontier}--\ref{tab:multicrop} summarize the registered
-gates: distillation is the sole Cycle~v2 \textbf{accept} (exp\_092, $-0.48$~pp vs
-HistGB teacher); architecture search, sample-efficiency, residual QNN, shadow
-features, and multi-crop joint training are honest negatives.
+heads, Fourier re-upload encodings, Pauli/shadow feature maps, soy{+}maize joint
+training, and hard temporal drift.
+Tables~\ref{tab:boosting_frontier}--\ref{tab:hard_drift} summarize the registered
+gates: distillation (exp\_092, $-0.48$~pp vs HistGB) and hard-drift ResidualNano
+(exp\_094, $-0.61$~pp vs HistGB) are Cycle~v2 \textbf{accepts}; architecture search,
+sample-efficiency, residual QNN, Fourier re-upload, shadow features, and multi-crop
+joint training are honest negatives.
 
 \input{tables/boosting_frontier}
 
@@ -113,10 +115,13 @@ features, and multi-crop joint training are honest negatives.
 
 \input{tables/multicrop}
 
+\input{tables/hard_drift}
+
 \paragraph{Practical takeaway.}
 The recommended maize serve model remains HistGB-distilled ResidualNano
-(\texttt{residual\_nano\_distill\_acyd\_maize}). Shared multi-crop trunks and
-Pauli/shadow feature banks do not improve maize ranking on the temporal val split.
+(\texttt{residual\_nano\_distill\_acyd\_maize}). Shared multi-crop trunks,
+Fourier climate re-upload heads, and Pauli/shadow feature banks do not improve
+maize ranking on the temporal val split.
 
 \subsection{Key findings}
 

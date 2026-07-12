@@ -600,12 +600,13 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `QML_DEVICE=cuda python experiments/exp_094_hard_temporal_drift/run.py --profile publication --write-results`  
 **Lesson:** Under stronger year shift, ResidualNano still tracks HistGB within 1 pp; keep distill serve for standard split.
 
-### Phase F — Paper cycle 2 tables
+### Phase F — Paper cycle 2 tables + arXiv bundle
 
-**Artifacts:** `paper/tables/boosting_frontier.tex`, `sample_efficiency.tex`, `quantum_v2.tex`, `multicrop.tex`  
+**Artifacts:** `paper/tables/boosting_frontier.tex`, `sample_efficiency.tex`, `quantum_v2.tex`, `multicrop.tex`, `hard_drift.tex`  
 **Registry:** `config/cycle_v2_paper.yaml` (curated from RTX 4060 `results.md`)  
-**Command:** `make cycle-v2-tables` · wired into `paper/sections/results.tex`  
-**Status:** closed with Cycle v2 accept (exp_092) + honest negatives documented
+**Commands:** `make cycle-v2-tables` · `make paper-build` · `make arxiv-bundle`  
+**Bundle:** `dist/arxiv/quantun-ia-paper.tar.gz` (F-T4 local ready; paste `arxiv_id` / Zenodo DOI after upload)  
+**Status:** closed — Cycle v2 accepts (exp_092, exp_094) + honest negatives (incl. exp_087) in paper + arXiv tarball
 
 ### Phase E — Agro Maize Lab + uncertainty (E-T3)
 

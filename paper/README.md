@@ -34,7 +34,8 @@ Headline narrative: holdout-fair QML benchmark (Option C in `.local/README.md`).
 - [x] exp_021 + exp_022 `results.md` with uniform statistical sections
 - [x] Embed holdout tables (`exp_021_holdout.tex`, `exp_022_holdout.tex` + `make latex-tables`)
 - [x] arXiv bundle pipeline (`make arxiv-bundle`, `docs/arxiv.md`)
-- [ ] Cite Zenodo DOI from `CITATION.cff` (after `v0.9.12` tag — see [docs/zenodo.md](../docs/zenodo.md))
+- [x] Local Cycle v2 arXiv bundle refreshed (F-T4) — includes exp_087 / exp_094 tables
+- [ ] Cite Zenodo DOI from `CITATION.cff` after upload (see [docs/zenodo.md](../docs/zenodo.md))
 - [ ] Upload to arXiv (cs.LG + quant-ph) — paste `arxiv_id` into `arxiv_metadata.yaml` after moderation
 
 ## arXiv ID
