@@ -582,6 +582,13 @@ vim experiments/exp_003_entanglement_effect/results.md
 
 **Next:** Paper cycle 2 synthesis and/or hard temporal drift (`exp_094`).
 
+### Phase F — Paper cycle 2 tables
+
+**Artifacts:** `paper/tables/boosting_frontier.tex`, `sample_efficiency.tex`, `quantum_v2.tex`, `multicrop.tex`  
+**Registry:** `config/cycle_v2_paper.yaml` (curated from RTX 4060 `results.md`)  
+**Command:** `make cycle-v2-tables` · wired into `paper/sections/results.tex`  
+**Status:** closed with Cycle v2 accept (exp_092) + honest negatives documented
+
 ## Publication Profiles
 
 | Profile | `n_samples` | Seeds | Command |

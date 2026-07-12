@@ -94,6 +94,30 @@ domains (best: +0.04~pp HIGGS).
 
 \input{tables/grand_comparison}
 
+\subsection{Research Cycle v2 (agro frontier, quantum 2.0, multi-crop)}
+\label{sec:cycle_v2}
+
+Cycle~v2 publication runs on ACYD Brazil maize (RTX~4060) stress-tested nano
+architectures against HistGradientBoosting, soft-label distillation, residual QNN
+heads, Pauli/shadow feature maps, and soy{+}maize joint training.
+Tables~\ref{tab:boosting_frontier}--\ref{tab:multicrop} summarize the registered
+gates: distillation is the sole Cycle~v2 \textbf{accept} (exp\_092, $-0.48$~pp vs
+HistGB teacher); architecture search, sample-efficiency, residual QNN, shadow
+features, and multi-crop joint training are honest negatives.
+
+\input{tables/boosting_frontier}
+
+\input{tables/sample_efficiency}
+
+\input{tables/quantum_v2}
+
+\input{tables/multicrop}
+
+\paragraph{Practical takeaway.}
+The recommended maize serve model remains HistGB-distilled ResidualNano
+(\texttt{residual\_nano\_distill\_acyd\_maize}). Shared multi-crop trunks and
+Pauli/shadow feature banks do not improve maize ranking on the temporal val split.
+
 \subsection{Key findings}
 
 On synthetic 2D tasks, parameter-matched classical MLPs remain competitive with

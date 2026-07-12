@@ -547,6 +547,10 @@ figures:
 
 latex-tables:
 	$(PYTHON) scripts/export_latex_tables.py
+	$(PYTHON) -m scripts.export_cycle_v2_tables
+
+cycle-v2-tables:
+	$(PYTHON) -m scripts.export_cycle_v2_tables
 
 release:
 	$(PYTHON) scripts/prepare_release.py

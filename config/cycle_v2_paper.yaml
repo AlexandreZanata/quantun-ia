@@ -1,0 +1,115 @@
+# Research Cycle v2 — curated publication metrics for paper tables (Phase F).
+# Source of truth: experiments/exp_*/results.md from RTX 4060 publication runs.
+# Regenerate LaTeX: python -m scripts.export_cycle_v2_tables
+
+hardware: "NVIDIA RTX 4060 Laptop GPU"
+dataset_primary: acyd_maize_brazil_v1
+val_rows_maize: 13566
+
+boosting_frontier:
+  caption: "Boosting frontier on ACYD maize temporal val (exp\\_084 / exp\\_092)."
+  label: tab:boosting_frontier
+  rows:
+    - model: HistGradientBoosting
+      roc_auc: 0.8178
+      notes: teacher / honesty floor
+      source: exp_084
+    - model: ResidualNanoMLP (hard)
+      roc_auc: 0.8086
+      notes: "exp\\_084 best nano"
+      source: exp_084
+    - model: NarrowDeepNano
+      roc_auc: 0.8058
+      notes: "exp\\_084"
+      source: exp_084
+    - model: FTLiteNano
+      roc_auc: 0.5602
+      notes: "exp\\_084"
+      source: exp_084
+    - model: ResidualNanoMLP (hard control)
+      roc_auc: 0.8075
+      notes: "exp\\_092 hard"
+      source: exp_092
+    - model: ResidualNanoMLP (HistGB distill)
+      roc_auc: 0.8130
+      notes: "exp\\_092 accepted (−0.48 pp vs teacher)"
+      source: exp_092
+
+sample_efficiency:
+  caption: "Sample-efficiency curves on ACYD maize (exp\\_085); distill wins 0/4 budgets."
+  label: tab:sample_efficiency
+  aulc_distill: 0.7831
+  aulc_histgb: 0.7973
+  rows:
+    - budget_pct: 1
+      train_rows: 1520
+      histgb: 0.6935
+      hard_nano: 0.6916
+      distill_nano: 0.6508
+    - budget_pct: 5
+      train_rows: 7598
+      histgb: 0.7807
+      hard_nano: 0.7436
+      distill_nano: 0.7461
+    - budget_pct: 20
+      train_rows: 30391
+      histgb: 0.8046
+      hard_nano: 0.7749
+      distill_nano: 0.7874
+    - budget_pct: 100
+      train_rows: 151956
+      histgb: 0.8178
+      hard_nano: 0.8079
+      distill_nano: 0.8130
+
+quantum_v2:
+  caption: "Quantum recipes 2.0 on ACYD maize (exp\\_086 residual QNN; exp\\_088 Pauli/shadow features)."
+  label: tab:quantum_v2
+  rows:
+    - experiment: exp_086
+      arm: Classical distill ResidualNano
+      roc_auc: 0.8129
+      delta_pp: 0.0
+      verdict: floor
+    - experiment: exp_086
+      arm: Plain 4q QNN head
+      roc_auc: 0.8120
+      delta_pp: -0.09
+      verdict: rejected
+    - experiment: exp_086
+      arm: Residual-skip 4q QNN head
+      roc_auc: 0.8127
+      delta_pp: -0.02
+      verdict: rejected
+    - experiment: exp_088
+      arm: NarrowDeepNano (raw 37-d)
+      roc_auc: 0.7610
+      delta_pp: 0.0
+      verdict: floor
+    - experiment: exp_088
+      arm: NarrowDeepNano (64-d Pauli/shadow)
+      roc_auc: 0.6050
+      delta_pp: -15.60
+      verdict: rejected
+    - experiment: exp_088
+      arm: LogisticRegression
+      roc_auc: 0.6960
+      delta_pp: null
+      verdict: baseline
+
+multicrop:
+  caption: "Multi-crop joint ResidualNano vs maize-solo (exp\\_090)."
+  label: tab:multicrop
+  rows:
+    - model: HistGB maize (honesty)
+      roc_auc: 0.8203
+      notes: 37-d native
+    - model: Maize-solo ResidualNano
+      roc_auc: 0.8073
+      notes: crop bit = maize
+    - model: Joint ResidualNano (maize val)
+      roc_auc: 0.7938
+      notes: "Δ −1.34 pp vs solo"
+    - model: Joint ResidualNano (soy val)
+      roc_auc: 0.6758
+      notes: secondary

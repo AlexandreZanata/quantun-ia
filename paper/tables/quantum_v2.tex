@@ -1,0 +1,18 @@
+% Auto-generated Cycle v2 quantum recipes (exp_086 / exp_088)
+\begin{table}[ht]
+\centering
+\caption{Quantum recipes 2.0 on ACYD maize (exp\_086 residual QNN; exp\_088 Pauli/shadow features).}
+\label{tab:quantum_v2}
+\begin{tabular}{llrl}
+\toprule
+Exp & Arm & Val ROC-AUC & $\Delta$ pp \\
+\midrule
+exp_086 & Classical distill ResidualNano & 0.8129 & 0.00 \\
+exp_086 & Plain 4q QNN head & 0.8120 & -0.09 \\
+exp_086 & Residual-skip 4q QNN head & 0.8127 & -0.02 \\
+exp_088 & NarrowDeepNano (raw 37-d) & 0.7610 & 0.00 \\
+exp_088 & NarrowDeepNano (64-d Pauli/shadow) & 0.6050 & -15.60 \\
+exp_088 & LogisticRegression & 0.6960 & --- \\
+\bottomrule
+\end{tabular}
+\end{table}

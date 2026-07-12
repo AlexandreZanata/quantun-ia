@@ -1,0 +1,18 @@
+% Auto-generated Cycle v2 boosting frontier (exp_084 / exp_092)
+\begin{table}[ht]
+\centering
+\caption{Boosting frontier on ACYD maize temporal val (exp\_084 / exp\_092).}
+\label{tab:boosting_frontier}
+\begin{tabular}{lrl}
+\toprule
+Model & Val ROC-AUC & Notes \\
+\midrule
+HistGradientBoosting & 0.8178 & teacher / honesty floor \\
+ResidualNanoMLP (hard) & 0.8086 & exp\_084 best nano \\
+NarrowDeepNano & 0.8058 & exp\_084 \\
+FTLiteNano & 0.5602 & exp\_084 \\
+ResidualNanoMLP (hard control) & 0.8075 & exp\_092 hard \\
+ResidualNanoMLP (HistGB distill) & 0.8130 & exp\_092 accepted (−0.48 pp vs teacher) \\
+\bottomrule
+\end{tabular}
+\end{table}
