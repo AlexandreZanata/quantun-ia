@@ -1890,6 +1890,42 @@ experiments:
         max_feature_chunks: 0
         min_vs_joint_pp: -1.0
 
+  exp_099_ssl_climate_pretrain:
+    description: "Masked weather SSL pretrain → ResidualNano fine-tune vs scratch on ACYD maize (D-T5)"
+    exp_id: exp_099
+    dataset_id: acyd_maize_brazil_v1
+    seed: 42
+    learning_rate: 0.001
+    pretrain_lr: 0.001
+    weight_decay: 0.0001
+    batch_size: 2048
+    dropout: 0.2
+    residual_hidden: 512
+    residual_n_blocks: 3
+    residual_bottleneck: 64
+    mask_ratio: 0.3
+    pretrain_epochs: 8
+    finetune_epochs: 12
+    histgb_max_iter: 100
+    min_vs_scratch_pp: 0.5
+    profile_overrides:
+      ci:
+        n_train_rows: 50
+        n_val_rows: 50
+        pretrain_epochs: 1
+        finetune_epochs: 1
+        batch_size: 32
+        histgb_max_iter: 20
+        min_vs_scratch_pp: -100.0
+      publication:
+        n_train_rows: 0
+        n_val_rows: 0
+        pretrain_epochs: 8
+        finetune_epochs: 12
+        batch_size: 2048
+        histgb_max_iter: 100
+        min_vs_scratch_pp: 0.5
+
   exp_087_fourier_reupload_climate:
     description: "Fourier sin/cos re-upload vs flat angle head on frozen distill ResidualNano (ACYD maize H-Q2.2)"
     exp_id: exp_087

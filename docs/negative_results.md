@@ -466,6 +466,26 @@ See: `experiments/exp_098_continual_crop_year/results.md`
 
 ---
 
+## exp_099 — Masked climate SSL pretrain vs scratch ResidualNano (D-T5)
+
+**Profile:** acyd_maize_brazil_v1, full train / 13,566 val, seed 42, RTX 4060
+
+| Arm | Val ROC-AUC |
+|-----|-------------|
+| Scratch ResidualNano (12 ep) | 0.8110 |
+| SSL pretrain→fine-tune (8+12) | **0.8143** |
+| HistGB (honesty) | 0.8203 |
+
+Pretrain MSE: 0.1601.
+
+**Gate:** SSL ≥ scratch + 0.5 pp → **failed** (+0.33 pp).
+
+**Interpretation:** Masked weather reconstruction yields a small positive transfer but below the publication claim. Prefer HistGB-distill ResidualNano (exp_092); do not claim SSL climate as a Cycle v2 win.
+
+See: `experiments/exp_099_ssl_climate_pretrain/results.md`
+
+---
+
 ## exp_088 — Pauli/shadow features → NarrowDeepNano on maize (H-Q2.3)
 
 **Profile:** acyd_maize_brazil_v1, 20k train / 13,566 val, seed 42, RTX 4060

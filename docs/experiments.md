@@ -614,6 +614,15 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `QML_DEVICE=cuda python experiments/exp_098_continual_crop_year/run.py --profile publication --write-results`  
 **Lesson:** Naive year-by-year fine-tune forgets; prefer joint ResidualNano (or distill) over sequential crop-year training without replay/EWC.
 
+### EXP 099 — Masked climate SSL pretrain (D-T5)
+
+**Models:** ResidualNanoMLP scratch · ResidualNanoSSL mask-reconstruct → fine-tune · HistGB honesty  
+**Dataset:** `acyd_maize_brazil_v1` (full train / 13,566 val)  
+**Claim:** SSL ≥ scratch + 0.5 pp  
+**Verdict:** Honest negative — SSL 0.8143 vs scratch 0.8110 (**+0.33 pp**, below gate)  
+**Command:** `QML_DEVICE=cuda python experiments/exp_099_ssl_climate_pretrain/run.py --profile publication --write-results`  
+**Lesson:** Masked weather SSL helps slightly but not enough for a +0.5 pp claim; keep distill ResidualNano as serve default.
+
 ### EXP 088 — Pauli/shadow features → NarrowDeepNano (H-Q2.3)
 
 **Models:** Logistic · NarrowDeepNano (raw 37-d) · NarrowDeepNano (64-d Pauli features) · HistGB honesty  
