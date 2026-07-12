@@ -401,6 +401,9 @@ def create_app() -> FastAPI:
                 {"name": d.name, "direction": d.direction, "detail": d.detail}
                 for d in result.top_drivers
             ],
+            uncertainty_std=result.uncertainty_std,
+            uncertainty_method=result.uncertainty_method,
+            mc_mean_probability=result.mc_mean_probability,
         )
 
     @app.get("/api/v1/models/agro/maize/card", response_model=AgroMaizeModelCardResponse)

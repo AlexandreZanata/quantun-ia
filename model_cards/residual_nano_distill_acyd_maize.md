@@ -45,3 +45,8 @@ qml-download --model residual_nano_distill_acyd_maize
 ## Validation gate
 
 Student within **1.0 pp** of HistGB teacher on maize temporal val (exp_092 publication; met at −0.48 pp).
+
+## Uncertainty (Phase E / E-T3)
+
+API responses may include MC-dropout predictive std (`uncertainty_method=mc_dropout`)
+from the ResidualNano dropout layers — research demo, not calibrated insurance bands.

@@ -55,4 +55,8 @@ def test_agro_maize_predict_and_model_card(tmp_path, monkeypatch):
         assert 0.0 <= body["probability"] <= 1.0
         assert body["risk_tier"] in {"low", "moderate", "high"}
         assert body["model_id"] == "residual_nano_distill_acyd_maize"
+        assert body["uncertainty_method"] in {"none", "mc_dropout"}
+        if body["uncertainty_method"] == "mc_dropout":
+            assert body["uncertainty_std"] is not None
+            assert body["uncertainty_std"] >= 0.0
         assert len(body["top_drivers"]) == 3

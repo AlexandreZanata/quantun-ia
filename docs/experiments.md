@@ -598,6 +598,12 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `make cycle-v2-tables` · wired into `paper/sections/results.tex`  
 **Status:** closed with Cycle v2 accept (exp_092) + honest negatives documented
 
+### Phase E — Agro Maize Lab + uncertainty (E-T3)
+
+**Dashboard:** `dashboard/pages/07_agro_maize_lab.py`  
+**API:** maize predict returns MC-dropout `uncertainty_std`  
+**Compare helper:** `src/application/agro_maize_compare.py` (published HistGB / quantum floors)
+
 ## Publication Profiles
 
 | Profile | `n_samples` | Seeds | Command |

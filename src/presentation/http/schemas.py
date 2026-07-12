@@ -89,6 +89,9 @@ class AgroMaizePredictResponse(BaseModel):
     municipality: str
     state: str
     top_drivers: list[dict[str, str]]
+    uncertainty_std: float | None = None
+    uncertainty_method: str = "none"
+    mc_mean_probability: float | None = None
 
 
 class AgroMaizeModelCardResponse(BaseModel):

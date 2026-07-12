@@ -92,6 +92,9 @@ class HumanAgroScoreResult:
     checkpoint_path: str
     profile: AgroMunicipalityProfile
     top_drivers: tuple[ClimateDriver, ...]
+    uncertainty_std: float | None = None
+    uncertainty_method: str = "none"
+    mc_mean_probability: float | None = None
 
 
 def yield_risk_tier(probability: float) -> tuple[str, str]:
