@@ -63,17 +63,18 @@ def build_model(
         if seq_len is None or input_dim_seq is None:
             raise ValueError(f"Sequence model {name} requires seq_len and input_dim_seq")
         if name == "transformer_mini":
-            model = TransformerMini(input_dim=input_dim_seq, d_model=mc.get("d_model", 16))
-        elif name == "transformer_qnn_fusion":
-            model = TransformerQNNFusion(
-                input_dim=input_dim_seq,
-                d_model=mc.get("d_model", 16),
-                n_qubits=mc.get("n_qubits", 4),
-                n_layers=mc.get("n_layers", 2),
+            return TransformerMini(input_dim=input_dim_seq, d_model=mc.get("d_model", 16)), lr
+        if name == "transformer_qnn_fusion":
+            return (
+                TransformerQNNFusion(
+                    input_dim=input_dim_seq,
+                    d_model=mc.get("d_model", 16),
+                    n_qubits=mc.get("n_qubits", 4),
+                    n_layers=mc.get("n_layers", 2),
+                ),
+                lr,
             )
-        else:
-            raise ValueError(f"Unknown sequence model: {name}")
-        return model, lr
+        raise ValueError(f"Unknown sequence model: {name}")
 
     if kind != TABULAR_KIND:
         raise ValueError(f"Unknown model kind: {kind}")

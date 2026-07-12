@@ -72,6 +72,9 @@ class SklearnBinaryClassifier(TrainableMixin, nn.Module):
             self.training = True if X is None else X
             return self
 
+        if not isinstance(X, torch.Tensor) or y is None:
+            raise TypeError("train(X, y) requires torch.Tensor inputs when fitting")
+
         if seed is not None:
             set_global_seed(seed)
 

@@ -49,9 +49,9 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install mypy types-PyYAML
           pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
-          pip install -r requirements.lock
+          pip install -r requirements-dev.txt
+          pip install types-PyYAML
 
       - name: Run mypy
         run: mypy src/training src/quantum
