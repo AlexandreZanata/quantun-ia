@@ -39,6 +39,8 @@ jobs:
         run: pip install jsonschema pyyaml
 
       - name: Validate public leaderboard artifacts
+        env:
+          PYTHONPATH: .
         run: python scripts/publish_leaderboard.py --verify-only
 
       - name: Setup Pages
