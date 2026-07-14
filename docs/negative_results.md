@@ -36,6 +36,7 @@ Each entry links to the experiment `results.md` and the statistical test outcome
 | exp_105 | Sharpness easy→hard curriculum ≥5% relative FID vs random | **Rejected** | FID 309.01 vs random 307.65 (win −0.4%) |
 | exp_105b | GV-ALR FID within ±3% at ≤70% fixed epochs | **Rejected** | epoch 8/12 OK; FID Δ +13.2% |
 | exp_107 | Patch amp FID within classical ±1.0 | **Rejected** | FID |Δ|=330.06 (566 vs 236) |
+| exp_108 | Unitary TinyDiT mid ≥5% FID rel vs affine | **Rejected** | rel −4.0% (499 vs 480) |
 
 ---
 
@@ -825,6 +826,23 @@ See: `experiments/exp_105b_gv_alr_image_ddpm/results.md`
 **Interpretation:** Projecting RGB 48-d patches into a 16-amplitude state loses too much reconstruction fidelity vs a matched classical bottleneck; do not claim pixel-level amp parity without grayscale/exact 16-d encoding or a longer quantum budget.
 
 See: `experiments/exp_107_patch_amplitude_bottleneck/results.md`
+
+---
+
+## exp_108 — Quantum flow coupling TinyDiT (H-Q3.3)
+
+**Profile:** CIFAR-10; TinyDiT dim=64 depth=4; classical affine vs unitary Givens mid coupling; RTX 4060
+
+| Condition | Final loss | FID-R18 |
+|-----------|------------|---------|
+| Classical affine coupling | 0.2249 | 480.38 |
+| Unitary Givens coupling | 0.2365 | 499.42 |
+
+**Gate:** ≥ 5% relative FID win → **failed** (rel −4.0%).
+
+**Interpretation:** Volume-preserving unitary mid remix underperforms unconstrained affine scale/shift on nano DiT I2I — do not claim quantum-inspired flow coupling wins without a deeper stack or latent-space placement.
+
+See: `experiments/exp_108_quantum_flow_coupling/results.md`
 
 ---
 

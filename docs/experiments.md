@@ -766,6 +766,15 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `make exp-107-publication`  
 **Lesson:** RGB patch amp bottleneck far from classical MSE parity under short quantum budget; try grayscale 16-d exact amp.
 
+### EXP 108 — Quantum flow coupling in TinyDiT (Phase J / H-Q3.3)
+
+**Models:** TinyDiT (~0.23M) classical affine mid coupling vs unitary Givens mid coupling  
+**Dataset:** `cifar10_v1`  
+**Claim:** FID unitary ≤ classical × 0.95 (≥ 5% relative)  
+**Verdict:** Rejected — FID 499.42 vs classical 480.38 (rel −4.0%)  
+**Command:** `make exp-108-publication`  
+**Lesson:** Mid-block unitary remix alone does not beat RealNVP-style affine coupling on nano DiT I2I.
+
 ### Phase E — Agro Maize Lab + uncertainty (E-T3)
 
 **Dashboard:** `dashboard/pages/07_agro_maize_lab.py`  

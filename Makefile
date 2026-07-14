@@ -631,6 +631,12 @@ exp-107:
 exp-107-publication:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_107_patch_amplitude_bottleneck/run.py --profile publication --write-results
 
+exp-108:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_108_quantum_flow_coupling/run.py --profile ci
+
+exp-108-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_108_quantum_flow_coupling/run.py --profile publication --write-results
+
 data-open-acyd-dvc:
 	@if $(PYTHON) -m dvc --version >/dev/null 2>&1; then \
 		$(PYTHON) -m dvc add data/open/acyd_soy_brazil/processed/v1; \
