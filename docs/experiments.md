@@ -775,6 +775,15 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `make exp-108-publication`  
 **Lesson:** Mid-block unitary remix alone does not beat RealNVP-style affine coupling on nano DiT I2I.
 
+### EXP 109 — Circuit-cut latent 6q (Phase J / H-Q3.4)
+
+**Models:** NanoVAE frozen + classical latent MLP vs 6q circuit-cut (2×4q overlap) residual  
+**Dataset:** `cifar10_v1`  
+**Claim:** FID_cut ≤ classical + 1.0 (parity)  
+**Verdict:** Confirmed — FID 576.59 vs classical 579.60 (Δ −3.01)  
+**Command:** `make exp-109-publication`  
+**Lesson:** Circuit-cut widens latent quantum guidance on 4060 without breaking parity; absolute FID still high.
+
 ### Phase E — Agro Maize Lab + uncertainty (E-T3)
 
 **Dashboard:** `dashboard/pages/07_agro_maize_lab.py`  
