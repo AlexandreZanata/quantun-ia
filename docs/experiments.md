@@ -801,6 +801,15 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `make exp-110-publication`  
 **Lesson:** Quantum remix of pooled CLIP is directionally helpful but does not clear +0.5; try multi-token CLIP sequences.
 
+### EXP 111 — Measurement-scheduled CFG (Phase J / H-Q3.6)
+
+**Models:** Shared CFG-trained TinyDiT + CLIP MLP; classical CFG vs annealed Bernoulli measurement schedule  
+**Dataset:** `flickr8k_captions_v1`  
+**Claim:** CLIP_meas ≥ CLIP_cfg + 0.5  
+**Verdict:** Rejected — CLIP 17.74 vs CFG 17.64 (Δ +0.10)  
+**Command:** `make exp-111-publication`  
+**Lesson:** Measurement schedule is nearly identical to fixed CFG at nano scale; not a CFG substitute win.
+
 ### Phase E — Agro Maize Lab + uncertainty (E-T3)
 
 **Dashboard:** `dashboard/pages/07_agro_maize_lab.py`  
