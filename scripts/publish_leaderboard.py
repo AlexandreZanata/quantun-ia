@@ -9,7 +9,6 @@ from pathlib import Path
 
 import jsonschema
 
-from src.benchmark.microqml_bench import build_bench_export, write_bench_export
 from tests.contracts.microqml_bench_schema import MICROQML_BENCH_V1_SCHEMA
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -51,6 +50,9 @@ def publish_leaderboard(
     output_dir: Path = DEFAULT_OUT_DIR,
 ) -> tuple[Path, Path]:
     """Build and write public leaderboard JSON + meta sidecar."""
+    # Lazy import: verify-only must stay torch-free for the Pages workflow.
+    from src.benchmark.microqml_bench import build_bench_export, write_bench_export
+
     records = load_records_from_jsonl(jsonl_path)
     export = build_bench_export(records=records)
     jsonschema.validate(instance=export, schema=MICROQML_BENCH_V1_SCHEMA)
