@@ -183,6 +183,12 @@ exp-084:
 exp-084-publication:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_084_residual_ft_nano_maize/run.py --profile publication --write-results
 
+exp-084b:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_084b_residual_nano_soy_transfer/run.py --profile ci
+
+exp-084b-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_084b_residual_nano_soy_transfer/run.py --profile publication --write-results
+
 exp-092:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_092_histgb_distill_nano_maize/run.py --profile ci
 
@@ -573,6 +579,12 @@ data-open-cybench-sample:
 
 data-open-cybench-maize: data-open-cybench-sample
 	MLFLOW_DISABLE=1 $(PYTHON) scripts/build_open_cybench_maize.py
+
+data-open-images-smoke:
+	MLFLOW_DISABLE=1 $(PYTHON) scripts/download_open_images.py --packs cifar10 fashion_mnist flowers102
+
+data-open-images-cifar:
+	MLFLOW_DISABLE=1 $(PYTHON) scripts/download_open_images.py --packs cifar10
 
 data-open-acyd-dvc:
 	@if $(PYTHON) -m dvc --version >/dev/null 2>&1; then \

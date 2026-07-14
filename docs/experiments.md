@@ -525,12 +525,21 @@ vim experiments/exp_003_entanglement_effect/results.md
 
 ### EXP 084 — Residual / NarrowDeep / FT-lite nano vs HistGB (Phase A H-N1)
 
-**Models:** ResidualNanoMLP, NarrowDeepNano, FTLiteNano vs HistGB  
-**Dataset:** `acyd_maize_brazil_v1` (151,956 train / 13,566 val)  
-**Claim:** Best nano ≥ HistGB + 0.5 pp ROC-AUC  
-**Verdict:** Honest negative — HistGB 0.8178 vs ResidualNano 0.8086 (−0.92 pp); FT-lite collapsed (0.5602)  
-**Command:** `QML_DEVICE=cuda python experiments/exp_084_residual_ft_nano_maize/run.py --profile publication --write-results`  
+**Models:** ResidualNanoMLP, NarrowDeepNano, FTLiteNano vs HistGB
+**Dataset:** `acyd_maize_brazil_v1` (151,956 train / 13,566 val)
+**Claim:** Best nano ≥ HistGB + 0.5 pp ROC-AUC
+**Verdict:** Honest negative — HistGB 0.8178 vs ResidualNano 0.8086 (−0.92 pp); FT-lite collapsed (0.5602)
+**Command:** `QML_DEVICE=cuda python experiments/exp_084_residual_ft_nano_maize/run.py --profile publication --write-results`
 **Lesson:** Architecture swaps alone do not close the agro boosting gap — prefer HistGB→nano distillation (exp_092).
+
+### EXP 084b — ResidualNano soy transfer vs HistGB (Phase A A-T4)
+
+**Models:** ResidualNanoMLP vs HistGB  
+**Dataset:** `acyd_soy_brazil_v1` (50,107 train / 5,830 val)  
+**Claim:** ResidualNano (maize-best arch) ≥ HistGB + 0.5 pp ROC-AUC on soy val  
+**Verdict:** Honest negative — HistGB 0.6941 vs ResidualNano 0.6740 (−2.01 pp)  
+**Command:** `QML_DEVICE=cuda python experiments/exp_084b_residual_nano_soy_transfer/run.py --profile publication --write-results`  
+**Lesson:** Maize-chosen ResidualNano still trails HistGB on soy; boosting gap is crop-agnostic — keep maize distill as serve default.  
 
 ### EXP 092 — HistGB → ResidualNano soft-label distillation (Phase D H-N3)
 
