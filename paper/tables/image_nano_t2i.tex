@@ -1,0 +1,16 @@
+% Auto-generated Cycle v3 T2I table (Phase K)
+\begin{table}[ht]
+\centering
+\caption{TinyDiT Flickr8k T2I and text–quantum fusion (OpenCLIP CLIPScore $\times$100; RTX~4060).}
+\label{tab:image_nano_t2i}
+\begin{tabular}{lrlrl}
+\toprule
+Model & CLIP & Floor & Verdict & Notes \\
+\midrule
+TinyDiT hash+caption (exp\_103) & 18.08 & null 21.36 & rejected & Δnull −3.28 \\
+Classical CLIP-MLP fusion (exp\_110) & 17.62 & — & baseline & null-quantum ablate \\
+4q CLIP fusion (exp\_110) & 17.99 & classical 17.62 & rejected & Δ +0.37 \\
+Meas. CFG schedule (exp\_111) & 17.74 & CFG 17.64 & rejected & Δ +0.10 \\
+\bottomrule
+\end{tabular}
+\end{table}

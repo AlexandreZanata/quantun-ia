@@ -1,0 +1,16 @@
+% Auto-generated Cycle v3 I2I table (Phase K)
+\begin{table}[ht]
+\centering
+\caption{Classical NanoUNet I2I floor and Phase I trainer transfers (CIFAR-10; FID-R18; RTX~4060).}
+\label{tab:image_nano_i2i}
+\begin{tabular}{lrrll}
+\toprule
+Model & FID & Floor & Verdict & Notes \\
+\midrule
+NanoUNet DDPM (exp\_102) & 153.93 & noise 652.36 & accepted & rel +0.764 vs noise \\
+Soft distill student (exp\_104) & 306.99 & teacher 207.85 & rejected & ratio 1.477 \\
+Sharpness curriculum (exp\_105) & 309.01 & random 307.65 & rejected & rel −0.4\% \\
+GV-ALR NanoUNet (exp\_105b) & 308.58 & fixed 272.64 & rejected & FID Δ +13.2\% \\
+\bottomrule
+\end{tabular}
+\end{table}

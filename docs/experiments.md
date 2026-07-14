@@ -810,6 +810,15 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `make exp-111-publication`  
 **Lesson:** Measurement schedule is nearly identical to fixed CFG at nano scale; not a CFG substitute win.
 
+### EXP 112 — Cycle v3 image grand leaderboard (Phase K / K-T5)
+
+**Models:** Synthesis (curated RTX 4060 metrics)  
+**Dataset:** exp_101–111 closed results  
+**Claim:** Accepts ≡ {101,102,106,109}; no rejected quantum false claim  
+**Verdict:** Confirmed — 12 rows · 4 accepts · 8 rejects  
+**Command:** `make exp-112-publication` · `make cycle-v3-tables` · `make ship-nano-unet-cifar`  
+**Lesson:** Cycle v3 closes with NanoUNet I2I + latent residual/cut; T2I and pixel trainers remain open problems for Cycle v4.
+
 ### Phase E — Agro Maize Lab + uncertainty (E-T3)
 
 **Dashboard:** `dashboard/pages/07_agro_maize_lab.py`  

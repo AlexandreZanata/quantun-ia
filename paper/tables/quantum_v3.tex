@@ -1,0 +1,18 @@
+% Auto-generated Cycle v3 quantum recipes table (Phase K)
+\begin{table}[ht]
+\centering
+\caption{Quantum recipes 3.0 on image latents / pixels (FID-R18 or CLIP; RTX~4060).}
+\label{tab:quantum_v3}
+\begin{tabular}{lllll}
+\toprule
+Model & Metric & Floor & Verdict & Notes \\
+\midrule
+Latent residual 4q (exp\_106) & FID 576.63 & classical 579.60 & accepted & Δ −2.97 \\
+Patch amplitude (exp\_107) & FID 566.27 & classical 236.21 & rejected & |Δ|=330 \\
+Unitary flow mid (exp\_108) & FID 499.42 & classical 480.38 & rejected & rel −4.0\% \\
+Circuit-cut 6q (exp\_109) & FID 576.59 & classical 579.60 & accepted & Δ −3.01 \\
+Text–quantum fusion (exp\_110) & CLIP 17.99 & classical 17.62 & rejected & Δ +0.37 \\
+Meas. schedule CFG (exp\_111) & CLIP 17.74 & CFG 17.64 & rejected & Δ +0.10 \\
+\bottomrule
+\end{tabular}
+\end{table}

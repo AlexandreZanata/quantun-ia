@@ -21,6 +21,7 @@ from src.application.create_training_job import CreateTrainingJobDTO
 from src.application.create_training_job import execute as create_job
 from src.application.dto import PredictNanomodelDTO
 from src.application.human_agro_scorer import AgroMunicipalityProfile, WeatherBlockStats
+from src.application.image_nano_predict import load_image_nano_model_card, predict_image_i2i
 from src.application.issue_tokens import IssueTokensDTO
 from src.application.issue_tokens import execute as issue_tokens
 from src.application.nanotrainer_config import load_nanotrainer_config
@@ -45,6 +46,9 @@ from src.presentation.http.schemas import (
     AgroSoyPredictRequest,
     AgroSoyPredictResponse,
     CreateTrainingJobRequest,
+    ImageModelCardResponse,
+    ImagePredictRequest,
+    ImagePredictResponse,
     IssueTokenRequest,
     LeaderboardResponse,
     LeaderboardRowResponse,
@@ -415,6 +419,48 @@ def create_app() -> FastAPI:
             exp_id=card.exp_id,
             seed=card.seed,
             markdown=card.markdown,
+        )
+
+    @app.post("/api/v1/predict/image", response_model=ImagePredictResponse)
+    def post_predict_image(
+        body: ImagePredictRequest,
+        tenant: TenantContext = Depends(resolve_tenant_context),
+    ) -> ImagePredictResponse:
+        _ = tenant
+        os.environ.setdefault("MLFLOW_DISABLE", "1")
+        if body.mode != "i2i":
+            raise HTTPException(
+                status_code=422,
+                detail={"code": "UNSUPPORTED_MODE", "message": "only mode=i2i is shipped (TinyDiT T2I deferred)"},
+            )
+        outcome = predict_image_i2i(n=body.n, timesteps=body.timesteps, seed=body.seed)
+        if isinstance(outcome, Fail):
+            status = 404 if outcome.error.code == "BUNDLE_MISSING" else 422
+            raise HTTPException(
+                status_code=status,
+                detail={"code": outcome.error.code, "message": outcome.error.message},
+            )
+        assert isinstance(outcome, Ok)
+        result = outcome.value
+        return ImagePredictResponse(
+            model_key=result.model_key,
+            n=result.n,
+            img_size=result.img_size,
+            timesteps=result.timesteps,
+            device=result.device,
+            png_base64=result.png_base64,
+        )
+
+    @app.get("/api/v1/models/image/card", response_model=ImageModelCardResponse)
+    def get_image_model_card() -> ImageModelCardResponse:
+        card = load_image_nano_model_card()
+        return ImageModelCardResponse(
+            registry_key=str(card.get("registry_key", "nano_unet_cifar")),
+            ready=bool(card.get("ready", False)),
+            exp_id=card.get("exp_id"),
+            profile=card.get("profile"),
+            n_params=card.get("n_params"),
+            message=card.get("message"),
         )
 
     @app.get("/api/v1/benchmarks/leaderboard", response_model=LeaderboardResponse)

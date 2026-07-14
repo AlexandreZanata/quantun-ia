@@ -261,6 +261,12 @@ exp-100:
 exp-100-publication:
 	MLFLOW_DISABLE=1 $(PYTHON) experiments/exp_100_cycle2_grand_leaderboard/run.py --profile publication --write-results
 
+exp-112:
+	MLFLOW_DISABLE=1 $(PYTHON) experiments/exp_112_cycle3_image_grand_leaderboard/run.py --profile ci
+
+exp-112-publication:
+	MLFLOW_DISABLE=1 $(PYTHON) experiments/exp_112_cycle3_image_grand_leaderboard/run.py --profile publication --write-results
+
 exp-088:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_088_shadow_features_nano_maize/run.py --profile ci
 
@@ -713,9 +719,19 @@ figures:
 latex-tables:
 	$(PYTHON) scripts/export_latex_tables.py
 	$(PYTHON) -m scripts.export_cycle_v2_tables
+	$(PYTHON) -m scripts.export_cycle_v3_tables
 
 cycle-v2-tables:
 	$(PYTHON) -m scripts.export_cycle_v2_tables
+
+cycle-v3-tables:
+	$(PYTHON) -m scripts.export_cycle_v3_tables
+
+ship-nano-unet-cifar:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m scripts.ship_nano_unet_cifar --profile publication
+
+ship-nano-unet-cifar-ci:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) -m scripts.ship_nano_unet_cifar --profile ci
 
 release:
 	$(PYTHON) scripts/prepare_release.py

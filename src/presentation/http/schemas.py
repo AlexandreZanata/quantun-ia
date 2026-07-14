@@ -102,6 +102,31 @@ class AgroMaizeModelCardResponse(BaseModel):
     markdown: str
 
 
+class ImagePredictRequest(BaseModel):
+    n: int = Field(default=4, ge=1, le=16)
+    timesteps: int | None = Field(default=None, ge=1, le=200)
+    seed: int = Field(default=42, ge=0)
+    mode: str = Field(default="i2i", pattern="^(i2i)$")
+
+
+class ImagePredictResponse(BaseModel):
+    model_key: str
+    n: int
+    img_size: int
+    timesteps: int
+    device: str
+    png_base64: list[str]
+
+
+class ImageModelCardResponse(BaseModel):
+    registry_key: str
+    ready: bool
+    exp_id: str | None = None
+    profile: str | None = None
+    n_params: int | None = None
+    message: str | None = None
+
+
 class IssueTokenRequest(BaseModel):
     tenant_id: str = Field(..., min_length=1)
     api_key: str = Field(..., min_length=1)

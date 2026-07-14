@@ -2890,6 +2890,23 @@ experiments:
         n_eval: 128
         min_clip_gap: 0.5
 
+  exp_112_cycle3_image_grand_leaderboard:
+    description: "Phase K — Cycle v3 image grand leaderboard synthesis (exp_101–111 curated RTX 4060 metrics)"
+    exp_id: exp_112
+    seed: 42
+    registry_path: config/cycle3_grand_leaderboard_registry.yaml
+    json_out: dist/leaderboards/cycle3_grand_leaderboard.json
+    latex_out: paper/tables/cycle3_grand_leaderboard.tex
+    claim_win_clip: 0.5
+    claim_win_fid: -2.0
+    profile_overrides:
+      ci:
+        claim_win_clip: 0.5
+        claim_win_fid: -2.0
+      publication:
+        claim_win_clip: 0.5
+        claim_win_fid: -2.0
+
   exp_100_cycle2_grand_leaderboard:
     description: "Cycle v2 grand leaderboard synthesis (exp_084–099 curated RTX 4060 metrics)"
     exp_id: exp_100

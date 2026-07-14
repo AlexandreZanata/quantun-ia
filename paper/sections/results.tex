@@ -128,6 +128,24 @@ Table~\ref{tab:cycle2_grand_leaderboard} is the full Cycle~v2 scorecard
 (exp\_084--099): five accepts and eleven honest negatives; no quantum arm
 clears $+0.5$~pp vs its classical floor.
 
+\subsection{Research Cycle v3 — image nano}
+
+\input{tables/image_nano_i2i}
+
+\input{tables/image_nano_t2i}
+
+\input{tables/quantum_v3}
+
+\input{tables/cycle3_grand_leaderboard}
+
+\paragraph{Practical takeaway.}
+The Cycle~v3 classical I2I floor is NanoUNet DDPM on CIFAR-10
+(\texttt{nano\_unet\_cifar}). TinyDiT Flickr T2I did not clear the null-caption
+CLIP gate; do not ship T2I until Phase~M latent repair. Quantum residual (exp\_106)
+and circuit-cut (exp\_109) are accepted as \emph{latent} parity/advantage only.
+Table~\ref{tab:cycle3_grand_leaderboard} is the full Cycle~v3 scorecard
+(exp\_101--111): four accepts and eight honest negatives.
+
 \subsection{Key findings}
 
 On synthetic 2D tasks, parameter-matched classical MLPs remain competitive with

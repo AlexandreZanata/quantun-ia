@@ -1,0 +1,86 @@
+# Curated Cycle v3 paper tables (Phase K / K-T4). Metrics from RTX 4060 results.md.
+
+image_nano_i2i:
+  caption: "Classical NanoUNet I2I floor and Phase I trainer transfers (CIFAR-10; FID-R18; RTX~4060)."
+  label: tab:image_nano_i2i
+  rows:
+    - model: NanoUNet DDPM (exp_102)
+      fid: 153.93
+      reference: "noise 652.36"
+      verdict: accepted
+      notes: "rel +0.764 vs noise"
+    - model: Soft distill student (exp_104)
+      fid: 306.99
+      reference: "teacher 207.85"
+      verdict: rejected
+      notes: "ratio 1.477"
+    - model: Sharpness curriculum (exp_105)
+      fid: 309.01
+      reference: "random 307.65"
+      verdict: rejected
+      notes: "rel −0.4%"
+    - model: GV-ALR NanoUNet (exp_105b)
+      fid: 308.58
+      reference: "fixed 272.64"
+      verdict: rejected
+      notes: "FID Δ +13.2%"
+
+image_nano_t2i:
+  caption: "TinyDiT Flickr8k T2I and text–quantum fusion (OpenCLIP CLIPScore $\\times$100; RTX~4060)."
+  label: tab:image_nano_t2i
+  rows:
+    - model: TinyDiT hash+caption (exp_103)
+      clip: 18.08
+      reference: "null 21.36"
+      verdict: rejected
+      notes: "Δnull −3.28"
+    - model: Classical CLIP-MLP fusion (exp_110)
+      clip: 17.62
+      reference: "—"
+      verdict: baseline
+      notes: "null-quantum ablate"
+    - model: 4q CLIP fusion (exp_110)
+      clip: 17.99
+      reference: "classical 17.62"
+      verdict: rejected
+      notes: "Δ +0.37"
+    - model: Meas. CFG schedule (exp_111)
+      clip: 17.74
+      reference: "CFG 17.64"
+      verdict: rejected
+      notes: "Δ +0.10"
+
+quantum_v3:
+  caption: "Quantum recipes 3.0 on image latents / pixels (FID-R18 or CLIP; RTX~4060)."
+  label: tab:quantum_v3
+  rows:
+    - model: Latent residual 4q (exp_106)
+      metric: "FID 576.63"
+      reference: "classical 579.60"
+      verdict: accepted
+      notes: "Δ −2.97"
+    - model: Patch amplitude (exp_107)
+      metric: "FID 566.27"
+      reference: "classical 236.21"
+      verdict: rejected
+      notes: "|Δ|=330"
+    - model: Unitary flow mid (exp_108)
+      metric: "FID 499.42"
+      reference: "classical 480.38"
+      verdict: rejected
+      notes: "rel −4.0%"
+    - model: Circuit-cut 6q (exp_109)
+      metric: "FID 576.59"
+      reference: "classical 579.60"
+      verdict: accepted
+      notes: "Δ −3.01"
+    - model: Text–quantum fusion (exp_110)
+      metric: "CLIP 17.99"
+      reference: "classical 17.62"
+      verdict: rejected
+      notes: "Δ +0.37"
+    - model: Meas. schedule CFG (exp_111)
+      metric: "CLIP 17.74"
+      reference: "CFG 17.64"
+      verdict: rejected
+      notes: "Δ +0.10"
