@@ -737,6 +737,16 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `make exp-105-publication`  
 **Lesson:** Laplacian-variance staging does not transfer SPEI curriculum gains to CIFAR DDPM.
 
+
+### EXP 105b — GV-ALR on NanoUNet DDPM (Phase I / H-I3)
+
+**Models:** NanoUNet DDPM (~0.48M) fixed-LR 12 ep vs GV-ALR 8 ep  
+**Dataset:** `cifar10_v1`  
+**Claim:** FID within ±3% relative at ≤70% epochs  
+**Verdict:** Rejected — epoch frac 0.667 OK; FID 308.58 vs fixed 272.64 (Δ +13.2%)  
+**Command:** `make exp-105b-publication`  
+**Lesson:** Tabular GV-ALR efficiency does not free FID-R18 quality under a shorter DDPM budget.
+
 ### Phase E — Agro Maize Lab + uncertainty (E-T3)
 
 **Dashboard:** `dashboard/pages/07_agro_maize_lab.py`  

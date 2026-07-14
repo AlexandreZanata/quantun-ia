@@ -188,3 +188,87 @@ def train_ddpm_distill(
         if logger is not None and (epoch % log_every == 0 or epoch == epochs):
             logger.log(epoch, loss=mean_loss, distill_alpha=alpha)
     return history
+
+
+def step_ddpm_gradient_variance(
+    model: nn.Module,
+    schedule: DDPMSchedule,
+    x_batch: torch.Tensor,
+) -> float:
+    """Gradient variance of one DDPM noise-prediction step (GV-ALR diagnostic)."""
+    device = schedule.device
+    model.train()
+    model.zero_grad(set_to_none=True)
+    batch = x_batch.to(device)
+    t = torch.randint(0, schedule.timesteps, (batch.shape[0],), device=device)
+    x_t, noise = q_sample(schedule, batch, t)
+    pred = model(x_t, t)
+    loss = F.mse_loss(pred, noise)
+    loss.backward()
+    grad_parts = [p.grad.detach().flatten() for p in model.parameters() if p.grad is not None]
+    if not grad_parts:
+        return 0.0
+    grad_flat = torch.cat(grad_parts)
+    if grad_flat.numel() <= 1:
+        return 0.0
+    return float(grad_flat.var().item())
+
+
+def train_ddpm_gvalr(
+    model: nn.Module,
+    x_train: torch.Tensor,
+    schedule: DDPMSchedule,
+    *,
+    epochs: int,
+    batch_size: int,
+    adaptive_config,
+    seed: int = 42,
+    log_every: int = 1,
+    logger=None,
+) -> list[float]:
+    """Train DDPM noise predictor with gradient-variance adaptive LR (GV-ALR)."""
+    from src.training.adaptive_lr import AdaptiveLRConfig, compute_lr_scale
+
+    cfg: AdaptiveLRConfig = adaptive_config
+    torch.manual_seed(seed)
+    device = schedule.device
+    model.to(device)
+    model.train()
+    loader = DataLoader(
+        TensorDataset(x_train),
+        batch_size=batch_size,
+        shuffle=True,
+        drop_last=False,
+    )
+    current_lr = cfg.base_lr
+    opt = torch.optim.AdamW(model.parameters(), lr=current_lr)
+    history: list[float] = []
+    for epoch in range(1, epochs + 1):
+        running = 0.0
+        n_batches = 0
+        for (batch,) in loader:
+            batch = batch.to(device)
+            t = torch.randint(0, schedule.timesteps, (batch.shape[0],), device=device)
+            x_t, noise = q_sample(schedule, batch, t)
+            pred = model(x_t, t)
+            loss = F.mse_loss(pred, noise)
+            opt.zero_grad(set_to_none=True)
+            loss.backward()
+            opt.step()
+            running += float(loss.item())
+            n_batches += 1
+
+        grad_var = 0.0
+        if epoch > cfg.warmup_epochs and epoch % cfg.adapt_every == 0:
+            sample_batch = next(iter(loader))[0]
+            grad_var = step_ddpm_gradient_variance(model, schedule, sample_batch)
+            scale = compute_lr_scale(grad_var, cfg)
+            current_lr = cfg.base_lr * scale
+            for group in opt.param_groups:
+                group["lr"] = current_lr
+
+        mean_loss = running / max(n_batches, 1)
+        history.append(mean_loss)
+        if logger is not None and (epoch % log_every == 0 or epoch == epochs):
+            logger.log(epoch, loss=mean_loss, learning_rate=current_lr, grad_variance=grad_var)
+    return history
