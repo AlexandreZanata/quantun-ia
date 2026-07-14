@@ -619,6 +619,12 @@ exp-105b:
 exp-105b-publication:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_105b_gv_alr_image_ddpm/run.py --profile publication --write-results
 
+exp-106:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_106_latent_residual_qnn/run.py --profile ci
+
+exp-106-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_106_latent_residual_qnn/run.py --profile publication --write-results
+
 data-open-acyd-dvc:
 	@if $(PYTHON) -m dvc --version >/dev/null 2>&1; then \
 		$(PYTHON) -m dvc add data/open/acyd_soy_brazil/processed/v1; \

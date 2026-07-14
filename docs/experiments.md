@@ -747,6 +747,16 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `make exp-105b-publication`  
 **Lesson:** Tabular GV-ALR efficiency does not free FID-R18 quality under a shorter DDPM budget.
 
+
+### EXP 106 — Latent residual QNN on frozen NanoVAE (Phase J / H-Q3.1)
+
+**Models:** NanoVAE (~0.38M frozen) + classical latent MLP vs 4q residual QNN  
+**Dataset:** `cifar10_v1`  
+**Claim:** Quantum FID ≤ classical + 1.0 (parity); advantage at ≤ classical − 2.0  
+**Verdict:** Confirmed — FID 576.63 vs classical 579.60 (Δ −2.97); absolute FID still high  
+**Command:** `make exp-106-publication`  
+**Lesson:** Relative latent-head win vs classical MLP is achievable; do not overclaim pixel NanoUNet FID.
+
 ### Phase E — Agro Maize Lab + uncertainty (E-T3)
 
 **Dashboard:** `dashboard/pages/07_agro_maize_lab.py`  
