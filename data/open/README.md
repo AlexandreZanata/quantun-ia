@@ -83,8 +83,30 @@ make data-open-verify DATASET=cybench_maize_us_v1
 - Label: low-yield binary (yield ≤ train-period median, years ≤ 2011)
 - Splits: train ≤ 2011 · val 2012–2015 · test ≥ 2016
 
+## Cycle v3 — open image packs (Phase G / exp_101+)
+
+Nano I2I / T2I training uses **license-clear** image corpora under `images/`.
+
+| Pack | Path | Role | Priority | Status |
+|------|------|------|----------|--------|
+| `cifar10` | `images/cifar10/raw/v1/` | I2I / class-cond FID floor | P0 | via `make data-open-images-smoke` |
+| `fashion_mnist` | `images/fashion_mnist/raw/v1/` | CI smoke | P0 | same |
+| `flowers102` | `images/flowers102/raw/v1/` | fine-detail class-cond | P0 | same |
+| Flickr8k / pokemon-blip / COCO-cap | TBD | T2I captions | P0–P1 | G-T3 |
+| LAION-Aesthetic micro ≤50k | TBD | optional hard T2I | P2 gated | G-T7 |
+
+```bash
+make data-open-images-smoke
+# writes data/open/images/GENERATION.md + download_stats.json
+```
+
+**Rules:** split train/val/test **before** resize/normalize; document licenses in `images/GENERATION.md`; do not commit multi-GB blobs — DVC/gitignore raw packs.
+
 ## Citations
 
 - **HIGGS:** Baldi, P., Sadowski, P., Whiteson, D. (2014). Searching for Exotic Particles in High-Energy Physics with Deep Learning. *Nature Communications*. UCI ML Repository.
 - **Synthea:** Walonoski, J. et al. Synthea: An approach, method, and software mechanism for generating synthetic patients and the standard medical data of a comprehensive lifetime journey. *JAMIA* (2018).
 - **CY-Bench:** Kallenberg et al. (2026). CY-Bench: a comprehensive benchmark dataset for sub-national crop yield forecasting. *ESSD* / Zenodo DOI [10.5281/zenodo.11502142](https://doi.org/10.5281/zenodo.11502142). Sample tables via [WUR-AI/sample_data](https://github.com/WUR-AI/sample_data).
+- **CIFAR-10:** Krizhevsky, A. (2009). Learning Multiple Layers of Features from Tiny Images.
+- **Fashion-MNIST:** Xiao, H., Rasul, K., Vollgraf, R. (2017). Fashion-MNIST.
+- **Oxford Flowers-102:** Nilsback, M., Zisserman, A. (2008). Automated flower classification over a large number of classes.

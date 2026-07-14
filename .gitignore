@@ -34,6 +34,8 @@ data/open/acyd_maize_brazil/processed/hard_drift_v1/
 data/open/acyd_maize_brazil/processed/continual_v1/
 data/open/cybench_maize/raw/
 data/open/cybench_maize/processed/v1/
+data/open/images/*/raw/
+data/open/images/download_stats.json
 data/*.db
 figures/
 dist/
