@@ -592,11 +592,29 @@ data-open-images-smoke:
 data-open-images-cifar:
 	MLFLOW_DISABLE=1 $(PYTHON) scripts/download_open_images.py --packs cifar10
 
+data-open-images-stl:
+	MLFLOW_DISABLE=1 $(PYTHON) scripts/download_open_images.py --packs stl10
+
+data-open-images-tiny-imagenet:
+	MLFLOW_DISABLE=1 $(PYTHON) scripts/download_open_images.py --packs tiny_imagenet
+
+data-open-images-v4:
+	MLFLOW_DISABLE=1 $(PYTHON) scripts/download_open_images.py --packs stl10 tiny_imagenet
+
 data-open-images-splits:
 	MLFLOW_DISABLE=1 $(PYTHON) scripts/build_open_image_splits.py --packs cifar10 fashion_mnist flowers102
 
+data-open-images-splits-v4:
+	MLFLOW_DISABLE=1 $(PYTHON) scripts/build_open_image_splits.py --packs stl10 tiny_imagenet
+
 data-open-images-captions:
 	MLFLOW_DISABLE=1 $(PYTHON) scripts/download_open_captions.py
+
+data-open-images-coco-cap:
+	MLFLOW_DISABLE=1 $(PYTHON) scripts/download_open_coco_captions.py --max-images 20000
+
+data-open-coco-caption-splits:
+	MLFLOW_DISABLE=1 $(PYTHON) scripts/build_open_coco_caption_splits.py
 
 data-open-caption-splits:
 	MLFLOW_DISABLE=1 $(PYTHON) scripts/build_open_caption_splits.py
@@ -606,6 +624,12 @@ exp-101:
 
 exp-101-publication:
 	MLFLOW_DISABLE=1 $(PYTHON) experiments/exp_101_open_image_corpus_ingest/run.py --profile publication --write-results
+
+exp-113:
+	MLFLOW_DISABLE=1 $(PYTHON) experiments/exp_113_open_image_corpus_expand/run.py --profile ci
+
+exp-113-publication:
+	MLFLOW_DISABLE=1 $(PYTHON) experiments/exp_113_open_image_corpus_expand/run.py --profile publication --write-results
 
 exp-102:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_102_nano_unet_cifar_i2i/run.py --profile ci

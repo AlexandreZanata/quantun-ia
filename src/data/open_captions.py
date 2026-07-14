@@ -13,9 +13,16 @@ ROOT_DEFAULT = Path(__file__).resolve().parents[2]
 PACK_ROOT = ROOT_DEFAULT / "data" / "open" / "images" / "flickr8k"
 RAW_DIR = PACK_ROOT / "raw" / "v1"
 PROCESSED_DIR = PACK_ROOT / "processed" / "v1"
+COCO_PACK_ROOT = ROOT_DEFAULT / "data" / "open" / "images" / "coco_captions"
 
 
 def is_flickr8k_ready(*, root: Path = PACK_ROOT) -> bool:
+    raw = root / "raw" / "v1"
+    processed = root / "processed" / "v1"
+    return (raw / ".download_complete").is_file() and (processed / "pairs.parquet").is_file()
+
+
+def is_coco_captions_ready(*, root: Path = COCO_PACK_ROOT) -> bool:
     raw = root / "raw" / "v1"
     processed = root / "processed" / "v1"
     return (raw / ".download_complete").is_file() and (processed / "pairs.parquet").is_file()

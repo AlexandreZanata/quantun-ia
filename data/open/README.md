@@ -96,14 +96,28 @@ Nano I2I / T2I training uses **license-clear** image corpora under `images/`.
 | pokemon-blip | n/a | was P1 toy | — | ❌ gated/DMCA — skipped |
 | LAION-Aesthetic micro ≤50k | TBD | optional hard T2I | P2 gated | G-T7 |
 
+## Cycle v4 — open image expansion (Phase L / exp_113)
+
+| Pack | Path | Role | Priority | Status |
+|------|------|------|----------|--------|
+| `stl10` | `images/stl10/` | harder I2I (96×96) | P0 | ✅ ready (`stl10_v1`) |
+| `tiny_imagenet` | `images/tiny_imagenet/` | mid-scale class-cond | P0 | ✅ ready (`tiny_imagenet_v1`) |
+| `coco_captions` | `images/coco_captions/` | T2I micro ≤20k | P0 | ✅ ready (`coco_captions_micro_v1`) |
+| AFHQ 64×64 | TBD | animals/faces I2I | P1 | optional |
+
 ```bash
 make data-open-images-smoke
 make data-open-images-splits
 make data-open-images-captions
 make data-open-caption-splits
 make exp-101-publication
-make exp-103-publication
-# writes GENERATION.md + processed/*/stats.json (+ pairs.parquet for captions)
+# Cycle v4 Phase L:
+make data-open-images-v4
+make data-open-images-splits-v4
+make data-open-images-coco-cap
+make data-open-coco-caption-splits
+make exp-113-publication
+make data-open-verify
 ```
 
 **Rules:** split train/val/test **before** resize/normalize; document licenses in `images/GENERATION.md`; do not commit multi-GB raw blobs — gitignore `images/*/raw/`.
@@ -117,3 +131,6 @@ make exp-103-publication
 - **Fashion-MNIST:** Xiao, H., Rasul, K., Vollgraf, R. (2017). Fashion-MNIST.
 - **Oxford Flowers-102:** Nilsback, M., Zisserman, A. (2008). Automated flower classification over a large number of classes.
 - **Flickr8k:** Hodosh, M., Young, P., Hockenmaier, J. (2013). Framing image description as a ranking task. *JAIR*.
+- **STL-10:** Coates, A., Lee, H., Ng, A. Y. (2011). An Analysis of Single-Layer Networks in Unsupervised Feature Learning. *AISTATS*.
+- **Tiny ImageNet:** Stanford CS231n. [tiny-imagenet-200](http://cs231n.stanford.edu/tiny-imagenet-200.zip).
+- **COCO Captions:** Lin, T.-Y. et al. (2014). Microsoft COCO: Common Objects in Context. *ECCV*.

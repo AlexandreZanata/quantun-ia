@@ -1,0 +1,28 @@
+{
+  "pack": "tiny_imagenet",
+  "split_method": "random_train_holdout_before_normalize",
+  "seed": 42,
+  "modality": "images",
+  "spatial_shape": [
+    64,
+    64,
+    3
+  ],
+  "n_classes": 200,
+  "splits": {
+    "train": {
+      "n": 90000,
+      "indices_file": "split_indices.npz"
+    },
+    "val": {
+      "n": 10000,
+      "indices_file": "split_indices.npz"
+    },
+    "test": {
+      "n": 10000,
+      "indices_file": "split_indices.npz"
+    }
+  },
+  "notes": "val carved from train; official Tiny-IN val used as test; resize deferred to loader",
+  "generated_at": "2026-07-14T18:49:09.399590+00:00"
+}

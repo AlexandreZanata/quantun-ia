@@ -819,6 +819,15 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `make exp-112-publication` · `make cycle-v3-tables` · `make ship-nano-unet-cifar`  
 **Lesson:** Cycle v3 closes with NanoUNet I2I + latent residual/cut; T2I and pixel trainers remain open problems for Cycle v4.
 
+### EXP 113 — Open image corpus expansion (Phase L)
+
+**Models:** Ingest scorecard (no train)  
+**Dataset:** `stl10_v1` · `tiny_imagenet_v1` · `coco_captions_micro_v1`  
+**Claim:** ≥3/3 P0 packs ready + split-before-resize smoke  
+**Verdict:** Confirmed — 3/3 packs · smoke OK  
+**Command:** `make data-open-images-v4` · `make data-open-images-coco-cap` · `make exp-113-publication`  
+**Lesson:** STL-10 + Tiny-ImageNet + COCO ≤20k unlock Phase M efficient nano floors on 4060.
+
 ### Phase E — Agro Maize Lab + uncertainty (E-T3)
 
 **Dashboard:** `dashboard/pages/07_agro_maize_lab.py`  

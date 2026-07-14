@@ -1,0 +1,28 @@
+{
+  "pack": "coco_captions",
+  "split_method": "random_image_holdout_before_resize",
+  "seed": 42,
+  "modality": "image_text",
+  "spatial_shape": [
+    null,
+    null,
+    3
+  ],
+  "n_pairs": 20000,
+  "splits": {
+    "train": {
+      "n": 16000,
+      "indices_file": "split_indices.npz"
+    },
+    "val": {
+      "n": 2000,
+      "indices_file": "split_indices.npz"
+    },
+    "test": {
+      "n": 2000,
+      "indices_file": "split_indices.npz"
+    }
+  },
+  "generated_at": "2026-07-14T19:12:48.498509+00:00",
+  "notes": "\u226420k COCO 2017 train images; first caption per image; split before resize"
+}

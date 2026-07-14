@@ -1,25 +1,26 @@
 # Open image packs — generation log
 
-**Updated:** 2026-07-14  
-**Scripts:** `scripts/download_open_images.py` · `scripts/download_open_captions.py` · `scripts/build_open_caption_splits.py`
+**Generated:** 2026-07-14T18:47:57.730229+00:00
+**Script:** `scripts/download_open_images.py`
 
-## License / source matrix
+## License / source matrix (P0)
 
 | Pack | Source | License notes |
 |------|--------|---------------|
 | cifar10 | Toronto CIFAR / torchvision | Research use; cite Krizhevsky 2009 |
 | fashion_mnist | Zalando Research / torchvision | MIT |
 | flowers102 | Oxford VGG / torchvision | Research use; cite Nilsback & Zisserman 2008 |
-| flickr8k | jbrownlee Datasets mirror (Hodosh et al.) | Research use for captions; G-T3 P0 |
-| pokemon-blip | HuggingFace `lambda/pokemon-blip-captions` | **Unavailable** (gated / DMCA) — do not use |
+| stl10 | Stanford STL-10 / torchvision | Research use; cite Coates et al. 2011 |
+| tiny_imagenet | Stanford CS231n Tiny-ImageNet-200 | Research use; ImageNet subset |
+| coco_captions_micro | COCO 2017 captions ≤20k images | CC BY 4.0 annotations; images COCO terms |
 
 ## Downloads
 
-- `cifar10` / `fashion_mnist` / `flowers102` — P0 I2I packs under `*/raw/v1/`
-- `flickr8k` — G-T3 caption pack: 8091 jpg + official token/split lists; processed `pairs.parquet` 6000/1000/1000
+- `stl10` → `/data/dev/projects/webstorm/quantun-ia/data/open/images/stl10/raw/v1` (skipped=False)
+- `tiny_imagenet` → `/data/dev/projects/webstorm/quantun-ia/data/open/images/tiny_imagenet/raw/v1` (skipped=False)
 
 ## Protocol
 
-- Raw blobs under `*/raw/v1/` — gitignored
-- Train/val/test **split before** normalize/resize in loaders
-- Flickr8k uses official `Flickr_8k.{train,dev,test}Images.txt` assignments before any resize
+- Raw blobs under `*/raw/v1/` — gitignored / DVC later
+- Train/val/test **split before** normalize for experiment `run.py`
+- Caption packs (Flickr8k, pokemon-blip) are Phase G-T3 — separate script

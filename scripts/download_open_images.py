@@ -23,7 +23,7 @@ sys.path.insert(0, str(ROOT))
 
 DEFAULT_ROOT = ROOT / "data" / "open" / "images"
 
-PACKS = ("cifar10", "fashion_mnist", "flowers102")
+PACKS = ("cifar10", "fashion_mnist", "flowers102", "stl10", "tiny_imagenet")
 
 # Prefer OSSCI / direct mirrors; fall back to origin.
 CIFAR10_MIRRORS = (
@@ -31,6 +31,10 @@ CIFAR10_MIRRORS = (
     "https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz",
 )
 FLOWERS_BASE = "https://thor.robots.ox.ac.uk/flowers/102"
+TINY_IMAGENET_URLS = (
+    "http://cs231n.stanford.edu/tiny-imagenet-200.zip",
+    "https://github.com/tjmoon0104/pytorch-tiny-imagenet/releases/download/tiny-imagenet-200/tiny-imagenet-200.zip",
+)
 
 
 def _sha256_file(path: Path) -> str:
@@ -165,10 +169,75 @@ def download_flowers102(root: Path, *, force: bool) -> dict:
     }
 
 
+def download_stl10(root: Path, *, force: bool) -> dict:
+    from torchvision.datasets import STL10
+
+    dest = _pack_dir(root, "stl10")
+    marker = dest / ".download_complete"
+    if marker.is_file() and not force:
+        return {"pack": "stl10", "path": str(dest), "skipped": True}
+    dest.mkdir(parents=True, exist_ok=True)
+    train_ds = STL10(root=str(dest), split="train", download=True)
+    test_ds = STL10(root=str(dest), split="test", download=True)
+    marker.write_text(datetime.now(timezone.utc).isoformat() + "\n", encoding="utf-8")
+    return {
+        "pack": "stl10",
+        "path": str(dest),
+        "skipped": False,
+        "n_train": len(train_ds),
+        "n_test": len(test_ds),
+        "source_url": "https://cs.stanford.edu/~acoates/stl10/",
+    }
+
+
+def download_tiny_imagenet(root: Path, *, force: bool) -> dict:
+    import zipfile
+
+    from scripts.parallel_http_download import download as parallel_download
+
+    dest = _pack_dir(root, "tiny_imagenet")
+    marker = dest / ".download_complete"
+    if marker.is_file() and not force:
+        return {"pack": "tiny_imagenet", "path": str(dest), "skipped": True}
+    dest.mkdir(parents=True, exist_ok=True)
+    archive = dest / "tiny-imagenet-200.zip"
+    extracted = dest / "tiny-imagenet-200"
+    if force or not extracted.is_dir() or not (extracted / "train").is_dir():
+        last_err: Exception | None = None
+        for url in TINY_IMAGENET_URLS:
+            try:
+                print(f"  parallel ← {url}", flush=True)
+                parallel_download(url, archive, n_parts=8)
+                break
+            except Exception as exc:  # noqa: BLE001
+                last_err = exc
+                print(f"  failed: {exc}", flush=True)
+        else:
+            msg = f"Tiny-ImageNet download failed: {last_err}"
+            raise RuntimeError(msg)
+        print("  extracting tiny-imagenet-200.zip …", flush=True)
+        with zipfile.ZipFile(archive) as zf:
+            zf.extractall(dest)
+    train_n = len(list((extracted / "train").glob("*/images/*.JPEG")))
+    val_n = len(list((extracted / "val" / "images").glob("*.JPEG")))
+    marker.write_text(datetime.now(timezone.utc).isoformat() + "\n", encoding="utf-8")
+    return {
+        "pack": "tiny_imagenet",
+        "path": str(dest),
+        "skipped": False,
+        "n_train": train_n,
+        "n_val_official": val_n,
+        "source_url": TINY_IMAGENET_URLS[0],
+        "archive_sha256": _sha256_file(archive) if archive.is_file() else "",
+    }
+
+
 DOWNLOADERS = {
     "cifar10": download_cifar10,
     "fashion_mnist": download_fashion_mnist,
     "flowers102": download_flowers102,
+    "stl10": download_stl10,
+    "tiny_imagenet": download_tiny_imagenet,
 }
 
 
@@ -187,6 +256,9 @@ def write_generation_md(root: Path, results: list[dict]) -> Path:
         "| cifar10 | Toronto CIFAR / torchvision | Research use; cite Krizhevsky 2009 |",
         "| fashion_mnist | Zalando Research / torchvision | MIT |",
         "| flowers102 | Oxford VGG / torchvision | Research use; cite Nilsback & Zisserman 2008 |",
+        "| stl10 | Stanford STL-10 / torchvision | Research use; cite Coates et al. 2011 |",
+        "| tiny_imagenet | Stanford CS231n Tiny-ImageNet-200 | Research use; ImageNet subset |",
+        "| coco_captions_micro | COCO 2017 captions ≤20k images | CC BY 4.0 annotations; images COCO terms |",
         "",
         "## Downloads",
         "",

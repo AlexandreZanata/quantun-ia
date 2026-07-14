@@ -1,0 +1,28 @@
+{
+  "pack": "stl10",
+  "split_method": "random_train_holdout_before_normalize",
+  "seed": 42,
+  "modality": "images",
+  "spatial_shape": [
+    96,
+    96,
+    3
+  ],
+  "n_classes": 10,
+  "splits": {
+    "train": {
+      "n": 4500,
+      "indices_file": "split_indices.npz"
+    },
+    "val": {
+      "n": 500,
+      "indices_file": "split_indices.npz"
+    },
+    "test": {
+      "n": 8000,
+      "indices_file": "split_indices.npz"
+    }
+  },
+  "notes": "val carved from official train; official test untouched; resize deferred",
+  "generated_at": "2026-07-14T18:49:08.246785+00:00"
+}

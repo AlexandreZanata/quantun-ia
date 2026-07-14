@@ -303,10 +303,14 @@
     {
       "id": "flickr8k_captions_v1",
       "path": "images/flickr8k/processed/v1",
-      "description": "Flickr8k image–caption pairs (Phase G-T3 T2I path; official train/dev/test)",
+      "description": "Flickr8k image\u2013caption pairs (Phase G-T3 T2I path; official train/dev/test)",
       "license": "research-use",
       "source_url": "https://github.com/jbrownlee/Datasets/releases/tag/Flickr8k",
-      "spatial_shape": [null, null, 3],
+      "spatial_shape": [
+        null,
+        null,
+        3
+      ],
       "n_features": 0,
       "modality": "image_text",
       "ready": true,
@@ -328,6 +332,103 @@
       },
       "build_script": "scripts/build_open_caption_splits.py",
       "raw_path": "images/flickr8k/raw/v1"
+    },
+    {
+      "id": "stl10_v1",
+      "path": "images/stl10/processed/v1",
+      "description": "STL-10 \u2014 96x96 RGB, 10 classes (Cycle v4 Phase L P0)",
+      "license": "research-use",
+      "source_url": "https://cs.stanford.edu/~acoates/stl10/",
+      "spatial_shape": [
+        96,
+        96,
+        3
+      ],
+      "n_features": 27648,
+      "modality": "images",
+      "ready": true,
+      "row_counts": {
+        "total": 13000,
+        "train": 4500,
+        "val": 500,
+        "test": 8000
+      },
+      "files": {
+        "stats": "stats.json",
+        "split_indices": "split_indices.npz"
+      },
+      "checksums": {
+        "stats": "c7da966a32d3829b9c7cf3cb9e005cf6ad1f94f5547bb2f440ba525cb7caf096",
+        "split_indices": "7314bf8e4259c0a3885a5169df3d890273a8e541dad1276747384e714c5dc1d7"
+      },
+      "build_script": "scripts/build_open_image_splits.py",
+      "raw_path": "images/stl10/raw/v1",
+      "n_classes": 10
+    },
+    {
+      "id": "tiny_imagenet_v1",
+      "path": "images/tiny_imagenet/processed/v1",
+      "description": "Tiny-ImageNet-200 \u2014 64x64 RGB, 200 classes (Cycle v4 Phase L P0)",
+      "license": "research-use",
+      "source_url": "http://cs231n.stanford.edu/tiny-imagenet-200.zip",
+      "spatial_shape": [
+        64,
+        64,
+        3
+      ],
+      "n_features": 12288,
+      "modality": "images",
+      "ready": true,
+      "row_counts": {
+        "total": 110000,
+        "train": 90000,
+        "val": 10000,
+        "test": 10000
+      },
+      "files": {
+        "stats": "stats.json",
+        "split_indices": "split_indices.npz"
+      },
+      "checksums": {
+        "stats": "72c5714926c1ba4b4a1a20f15fb3cd6a396023278c14895fa8edd103a862acf0",
+        "split_indices": "2d4b4d4fe9f1395214affe526f1b3d75c1ab58c806a57e5eccb16a2b15f83bb4"
+      },
+      "build_script": "scripts/build_open_image_splits.py",
+      "raw_path": "images/tiny_imagenet/raw/v1",
+      "n_classes": 200
+    },
+    {
+      "id": "coco_captions_micro_v1",
+      "path": "images/coco_captions/processed/v1",
+      "description": "COCO 2017 caption micro \u226420k images (Cycle v4 Phase L P0)",
+      "license": "CC-BY-4.0",
+      "source_url": "https://cocodataset.org/#download",
+      "spatial_shape": [
+        null,
+        null,
+        3
+      ],
+      "n_features": 0,
+      "modality": "image_text",
+      "ready": true,
+      "row_counts": {
+        "total": 20000,
+        "train": 16000,
+        "val": 2000,
+        "test": 2000
+      },
+      "files": {
+        "pairs": "pairs.parquet",
+        "stats": "stats.json",
+        "split_indices": "split_indices.npz"
+      },
+      "checksums": {
+        "pairs": "0afa41666e79c26b9e6426b26280b07dabc10ee2a4b92242b5cc1f609f0f328c",
+        "stats": "36e5e58c951cd01f414d268a42c87d6d473c66ce7c1e96a266474388e984ab55",
+        "split_indices": "29fb99bb95e016387da95702635b5f73bf698ef3228fcc90014830e771a691b7"
+      },
+      "build_script": "scripts/build_open_coco_caption_splits.py",
+      "raw_path": "images/coco_captions/raw/v1"
     }
   ]
 }

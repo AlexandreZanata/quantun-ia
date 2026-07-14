@@ -2414,7 +2414,7 @@ experiments:
         save_checkpoints: true
 
   exp_101_open_image_corpus_ingest:
-    description: "Phase G — verify P0 image packs downloaded + split stats written"
+    description: "Phase G — verify CIFAR/Fashion/Flowers open image packs ready"
     exp_id: exp_101
     seed: 42
     n_smoke_rows: 8
@@ -2423,6 +2423,20 @@ experiments:
         n_smoke_rows: 8
       publication:
         n_smoke_rows: 8
+
+  exp_113_open_image_corpus_expand:
+    description: "Phase L — STL-10 + Tiny-ImageNet + COCO caption micro ingest scorecard"
+    exp_id: exp_113
+    seed: 42
+    n_smoke_rows: 8
+    min_p0_packs: 3
+    profile_overrides:
+      ci:
+        n_smoke_rows: 8
+        min_p0_packs: 3
+      publication:
+        n_smoke_rows: 8
+        min_p0_packs: 3
 
   exp_102_nano_unet_cifar_i2i:
     description: "Phase H — NanoUNet DDPM classical I2I floor on CIFAR-10 (FID-R18 vs noise)"

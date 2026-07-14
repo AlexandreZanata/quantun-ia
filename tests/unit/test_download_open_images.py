@@ -7,8 +7,8 @@ from pathlib import Path
 from scripts.download_open_images import PACKS, write_generation_md, write_stats
 
 
-def test_packs_are_p0_triple():
-    assert PACKS == ("cifar10", "fashion_mnist", "flowers102")
+def test_packs_include_cycle_v3_and_v4():
+    assert PACKS == ("cifar10", "fashion_mnist", "flowers102", "stl10", "tiny_imagenet")
 
 
 def test_generation_md_written(tmp_path: Path):
