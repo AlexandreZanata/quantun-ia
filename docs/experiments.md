@@ -717,6 +717,16 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `make exp-102-publication`  
 **Lesson:** ResNet18-feature FID + VGG LPIPS-proxy are enough for a classical I2I floor before quantum heads.
 
+
+### EXP 104 — Teacher→NanoUNet image distill (Phase I / H-I1)
+
+**Models:** Teacher NanoUNet (~3.0M) → student (~0.48M) soft denoise distill vs hard scratch  
+**Dataset:** `cifar10_v1`  
+**Claim:** Distill FID ≤ teacher × 1.10 and ≥ 5% relative FID win vs hard  
+**Verdict:** Rejected — FID 306.99 vs teacher 207.85 (ratio 1.477); +5.0% vs hard 323.29  
+**Command:** `make exp-104-publication`  
+**Lesson:** Soft denoise helps vs hard slightly, but a 6× smaller student does not stay within +10% of teacher FID-R18.
+
 ### Phase E — Agro Maize Lab + uncertainty (E-T3)
 
 **Dashboard:** `dashboard/pages/07_agro_maize_lab.py`  

@@ -32,6 +32,7 @@ Each entry links to the experiment `results.md` and the statistical test outcome
 | exp_070 | LargeNanoMLP ≥ logistic + 2.0 pp PR-AUC (GoBug) | **Rejected** | logistic 0.3097 vs nano 0.3100 (+0.03 pp) |
 | exp_080 | Fused ACYD champion ≥ best hybrid + 0.5 pp (and C4 −1.0 pp) | **Rejected** | champion 0.6709 vs hybrid 0.6771 (−0.62 pp); parity vs C4 OK (−0.68 pp) |
 | exp_079 | HIGGS→ACYD QNN head transfer beats scratch by ≥ +0.5 pp | **Rejected** | transfer +0.35 pp (below gate); honest-negative hypothesis confirmed |
+| exp_104 | Teacher→nano soft denoise FID ≤ teacher×1.10 and ≥5% vs hard | **Rejected** | FID ratio 1.477; win vs hard +5.0% (teacher proximity failed) |
 
 ---
 
@@ -750,6 +751,24 @@ See: `experiments/exp_080_quantum_champion_fusion_acyd/results.md`
 **Interpretation:** Head-only quantum transfer across physics→agro tabular does not deliver a publication-scale win — do not market cross-domain QNN head reuse as a free boost.
 
 See: `experiments/exp_079_quantum_transfer_higgs_to_acyd/results.md`
+
+---
+
+## exp_104 — Teacher→NanoUNet image distill (H-I1)
+
+**Profile:** CIFAR-10 `cifar10_v1`; teacher NanoUNet base_ch=96 (~3.0M) → student base_ch=32 (~0.48M); 15k train; T=100; 12 epochs; RTX 4060
+
+| Model | FID-R18 |
+|-------|---------|
+| Teacher | 207.85 |
+| Hard student | 323.29 |
+| Distill student | 306.99 |
+
+**Gate:** distill ≤ teacher×1.10 **and** ≥5% relative FID win vs hard → **failed** (ratio 1.477; win +5.0%).
+
+**Interpretation:** Soft denoise slightly beats hard scratch but a 6× smaller student does not stay within +10% of teacher FID-R18. Prefer curriculum (H-I2) or latent distill before claiming pixel transfer of Cycle-v2 distill wins.
+
+See: `experiments/exp_104_distill_image_nano/results.md`
 
 ---
 

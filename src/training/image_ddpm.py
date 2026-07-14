@@ -132,3 +132,59 @@ def train_ddpm(
         if logger is not None and (epoch % log_every == 0 or epoch == epochs):
             logger.log(epoch, loss=mean_loss)
     return history
+
+
+def train_ddpm_distill(
+    student: nn.Module,
+    teacher: nn.Module,
+    x_train: torch.Tensor,
+    schedule: DDPMSchedule,
+    *,
+    epochs: int,
+    batch_size: int,
+    lr: float,
+    alpha: float = 0.7,
+    seed: int = 42,
+    log_every: int = 1,
+    logger=None,
+) -> list[float]:
+    """Train student with soft teacher noise targets mixed with hard Gaussian noise."""
+    from src.training.distillation import denoise_distill_loss
+
+    torch.manual_seed(seed)
+    device = schedule.device
+    student.to(device)
+    teacher.to(device)
+    teacher.eval()
+    for p in teacher.parameters():
+        p.requires_grad_(False)
+    student.train()
+    loader = DataLoader(
+        TensorDataset(x_train),
+        batch_size=batch_size,
+        shuffle=True,
+        drop_last=False,
+    )
+    opt = torch.optim.AdamW(student.parameters(), lr=lr)
+    history: list[float] = []
+    for epoch in range(1, epochs + 1):
+        running = 0.0
+        n_batches = 0
+        for (batch,) in loader:
+            batch = batch.to(device)
+            t = torch.randint(0, schedule.timesteps, (batch.shape[0],), device=device)
+            x_t, noise = q_sample(schedule, batch, t)
+            with torch.no_grad():
+                teacher_eps = teacher(x_t, t)
+            student_eps = student(x_t, t)
+            loss = denoise_distill_loss(student_eps, teacher_eps, noise, alpha=alpha)
+            opt.zero_grad(set_to_none=True)
+            loss.backward()
+            opt.step()
+            running += float(loss.item())
+            n_batches += 1
+        mean_loss = running / max(n_batches, 1)
+        history.append(mean_loss)
+        if logger is not None and (epoch % log_every == 0 or epoch == epochs):
+            logger.log(epoch, loss=mean_loss, distill_alpha=alpha)
+    return history

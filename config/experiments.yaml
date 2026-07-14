@@ -2455,6 +2455,43 @@ experiments:
         n_val: 2000
         n_fid_samples: 1000
 
+  exp_104_distill_image_nano:
+    description: "Phase I — teacher NanoUNet soft denoise → student distill (FID-R18 H-I1)"
+    exp_id: exp_104
+    seed: 42
+    epochs: 2
+    batch_size: 8
+    lr: 0.0002
+    timesteps: 20
+    teacher_base_channels: 32
+    student_base_channels: 16
+    n_train: 32
+    n_val: 16
+    n_fid_samples: 16
+    distill_alpha: 0.7
+    max_teacher_fid_ratio: 1.10
+    min_relative_fid_win_vs_hard: 0.05
+    profile_overrides:
+      ci:
+        epochs: 2
+        batch_size: 8
+        timesteps: 10
+        teacher_base_channels: 16
+        student_base_channels: 8
+        n_train: 32
+        n_val: 16
+        n_fid_samples: 16
+      publication:
+        epochs: 12
+        batch_size: 128
+        timesteps: 100
+        teacher_base_channels: 96
+        student_base_channels: 32
+        n_train: 15000
+        n_val: 1500
+        n_fid_samples: 512
+        distill_alpha: 0.7
+
   exp_100_cycle2_grand_leaderboard:
     description: "Cycle v2 grand leaderboard synthesis (exp_084–099 curated RTX 4060 metrics)"
     exp_id: exp_100
