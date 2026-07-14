@@ -707,6 +707,16 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `python experiments/exp_101_open_image_corpus_ingest/run.py --profile publication --write-results`  
 **Lesson:** Parallel-range downloads + pre-normalize split indices unlock Phase H NanoUNet.
 
+
+### EXP 102 — NanoUNet CIFAR-10 I2I floor (Phase H)
+
+**Models:** NanoUNet DDPM (~1.43M params)  
+**Dataset:** `cifar10_v1` (Phase G splits)  
+**Claim:** FID-R18 vs noise null improves ≥ 20% relative on val  
+**Verdict:** Confirmed — FID-R18 153.93 vs noise 652.36 (rel +0.764) on RTX 4060  
+**Command:** `make exp-102-publication`  
+**Lesson:** ResNet18-feature FID + VGG LPIPS-proxy are enough for a classical I2I floor before quantum heads.
+
 ### Phase E — Agro Maize Lab + uncertainty (E-T3)
 
 **Dashboard:** `dashboard/pages/07_agro_maize_lab.py`  

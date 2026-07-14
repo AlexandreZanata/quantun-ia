@@ -106,3 +106,58 @@ def summarize_packs(*, root: Path = IMAGES_ROOT) -> list[dict[str, Any]]:
             }
         )
     return rows
+
+
+def pack_processed_dir(pack: str, *, root: Path = IMAGES_ROOT) -> Path:
+    return root / pack / "processed" / "v1"
+
+
+def load_split_indices(pack: str, *, root: Path = IMAGES_ROOT) -> dict[str, np.ndarray]:
+    path = pack_processed_dir(pack, root=root) / "split_indices.npz"
+    if not path.is_file():
+        msg = f"missing split indices: {path}"
+        raise FileNotFoundError(msg)
+    data = np.load(path)
+    return {k: data[k] for k in ("train", "val", "test")}
+
+
+def load_cifar10_nchw(
+    *,
+    root: Path = IMAGES_ROOT,
+    split: str = "train",
+    n_take: int | None = None,
+    seed: int = 42,
+) -> tuple[np.ndarray, np.ndarray]:
+    """Load CIFAR-10 images as float32 NCHW in [-1, 1] using Phase G split indices."""
+    from torchvision.datasets import CIFAR10
+
+    if split not in {"train", "val", "test"}:
+        msg = f"invalid split: {split}"
+        raise ValueError(msg)
+    dest = pack_raw_dir("cifar10", root=root)
+    if not is_pack_complete("cifar10", root=root):
+        msg = "pack not downloaded: cifar10"
+        raise FileNotFoundError(msg)
+
+    indices = load_split_indices("cifar10", root=root)[split]
+    # val carved from official train; test uses official test set
+    train_flag = split != "test"
+    ds = CIFAR10(root=str(dest), train=train_flag, download=False)
+
+    rng = np.random.default_rng(seed)
+    idx = np.asarray(indices, dtype=np.int64)
+    if n_take is not None and n_take < len(idx):
+        idx = rng.choice(idx, size=int(n_take), replace=False)
+
+    images = []
+    labels = []
+    for i in idx:
+        img, label = ds[int(i)]
+        arr = np.asarray(img, dtype=np.float32) / 255.0  # HWC [0,1]
+        arr = arr.transpose(2, 0, 1)  # CHW
+        arr = arr * 2.0 - 1.0
+        images.append(arr)
+        labels.append(int(label))
+    x = np.stack(images).astype(np.float32)
+    y = np.asarray(labels, dtype=np.int64)
+    return x, y

@@ -595,6 +595,12 @@ exp-101:
 exp-101-publication:
 	MLFLOW_DISABLE=1 $(PYTHON) experiments/exp_101_open_image_corpus_ingest/run.py --profile publication --write-results
 
+exp-102:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_102_nano_unet_cifar_i2i/run.py --profile ci
+
+exp-102-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_102_nano_unet_cifar_i2i/run.py --profile publication --write-results
+
 data-open-acyd-dvc:
 	@if $(PYTHON) -m dvc --version >/dev/null 2>&1; then \
 		$(PYTHON) -m dvc add data/open/acyd_soy_brazil/processed/v1; \
