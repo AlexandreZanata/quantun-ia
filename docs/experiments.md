@@ -757,6 +757,15 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `make exp-106-publication`  
 **Lesson:** Relative latent-head win vs classical MLP is achievable; do not overclaim pixel NanoUNet FID.
 
+### EXP 107 — Patch amplitude bottleneck (Phase J / H-Q3.2)
+
+**Models:** Classical 48→16→48 patch AE vs 4q amplitude-encode → decode  
+**Dataset:** `cifar10_v1` (4×4 RGB patches)  
+**Claim:** `|FID_q − FID_classical| ≤ 1.0` on reconstructions  
+**Verdict:** Rejected — FID 566.27 vs classical 236.21 (|Δ|=330.06)  
+**Command:** `make exp-107-publication`  
+**Lesson:** RGB patch amp bottleneck far from classical MSE parity under short quantum budget; try grayscale 16-d exact amp.
+
 ### Phase E — Agro Maize Lab + uncertainty (E-T3)
 
 **Dashboard:** `dashboard/pages/07_agro_maize_lab.py`  

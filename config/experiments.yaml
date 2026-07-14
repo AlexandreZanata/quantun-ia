@@ -2624,6 +2624,45 @@ experiments:
         parity_fid_slack: 1.0
         advantage_fid_gain: 2.0
 
+  exp_107_patch_amplitude_bottleneck:
+    description: "Phase J — amplitude 4x4 patch QNN bottleneck vs classical Linear bottleneck (H-Q3.2)"
+    exp_id: exp_107
+    seed: 42
+    n_qubits: 4
+    n_layers: 2
+    bottleneck: 16
+    batch_size: 64
+    quantum_batch_size: 16
+    lr: 0.0002
+    n_train: 32
+    n_val: 16
+    n_fid_samples: 16
+    classical_epochs: 2
+    quantum_epochs: 1
+    max_quantum_patches: 512
+    max_fid_abs_delta: 1.0
+    profile_overrides:
+      ci:
+        n_train: 16
+        n_val: 8
+        n_fid_samples: 8
+        classical_epochs: 1
+        quantum_epochs: 1
+        batch_size: 32
+        quantum_batch_size: 8
+        max_quantum_patches: 128
+        max_fid_abs_delta: 50.0
+      publication:
+        n_train: 1024
+        n_val: 256
+        n_fid_samples: 64
+        classical_epochs: 12
+        quantum_epochs: 6
+        batch_size: 256
+        quantum_batch_size: 32
+        max_quantum_patches: 4096
+        max_fid_abs_delta: 1.0
+
   exp_100_cycle2_grand_leaderboard:
     description: "Cycle v2 grand leaderboard synthesis (exp_084–099 curated RTX 4060 metrics)"
     exp_id: exp_100

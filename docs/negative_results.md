@@ -35,6 +35,7 @@ Each entry links to the experiment `results.md` and the statistical test outcome
 | exp_104 | Teacher→nano soft denoise FID ≤ teacher×1.10 and ≥5% vs hard | **Rejected** | FID ratio 1.477; win vs hard +5.0% (teacher proximity failed) |
 | exp_105 | Sharpness easy→hard curriculum ≥5% relative FID vs random | **Rejected** | FID 309.01 vs random 307.65 (win −0.4%) |
 | exp_105b | GV-ALR FID within ±3% at ≤70% fixed epochs | **Rejected** | epoch 8/12 OK; FID Δ +13.2% |
+| exp_107 | Patch amp FID within classical ±1.0 | **Rejected** | FID |Δ|=330.06 (566 vs 236) |
 
 ---
 
@@ -807,6 +808,23 @@ See: `experiments/exp_105_image_difficulty_curriculum/results.md`
 **Interpretation:** Shorter GV-ALR budget meets the epoch efficiency half of H-I3 but loses FID-R18 parity — do not claim Cycle-1 GV-ALR transfer to pixel DDPM without retuning var_target / warmup.
 
 See: `experiments/exp_105b_gv_alr_image_ddpm/results.md`
+
+---
+
+## exp_107 — Patch amplitude bottleneck (H-Q3.2)
+
+**Profile:** CIFAR-10; 4×4 RGB patches; classical 48→16→48 vs 4q amplitude bottleneck; RTX 4060
+
+| Condition | Patch MSE | FID-R18 recon |
+|-----------|-----------|---------------|
+| Classical bottleneck | 0.0094 | 236.21 |
+| Quantum amplitude | 0.0714 | 566.27 |
+
+**Gate:** `|FID_q − FID_classical| ≤ 1.0` → **failed** (|Δ|=330.06).
+
+**Interpretation:** Projecting RGB 48-d patches into a 16-amplitude state loses too much reconstruction fidelity vs a matched classical bottleneck; do not claim pixel-level amp parity without grayscale/exact 16-d encoding or a longer quantum budget.
+
+See: `experiments/exp_107_patch_amplitude_bottleneck/results.md`
 
 ---
 
