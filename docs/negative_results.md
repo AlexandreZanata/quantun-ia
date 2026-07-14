@@ -33,6 +33,7 @@ Each entry links to the experiment `results.md` and the statistical test outcome
 | exp_080 | Fused ACYD champion ≥ best hybrid + 0.5 pp (and C4 −1.0 pp) | **Rejected** | champion 0.6709 vs hybrid 0.6771 (−0.62 pp); parity vs C4 OK (−0.68 pp) |
 | exp_079 | HIGGS→ACYD QNN head transfer beats scratch by ≥ +0.5 pp | **Rejected** | transfer +0.35 pp (below gate); honest-negative hypothesis confirmed |
 | exp_104 | Teacher→nano soft denoise FID ≤ teacher×1.10 and ≥5% vs hard | **Rejected** | FID ratio 1.477; win vs hard +5.0% (teacher proximity failed) |
+| exp_105 | Sharpness easy→hard curriculum ≥5% relative FID vs random | **Rejected** | FID 309.01 vs random 307.65 (win −0.4%) |
 
 ---
 
@@ -769,6 +770,24 @@ See: `experiments/exp_079_quantum_transfer_higgs_to_acyd/results.md`
 **Interpretation:** Soft denoise slightly beats hard scratch but a 6× smaller student does not stay within +10% of teacher FID-R18. Prefer curriculum (H-I2) or latent distill before claiming pixel transfer of Cycle-v2 distill wins.
 
 See: `experiments/exp_104_distill_image_nano/results.md`
+
+---
+
+
+## exp_105 — Image difficulty curriculum (H-I2)
+
+**Profile:** CIFAR-10; NanoUNet base_ch=32; sharpness Laplacian stages 4×2 + refine 4; T=100; RTX 4060
+
+| Condition | FID-R18 |
+|-----------|---------|
+| Random staged | 307.65 |
+| Sharpness curriculum | 309.01 |
+
+**Gate:** ≥5% relative FID win vs random → **failed** (−0.4%).
+
+**Interpretation:** Easy→hard sharpness staging does not beat matched-budget random staging on CIFAR DDPM — do not claim SPEI-style curriculum transfer to pixels without a new difficulty signal (e.g. FFT energy).
+
+See: `experiments/exp_105_image_difficulty_curriculum/results.md`
 
 ---
 

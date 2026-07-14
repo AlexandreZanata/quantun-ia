@@ -727,6 +727,16 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `make exp-104-publication`  
 **Lesson:** Soft denoise helps vs hard slightly, but a 6× smaller student does not stay within +10% of teacher FID-R18.
 
+
+### EXP 105 — Image difficulty curriculum (Phase I / H-I2)
+
+**Models:** NanoUNet DDPM (~0.48M) sharpness easy→hard vs random staged  
+**Dataset:** `cifar10_v1`  
+**Claim:** Curriculum FID ≤ random × 0.95 (≥5% relative win)  
+**Verdict:** Rejected — FID curriculum 309.01 vs random 307.65 (win −0.4%)  
+**Command:** `make exp-105-publication`  
+**Lesson:** Laplacian-variance staging does not transfer SPEI curriculum gains to CIFAR DDPM.
+
 ### Phase E — Agro Maize Lab + uncertainty (E-T3)
 
 **Dashboard:** `dashboard/pages/07_agro_maize_lab.py`  

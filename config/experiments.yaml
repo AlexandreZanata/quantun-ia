@@ -2492,6 +2492,43 @@ experiments:
         n_fid_samples: 512
         distill_alpha: 0.7
 
+  exp_105_image_difficulty_curriculum:
+    description: "Phase I — sharpness easy→hard curriculum vs random staged (FID-R18 H-I2)"
+    exp_id: exp_105
+    seed: 42
+    batch_size: 8
+    lr: 0.0002
+    timesteps: 20
+    base_channels: 16
+    n_train: 32
+    n_val: 16
+    n_fid_samples: 16
+    n_stages: 4
+    epochs_per_stage: 1
+    refine_epochs: 1
+    min_relative_fid_win: 0.05
+    profile_overrides:
+      ci:
+        batch_size: 8
+        timesteps: 10
+        base_channels: 8
+        n_train: 32
+        n_val: 16
+        n_fid_samples: 16
+        n_stages: 2
+        epochs_per_stage: 1
+        refine_epochs: 1
+      publication:
+        batch_size: 128
+        timesteps: 100
+        base_channels: 32
+        n_train: 15000
+        n_val: 1500
+        n_fid_samples: 512
+        n_stages: 4
+        epochs_per_stage: 2
+        refine_epochs: 4
+
   exp_100_cycle2_grand_leaderboard:
     description: "Cycle v2 grand leaderboard synthesis (exp_084–099 curated RTX 4060 metrics)"
     exp_id: exp_100
