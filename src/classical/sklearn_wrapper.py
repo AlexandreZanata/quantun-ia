@@ -75,6 +75,9 @@ class SklearnBinaryClassifier(TrainableMixin, nn.Module):
         if not isinstance(X, torch.Tensor) or y is None:
             raise TypeError("train(X, y) requires torch.Tensor inputs when fitting")
 
+        # Narrow for mypy after the nn.Module train(mode) overload branch.
+        assert isinstance(X, torch.Tensor) and y is not None
+
         if seed is not None:
             set_global_seed(seed)
 
