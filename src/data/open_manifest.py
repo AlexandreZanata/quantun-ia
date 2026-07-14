@@ -126,9 +126,24 @@ def collect_open_data_issues(
     except (FileNotFoundError, KeyError, json.JSONDecodeError) as exc:
         return [str(exc)]
 
-    issues.extend(verify_dvc_pointer(root, dataset))
     if not dataset.get("ready"):
         return issues
+
+    # Image packs: stats + split indices only (no tabular parquet / DVC pointer yet).
+    if dataset.get("modality") == "images":
+        out_dir = processed_dir(root, dataset)
+        issues.extend(verify_checksums(dataset, out_dir))
+        for key in ("stats", "split_indices"):
+            filename = dataset.get("files", {}).get(key)
+            if not filename:
+                issues.append(f"missing files.{key} in manifest for {dataset_id}")
+                continue
+            path = out_dir / filename
+            if not path.is_file():
+                issues.append(f"missing {key}: {path}")
+        return issues
+
+    issues.extend(verify_dvc_pointer(root, dataset))
 
     out_dir = processed_dir(root, dataset)
     issues.extend(verify_checksums(dataset, out_dir))
@@ -169,6 +184,9 @@ def validate_all_ready_open_data(root: Path) -> tuple[bool, list[str]]:
     all_issues: list[str] = []
     for dataset in manifest.get("datasets", []):
         if not dataset.get("ready"):
+            continue
+        # Image packs use a different on-disk contract (raw markers + processed stats).
+        if dataset.get("modality") == "images":
             continue
         ok, issues = validate_open_data(root, dataset_id=dataset["id"])
         if not ok:

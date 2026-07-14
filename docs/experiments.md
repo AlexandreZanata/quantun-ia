@@ -698,6 +698,15 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `python experiments/exp_100_cycle2_grand_leaderboard/run.py --profile publication --write-results`  
 **Lesson:** Full Cycle v2 scorecard closes research synthesis; remaining work is external citation paste only.
 
+### EXP 101 — Open image corpus ingest (Phase G)
+
+**Models:** N/A (data gate)  
+**Dataset:** `cifar10` · `fashion_mnist` · `flowers102` under `data/open/images/`  
+**Claim:** 3/3 P0 packs complete + processed splits + smoke shapes  
+**Verdict:** Confirmed — Phase G P0 accept pack gate  
+**Command:** `python experiments/exp_101_open_image_corpus_ingest/run.py --profile publication --write-results`  
+**Lesson:** Parallel-range downloads + pre-normalize split indices unlock Phase H NanoUNet.
+
 ### Phase E — Agro Maize Lab + uncertainty (E-T3)
 
 **Dashboard:** `dashboard/pages/07_agro_maize_lab.py`  

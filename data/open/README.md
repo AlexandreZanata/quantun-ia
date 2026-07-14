@@ -89,18 +89,20 @@ Nano I2I / T2I training uses **license-clear** image corpora under `images/`.
 
 | Pack | Path | Role | Priority | Status |
 |------|------|------|----------|--------|
-| `cifar10` | `images/cifar10/raw/v1/` | I2I / class-cond FID floor | P0 | via `make data-open-images-smoke` |
-| `fashion_mnist` | `images/fashion_mnist/raw/v1/` | CI smoke | P0 | same |
-| `flowers102` | `images/flowers102/raw/v1/` | fine-detail class-cond | P0 | same |
+| `cifar10` | `images/cifar10/` | I2I / class-cond FID floor | P0 | ✅ ready (`cifar10_v1`) |
+| `fashion_mnist` | `images/fashion_mnist/` | CI smoke | P0 | ✅ ready (`fashion_mnist_v1`) |
+| `flowers102` | `images/flowers102/` | fine-detail class-cond | P0 | ✅ ready (`flowers102_v1`) |
 | Flickr8k / pokemon-blip / COCO-cap | TBD | T2I captions | P0–P1 | G-T3 |
 | LAION-Aesthetic micro ≤50k | TBD | optional hard T2I | P2 gated | G-T7 |
 
 ```bash
 make data-open-images-smoke
-# writes data/open/images/GENERATION.md + download_stats.json
+make data-open-images-splits
+make exp-101-publication
+# writes GENERATION.md + processed/*/stats.json + split_indices.npz
 ```
 
-**Rules:** split train/val/test **before** resize/normalize; document licenses in `images/GENERATION.md`; do not commit multi-GB blobs — DVC/gitignore raw packs.
+**Rules:** split train/val/test **before** resize/normalize; document licenses in `images/GENERATION.md`; do not commit multi-GB raw blobs — gitignore `images/*/raw/`.
 
 ## Citations
 

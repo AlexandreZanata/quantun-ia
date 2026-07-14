@@ -2,7 +2,7 @@
   "schema_version": "1",
   "project": "quantun-ia",
   "phase": "L",
-  "updated_at": "2026-07-12",
+  "updated_at": "2026-07-14",
   "hardware_target": "NVIDIA RTX 4060 Laptop GPU (8 GB VRAM)",
   "model_target_params": {
     "min": 1000000,
@@ -204,6 +204,101 @@
         "stats": "9cb00059ffe462bcd2db6bf8856201c5a2d9c530e34239602222e32ad719a1cc"
       },
       "build_script": "scripts/build_open_cybench_maize.py"
+    },
+    {
+      "id": "cifar10_v1",
+      "path": "images/cifar10/processed/v1",
+      "description": "CIFAR-10 \u2014 32x32 RGB, 10 classes (Phase G P0)",
+      "license": "research-use",
+      "source_url": "https://www.cs.toronto.edu/~kriz/cifar.html",
+      "spatial_shape": [
+        32,
+        32,
+        3
+      ],
+      "n_classes": 10,
+      "n_features": 3072,
+      "modality": "images",
+      "ready": true,
+      "row_counts": {
+        "total": 60000,
+        "train": 45000,
+        "val": 5000,
+        "test": 10000
+      },
+      "files": {
+        "stats": "stats.json",
+        "split_indices": "split_indices.npz"
+      },
+      "checksums": {
+        "stats": "b4d3cbaf916440170aa4ad9ab61e762bcb43f2808a2d1bc239aa06038e6f1ef1",
+        "split_indices": "52b513a25f4aee8abe2cc534ea811d56af0009dacdef2f3faecec333a0763974"
+      },
+      "build_script": "scripts/build_open_image_splits.py",
+      "raw_path": "images/cifar10/raw/v1"
+    },
+    {
+      "id": "fashion_mnist_v1",
+      "path": "images/fashion_mnist/processed/v1",
+      "description": "Fashion-MNIST \u2014 28x28 grayscale, 10 classes (Phase G P0)",
+      "license": "MIT",
+      "source_url": "https://github.com/zalandoresearch/fashion-mnist",
+      "spatial_shape": [
+        28,
+        28
+      ],
+      "n_classes": 10,
+      "n_features": 784,
+      "modality": "images",
+      "ready": true,
+      "row_counts": {
+        "total": 70000,
+        "train": 54000,
+        "val": 6000,
+        "test": 10000
+      },
+      "files": {
+        "stats": "stats.json",
+        "split_indices": "split_indices.npz"
+      },
+      "checksums": {
+        "stats": "65783a9d86493d0a8d294225847ac059aa986f4247f4f7b9a9a96a07497f2c45",
+        "split_indices": "6fccc8bce2f457e84a3c929a311176c9f7aecb6183138ac53688c2d71b4b5ace"
+      },
+      "build_script": "scripts/build_open_image_splits.py",
+      "raw_path": "images/fashion_mnist/raw/v1"
+    },
+    {
+      "id": "flowers102_v1",
+      "path": "images/flowers102/processed/v1",
+      "description": "Oxford Flowers-102 \u2014 class-conditional fine detail (Phase G P0)",
+      "license": "research-use",
+      "source_url": "https://www.robots.ox.ac.uk/~vgg/data/flowers/102/",
+      "spatial_shape": [
+        64,
+        64,
+        3
+      ],
+      "n_classes": 102,
+      "n_features": 12288,
+      "modality": "images",
+      "ready": true,
+      "row_counts": {
+        "total": 8189,
+        "train": 1020,
+        "val": 1020,
+        "test": 6149
+      },
+      "files": {
+        "stats": "stats.json",
+        "split_indices": "split_indices.npz"
+      },
+      "checksums": {
+        "stats": "8710da84003eea5dbcd96c475fa70190b40717906921cf94c0e1a2bf009541a6",
+        "split_indices": "00bd2f74571487eead4f36217ee8d931fe1e87646baccf37fb6027057ac16183"
+      },
+      "build_script": "scripts/build_open_image_splits.py",
+      "raw_path": "images/flowers102/raw/v1"
     }
   ]
 }

@@ -1,0 +1,29 @@
+{
+  "pack": "cifar10",
+  "split_method": "random_train_holdout_before_normalize",
+  "seed": 42,
+  "n_features": null,
+  "modality": "images",
+  "spatial_shape": [
+    32,
+    32,
+    3
+  ],
+  "n_classes": 10,
+  "splits": {
+    "train": {
+      "n": 45000,
+      "indices_file": "split_indices.npz"
+    },
+    "val": {
+      "n": 5000,
+      "indices_file": "split_indices.npz"
+    },
+    "test": {
+      "n": 10000,
+      "indices_file": "split_indices.npz"
+    }
+  },
+  "notes": "val carved from official train; official test untouched",
+  "generated_at": "2026-07-14T14:37:17.083986+00:00"
+}

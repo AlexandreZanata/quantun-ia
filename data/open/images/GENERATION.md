@@ -1,6 +1,6 @@
 # Open image packs — generation log
 
-**Generated:** 2026-07-14T14:06:39.898820+00:00
+**Generated:** 2026-07-14T14:37:14.253368+00:00
 **Script:** `scripts/download_open_images.py`
 
 ## License / source matrix (P0)
@@ -13,7 +13,9 @@
 
 ## Downloads
 
+- `cifar10` → `/data/dev/projects/webstorm/quantun-ia/data/open/images/cifar10/raw/v1` (skipped=True)
 - `fashion_mnist` → `/data/dev/projects/webstorm/quantun-ia/data/open/images/fashion_mnist/raw/v1` (skipped=True)
+- `flowers102` → `/data/dev/projects/webstorm/quantun-ia/data/open/images/flowers102/raw/v1` (skipped=True)
 
 ## Protocol
 

@@ -586,6 +586,15 @@ data-open-images-smoke:
 data-open-images-cifar:
 	MLFLOW_DISABLE=1 $(PYTHON) scripts/download_open_images.py --packs cifar10
 
+data-open-images-splits:
+	MLFLOW_DISABLE=1 $(PYTHON) scripts/build_open_image_splits.py --packs cifar10 fashion_mnist flowers102
+
+exp-101:
+	MLFLOW_DISABLE=1 $(PYTHON) experiments/exp_101_open_image_corpus_ingest/run.py --profile ci
+
+exp-101-publication:
+	MLFLOW_DISABLE=1 $(PYTHON) experiments/exp_101_open_image_corpus_ingest/run.py --profile publication --write-results
+
 data-open-acyd-dvc:
 	@if $(PYTHON) -m dvc --version >/dev/null 2>&1; then \
 		$(PYTHON) -m dvc add data/open/acyd_soy_brazil/processed/v1; \

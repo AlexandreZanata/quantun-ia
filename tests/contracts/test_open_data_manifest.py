@@ -231,6 +231,10 @@ def test_open_dataset_splits_when_ready(
     assert set(frame["label"].unique()).issubset({0, 1})
 
 
+def _is_image_pack(dataset: dict) -> bool:
+    return dataset.get("modality") == "images"
+
+
 def test_ready_datasets_have_checksums():
     manifest = _load_manifest()
     for dataset in manifest["datasets"]:
@@ -242,16 +246,16 @@ def test_ready_datasets_have_checksums():
         for key, filename in dataset["files"].items():
             assert key in checksums
             assert len(checksums[key]) == 64
-            parquet_path = processed / filename
-            if not parquet_path.is_file():
-                pytest.skip(f"open data not on disk (DVC pull required): {parquet_path}")
-            assert parquet_path.is_file()
+            file_path = processed / filename
+            if not file_path.is_file():
+                pytest.skip(f"open data not on disk (DVC pull required): {file_path}")
+            assert file_path.is_file()
 
 
 def test_ready_datasets_have_dvc_pointer():
     manifest = _load_manifest()
     for dataset in manifest["datasets"]:
-        if not dataset.get("ready"):
+        if not dataset.get("ready") or _is_image_pack(dataset):
             continue
         pointer = dvc_pointer_path(ROOT, dataset)
         assert pointer.is_file(), f"missing DVC pointer: {pointer}"
@@ -260,7 +264,7 @@ def test_ready_datasets_have_dvc_pointer():
 def test_ready_datasets_stratified_balance():
     manifest = _load_manifest()
     for dataset in manifest["datasets"]:
-        if not dataset.get("ready"):
+        if not dataset.get("ready") or _is_image_pack(dataset):
             continue
         stats_path = ROOT / "data" / "open" / dataset["path"] / dataset["files"]["stats"]
         if not stats_path.is_file():
@@ -275,7 +279,7 @@ def test_ready_datasets_stratified_balance():
 def test_ready_datasets_tabular_binary_contract():
     manifest = _load_manifest()
     for dataset in manifest["datasets"]:
-        if not dataset.get("ready"):
+        if not dataset.get("ready") or _is_image_pack(dataset):
             continue
         processed = ROOT / "data" / "open" / dataset["path"]
         expected_cols = expected_feature_columns(dataset["n_features"]) + ["label"]
@@ -289,9 +293,13 @@ def test_ready_datasets_tabular_binary_contract():
 
 def test_open_data_l2_gate_passes_when_built():
     manifest = _load_manifest()
-    ready_ids = [d["id"] for d in manifest["datasets"] if d.get("ready")]
+    ready_ids = [
+        d["id"]
+        for d in manifest["datasets"]
+        if d.get("ready") and not _is_image_pack(d)
+    ]
     if not ready_ids:
-        pytest.skip("no ready datasets")
+        pytest.skip("no ready tabular datasets")
     for dataset_id in ready_ids:
         dataset = _dataset_by_id(manifest, dataset_id)
         processed = ROOT / "data" / "open" / dataset["path"]
@@ -300,6 +308,22 @@ def test_open_data_l2_gate_passes_when_built():
             pytest.skip(f"open data not on disk (DVC pull required): {train_path}")
         ok, issues = validate_open_data(ROOT, dataset_id=dataset_id)
         assert ok, f"{dataset_id}: {issues}"
+
+
+def test_ready_image_packs_have_processed_artifacts():
+    """Phase G image packs use stats + split indices, not tabular parquet."""
+    manifest = _load_manifest()
+    image_packs = [d for d in manifest["datasets"] if d.get("ready") and _is_image_pack(d)]
+    assert image_packs, "expected ready image packs (Phase G P0)"
+    for dataset in image_packs:
+        processed = ROOT / "data" / "open" / dataset["path"]
+        stats_path = processed / dataset["files"]["stats"]
+        splits_path = processed / dataset["files"]["split_indices"]
+        assert stats_path.is_file(), f"missing {stats_path}"
+        assert splits_path.is_file(), f"missing {splits_path}"
+        assert dataset["row_counts"]["total"] == sum(
+            dataset["row_counts"][k] for k in ("train", "val", "test")
+        )
 
 
 def test_data_open_verify_registered_in_makefile():

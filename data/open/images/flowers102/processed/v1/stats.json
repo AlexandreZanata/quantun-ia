@@ -1,0 +1,28 @@
+{
+  "pack": "flowers102",
+  "split_method": "official_oxford_setid",
+  "seed": 42,
+  "modality": "images",
+  "spatial_shape": [
+    64,
+    64,
+    3
+  ],
+  "n_classes": 102,
+  "splits": {
+    "train": {
+      "n": 1020,
+      "indices_file": "split_indices.npz"
+    },
+    "val": {
+      "n": 1020,
+      "indices_file": "split_indices.npz"
+    },
+    "test": {
+      "n": 6149,
+      "indices_file": "split_indices.npz"
+    }
+  },
+  "notes": "official train/val/test from setid.mat; resize deferred to loader",
+  "generated_at": "2026-07-14T14:37:17.316423+00:00"
+}

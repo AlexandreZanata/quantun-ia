@@ -1,0 +1,27 @@
+{
+  "pack": "fashion_mnist",
+  "split_method": "random_train_holdout_before_normalize",
+  "seed": 42,
+  "modality": "images",
+  "spatial_shape": [
+    28,
+    28
+  ],
+  "n_classes": 10,
+  "splits": {
+    "train": {
+      "n": 54000,
+      "indices_file": "split_indices.npz"
+    },
+    "val": {
+      "n": 6000,
+      "indices_file": "split_indices.npz"
+    },
+    "test": {
+      "n": 10000,
+      "indices_file": "split_indices.npz"
+    }
+  },
+  "notes": "val carved from official train; official test untouched",
+  "generated_at": "2026-07-14T14:37:17.206794+00:00"
+}

@@ -2413,6 +2413,17 @@ experiments:
         min_rung_advantage_pp: 0.3
         save_checkpoints: true
 
+  exp_101_open_image_corpus_ingest:
+    description: "Phase G — verify P0 image packs downloaded + split stats written"
+    exp_id: exp_101
+    seed: 42
+    n_smoke_rows: 8
+    profile_overrides:
+      ci:
+        n_smoke_rows: 8
+      publication:
+        n_smoke_rows: 8
+
   exp_100_cycle2_grand_leaderboard:
     description: "Cycle v2 grand leaderboard synthesis (exp_084–099 curated RTX 4060 metrics)"
     exp_id: exp_100
