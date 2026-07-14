@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **exp_114 (Phase M / M0)** — NanoUNet-v2 efficient DDPM I2I on Tiny-ImageNet 64×64 (rel FID 0.454 + efficiency card); `make exp-114-publication`
 - **exp_113 (Phase L)** — STL-10 + Tiny-ImageNet + COCO caption micro ≤20k ingest scorecard (`stl10_v1`, `tiny_imagenet_v1`, `coco_captions_micro_v1`); `make data-open-images-v4` / `data-open-images-coco-cap` / `exp-113-publication`
 - **Nano model factory (Phase S)** — `qml-ship` / `qml-download`, `config/nanomodel_registry.yaml`, train→gate→publish→export pipeline, ONNX/TorchScript bundles, CPU `predict.py`, `make ship-all-p0`
 - **Scientific integrity (Phase 0)** — `balanced_metrics.py`, `calibration.py`, exp_042 sample-scale curve, exp_043 isotonic calibration

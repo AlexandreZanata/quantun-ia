@@ -1,4 +1,4 @@
-"""Compact U-Net denoiser for 32x32 RGB DDPM (Phase H NanoUNet floor)."""
+"""Compact U-Net denoisers for RGB DDPM (Phase H NanoUNet + Phase M NanoUNet-v2)."""
 
 from __future__ import annotations
 
@@ -99,6 +99,96 @@ class NanoUNet(nn.Module):
 
         schedule = DDPMSchedule(timesteps=timesteps, device=device or next(self.parameters()).device)
         return sample_ddpm(self, schedule, n=n)
+
+    def evaluate(self, x: torch.Tensor, *, timesteps: int) -> dict:
+        from src.training.image_ddpm import DDPMSchedule, noise_prediction_mse
+
+        device = x.device
+        schedule = DDPMSchedule(timesteps=timesteps, device=device)
+        mse = noise_prediction_mse(self, schedule, x)
+        return {"denoise_mse": float(mse), "n": int(x.shape[0])}
+
+
+class NanoUNetV2(nn.Module):
+    """Efficient two-stage U-Net for 32→64 RGB DDPM (Phase M / Cycle v4).
+
+    Param budget is intentional: a second downsample at modest ``base_channels``
+    keeps RTX 4060 8 GB trainable at 64×64 while widening receptive field vs NanoUNet.
+    """
+
+    def __init__(
+        self,
+        in_channels: int = 3,
+        base_channels: int = 48,
+        time_dim: int = 128,
+        img_size: int = 64,
+    ) -> None:
+        super().__init__()
+        if base_channels % 8 != 0:
+            msg = f"base_channels must be divisible by 8 for GroupNorm, got {base_channels}"
+            raise ValueError(msg)
+        if img_size % 4 != 0:
+            msg = f"img_size must be divisible by 4, got {img_size}"
+            raise ValueError(msg)
+        self.in_channels = in_channels
+        self.base_channels = base_channels
+        self.img_size = img_size
+        ch = base_channels
+        self.time_mlp = nn.Sequential(
+            SinusoidalTimeEmbedding(time_dim),
+            nn.Linear(time_dim, time_dim * 4),
+            nn.SiLU(),
+            nn.Linear(time_dim * 4, time_dim),
+        )
+        self.in_conv = nn.Conv2d(in_channels, ch, 3, padding=1)
+        self.down1 = ResidualBlock(ch, ch, time_dim)
+        self.down2 = ResidualBlock(ch, ch * 2, time_dim)
+        self.down3 = ResidualBlock(ch * 2, ch * 4, time_dim)
+        self.pool = nn.AvgPool2d(2)
+        self.mid1 = ResidualBlock(ch * 4, ch * 4, time_dim)
+        self.mid2 = ResidualBlock(ch * 4, ch * 4, time_dim)
+        self.up1_conv = nn.ConvTranspose2d(ch * 4, ch * 2, 4, stride=2, padding=1)
+        self.up1 = ResidualBlock(ch * 4, ch * 2, time_dim)
+        self.up2_conv = nn.ConvTranspose2d(ch * 2, ch, 4, stride=2, padding=1)
+        self.up2 = ResidualBlock(ch * 2, ch, time_dim)
+        self.up3 = ResidualBlock(ch, ch, time_dim)
+        self.out_norm = nn.GroupNorm(8, ch)
+        self.out_conv = nn.Conv2d(ch, in_channels, 3, padding=1)
+
+    def forward(self, x: torch.Tensor, t: torch.Tensor) -> torch.Tensor:
+        t_emb = self.time_mlp(t)
+        h0 = self.in_conv(x)
+        h1 = self.down1(h0, t_emb)
+        h2 = self.down2(self.pool(h1), t_emb)
+        h3 = self.down3(self.pool(h2), t_emb)
+        h = self.mid2(self.mid1(h3, t_emb), t_emb)
+        h = self.up1_conv(h)
+        h = self.up1(torch.cat([h, h2], dim=1), t_emb)
+        h = self.up2_conv(h)
+        h = self.up2(torch.cat([h, h1], dim=1), t_emb)
+        h = self.up3(h, t_emb)
+        return self.out_conv(F.silu(self.out_norm(h)))
+
+    def count_parameters(self) -> int:
+        return sum(p.numel() for p in self.parameters() if p.requires_grad)
+
+    def train(self, X=None, y=None, **kwargs):  # noqa: N802
+        if y is None and (X is None or isinstance(X, bool)):
+            mode = True if X is None else bool(X)
+            return super().train(mode)
+        raise TypeError("Use src.training.image_ddpm.train_ddpm for DDPM fitting")
+
+    def predict(
+        self,
+        n: int,
+        *,
+        timesteps: int,
+        device: torch.device | None = None,
+    ) -> torch.Tensor:
+        from src.training.image_ddpm import DDPMSchedule, sample_ddpm
+
+        schedule = DDPMSchedule(timesteps=timesteps, device=device or next(self.parameters()).device)
+        return sample_ddpm(self, schedule, n=n, shape=(self.in_channels, self.img_size, self.img_size))
 
     def evaluate(self, x: torch.Tensor, *, timesteps: int) -> dict:
         from src.training.image_ddpm import DDPMSchedule, noise_prediction_mse

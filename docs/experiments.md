@@ -828,6 +828,15 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `make data-open-images-v4` · `make data-open-images-coco-cap` · `make exp-113-publication`  
 **Lesson:** STL-10 + Tiny-ImageNet + COCO ≤20k unlock Phase M efficient nano floors on 4060.
 
+### EXP 114 — NanoUNet-v2 efficient I2I (Phase M / M0)
+
+**Models:** NanoUNetV2 DDPM (~3.02M params, base_ch=48)  
+**Dataset:** `tiny_imagenet_v1` @ 64×64  
+**Claim:** rel FID ≥ 0.20 vs noise **and** (FID ≤ 138.5 vs exp_102 **or** efficiency card)  
+**Verdict:** Confirmed — FID-R18 345.28 vs noise 632.61 (rel **0.454**); VRAM peak 4243 MB; 350.8 imgs/s  
+**Command:** `make exp-114-publication`  
+**Lesson:** Two-stage NanoUNet-v2 clears the honesty gate on Tiny-IN@64; absolute FID vs CIFAR@32 is not comparable — efficiency card carries M0.
+
 ### Phase E — Agro Maize Lab + uncertainty (E-T3)
 
 **Dashboard:** `dashboard/pages/07_agro_maize_lab.py`  

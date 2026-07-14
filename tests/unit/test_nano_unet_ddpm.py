@@ -17,6 +17,17 @@ def test_nano_unet_forward_shape():
     assert model.count_parameters() > 0
 
 
+def test_nano_unet_v2_forward_shape_64():
+    from src.classical.nano_unet import NanoUNetV2
+
+    model = NanoUNetV2(in_channels=3, base_channels=16, img_size=64)
+    x = torch.randn(2, 3, 64, 64)
+    t = torch.randint(0, 10, (2,))
+    out = model(x, t)
+    assert out.shape == x.shape
+    assert model.count_parameters() > 0
+
+
 def test_ddpm_train_and_sample_smoke():
     device = torch.device("cpu")
     model = NanoUNet(in_channels=3, base_channels=8)

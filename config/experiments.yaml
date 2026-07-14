@@ -2438,6 +2438,42 @@ experiments:
         n_smoke_rows: 8
         min_p0_packs: 3
 
+  exp_114_nano_unet_v2_efficient_i2i:
+    description: "Phase M — NanoUNet-v2 efficient DDPM I2I on Tiny-ImageNet 64x64 (FID-R18 + efficiency card)"
+    exp_id: exp_114
+    seed: 42
+    pack: tiny_imagenet
+    img_size: 64
+    epochs: 2
+    batch_size: 8
+    lr: 0.0002
+    timesteps: 20
+    base_channels: 24
+    n_train: 32
+    n_val: 16
+    n_fid_samples: 16
+    min_relative_fid_improvement: 0.20
+    max_fid_vs_exp102: 138.537
+    profile_overrides:
+      ci:
+        epochs: 2
+        batch_size: 8
+        timesteps: 20
+        base_channels: 16
+        n_train: 32
+        n_val: 16
+        n_fid_samples: 16
+        img_size: 64
+      publication:
+        epochs: 12
+        batch_size: 48
+        timesteps: 150
+        base_channels: 48
+        n_train: 16000
+        n_val: 2000
+        n_fid_samples: 512
+        img_size: 64
+
   exp_102_nano_unet_cifar_i2i:
     description: "Phase H — NanoUNet DDPM classical I2I floor on CIFAR-10 (FID-R18 vs noise)"
     exp_id: exp_102

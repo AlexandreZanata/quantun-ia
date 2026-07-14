@@ -206,6 +206,12 @@ def load_split_indices(pack: str, *, root: Path = IMAGES_ROOT) -> dict[str, np.n
     return {k: data[k] for k in ("train", "val", "test")}
 
 
+def _hwc_uint8_to_nchw_minus1_1(arr: np.ndarray) -> np.ndarray:
+    out = np.asarray(arr, dtype=np.float32) / 255.0
+    out = out.transpose(2, 0, 1)
+    return out * 2.0 - 1.0
+
+
 def load_cifar10_nchw(
     *,
     root: Path = IMAGES_ROOT,
@@ -238,11 +244,74 @@ def load_cifar10_nchw(
     labels = []
     for i in idx:
         img, label = ds[int(i)]
-        arr = np.asarray(img, dtype=np.float32) / 255.0  # HWC [0,1]
-        arr = arr.transpose(2, 0, 1)  # CHW
-        arr = arr * 2.0 - 1.0
-        images.append(arr)
+        images.append(_hwc_uint8_to_nchw_minus1_1(np.asarray(img, dtype=np.uint8)))
         labels.append(int(label))
     x = np.stack(images).astype(np.float32)
     y = np.asarray(labels, dtype=np.int64)
     return x, y
+
+
+def load_pack_nchw(
+    pack: str,
+    *,
+    root: Path = IMAGES_ROOT,
+    split: str = "train",
+    n_take: int | None = None,
+    img_size: int = 64,
+    seed: int = 42,
+) -> tuple[np.ndarray, np.ndarray]:
+    """Load Phase L/G pack as float32 NCHW in [-1, 1]; split indices before resize."""
+    from PIL import Image
+    from torchvision.datasets import STL10
+
+    if pack not in ALL_IMAGE_PACKS:
+        msg = f"unsupported pack: {pack}"
+        raise ValueError(msg)
+    if split not in {"train", "val", "test"}:
+        msg = f"invalid split: {split}"
+        raise ValueError(msg)
+    if not is_pack_complete(pack, root=root):
+        msg = f"pack not downloaded: {pack}"
+        raise FileNotFoundError(msg)
+
+    if pack == "cifar10":
+        if img_size != 32:
+            msg = "cifar10 NCHW loader only supports img_size=32"
+            raise ValueError(msg)
+        return load_cifar10_nchw(root=root, split=split, n_take=n_take, seed=seed)
+
+    dest = pack_raw_dir(pack, root=root)
+    indices = np.asarray(load_split_indices(pack, root=root)[split], dtype=np.int64)
+    rng = np.random.default_rng(seed)
+    if n_take is not None and n_take < len(indices):
+        indices = rng.choice(indices, size=int(n_take), replace=False)
+
+    images: list[np.ndarray] = []
+    labels: list[int] = []
+
+    if pack == "stl10":
+        # val/train carved from official train; test from official test
+        stl_split = "test" if split == "test" else "train"
+        ds = STL10(root=str(dest), split=stl_split, download=False)
+        for i in indices:
+            img, label = ds[int(i)]
+            pil = img if isinstance(img, Image.Image) else Image.fromarray(np.asarray(img))
+            pil = pil.convert("RGB").resize((img_size, img_size), Image.BILINEAR)
+            images.append(_hwc_uint8_to_nchw_minus1_1(np.asarray(pil, dtype=np.uint8)))
+            labels.append(int(label))
+    elif pack == "tiny_imagenet":
+        train_paths, train_labels, val_paths, val_labels = _load_tiny_imagenet_lists(dest)
+        if split == "test":
+            paths, labs = val_paths, val_labels
+        else:
+            paths, labs = train_paths, train_labels
+        for i in indices:
+            with Image.open(paths[int(i)]) as img:
+                pil = img.convert("RGB").resize((img_size, img_size), Image.BILINEAR)
+                images.append(_hwc_uint8_to_nchw_minus1_1(np.asarray(pil, dtype=np.uint8)))
+            labels.append(int(labs[int(i)]))
+    else:
+        msg = f"NCHW loader not implemented for pack={pack}"
+        raise NotImplementedError(msg)
+
+    return np.stack(images).astype(np.float32), np.asarray(labels, dtype=np.int64)

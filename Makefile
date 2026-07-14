@@ -631,6 +631,12 @@ exp-113:
 exp-113-publication:
 	MLFLOW_DISABLE=1 $(PYTHON) experiments/exp_113_open_image_corpus_expand/run.py --profile publication --write-results
 
+exp-114:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_114_nano_unet_v2_efficient_i2i/run.py --profile ci
+
+exp-114-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_114_nano_unet_v2_efficient_i2i/run.py --profile publication --write-results
+
 exp-102:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_102_nano_unet_cifar_i2i/run.py --profile ci
 
