@@ -186,7 +186,7 @@
       "source": "multi_seed_summary"
     }
   ],
-  "generated_at": "2026-06-18T17:25:29.958816+00:00",
-  "software_version": "1.0.0-rc1",
+  "generated_at": "2026-07-14T17:20:37.037979+00:00",
+  "software_version": "1.2.0",
   "citation": "MicroQML Bench v1.0.0 \u2014 quantun-ia Quantum-Inspired Micro ML Lab. https://github.com/AlexandreZanata/quantun-ia"
 }

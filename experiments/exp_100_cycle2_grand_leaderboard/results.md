@@ -1,6 +1,6 @@
 # Results — EXP 100: Cycle v2 Grand Leaderboard
 
-**Run date:** 2026-07-12  
+**Run date:** 2026-07-14  
 **Hardware:** CPU synthesis (aggregates RTX 4060 publication runs)
 **Profile:** `publication`
 
@@ -9,7 +9,7 @@
 - JSON leaderboard: `dist/leaderboards/cycle2_grand_leaderboard.json`
 - LaTeX table: `paper/tables/cycle2_grand_leaderboard.tex`
 - Rows: **16** · accepted: **5** · rejected: **11**
-- Elapsed: **0.009s**
+- Elapsed: **0.007s**
 
 ## Science gates
 

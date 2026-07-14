@@ -5,5 +5,35 @@
   "canonical_json_url": "https://alexandrezanata.github.io/quantun-ia/leaderboard/v1.json",
   "viewer_url": "https://alexandrezanata.github.io/quantun-ia/leaderboard/",
   "leaderboard_rows": 8,
-  "source_fixture": "tests/contracts/fixtures/publication_experiments.jsonl"
+  "source_fixture": "tests/contracts/fixtures/publication_experiments.jsonl",
+  "published_at": "2026-07-14T17:20:37.048655+00:00",
+  "cycles": {
+    "v1_microqml": {
+      "json": "v1.json",
+      "rows": 8
+    },
+    "v2_agro": {
+      "json": "cycle2.json",
+      "accepted": [
+        "exp_091",
+        "exp_092",
+        "exp_094",
+        "exp_096",
+        "exp_097"
+      ],
+      "n_rows": 16,
+      "hypothesis_confirmed": true
+    },
+    "v3_image": {
+      "json": "cycle3.json",
+      "accepted": [
+        "exp_101",
+        "exp_102",
+        "exp_106",
+        "exp_109"
+      ],
+      "n_rows": 12,
+      "hypothesis_confirmed": true
+    }
+  }
 }

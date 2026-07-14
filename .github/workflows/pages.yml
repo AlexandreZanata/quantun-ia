@@ -8,6 +8,8 @@ on:
       - "scripts/publish_leaderboard.py"
       - "tests/contracts/fixtures/publication_experiments.jsonl"
       - "config/microqml_bench/**"
+      - "config/cycle2_grand_leaderboard_registry.yaml"
+      - "config/cycle3_grand_leaderboard_registry.yaml"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 

@@ -3,103 +3,403 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MicroQML Bench — Public Leaderboard</title>
-  <meta name="description" content="Holdout-fair quantum vs classical benchmark leaderboard (MicroQML Bench v1)" />
+  <title>quantun-ia — Public Research Scoreboard</title>
+  <meta name="description" content="Holdout-fair MicroQML Bench plus Cycle v2 agro and Cycle v3 image nano scorecards from the quantun-ia lab." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
   <style>
     :root {
-      color-scheme: light dark;
-      --bg: #0f1419;
-      --panel: #1a2332;
-      --text: #e6edf3;
-      --muted: #8b949e;
-      --accent: #58a6ff;
-      --flagship: #3fb950;
-      --border: #30363d;
-    }
-    @media (prefers-color-scheme: light) {
-      :root {
-        --bg: #f6f8fa;
-        --panel: #ffffff;
-        --text: #1f2328;
-        --muted: #656d76;
-        --accent: #0969da;
-        --flagship: #1a7f37;
-        --border: #d0d7de;
-      }
+      --bg0: #071018;
+      --bg1: #0c1824;
+      --panel: rgba(14, 28, 42, 0.82);
+      --text: #e8eef5;
+      --muted: #8fa3b8;
+      --accent: #2ec4b6;
+      --accent-dim: rgba(46, 196, 182, 0.14);
+      --warn: #e8a54b;
+      --ok: #3dd68c;
+      --bad: #e8726a;
+      --border: rgba(143, 163, 184, 0.22);
+      --glow: rgba(46, 196, 182, 0.18);
+      --font-display: "Syne", system-ui, sans-serif;
+      --font-body: "IBM Plex Sans", system-ui, sans-serif;
     }
     * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-      background: var(--bg);
+      min-height: 100vh;
+      font-family: var(--font-body);
       color: var(--text);
-      line-height: 1.5;
+      background:
+        radial-gradient(1200px 600px at 12% -10%, rgba(46, 196, 182, 0.16), transparent 55%),
+        radial-gradient(900px 500px at 90% 10%, rgba(64, 120, 180, 0.14), transparent 50%),
+        linear-gradient(165deg, var(--bg0), var(--bg1) 45%, #08121c);
+      line-height: 1.55;
     }
-    main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem 3rem; }
-    h1 { font-size: 1.75rem; margin: 0 0 0.25rem; }
-    .sub { color: var(--muted); margin-bottom: 1.5rem; }
-    .meta { font-size: 0.875rem; color: var(--muted); margin-bottom: 1rem; }
-    .meta a { color: var(--accent); }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.55), transparent 70%);
+      opacity: 0.5;
+    }
+    main {
+      position: relative;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2.5rem 1.25rem 4rem;
+    }
+    .hero {
+      padding: 1.5rem 0 2rem;
+      animation: rise 0.7s ease both;
+    }
+    .brand {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: clamp(2.4rem, 6vw, 3.6rem);
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      margin: 0 0 0.75rem;
+    }
+    .brand span { color: var(--accent); }
+    .lede {
+      max-width: 38rem;
+      font-size: 1.05rem;
+      color: var(--muted);
+      margin: 0 0 1.25rem;
+    }
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1.75rem;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.65rem 1rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+      background: transparent;
+      transition: border-color 0.2s, background 0.2s, transform 0.2s;
+    }
+    .btn:hover { border-color: var(--accent); background: var(--accent-dim); transform: translateY(-1px); }
+    .btn.primary {
+      background: var(--accent);
+      color: #04201c;
+      border-color: transparent;
+    }
+    .btn.primary:hover { filter: brightness(1.05); background: var(--accent); }
+    .highlights {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.75rem;
+      margin: 0 0 2rem;
+      animation: rise 0.8s 0.1s ease both;
+    }
+    @media (max-width: 800px) {
+      .highlights { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    .stat {
+      padding: 1rem 1.1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .stat .k {
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+    }
+    .stat .v {
+      font-family: var(--font-display);
+      font-size: 1.55rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .stat .v.ok { color: var(--ok); }
+    .stat .v.warn { color: var(--warn); }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28), 0 0 0 1px rgba(46, 196, 182, 0.05);
+      overflow: hidden;
+      animation: rise 0.85s 0.15s ease both;
+    }
+    .tabs {
+      display: flex;
+      gap: 0.25rem;
+      padding: 0.75rem;
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+    }
+    .tab {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      font: inherit;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 0.65rem 0.95rem;
+      border-radius: 10px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s, color 0.2s;
+    }
+    .tab:hover { color: var(--text); background: rgba(255,255,255,0.04); }
+    .tab[aria-selected="true"] {
+      color: #04201c;
+      background: var(--accent);
+    }
+    .pane { display: none; padding: 1rem 1rem 1.25rem; }
+    .pane.active { display: block; animation: fade 0.35s ease; }
+    .pane-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 0.85rem;
+      align-items: baseline;
+    }
+    .pane-head h2 {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      margin: 0;
+      letter-spacing: -0.02em;
+    }
+    .pane-head p { margin: 0.2rem 0 0; color: var(--muted); font-size: 0.88rem; max-width: 40rem; }
+    .links a { color: var(--accent); text-decoration: none; font-size: 0.85rem; font-weight: 500; }
+    .links a:hover { text-decoration: underline; }
+    .table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border); }
     table {
       width: 100%;
       border-collapse: collapse;
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      overflow: hidden;
+      min-width: 640px;
     }
-    th, td { padding: 0.65rem 0.85rem; text-align: left; border-bottom: 1px solid var(--border); }
-    th { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+    th, td {
+      padding: 0.7rem 0.85rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+    }
+    th {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      background: rgba(0,0,0,0.2);
+      position: sticky;
+      top: 0;
+    }
     tr:last-child td { border-bottom: none; }
-    .flagship { color: var(--flagship); font-weight: 600; }
-    .acc { font-variant-numeric: tabular-nums; font-weight: 600; }
-    .ci { color: var(--muted); font-size: 0.875rem; }
-    #status { margin: 1rem 0; color: var(--muted); }
-    footer { margin-top: 2rem; font-size: 0.8125rem; color: var(--muted); }
+    tr:hover td { background: rgba(46, 196, 182, 0.04); }
+    .mono { font-variant-numeric: tabular-nums; font-weight: 600; }
+    .muted { color: var(--muted); font-size: 0.85rem; }
+    .pill {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .pill.ok { background: rgba(61, 214, 140, 0.15); color: var(--ok); }
+    .pill.bad { background: rgba(232, 114, 106, 0.15); color: var(--bad); }
+    .pill.base { background: rgba(143, 163, 184, 0.15); color: var(--muted); }
+    .pill.q { background: var(--accent-dim); color: var(--accent); }
+    .flagship { color: var(--accent); font-weight: 600; }
+    #status { color: var(--muted); font-size: 0.9rem; margin: 0.25rem 0 0.75rem; }
+    footer {
+      margin-top: 2rem;
+      color: var(--muted);
+      font-size: 0.82rem;
+      animation: rise 0.9s 0.2s ease both;
+    }
+    footer a { color: var(--accent); }
+    footer code {
+      font-size: 0.8rem;
+      background: rgba(255,255,255,0.05);
+      padding: 0.1rem 0.35rem;
+      border-radius: 4px;
+    }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fade {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
   </style>
 </head>
 <body>
   <main>
-    <h1>MicroQML Bench v1</h1>
-    <p class="sub">Public holdout-fair leaderboard — quantum vs classical nano models</p>
-    <p class="meta">
-      JSON: <a id="json-link" href="v1.json">v1.json</a> ·
-      Schema v1 ·
-      <a href="https://github.com/AlexandreZanata/quantun-ia/blob/main/docs/microqml_bench.md">Documentation</a>
-    </p>
-    <p id="status">Loading leaderboard…</p>
-    <table id="board" hidden>
-      <thead>
-        <tr>
-          <th>Task</th>
-          <th>Model</th>
-          <th>Holdout</th>
-          <th>95% CI</th>
-          <th>Seeds</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+    <header class="hero">
+      <h1 class="brand">quantun<span>-ia</span></h1>
+      <p class="lede">
+        Public research scoreboard: holdout-fair MicroQML Bench baselines plus Cycle&nbsp;v2 agro
+        and Cycle&nbsp;v3 image-nano results from NVIDIA RTX&nbsp;4060 publication runs.
+      </p>
+      <div class="cta-row">
+        <a class="btn primary" href="https://github.com/AlexandreZanata/quantun-ia">View repository</a>
+        <a class="btn" href="v1.json">MicroQML JSON</a>
+        <a class="btn" href="cycle3.json">Cycle v3 JSON</a>
+        <a class="btn" href="https://github.com/AlexandreZanata/quantun-ia/blob/main/docs/microqml_bench.md">Docs</a>
+      </div>
+      <div class="highlights" id="highlights" aria-live="polite">
+        <div class="stat"><div class="k">MicroQML rows</div><div class="v" id="h-v1">—</div></div>
+        <div class="stat"><div class="k">Cycle v2 accepts</div><div class="v ok" id="h-v2">—</div></div>
+        <div class="stat"><div class="k">Cycle v3 accepts</div><div class="v ok" id="h-v3">—</div></div>
+        <div class="stat"><div class="k">Hardware</div><div class="v" style="font-size:1.1rem">RTX 4060</div></div>
+      </div>
+    </header>
+
+    <p id="status">Loading scoreboards…</p>
+
+    <section class="panel" aria-label="Scoreboards">
+      <div class="tabs" role="tablist">
+        <button class="tab" role="tab" id="tab-v3" aria-selected="true" aria-controls="pane-v3" data-pane="v3">Cycle v3 · Image</button>
+        <button class="tab" role="tab" id="tab-v2" aria-selected="false" aria-controls="pane-v2" data-pane="v2">Cycle v2 · Agro</button>
+        <button class="tab" role="tab" id="tab-v1" aria-selected="false" aria-controls="pane-v1" data-pane="v1">MicroQML Bench v1</button>
+      </div>
+
+      <div class="pane active" id="pane-v3" role="tabpanel" aria-labelledby="tab-v3">
+        <div class="pane-head">
+          <div>
+            <h2>Cycle v3 — image nano (exp_101–111)</h2>
+            <p>I2I / T2I / quantum recipes 3.0. FID or CLIP deltas vs registered floors. Accepts: 101, 102, 106, 109.</p>
+          </div>
+          <div class="links"><a href="cycle3.json">cycle3.json</a></div>
+        </div>
+        <div class="table-wrap">
+          <table id="board-v3">
+            <thead>
+              <tr>
+                <th>Exp</th>
+                <th>Arm</th>
+                <th>Metric</th>
+                <th>Primary</th>
+                <th>Δ</th>
+                <th>Verdict</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="pane" id="pane-v2" role="tabpanel" aria-labelledby="tab-v2" hidden>
+        <div class="pane-head">
+          <div>
+            <h2>Cycle v2 — agro / tabular (exp_084–099)</h2>
+            <p>ROC-AUC / PR-AUC vs floors. Five accepts; no quantum claim clears +0.5&nbsp;pp.</p>
+          </div>
+          <div class="links"><a href="cycle2.json">cycle2.json</a></div>
+        </div>
+        <div class="table-wrap">
+          <table id="board-v2">
+            <thead>
+              <tr>
+                <th>Exp</th>
+                <th>Arm</th>
+                <th>Metric</th>
+                <th>Primary</th>
+                <th>Δ pp</th>
+                <th>Verdict</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="pane" id="pane-v1" role="tabpanel" aria-labelledby="tab-v1" hidden>
+        <div class="pane-head">
+          <div>
+            <h2>MicroQML Bench v1</h2>
+            <p>Holdout-fair quantum vs classical nano baselines (publication profile).</p>
+          </div>
+          <div class="links"><a href="v1.json">v1.json</a></div>
+        </div>
+        <div class="table-wrap">
+          <table id="board-v1">
+            <thead>
+              <tr>
+                <th>Task</th>
+                <th>Model</th>
+                <th>Holdout</th>
+                <th>95% CI</th>
+                <th>Seeds</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
     <footer>
-      Reproduce locally: <code>make publish-leaderboard</code> ·
-      Submit results via
+      Reproduce: <code>make publish-leaderboard</code> ·
+      Submit via
       <a href="https://github.com/AlexandreZanata/quantun-ia/issues/new?template=experiment_replication.yml">Replication Challenge</a>
+      · Lab docs
+      <a href="https://github.com/AlexandreZanata/quantun-ia/blob/main/docs/experiments.md">experiments.md</a>
     </footer>
   </main>
-  <script>
-    const tbody = document.querySelector("#board tbody");
-    const status = document.getElementById("status");
-    const table = document.getElementById("board");
 
-    function flagshipTasks(tasks) {
-      return new Set((tasks || []).filter(t => t.flagship).map(t => t.task_id));
+  <script>
+    const status = document.getElementById("status");
+
+    function fmtDelta(v, digits = 2) {
+      if (v == null || Number.isNaN(v)) return "—";
+      const n = Number(v);
+      const sign = n > 0 ? "+" : "";
+      return sign + n.toFixed(digits);
     }
 
-    function render(data) {
-      const flagship = flagshipTasks(data.tasks);
-      const rows = [...(data.leaderboard || [])].sort(
-        (a, b) => (b.accuracy_pct || 0) - (a.accuracy_pct || 0)
-      );
+    function verdictPill(v) {
+      const x = String(v || "").toLowerCase();
+      if (x === "accepted" || x === "confirmed") return '<span class="pill ok">accepted</span>';
+      if (x === "rejected") return '<span class="pill bad">rejected</span>';
+      return `<span class="pill base">${x || "—"}</span>`;
+    }
+
+    function setTab(id) {
+      document.querySelectorAll(".tab").forEach((btn) => {
+        const on = btn.dataset.pane === id;
+        btn.setAttribute("aria-selected", on ? "true" : "false");
+      });
+      document.querySelectorAll(".pane").forEach((pane) => {
+        const on = pane.id === "pane-" + id;
+        pane.classList.toggle("active", on);
+        pane.hidden = !on;
+      });
+    }
+
+    document.querySelectorAll(".tab").forEach((btn) => {
+      btn.addEventListener("click", () => setTab(btn.dataset.pane));
+    });
+
+    function renderV1(data) {
+      const flagship = new Set((data.tasks || []).filter((t) => t.flagship).map((t) => t.task_id));
+      const rows = [...(data.leaderboard || [])].sort((a, b) => (b.accuracy_pct || 0) - (a.accuracy_pct || 0));
+      const tbody = document.querySelector("#board-v1 tbody");
       tbody.replaceChildren();
       for (const row of rows) {
         const tr = document.createElement("tr");
@@ -110,19 +410,52 @@
         tr.innerHTML = `
           <td class="${flagship.has(row.task_id) ? "flagship" : ""}">${taskLabel}</td>
           <td>${row.model}</td>
-          <td class="acc">${row.accuracy_pct}%</td>
-          <td class="ci">${ci}</td>
+          <td class="mono">${row.accuracy_pct}%</td>
+          <td class="muted">${ci}</td>
           <td>${row.n_seeds ?? "—"}</td>`;
         tbody.appendChild(tr);
       }
-      status.textContent = `${rows.length} models · generated ${data.generated_at || ""} · v${data.version || "?"}`;
-      table.hidden = rows.length === 0;
+      document.getElementById("h-v1").textContent = String(rows.length);
+      return rows.length;
     }
 
-    fetch("v1.json")
-      .then(r => { if (!r.ok) throw new Error(r.statusText); return r.json(); })
-      .then(render)
-      .catch(err => { status.textContent = "Failed to load leaderboard: " + err.message; });
+    function renderCycle(boardId, data, deltaKey) {
+      const tbody = document.querySelector(`#${boardId} tbody`);
+      tbody.replaceChildren();
+      for (const row of data.rows || []) {
+        const tr = document.createElement("tr");
+        const q = row.quantum ? ' <span class="pill q">Q</span>' : "";
+        const delta = deltaKey === "delta_pp" ? row.delta_pp : row.delta;
+        tr.innerHTML = `
+          <td class="mono">${row.experiment}</td>
+          <td>${row.arm}${q}</td>
+          <td class="muted">${row.metric || "—"}</td>
+          <td class="mono">${Number(row.primary).toFixed(row.metric === "clip_score" || row.metric === "fid_r18" ? 2 : 4)}</td>
+          <td class="mono">${fmtDelta(delta)}</td>
+          <td>${verdictPill(row.verdict)}</td>`;
+        tbody.appendChild(tr);
+      }
+      return (data.observed_accepts || []).length;
+    }
+
+    Promise.all([
+      fetch("v1.json").then((r) => { if (!r.ok) throw new Error("v1.json"); return r.json(); }),
+      fetch("cycle2.json").then((r) => { if (!r.ok) throw new Error("cycle2.json"); return r.json(); }),
+      fetch("cycle3.json").then((r) => { if (!r.ok) throw new Error("cycle3.json"); return r.json(); }),
+      fetch("meta.json").then((r) => (r.ok ? r.json() : {})),
+    ])
+      .then(([v1, c2, c3, meta]) => {
+        const n1 = renderV1(v1);
+        const n2 = renderCycle("board-v2", c2, "delta_pp");
+        const n3 = renderCycle("board-v3", c3, "delta");
+        document.getElementById("h-v2").textContent = String(n2);
+        document.getElementById("h-v3").textContent = String(n3);
+        const when = meta.published_at || c3.generated_at || v1.generated_at || "";
+        status.textContent = `${n1} MicroQML · ${c2.n_rows || "?"} Cycle v2 · ${c3.n_rows || "?"} Cycle v3 · updated ${when}`;
+      })
+      .catch((err) => {
+        status.textContent = "Failed to load scoreboards: " + err.message;
+      });
   </script>
 </body>
 </html>

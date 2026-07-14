@@ -55,11 +55,29 @@ def test_verify_published_leaderboard_passes():
     assert verify_published_leaderboard() is True
 
 
+def test_committed_cycle_scorecards_exist():
+    cycle2 = json.loads((DEFAULT_OUT_DIR / "cycle2.json").read_text(encoding="utf-8"))
+    cycle3 = json.loads((DEFAULT_OUT_DIR / "cycle3.json").read_text(encoding="utf-8"))
+    assert cycle2["bench_id"] == "cycle2_grand_leaderboard"
+    assert cycle3["bench_id"] == "cycle3_grand_leaderboard"
+    assert "exp_092" in cycle2.get("observed_accepts", [])
+    assert "exp_102" in cycle3.get("observed_accepts", [])
+
+
+def test_meta_includes_cycle_summaries():
+    meta = json.loads((DEFAULT_OUT_DIR / "meta.json").read_text(encoding="utf-8"))
+    assert "cycles" in meta
+    assert meta["cycles"]["v3_image"]["json"] == "cycle3.json"
+    assert "exp_109" in meta["cycles"]["v3_image"]["accepted"]
+
+
 def test_publish_leaderboard_regenerates_valid_bundle(tmp_path):
     out = tmp_path / "leaderboard"
     json_path, meta_path = publish_leaderboard(jsonl_path=PUBLICATION_FIXTURE, output_dir=out)
     assert json_path.is_file()
     assert meta_path.is_file()
+    assert (out / "cycle2.json").is_file()
+    assert (out / "cycle3.json").is_file()
     export = json.loads(json_path.read_text(encoding="utf-8"))
     jsonschema.validate(instance=export, schema=MICROQML_BENCH_V1_SCHEMA)
     assert len(export["leaderboard"]) >= 2

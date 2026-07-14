@@ -28,11 +28,19 @@ All tasks use the **publication profile**: 30% stratified holdout (fit preproces
 | Resource | URL |
 |----------|-----|
 | Viewer | https://alexandrezanata.github.io/quantun-ia/leaderboard/ |
-| JSON | https://alexandrezanata.github.io/quantun-ia/leaderboard/v1.json |
+| MicroQML JSON | https://alexandrezanata.github.io/quantun-ia/leaderboard/v1.json |
+| Cycle v2 JSON | https://alexandrezanata.github.io/quantun-ia/leaderboard/cycle2.json |
+| Cycle v3 JSON | https://alexandrezanata.github.io/quantun-ia/leaderboard/cycle3.json |
 | Source | `docs/leaderboard/` (committed, deployed via `.github/workflows/pages.yml`) |
 
+The viewer shows three scorecards:
+
+1. **Cycle v3 image nano** — curated FID/CLIP gates (exp_101–111)
+2. **Cycle v2 agro / tabular** — ROC/PR-AUC gates (exp_084–099)
+3. **MicroQML Bench v1** — holdout-fair classical vs quantum nano baselines
+
 ```bash
-make publish-leaderboard        # regenerate from publication fixture
+make publish-leaderboard        # regenerate from publication fixture + cycle registries
 make publish-leaderboard-check  # CI validation
 ```
 
