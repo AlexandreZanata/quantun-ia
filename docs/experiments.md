@@ -792,6 +792,15 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `make exp-109-publication`  
 **Lesson:** Circuit-cut widens latent quantum guidance on 4060 without breaking parity; absolute FID still high.
 
+### EXP 110 — Text–quantum token fusion (Phase J / H-Q3.5)
+
+**Models:** TinyDiT + classical CLIP-MLP fusion vs 4q angle CLIP fusion + cross-attn  
+**Dataset:** `flickr8k_captions_v1`  
+**Claim:** CLIP_q ≥ CLIP_classical + 0.5  
+**Verdict:** Rejected — CLIP 17.99 vs classical 17.62 (Δ +0.37)  
+**Command:** `make exp-110-publication`  
+**Lesson:** Quantum remix of pooled CLIP is directionally helpful but does not clear +0.5; try multi-token CLIP sequences.
+
 ### Phase E — Agro Maize Lab + uncertainty (E-T3)
 
 **Dashboard:** `dashboard/pages/07_agro_maize_lab.py`  

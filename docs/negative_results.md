@@ -38,6 +38,7 @@ Each entry links to the experiment `results.md` and the statistical test outcome
 | exp_107 | Patch amp FID within classical ±1.0 | **Rejected** | FID |Δ|=330.06 (566 vs 236) |
 | exp_108 | Unitary TinyDiT mid ≥5% FID rel vs affine | **Rejected** | rel −4.0% (499 vs 480) |
 | exp_103 | TinyDiT T2I CLIP ≥ noise and null+0.5 | **Rejected** | Δnoise +0.72; Δnull −3.28 |
+| exp_110 | CLIP→4q fusion ≥ classical +0.5 CLIP | **Rejected** | Δ +0.37 (17.99 vs 17.62) |
 
 ---
 
@@ -862,6 +863,23 @@ See: `experiments/exp_108_quantum_flow_coupling/results.md`
 **Interpretation:** Hash-conditioned nano DiT samples are weakly above noise but are more OpenCLIP-aligned with empty strings than with prompts — do not claim a T2I text floor until the generator uses CLIP text features (or stronger resolution/budget).
 
 See: `experiments/exp_103_tiny_dit_flickr_t2i/results.md`
+
+---
+
+## exp_110 — Text–quantum token fusion (H-Q3.5)
+
+**Profile:** Flickr8k; TinyDiT + cross-attn; classical CLIP-MLP vs 4q angle fusion; OpenCLIP ViT-B/32; RTX 4060
+
+| Condition | CLIPScore ×100 |
+|-----------|----------------|
+| Classical (null-quantum) | 17.62 |
+| Quantum fusion | 17.99 |
+
+**Gate:** Δ ≥ +0.5 → **failed** (+0.37).
+
+**Interpretation:** Angle-encoding pooled CLIP into a 4q residual helps slightly vs classical MLP fusion but does not meet the publication gap — prefer multi-token CLIP sequences before claiming quantum text advantage.
+
+See: `experiments/exp_110_text_quantum_token_fusion/results.md`
 
 ---
 

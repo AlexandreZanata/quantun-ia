@@ -139,6 +139,7 @@ class TinyDiT(nn.Module):
         coupling: str = "classical",
         coupling_layers: int = 2,
         text_dim: int = 0,
+        use_cross_attn: bool = False,
     ) -> None:
         super().__init__()
         if img_size % patch_size != 0:
@@ -148,6 +149,7 @@ class TinyDiT(nn.Module):
         self.in_channels = in_channels
         self.dim = dim
         self.text_dim = int(text_dim)
+        self.use_cross_attn = bool(use_cross_attn) and self.text_dim > 0
         self.grid = img_size // patch_size
         self.n_tokens = self.grid * self.grid
         patch_dim = in_channels * patch_size * patch_size
@@ -176,6 +178,10 @@ class TinyDiT(nn.Module):
             hidden=dim * 2,
         )
         self.coupling_kind = coupling
+        self.cross_attn_norm = nn.LayerNorm(dim) if self.use_cross_attn else None
+        self.cross_attn = (
+            nn.MultiheadAttention(dim, n_heads, batch_first=True) if self.use_cross_attn else None
+        )
         self.out_norm = nn.LayerNorm(dim)
         self.out_proj = nn.Linear(dim, patch_dim)
 
@@ -203,15 +209,23 @@ class TinyDiT(nn.Module):
     ) -> torch.Tensor:
         tokens = self.patch_embed(self._patchify(x)) + self.pos_embed
         cond = self.time_mlp(t)
+        text_ctx: torch.Tensor | None = None
         if self.text_proj is not None:
             if text_emb is None:
                 text_emb = torch.zeros(x.shape[0], self.text_dim, device=x.device, dtype=x.dtype)
-            cond = cond + self.text_proj(text_emb.to(device=x.device, dtype=x.dtype))
+            text_ctx = self.text_proj(text_emb.to(device=x.device, dtype=x.dtype))
+            cond = cond + text_ctx
         tokens = tokens + cond.unsqueeze(1)
         for i, block in enumerate(self.blocks):
             tokens = block(tokens)
             if i + 1 == self.mid_index:
                 tokens = self.coupling(tokens)
+                if self.cross_attn is not None and text_ctx is not None:
+                    assert self.cross_attn_norm is not None
+                    q = self.cross_attn_norm(tokens)
+                    kv = text_ctx.unsqueeze(1)
+                    attn_out, _ = self.cross_attn(q, kv, kv, need_weights=False)
+                    tokens = tokens + attn_out
         tokens = self.out_proj(self.out_norm(tokens))
         return self._unpatchify(tokens)
 

@@ -1,4 +1,4 @@
-"""OpenCLIP image–text score helper for T2I gates (Phase H / H-T4)."""
+"""OpenCLIP image–text score helper for T2I gates (Phase H / H-T4 / H-Q3.5)."""
 
 from __future__ import annotations
 
@@ -18,6 +18,28 @@ def _load_clip(model_name: str = "ViT-B-32", pretrained: str = "openai"):
     for p in model.parameters():
         p.requires_grad = False
     return model, preprocess, tokenizer
+
+
+@torch.no_grad()
+def encode_clip_text(
+    captions: list[str],
+    *,
+    device: torch.device,
+    batch_size: int = 64,
+    model_name: str = "ViT-B-32",
+    pretrained: str = "openai",
+) -> torch.Tensor:
+    """Return L2-normalized OpenCLIP text features (N, D) on CPU."""
+    model, _, tokenizer = _load_clip(model_name, pretrained)
+    model = model.to(device)
+    feats: list[torch.Tensor] = []
+    for start in range(0, len(captions), batch_size):
+        caps = captions[start : start + batch_size]
+        text_input = tokenizer(caps).to(device)
+        text_features = model.encode_text(text_input)
+        text_features = F.normalize(text_features.float(), dim=-1)
+        feats.append(text_features.detach().cpu())
+    return torch.cat(feats, dim=0)
 
 
 @torch.no_grad()

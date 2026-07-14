@@ -2795,6 +2795,56 @@ experiments:
         head_hidden: 64
         parity_fid_slack: 1.0
 
+  exp_110_text_quantum_token_fusion:
+    description: "Phase J — CLIP text → 4q angle fusion vs classical MLP into TinyDiT cross-attn (H-Q3.5)"
+    exp_id: exp_110
+    seed: 42
+    classical_epochs: 2
+    quantum_epochs: 1
+    batch_size: 8
+    quantum_batch_size: 4
+    lr: 0.0002
+    timesteps: 20
+    patch_size: 4
+    dim: 64
+    depth: 4
+    n_heads: 4
+    time_dim: 128
+    text_dim: 64
+    clip_dim: 512
+    n_qubits: 4
+    n_layers: 2
+    img_size: 32
+    n_train: 32
+    n_eval: 16
+    min_clip_gap: 0.5
+    profile_overrides:
+      ci:
+        classical_epochs: 1
+        quantum_epochs: 1
+        batch_size: 8
+        quantum_batch_size: 4
+        timesteps: 8
+        dim: 32
+        depth: 2
+        text_dim: 32
+        time_dim: 64
+        n_train: 32
+        n_eval: 8
+        min_clip_gap: -100.0
+      publication:
+        classical_epochs: 10
+        quantum_epochs: 6
+        batch_size: 64
+        quantum_batch_size: 16
+        timesteps: 100
+        dim: 64
+        depth: 4
+        text_dim: 64
+        n_train: 2048
+        n_eval: 128
+        min_clip_gap: 0.5
+
   exp_100_cycle2_grand_leaderboard:
     description: "Cycle v2 grand leaderboard synthesis (exp_084–099 curated RTX 4060 metrics)"
     exp_id: exp_100

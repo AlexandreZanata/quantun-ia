@@ -358,3 +358,95 @@ def sample_ddpm_captioned(
         else:
             x = mean
     return x.clamp(-1.0, 1.0)
+
+
+def train_ddpm_clip_features(
+    model: nn.Module,
+    fusion: nn.Module,
+    x_train: torch.Tensor,
+    clip_emb: torch.Tensor,
+    schedule: DDPMSchedule,
+    *,
+    epochs: int,
+    batch_size: int,
+    lr: float,
+    seed: int = 42,
+    logger=None,
+    fusion_on_cpu: bool = False,
+) -> list[float]:
+    """Train captioned DDPM with precomputed CLIP text features + fusion head."""
+    if x_train.shape[0] != clip_emb.shape[0]:
+        raise ValueError("x_train/clip_emb length mismatch")
+    torch.manual_seed(seed)
+    device = schedule.device
+    model.to(device)
+    if fusion_on_cpu:
+        fusion.to(torch.device("cpu"))
+    else:
+        fusion.to(device)
+    model.train()
+    fusion.train()
+    index = torch.arange(x_train.shape[0])
+    loader = DataLoader(TensorDataset(index), batch_size=batch_size, shuffle=True)
+    params = [p for p in model.parameters() if p.requires_grad] + [
+        p for p in fusion.parameters() if p.requires_grad
+    ]
+    opt = torch.optim.AdamW(params, lr=lr)
+    history: list[float] = []
+    for epoch in range(1, epochs + 1):
+        running = 0.0
+        n_batches = 0
+        for (idxs,) in loader:
+            batch = x_train[idxs].to(device)
+            emb = clip_emb[idxs]
+            if fusion_on_cpu:
+                text_emb = fusion(emb.cpu()).to(device)
+            else:
+                text_emb = fusion(emb.to(device))
+            t = torch.randint(0, schedule.timesteps, (batch.shape[0],), device=device)
+            x_t, noise = q_sample(schedule, batch, t)
+            pred = model(x_t, t, text_emb)
+            loss = F.mse_loss(pred, noise)
+            opt.zero_grad(set_to_none=True)
+            loss.backward()
+            opt.step()
+            running += float(loss.item())
+            n_batches += 1
+        mean_loss = running / max(n_batches, 1)
+        history.append(mean_loss)
+        if logger is not None:
+            logger.log(epoch, loss=mean_loss)
+    return history
+
+
+@torch.no_grad()
+def sample_ddpm_clip_features(
+    model: nn.Module,
+    fusion: nn.Module,
+    clip_emb: torch.Tensor,
+    schedule: DDPMSchedule,
+    *,
+    shape: tuple[int, int, int] = (3, 32, 32),
+    fusion_on_cpu: bool = False,
+) -> torch.Tensor:
+    model.eval()
+    fusion.eval()
+    device = schedule.device
+    n = clip_emb.shape[0]
+    if fusion_on_cpu:
+        text_emb = fusion(clip_emb.cpu()).to(device)
+    else:
+        text_emb = fusion(clip_emb.to(device))
+    x = torch.randn(n, *shape, device=device)
+    for step in reversed(range(schedule.timesteps)):
+        t = torch.full((n,), step, device=device, dtype=torch.long)
+        eps = model(x, t, text_emb)
+        beta = schedule.betas[step]
+        alpha = schedule.alphas[step]
+        alpha_bar = schedule.alphas_cumprod[step]
+        mean = (1.0 / torch.sqrt(alpha)) * (x - (beta / torch.sqrt(1.0 - alpha_bar)) * eps)
+        if step > 0:
+            x = mean + torch.sqrt(beta) * torch.randn_like(x)
+        else:
+            x = mean
+    return x.clamp(-1.0, 1.0)
