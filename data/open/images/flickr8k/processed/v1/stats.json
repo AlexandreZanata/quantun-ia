@@ -1,0 +1,23 @@
+{
+  "pack": "flickr8k",
+  "dataset_id": "flickr8k_captions_v1",
+  "modality": "image_text",
+  "split_method": "official_flickr8k_lists_before_resize",
+  "seed": 42,
+  "max_captions_per_image": 1,
+  "spatial_shape": [
+    null,
+    null,
+    3
+  ],
+  "n_images_missing": 0,
+  "row_counts": {
+    "total": 8000,
+    "train": 6000,
+    "val": 1000,
+    "test": 1000
+  },
+  "n_unique_images": 8000,
+  "built_at": "2026-07-14T16:23:39.039597+00:00",
+  "notes": "Splits assigned from official Flickr_8k.*Images.txt before any resize/normalize"
+}

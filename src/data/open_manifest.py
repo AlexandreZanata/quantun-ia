@@ -129,6 +129,20 @@ def collect_open_data_issues(
     if not dataset.get("ready"):
         return issues
 
+    # Image-text packs (caption corpora): processed stats + pairs + optional checksums.
+    if dataset.get("modality") == "image_text":
+        out_dir = processed_dir(root, dataset)
+        issues.extend(verify_checksums(dataset, out_dir))
+        for key in ("stats", "pairs"):
+            filename = dataset.get("files", {}).get(key)
+            if not filename:
+                issues.append(f"missing files.{key} in manifest for {dataset_id}")
+                continue
+            path = out_dir / filename
+            if not path.is_file():
+                issues.append(f"missing {key}: {path}")
+        return issues
+
     # Image packs: stats + split indices only (no tabular parquet / DVC pointer yet).
     if dataset.get("modality") == "images":
         out_dir = processed_dir(root, dataset)
@@ -186,7 +200,7 @@ def validate_all_ready_open_data(root: Path) -> tuple[bool, list[str]]:
         if not dataset.get("ready"):
             continue
         # Image packs use a different on-disk contract (raw markers + processed stats).
-        if dataset.get("modality") == "images":
+        if dataset.get("modality") in ("images", "image_text"):
             continue
         ok, issues = validate_open_data(root, dataset_id=dataset["id"])
         if not ok:

@@ -717,6 +717,14 @@ vim experiments/exp_003_entanglement_effect/results.md
 **Command:** `make exp-102-publication`  
 **Lesson:** ResNet18-feature FID + VGG LPIPS-proxy are enough for a classical I2I floor before quantum heads.
 
+### EXP 103 — TinyDiT Flickr8k T2I floor (Phase H / H-T4 · G-T3)
+
+**Models:** Caption-conditioned TinyDiT + hash embedder (~0.51M)  
+**Dataset:** `flickr8k_captions_v1` (official splits before resize)  
+**Claim:** CLIPScore ≥ noise and ≥ null-caption + 0.5  
+**Verdict:** Rejected — CLIP 18.08 vs noise 17.36 (OK) vs null 21.36 (Δ −3.28)  
+**Command:** `make exp-103-publication`  
+**Lesson:** Nano 32×32 hash-conditioned DiT beats noise slightly but is not text-aligned enough for +0.5 vs empty captions; freeze OpenCLIP text tower next.
 
 ### EXP 104 — Teacher→NanoUNet image distill (Phase I / H-I1)
 

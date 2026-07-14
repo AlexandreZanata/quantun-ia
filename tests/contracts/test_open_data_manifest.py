@@ -232,7 +232,7 @@ def test_open_dataset_splits_when_ready(
 
 
 def _is_image_pack(dataset: dict) -> bool:
-    return dataset.get("modality") == "images"
+    return dataset.get("modality") in {"images", "image_text"}
 
 
 def test_ready_datasets_have_checksums():
@@ -311,16 +311,20 @@ def test_open_data_l2_gate_passes_when_built():
 
 
 def test_ready_image_packs_have_processed_artifacts():
-    """Phase G image packs use stats + split indices, not tabular parquet."""
+    """Phase G image packs use stats + split indices; caption packs use pairs.parquet."""
     manifest = _load_manifest()
     image_packs = [d for d in manifest["datasets"] if d.get("ready") and _is_image_pack(d)]
     assert image_packs, "expected ready image packs (Phase G P0)"
     for dataset in image_packs:
         processed = ROOT / "data" / "open" / dataset["path"]
         stats_path = processed / dataset["files"]["stats"]
-        splits_path = processed / dataset["files"]["split_indices"]
         assert stats_path.is_file(), f"missing {stats_path}"
-        assert splits_path.is_file(), f"missing {splits_path}"
+        if dataset.get("modality") == "image_text":
+            pairs_path = processed / dataset["files"]["pairs"]
+            assert pairs_path.is_file(), f"missing {pairs_path}"
+        else:
+            splits_path = processed / dataset["files"]["split_indices"]
+            assert splits_path.is_file(), f"missing {splits_path}"
         assert dataset["row_counts"]["total"] == sum(
             dataset["row_counts"][k] for k in ("train", "val", "test")
         )

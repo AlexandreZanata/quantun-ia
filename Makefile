@@ -589,6 +589,12 @@ data-open-images-cifar:
 data-open-images-splits:
 	MLFLOW_DISABLE=1 $(PYTHON) scripts/build_open_image_splits.py --packs cifar10 fashion_mnist flowers102
 
+data-open-images-captions:
+	MLFLOW_DISABLE=1 $(PYTHON) scripts/download_open_captions.py
+
+data-open-caption-splits:
+	MLFLOW_DISABLE=1 $(PYTHON) scripts/build_open_caption_splits.py
+
 exp-101:
 	MLFLOW_DISABLE=1 $(PYTHON) experiments/exp_101_open_image_corpus_ingest/run.py --profile ci
 
@@ -600,6 +606,12 @@ exp-102:
 
 exp-102-publication:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_102_nano_unet_cifar_i2i/run.py --profile publication --write-results
+
+exp-103:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_103_tiny_dit_flickr_t2i/run.py --profile ci
+
+exp-103-publication:
+	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_103_tiny_dit_flickr_t2i/run.py --profile publication --write-results
 
 exp-104:
 	MLFLOW_DISABLE=1 QML_DEVICE=cuda $(PYTHON) experiments/exp_104_distill_image_nano/run.py --profile ci

@@ -120,9 +120,10 @@ class TinyDiTBlock(nn.Module):
 
 class TinyDiT(nn.Module):
     """
-    Patch Transformer denoiser for 32×32 RGB (Nano DiT floor for H-Q3.3).
+    Patch Transformer denoiser for 32×32 RGB (Nano DiT floor).
 
     ``coupling`` is injected once after the first half of transformer blocks.
+    Optional ``text_dim`` enables caption conditioning for T2I (H-T4).
     """
 
     def __init__(
@@ -137,6 +138,7 @@ class TinyDiT(nn.Module):
         time_dim: int = 128,
         coupling: str = "classical",
         coupling_layers: int = 2,
+        text_dim: int = 0,
     ) -> None:
         super().__init__()
         if img_size % patch_size != 0:
@@ -145,6 +147,7 @@ class TinyDiT(nn.Module):
         self.patch_size = patch_size
         self.in_channels = in_channels
         self.dim = dim
+        self.text_dim = int(text_dim)
         self.grid = img_size // patch_size
         self.n_tokens = self.grid * self.grid
         patch_dim = in_channels * patch_size * patch_size
@@ -154,6 +157,11 @@ class TinyDiT(nn.Module):
             nn.Linear(time_dim, dim),
             nn.SiLU(),
             nn.Linear(dim, dim),
+        )
+        self.text_proj = (
+            nn.Sequential(nn.Linear(self.text_dim, dim), nn.SiLU(), nn.Linear(dim, dim))
+            if self.text_dim > 0
+            else None
         )
         self.patch_embed = nn.Linear(patch_dim, dim)
         self.pos_embed = nn.Parameter(torch.zeros(1, self.n_tokens, dim))
@@ -187,16 +195,58 @@ class TinyDiT(nn.Module):
         x = x.permute(0, 3, 1, 4, 2, 5).contiguous()
         return x.reshape(b, c, g * p, g * p)
 
-    def forward(self, x: torch.Tensor, t: torch.Tensor) -> torch.Tensor:
+    def forward(
+        self,
+        x: torch.Tensor,
+        t: torch.Tensor,
+        text_emb: torch.Tensor | None = None,
+    ) -> torch.Tensor:
         tokens = self.patch_embed(self._patchify(x)) + self.pos_embed
-        t_emb = self.time_mlp(t).unsqueeze(1)
-        tokens = tokens + t_emb
+        cond = self.time_mlp(t)
+        if self.text_proj is not None:
+            if text_emb is None:
+                text_emb = torch.zeros(x.shape[0], self.text_dim, device=x.device, dtype=x.dtype)
+            cond = cond + self.text_proj(text_emb.to(device=x.device, dtype=x.dtype))
+        tokens = tokens + cond.unsqueeze(1)
         for i, block in enumerate(self.blocks):
             tokens = block(tokens)
             if i + 1 == self.mid_index:
                 tokens = self.coupling(tokens)
         tokens = self.out_proj(self.out_norm(tokens))
         return self._unpatchify(tokens)
+
+    def count_parameters(self) -> int:
+        return sum(p.numel() for p in self.parameters() if p.requires_grad)
+
+
+class HashCaptionEmbedder(nn.Module):
+    """Deterministic bag-of-hash caption embedder (no tokenizer dependency)."""
+
+    def __init__(self, dim: int = 64, n_buckets: int = 4096) -> None:
+        super().__init__()
+        self.dim = dim
+        self.n_buckets = n_buckets
+        self.table = nn.Embedding(n_buckets, dim)
+        nn.init.normal_(self.table.weight, std=0.02)
+
+    def forward(self, captions: list[str]) -> torch.Tensor:
+        device = self.table.weight.device
+        outs: list[torch.Tensor] = []
+        for cap in captions:
+            tokens = [t for t in "".join(ch.lower() if ch.isalnum() else " " for ch in cap).split() if t]
+            if not tokens:
+                outs.append(torch.zeros(self.dim, device=device))
+                continue
+            idxs = []
+            for tok in tokens:
+                h = 2166136261
+                for ch in tok.encode("utf-8"):
+                    h ^= ch
+                    h = (h * 16777619) & 0xFFFFFFFF
+                idxs.append(h % self.n_buckets)
+            emb = self.table(torch.tensor(idxs, device=device, dtype=torch.long)).mean(dim=0)
+            outs.append(emb)
+        return torch.stack(outs, dim=0)
 
     def count_parameters(self) -> int:
         return sum(p.numel() for p in self.parameters() if p.requires_grad)

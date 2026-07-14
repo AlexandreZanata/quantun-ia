@@ -272,3 +272,89 @@ def train_ddpm_gvalr(
         if logger is not None and (epoch % log_every == 0 or epoch == epochs):
             logger.log(epoch, loss=mean_loss, learning_rate=current_lr, grad_variance=grad_var)
     return history
+
+
+def train_ddpm_captioned(
+    model: nn.Module,
+    embedder: nn.Module,
+    x_train: torch.Tensor,
+    captions: list[str],
+    schedule: DDPMSchedule,
+    *,
+    epochs: int,
+    batch_size: int,
+    lr: float,
+    seed: int = 42,
+    logger=None,
+) -> list[float]:
+    """Train noise predictor with caption embeddings from ``embedder``."""
+    if x_train.shape[0] != len(captions):
+        raise ValueError("x_train/captions length mismatch")
+    torch.manual_seed(seed)
+    device = schedule.device
+    model.to(device)
+    embedder.to(device)
+    model.train()
+    embedder.train()
+    index = torch.arange(x_train.shape[0])
+    loader = DataLoader(
+        TensorDataset(index),
+        batch_size=batch_size,
+        shuffle=True,
+        drop_last=False,
+    )
+    params = [p for p in model.parameters() if p.requires_grad] + [
+        p for p in embedder.parameters() if p.requires_grad
+    ]
+    opt = torch.optim.AdamW(params, lr=lr)
+    history: list[float] = []
+    for epoch in range(1, epochs + 1):
+        running = 0.0
+        n_batches = 0
+        for (idxs,) in loader:
+            batch = x_train[idxs].to(device)
+            caps = [captions[int(i)] for i in idxs.tolist()]
+            text_emb = embedder(caps)
+            t = torch.randint(0, schedule.timesteps, (batch.shape[0],), device=device)
+            x_t, noise = q_sample(schedule, batch, t)
+            pred = model(x_t, t, text_emb)
+            loss = F.mse_loss(pred, noise)
+            opt.zero_grad(set_to_none=True)
+            loss.backward()
+            opt.step()
+            running += float(loss.item())
+            n_batches += 1
+        mean_loss = running / max(n_batches, 1)
+        history.append(mean_loss)
+        if logger is not None:
+            logger.log(epoch, loss=mean_loss)
+    return history
+
+
+@torch.no_grad()
+def sample_ddpm_captioned(
+    model: nn.Module,
+    embedder: nn.Module,
+    captions: list[str],
+    schedule: DDPMSchedule,
+    *,
+    shape: tuple[int, int, int] = (3, 32, 32),
+) -> torch.Tensor:
+    model.eval()
+    embedder.eval()
+    device = schedule.device
+    n = len(captions)
+    text_emb = embedder(captions).to(device)
+    x = torch.randn(n, *shape, device=device)
+    for step in reversed(range(schedule.timesteps)):
+        t = torch.full((n,), step, device=device, dtype=torch.long)
+        eps = model(x, t, text_emb)
+        beta = schedule.betas[step]
+        alpha = schedule.alphas[step]
+        alpha_bar = schedule.alphas_cumprod[step]
+        mean = (1.0 / torch.sqrt(alpha)) * (x - (beta / torch.sqrt(1.0 - alpha_bar)) * eps)
+        if step > 0:
+            x = mean + torch.sqrt(beta) * torch.randn_like(x)
+        else:
+            x = mean
+    return x.clamp(-1.0, 1.0)

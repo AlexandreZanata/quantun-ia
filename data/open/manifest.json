@@ -299,6 +299,35 @@
       },
       "build_script": "scripts/build_open_image_splits.py",
       "raw_path": "images/flowers102/raw/v1"
+    },
+    {
+      "id": "flickr8k_captions_v1",
+      "path": "images/flickr8k/processed/v1",
+      "description": "Flickr8k image–caption pairs (Phase G-T3 T2I path; official train/dev/test)",
+      "license": "research-use",
+      "source_url": "https://github.com/jbrownlee/Datasets/releases/tag/Flickr8k",
+      "spatial_shape": [null, null, 3],
+      "n_features": 0,
+      "modality": "image_text",
+      "ready": true,
+      "row_counts": {
+        "total": 8000,
+        "train": 6000,
+        "val": 1000,
+        "test": 1000
+      },
+      "files": {
+        "stats": "stats.json",
+        "pairs": "pairs.parquet",
+        "split_indices": "split_indices.npz"
+      },
+      "checksums": {
+        "stats": "ea8b12ba402cf73b92cce759b175ad888c640d5907b25479084d309f484a3e14",
+        "pairs": "32867cc2dcd1b033eba52a88c111b981b12ae5ebb385b64f61cf834086b5281f",
+        "split_indices": "bd2660b8e3dcb17735c5c6f9d5de6d1052e3f29e5aad5638b8ae3980586fb527"
+      },
+      "build_script": "scripts/build_open_caption_splits.py",
+      "raw_path": "images/flickr8k/raw/v1"
     }
   ]
 }

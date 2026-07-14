@@ -37,6 +37,7 @@ Each entry links to the experiment `results.md` and the statistical test outcome
 | exp_105b | GV-ALR FID within ±3% at ≤70% fixed epochs | **Rejected** | epoch 8/12 OK; FID Δ +13.2% |
 | exp_107 | Patch amp FID within classical ±1.0 | **Rejected** | FID |Δ|=330.06 (566 vs 236) |
 | exp_108 | Unitary TinyDiT mid ≥5% FID rel vs affine | **Rejected** | rel −4.0% (499 vs 480) |
+| exp_103 | TinyDiT T2I CLIP ≥ noise and null+0.5 | **Rejected** | Δnoise +0.72; Δnull −3.28 |
 
 ---
 
@@ -843,6 +844,24 @@ See: `experiments/exp_107_patch_amplitude_bottleneck/results.md`
 **Interpretation:** Volume-preserving unitary mid remix underperforms unconstrained affine scale/shift on nano DiT I2I — do not claim quantum-inspired flow coupling wins without a deeper stack or latent-space placement.
 
 See: `experiments/exp_108_quantum_flow_coupling/results.md`
+
+---
+
+## exp_103 — TinyDiT Flickr8k T2I (H-T4)
+
+**Profile:** Flickr8k; TinyDiT dim=64 depth=4 + hash caption embedder; OpenCLIP ViT-B/32 CLIPScore; RTX 4060
+
+| Condition | CLIPScore ×100 |
+|-----------|----------------|
+| Model samples + real captions | 18.08 |
+| Gaussian noise + real captions | 17.36 |
+| Model samples + null captions | 21.36 |
+
+**Gate:** ≥ noise **and** ≥ null + 0.5 → **failed** (beats noise; Δnull −3.28).
+
+**Interpretation:** Hash-conditioned nano DiT samples are weakly above noise but are more OpenCLIP-aligned with empty strings than with prompts — do not claim a T2I text floor until the generator uses CLIP text features (or stronger resolution/budget).
+
+See: `experiments/exp_103_tiny_dit_flickr_t2i/results.md`
 
 ---
 

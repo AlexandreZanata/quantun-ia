@@ -2455,6 +2455,47 @@ experiments:
         n_val: 2000
         n_fid_samples: 1000
 
+  exp_103_tiny_dit_flickr_t2i:
+    description: "Phase H — TinyDiT caption-conditioned T2I floor on Flickr8k (CLIPScore H-T4 / G-T3)"
+    exp_id: exp_103
+    seed: 42
+    epochs: 2
+    batch_size: 8
+    lr: 0.0002
+    timesteps: 20
+    patch_size: 4
+    dim: 64
+    depth: 4
+    n_heads: 4
+    time_dim: 128
+    text_dim: 64
+    img_size: 32
+    n_train: 32
+    n_eval: 16
+    min_clip_null_gap: 0.5
+    profile_overrides:
+      ci:
+        epochs: 1
+        batch_size: 8
+        timesteps: 8
+        dim: 32
+        depth: 2
+        text_dim: 32
+        time_dim: 64
+        n_train: 32
+        n_eval: 8
+        min_clip_null_gap: -100.0
+      publication:
+        epochs: 12
+        batch_size: 64
+        timesteps: 100
+        dim: 64
+        depth: 4
+        text_dim: 64
+        n_train: 4000
+        n_eval: 128
+        min_clip_null_gap: 0.5
+
   exp_104_distill_image_nano:
     description: "Phase I — teacher NanoUNet soft denoise → student distill (FID-R18 H-I1)"
     exp_id: exp_104

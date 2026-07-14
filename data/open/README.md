@@ -92,14 +92,18 @@ Nano I2I / T2I training uses **license-clear** image corpora under `images/`.
 | `cifar10` | `images/cifar10/` | I2I / class-cond FID floor | P0 | ✅ ready (`cifar10_v1`) |
 | `fashion_mnist` | `images/fashion_mnist/` | CI smoke | P0 | ✅ ready (`fashion_mnist_v1`) |
 | `flowers102` | `images/flowers102/` | fine-detail class-cond | P0 | ✅ ready (`flowers102_v1`) |
-| Flickr8k / pokemon-blip / COCO-cap | TBD | T2I captions | P0–P1 | G-T3 |
+| `flickr8k` | `images/flickr8k/` | T2I captions (G-T3) | P0 | ✅ ready (`flickr8k_captions_v1`) |
+| pokemon-blip | n/a | was P1 toy | — | ❌ gated/DMCA — skipped |
 | LAION-Aesthetic micro ≤50k | TBD | optional hard T2I | P2 gated | G-T7 |
 
 ```bash
 make data-open-images-smoke
 make data-open-images-splits
+make data-open-images-captions
+make data-open-caption-splits
 make exp-101-publication
-# writes GENERATION.md + processed/*/stats.json + split_indices.npz
+make exp-103-publication
+# writes GENERATION.md + processed/*/stats.json (+ pairs.parquet for captions)
 ```
 
 **Rules:** split train/val/test **before** resize/normalize; document licenses in `images/GENERATION.md`; do not commit multi-GB raw blobs — gitignore `images/*/raw/`.
@@ -112,3 +116,4 @@ make exp-101-publication
 - **CIFAR-10:** Krizhevsky, A. (2009). Learning Multiple Layers of Features from Tiny Images.
 - **Fashion-MNIST:** Xiao, H., Rasul, K., Vollgraf, R. (2017). Fashion-MNIST.
 - **Oxford Flowers-102:** Nilsback, M., Zisserman, A. (2008). Automated flower classification over a large number of classes.
+- **Flickr8k:** Hodosh, M., Young, P., Hockenmaier, J. (2013). Framing image description as a ranking task. *JAIR*.
