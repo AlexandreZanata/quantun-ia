@@ -37,7 +37,7 @@ jobs:
           python scripts/prepare_release.py --verify-only dist/release
 
       - name: Upload release artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: release-bundle
           path: dist/release/
