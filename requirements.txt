@@ -30,4 +30,4 @@ pydantic>=2.7.0
 pyjwt[crypto]>=2.8.0
 xgboost>=2.0.0
 joblib>=1.5.3
-open-clip-torch>=2.24.0
+open-clip-torch>=3.3.0
