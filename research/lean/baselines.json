@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "policy": {
+    "size_classes": {
+      "symbolic": "0 parâmetros aprendidos",
+      "nano": "<=100M parâmetros totais",
+      "micro": ">100M e <=300M parâmetros totais",
+      "small": ">300M e <=1.5B parâmetros totais",
+      "reference": ">1.5B; teto externo, não comparação de tamanho"
+    },
+    "fairness_lock": [
+      "Lean version",
+      "mathlib commit",
+      "theorem statement hash",
+      "split",
+      "timeout",
+      "verifier calls",
+      "sampling budget",
+      "hardware class"
+    ],
+    "note": "Nenhum peso foi baixado nesta etapa. Parâmetros são nominais publicados e serão recontados após aquisição."
+  },
+  "baselines": [
+    {
+      "id": "lean_native_tactics",
+      "kind": "symbolic",
+      "consolidated": true,
+      "parameters_nominal": 0,
+      "source": "https://github.com/leanprover-community/mathlib4",
+      "license": "Apache-2.0",
+      "status": "requires_lean_install",
+      "components": [
+        "simp",
+        "aesop",
+        "omega",
+        "linarith",
+        "nlinarith"
+      ],
+      "role": "piso obrigatório e roteador de metas fáceis"
+    },
+    {
+      "id": "bm25_type_filter",
+      "kind": "symbolic",
+      "consolidated": true,
+      "parameters_nominal": 0,
+      "source": "implementação local sobre snapshot mathlib pinado",
+      "license": "project license",
+      "status": "to_implement",
+      "role": "baseline clássico de recuperação sem rede"
+    },
+    {
+      "id": "reprover_tacgen_byt5_small",
+      "kind": "micro",
+      "consolidated": true,
+      "parameters_nominal": 300000000,
+      "source": "https://huggingface.co/kaiyuy/leandojo-lean4-tacgen-byt5-small",
+      "code": "https://github.com/lean-dojo/ReProver",
+      "license": "MIT",
+      "published_weight_size": "1.2 GB",
+      "status": "planned_download",
+      "role": "baseline neural principal pareado por tamanho"
+    },
+    {
+      "id": "reprover_retriever_byt5_small",
+      "kind": "micro",
+      "consolidated": true,
+      "parameters_nominal": 200000000,
+      "source": "https://huggingface.co/kaiyuy/leandojo-lean4-retriever-byt5-small",
+      "code": "https://github.com/lean-dojo/ReProver",
+      "license": "MIT",
+      "status": "planned_download",
+      "role": "baseline de recuperação neural; reportar pesos totais e ativos"
+    },
+    {
+      "id": "pythagoras_prover_4b",
+      "kind": "reference",
+      "consolidated": false,
+      "parameters_nominal": 4000000000,
+      "source": "https://huggingface.co/Pythagoras-LM/Pythagoras-Prover-4B",
+      "license": "audit required",
+      "status": "optional_reference_pending_replication",
+      "role": "teto externo recente; não sustenta alegação de eficiência pareada"
+    },
+    {
+      "id": "deepseek_prover_v2_7b",
+      "kind": "reference",
+      "consolidated": true,
+      "parameters_nominal": 7000000000,
+      "source": "https://huggingface.co/deepseek-ai/DeepSeek-Prover-V2-7B",
+      "code": "https://github.com/deepseek-ai/DeepSeek-Prover-V2",
+      "license": "DeepSeek Model License; audit before use",
+      "status": "optional_reference_too_large_for_default_training",
+      "role": "teto forte de qualidade e possível professor offline, nunca baseline de mesmo hardware"
+    }
+  ],
+  "evidence_gap": "Não foi identificado baseline Lean especialista consolidado e aberto abaixo de 100M. O projeto deve declarar essa lacuna, não inventar um campeão nano."
+}
+

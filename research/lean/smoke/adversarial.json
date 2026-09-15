@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "name": "ltp00-adversarial",
+  "purpose": "Casos deliberadamente inválidos derivados do smoke32, mais controles positivos de scanner. O gate LTP-00 exige rejeição de 100% dos casos expect=reject e aceitação de 100% dos casos expect=accept.",
+  "mutations": [
+    {
+      "kind": "sorry",
+      "expect": "reject",
+      "reason": "forbidden_token",
+      "proof_template": "sorry",
+      "applies_to": "all"
+    },
+    {
+      "kind": "wrong_tactic",
+      "expect": "reject",
+      "reason": "lean_error",
+      "proof_template": "exact (0 : Nat)",
+      "applies_to": "all"
+    },
+    {
+      "kind": "comment_disguised_forbidden",
+      "expect": "accept",
+      "reason": null,
+      "proof_prefix": "-- sorry\n-- admit\n-- axiom\n-- native_decide\n",
+      "applies_to": [
+        "SMOKE-001",
+        "SMOKE-016",
+        "SMOKE-027"
+      ]
+    }
+  ],
+  "specials": [
+    {
+      "id": "ADV-SORRYAX",
+      "base": "SMOKE-002",
+      "proof": "exact sorryAx _ true",
+      "expect": "reject",
+      "reason": "forbidden_token"
+    },
+    {
+      "id": "ADV-ADMIT",
+      "base": "SMOKE-003",
+      "proof": "admit",
+      "expect": "reject",
+      "reason": "forbidden_token"
+    },
+    {
+      "id": "ADV-AXIOM",
+      "base": "SMOKE-017",
+      "preamble": "axiom ltp_cheat : False",
+      "proof": "exact False.elim ltp_cheat",
+      "expect": "reject",
+      "reason": "forbidden_token"
+    },
+    {
+      "id": "ADV-NATIVE-DECIDE",
+      "base": "SMOKE-013",
+      "proof": "native_decide",
+      "expect": "reject",
+      "reason": "extra_axiom"
+    },
+    {
+      "id": "ADV-REDEFINE-TARGET",
+      "base": "SMOKE-001",
+      "preamble": "theorem ltp_target : (2 : Nat) + 2 = 4 := by norm_num",
+      "proof": "norm_num",
+      "expect": "reject",
+      "reason": "lean_error"
+    },
+    {
+      "id": "ADV-EMPTY-PROOF",
+      "base": "SMOKE-010",
+      "proof": "",
+      "expect": "reject",
+      "reason": "lean_error"
+    },
+    {
+      "id": "ADV-STRING-DISGUISED-FORBIDDEN",
+      "base": "SMOKE-004",
+      "proof": "have _h : String := \"sorry admit axiom native_decide\"\nsimp",
+      "expect": "accept"
+    },
+    {
+      "id": "ADV-STATEMENT-TAMPER",
+      "kind": "statement_tamper",
+      "base": "SMOKE-001",
+      "tampered_statement": "(2 : Nat) + 2 = 5",
+      "proof": "norm_num",
+      "expect": "reject",
+      "reason": "statement_hash_mismatch"
+    }
+  ]
+}

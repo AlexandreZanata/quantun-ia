@@ -1,0 +1,32 @@
+SMOKE-001	(2 : Nat) + 2 = 4
+SMOKE-002	∀ n : Nat, n + 0 = n
+SMOKE-003	∀ n : Nat, 0 + n = n
+SMOKE-004	∀ n : Nat, n * 1 = n
+SMOKE-005	∀ n : Nat, n * 0 = 0
+SMOKE-006	∀ n : Nat, n ≤ n + 1
+SMOKE-007	∀ a b : Nat, a + b = b + a
+SMOKE-008	∀ n : Nat, (n + 1)^2 = n^2 + 2*n + 1
+SMOKE-009	∀ n : Nat, n % 2 = 0 ∨ n % 2 = 1
+SMOKE-010	(10 : Nat) - 3 = 7
+SMOKE-011	∀ n : Nat, n < n + 5
+SMOKE-012	∀ m n : Nat, m + n - n = m
+SMOKE-013	(123456 * 654321) % 10 = 6
+SMOKE-014	∀ n : Nat, 2 * n = n + n
+SMOKE-015	∀ n : Nat, n ∣ n * 3
+SMOKE-016	∀ a : Int, a + 0 = a
+SMOKE-017	∀ a b : Int, (a - b) + b = a
+SMOKE-018	∀ a : Int, a ≤ a
+SMOKE-019	(-5 : Int) + 8 = 3
+SMOKE-020	∀ a : Int, a * 2 = a + a
+SMOKE-021	∀ a : Int, 0 ≤ |a|
+SMOKE-022	∀ a : Int, a^2 ≥ 0
+SMOKE-023	∀ p q : Prop, p ∧ q → q ∧ p
+SMOKE-024	∀ p q r : Prop, (p → q) → (q → r) → p → r
+SMOKE-025	∀ p : Prop, p → ¬¬p
+SMOKE-026	∀ p q : Prop, p → q → p ∧ q
+SMOKE-027	∀ p : Prop, p ∨ ¬p
+SMOKE-028	(1/2 : ℚ) + 1/2 = 1
+SMOKE-029	∀ x : ℝ, x^2 + 1 > 0
+SMOKE-030	∀ x : ℝ, x ≤ x + 1
+SMOKE-031	∀ l : List Nat, 0 ≤ l.length
+SMOKE-032	List.reverse (List.reverse [1, 2, 3]) = [1, 2, 3]

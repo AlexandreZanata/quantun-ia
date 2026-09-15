@@ -1,0 +1,24 @@
+{
+  "record": "https://zenodo.org/records/10114157",
+  "id": 10114157,
+  "doi": "10.5281/zenodo.10114157",
+  "conceptdoi": "10.5281/zenodo.8016385",
+  "revision": 4,
+  "created": "2023-11-11T18:12:28.482361+00:00",
+  "updated": "2023-11-11T18:12:28.596754+00:00",
+  "title": "LeanDojo Benchmark",
+  "license": {
+    "id": "cc-by-2.0"
+  },
+  "creators": [
+    "Yang, Kaiyu"
+  ],
+  "description": " Dataset in the paper: \n\n  LeanDojo: Theorem Proving with Retrieval-Augmented Language Models  \n Kaiyu Yang ,&nbsp; Aidan Swope ,&nbsp; Alex Gu ,&nbsp; Rahul Chalamala ,&nbsp; Peiyang Song ,&nbsp; Shixing Yu ,&nbsp; Saad Godil ,&nbsp; Ryan Prenger ,&nbsp; Anima Anandkumar  ",
+  "files": [
+    {
+      "key": "leandojo_benchmark_v5.tar.gz",
+      "size": 47260016,
+      "checksum": "md5:4b256200618d4668b12a9cfe8c4df4d3"
+    }
+  ]
+}

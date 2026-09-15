@@ -1,0 +1,38 @@
+{
+  "phase": "LTP-00",
+  "gate": "100% das provas válidas aceitas em ambiente limpo e 100% das provas deliberadamente inválidas rejeitadas",
+  "passed": true,
+  "criteria": {
+    "all_expected_accept_accepted": true,
+    "all_expected_reject_rejected": true,
+    "expected_reasons_matched": true,
+    "replay_identical": true
+  },
+  "failures": [],
+  "metrics": {
+    "cases_total": 107,
+    "expected_accept": 36,
+    "expected_reject": 71,
+    "accepted": 36,
+    "rejected": 71,
+    "lean_calls": 71,
+    "wall_total_seconds": 259.302,
+    "wall_lean_p50_seconds": 3.598,
+    "wall_lean_p95_seconds": 4.853,
+    "peak_rss_max_bytes": 3452698624,
+    "reason_counts": {
+      "accept": 36,
+      "extra_axiom": 1,
+      "forbidden_token": 35,
+      "lean_error": 34,
+      "statement_hash_mismatch": 1
+    }
+  },
+  "limitations": [
+    "A auditoria de axiomas cobre o termo da prova; ela não audita a fidelidade da afirmação formal ao enunciado em linguagem natural.",
+    "O scanner de tokens é uma camada de rejeição antecipada; a garantia de ausência de atalhos vem do exit code e do relatório `#print axioms`.",
+    "O isolamento usa namespace de rede unprivilegiado (`unshare -rn`) e não é uma sandbox de sistema completa.",
+    "Cada caso tem tempo de parede e pico de RSS registrados, mas não medição de energia.",
+    "Os 32 teoremas são internos e não substituem avaliação em miniF2F ou outros benchmarks."
+  ]
+}

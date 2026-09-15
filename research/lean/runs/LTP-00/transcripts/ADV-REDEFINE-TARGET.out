@@ -1,0 +1,2 @@
+/home/iiii/PESSOAL-PROJETOS-ALEXANDRE/quantun-ia/.local/runs/lean/LTP-00/20260915T182954Z/scratch/ADV-REDEFINE-TARGET/Candidate.lean:5:8: error: `ltp_target` has already been declared
+'ltp_target' depends on axioms: [propext]

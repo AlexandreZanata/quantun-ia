@@ -1,0 +1,1 @@
+'ltp_target' depends on axioms: [ltp_target._native.native_decide.ax_1_1]

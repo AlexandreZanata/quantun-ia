@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0",
+  "audited_at": "2026-09-15",
+  "claim_policy": "internal_reproducible_evidence_not_external_confirmation",
+  "active_experiments": [
+    {
+      "exp_id": "exp_011",
+      "path": "experiments/exp_011_uci_tabular_qml",
+      "dataset": "UCI Wisconsin Breast Cancer",
+      "data_kind": "public_real",
+      "seeds": 10,
+      "primary_comparison": "quantum_angle minus parameter-matched classical MLP",
+      "delta_pp": -5.6,
+      "p_value": 0.004,
+      "effect_size_cohens_d": -1.15,
+      "supported_statement": "The tested angle-encoding QNN underperformed the matched classical baseline on this split.",
+      "limitations": ["single holdout protocol", "historical run labelled ci", "no independent replication"]
+    },
+    {
+      "exp_id": "exp_012",
+      "path": "experiments/exp_012_mnist_pca_qml",
+      "dataset": "MNIST digits 0 vs 1, PCA-8",
+      "data_kind": "public_real",
+      "seeds": 10,
+      "primary_comparison": "amplitude encoding minus angle encoding",
+      "delta_pp": 5.5,
+      "p_value": 0.004,
+      "effect_size_cohens_d": 1.03,
+      "supported_statement": "Amplitude encoding outperformed angle encoding in the tested PCA-reduced setup.",
+      "limitations": ["single holdout protocol", "no strong classical primary baseline", "no independent replication"]
+    },
+    {
+      "exp_id": "exp_024",
+      "path": "experiments/exp_024_quantum_nano_bc",
+      "dataset": "UCI Wisconsin Breast Cancer",
+      "data_kind": "public_real",
+      "seeds": 30,
+      "primary_comparison": "hybrid_sandwich minus logistic regression",
+      "delta_pp": -0.5,
+      "p_value": 0.003,
+      "effect_size_cohens_d": -0.72,
+      "supported_statement": "The hybrid model did not beat logistic regression; it stayed within the predeclared two-point parity band.",
+      "limitations": ["single holdout protocol", "promised external preregistration missing", "simulator only", "not a clinical claim"]
+    },
+    {
+      "exp_id": "exp_025",
+      "path": "experiments/exp_025_pima_generalization",
+      "dataset": "OpenML Pima Indians Diabetes, data id 37",
+      "data_kind": "public_real",
+      "seeds": 30,
+      "primary_comparison": "hybrid_sandwich minus logistic regression",
+      "delta_pp": -1.0,
+      "p_value": 0.017,
+      "effect_size_cohens_d": -0.59,
+      "supported_statement": "The hybrid model did not beat logistic regression and matched the tested shallow XGBoost baseline.",
+      "limitations": ["single holdout protocol", "promised external preregistration missing", "simulator only", "not a clinical claim"]
+    }
+  ],
+  "excluded_from_active_claims": {
+    "count": 109,
+    "local_archive": ".local/archive/2026-09-15-research-reset/legacy_experiments",
+    "git_recovery_commit": "9918975",
+    "reasons": [
+      "rejected or inconclusive by its own gate",
+      "synthetic-only result",
+      "software or serving check rather than scientific evidence",
+      "single-seed or permissive internal gate",
+      "missing strong baseline, sealed confirmation, or independent replication"
+    ]
+  }
+}
+

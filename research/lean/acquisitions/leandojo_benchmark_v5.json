@@ -1,0 +1,212 @@
+{
+  "schema_version": 1,
+  "id": "leandojo_benchmark_v5",
+  "acquired_at": "2026-09-15T18:47:26.401676+00:00",
+  "source": {
+    "record": "https://zenodo.org/records/10114157",
+    "doi": "10.5281/zenodo.10114157",
+    "concept_doi": "10.5281/zenodo.8016385",
+    "api_snapshot": "research/lean/acquisitions/zenodo_10114157.metadata.json",
+    "api_response_sha256": "3f059855e4183bcb08675d24b1c1f9689487c7df3c47992470991dc50728187f"
+  },
+  "version_pin": {
+    "zenodo_revision": 4,
+    "zenodo_created": "2023-11-11T18:12:28.482361+00:00",
+    "leandojo_version": "1.4.0",
+    "mathlib_commit": "19c869efa56bbb8b500f2724c0b77261edbfa28c",
+    "mathlib_url": "https://github.com/leanprover-community/mathlib"
+  },
+  "license": {
+    "dataset": "CC BY 2.0",
+    "source": "https://creativecommons.org/licenses/by/2.0/",
+    "bundled_license_files": [
+      "licenses/README.md",
+      "licenses/lean",
+      "licenses/mathlib"
+    ],
+    "note": "Licenças transitivas de mathlib e Lean incluídas pelo próprio dataset."
+  },
+  "archive": {
+    "filename": "leandojo_benchmark_v5.tar.gz",
+    "size_bytes": 47260016,
+    "md5_published": "4b256200618d4668b12a9cfe8c4df4d3",
+    "md5_observed": "4b256200618d4668b12a9cfe8c4df4d3",
+    "sha256_observed": "4c3df80440630c5c9785b511491c8ee09c4d2da31de085b205b3768666e510a0",
+    "local_path": "data/raw/leandojo/leandojo_benchmark_v5.tar.gz",
+    "checksum_verified": true
+  },
+  "extracted_root": "data/raw/leandojo/extracted/leandojo_benchmark",
+  "files": [
+    {
+      "path": "corpus.jsonl",
+      "size_bytes": 39750037,
+      "sha256": "24c034bd1483f6edb05f429c3cc8fefdd064a1a0a4eb1ce350554e686c3540d8"
+    },
+    {
+      "path": "licenses/README.md",
+      "size_bytes": 173,
+      "sha256": "4031ab4528f0bc042344fe5d68568080dd56e989ede81b9ae15e3258334bd849"
+    },
+    {
+      "path": "licenses/lean",
+      "size_bytes": 9160,
+      "sha256": "8b28515ffffc5c0fe2807d8ae3735b00b324d9b7ce807dd63ff6ac8922fbce7e"
+    },
+    {
+      "path": "licenses/mathlib",
+      "size_bytes": 11357,
+      "sha256": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1"
+    },
+    {
+      "path": "metadata.json",
+      "size_bytes": 241,
+      "sha256": "72a563ebb21f3698275f77d7904cdbcf24b5a736610d481d181ff94311af8269"
+    },
+    {
+      "path": "novel_premises/test.json",
+      "size_bytes": 19321575,
+      "sha256": "4d2b7fd134d00b9787d0a6c26d35321bc327daf0eafb806b0768c341a8e2681b",
+      "record_count": null,
+      "content_inspected": false
+    },
+    {
+      "path": "novel_premises/train.json",
+      "size_bytes": 260105204,
+      "sha256": "55fa25168fbfbdc8a5e0baa7819e574ea32880de1f5ab48300ce8299681767e8",
+      "record_count": 94734,
+      "content_inspected": true
+    },
+    {
+      "path": "novel_premises/val.json",
+      "size_bytes": 20038599,
+      "sha256": "524bac7fc7cb4547d20c426a8451a7424be101ace84ce093a429104c4fccde3b",
+      "record_count": 2000,
+      "content_inspected": true
+    },
+    {
+      "path": "random/test.json",
+      "size_bytes": 5894234,
+      "sha256": "445eb61d25b98b34b029d720f8ed56851e93366d62ccae2f712441f63edec0ed",
+      "record_count": null,
+      "content_inspected": false
+    },
+    {
+      "path": "random/train.json",
+      "size_bytes": 285461169,
+      "sha256": "8b20dee433e116231c99e96e79c50af729c3e868c59d206c9be4f386af1f6013",
+      "record_count": 94734,
+      "content_inspected": true
+    },
+    {
+      "path": "random/val.json",
+      "size_bytes": 8109975,
+      "sha256": "49fddb5476d1dd206bd6ee7caad1285a1937ea6192f3e87ea8fd962316074b49",
+      "record_count": 2000,
+      "content_inspected": true
+    }
+  ],
+  "splits": [
+    {
+      "name": "novel_premises",
+      "role": "training_and_development",
+      "train": {
+        "path": "novel_premises/train.json",
+        "size_bytes": 260105204,
+        "sha256": "55fa25168fbfbdc8a5e0baa7819e574ea32880de1f5ab48300ce8299681767e8",
+        "record_count": 94734,
+        "content_inspected": true
+      },
+      "val": {
+        "path": "novel_premises/val.json",
+        "size_bytes": 20038599,
+        "sha256": "524bac7fc7cb4547d20c426a8451a7424be101ace84ce093a429104c4fccde3b",
+        "record_count": 2000,
+        "content_inspected": true
+      },
+      "test": {
+        "path": "novel_premises/test.json",
+        "size_bytes": 19321575,
+        "sha256": "4d2b7fd134d00b9787d0a6c26d35321bc327daf0eafb806b0768c341a8e2681b",
+        "record_count": null,
+        "content_inspected": false,
+        "sealed_for": "seleção de arquitetura, hiperparâmetros e hipóteses"
+      }
+    },
+    {
+      "name": "random",
+      "role": "training_and_development",
+      "train": {
+        "path": "random/train.json",
+        "size_bytes": 285461169,
+        "sha256": "8b20dee433e116231c99e96e79c50af729c3e868c59d206c9be4f386af1f6013",
+        "record_count": 94734,
+        "content_inspected": true
+      },
+      "val": {
+        "path": "random/val.json",
+        "size_bytes": 8109975,
+        "sha256": "49fddb5476d1dd206bd6ee7caad1285a1937ea6192f3e87ea8fd962316074b49",
+        "record_count": 2000,
+        "content_inspected": true
+      },
+      "test": {
+        "path": "random/test.json",
+        "size_bytes": 5894234,
+        "sha256": "445eb61d25b98b34b029d720f8ed56851e93366d62ccae2f712441f63edec0ed",
+        "record_count": null,
+        "content_inspected": false,
+        "sealed_for": "seleção de arquitetura, hiperparâmetros e hipóteses"
+      }
+    }
+  ],
+  "contamination_report": {
+    "version": 1,
+    "method": "Proveniência pinada, contagem de registros em treino/val e verificação de presença local dos demais benchmarks; deduplicação por hash de afirmação fica para LTP-03/LTP-04.",
+    "sealed_sets_touched": [],
+    "test_files": [
+      {
+        "path": "novel_premises/test.json",
+        "sha256": "4d2b7fd134d00b9787d0a6c26d35321bc327daf0eafb806b0768c341a8e2681b",
+        "content_inspected": false
+      },
+      {
+        "path": "random/test.json",
+        "sha256": "445eb61d25b98b34b029d720f8ed56851e93366d62ccae2f712441f63edec0ed",
+        "content_inspected": false
+      }
+    ],
+    "cross_benchmark": [
+      {
+        "dataset_id": "minif2f",
+        "registry_status": "planned",
+        "local_files_found": false,
+        "overlap_audit": "pending_until_acquisition"
+      },
+      {
+        "dataset_id": "proofnet_lean4",
+        "registry_status": "planned_blocked_on_license",
+        "local_files_found": false,
+        "overlap_audit": "pending_until_acquisition"
+      },
+      {
+        "dataset_id": "minictx_v2",
+        "registry_status": "planned_blocked_on_license",
+        "local_files_found": false,
+        "overlap_audit": "pending_until_acquisition"
+      },
+      {
+        "dataset_id": "putnambench",
+        "registry_status": "planned_blocked_on_license",
+        "local_files_found": false,
+        "overlap_audit": "pending_until_acquisition"
+      }
+    ],
+    "open_items": [
+      "Deduplicação por afirmação contra miniF2F após aquisição.",
+      "Deduplicação por afirmação contra ProofNet Lean 4 após auditoria de licença.",
+      "Deduplicação por afirmação contra miniCTX v2 e PutnamBench após aquisição.",
+      "Verificação de que nenhum arquivo de teste selado foi usado na seleção."
+    ]
+  },
+  "status": "acquired_verified"
+}

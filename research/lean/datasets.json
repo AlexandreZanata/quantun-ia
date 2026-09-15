@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "policy": {
+    "default_status": "planned",
+    "acquisition_requires": [
+      "commit_or_revision_pin",
+      "license_audit",
+      "checksum",
+      "split_role",
+      "contamination_report"
+    ],
+    "no_test_peeking": true,
+    "test_outputs_location": ".local/sealed/",
+    "note": "Nenhum dataset abaixo foi baixado nesta etapa de planejamento."
+  },
+  "datasets": [
+    {
+      "id": "leandojo_benchmark_v5",
+      "role": "training_and_development",
+      "source": "https://zenodo.org/records/10114157",
+      "upstream": "https://github.com/lean-dojo/LeanDojo",
+      "version_pin": "Zenodo record 10114157; archive leandojo_benchmark_v5.tar.gz",
+      "published_size": "47.3 MB",
+      "published_checksum": "md5:4b256200618d4668b12a9cfe8c4df4d3",
+      "license": "CC BY 2.0 (dataset paper); audit transitive source licenses",
+      "status": "planned",
+      "reason": "Traços de prova e recuperação extraídos de mathlib."
+    },
+    {
+      "id": "minif2f",
+      "role": "development_validation_and_sealed_test",
+      "source": "https://github.com/facebookresearch/miniF2F",
+      "version_pin": "commit required at acquisition",
+      "license": "Lean files Apache-2.0 according to upstream README",
+      "status": "planned",
+      "reason": "Benchmark compacto de matemática de competição; test nunca entra no ciclo de seleção."
+    },
+    {
+      "id": "proofnet_lean4",
+      "role": "secondary_sealed_evaluation",
+      "source": "https://github.com/rahul3613/ProofNet-lean4",
+      "upstream": "https://github.com/zhangir-azerbayev/ProofNet",
+      "version_pin": "commit required at acquisition",
+      "license": "pending explicit audit of Lean 4 port; original repository MIT",
+      "status": "planned_blocked_on_license",
+      "reason": "Matemática universitária; usar apenas a porta Lean 4 pinada."
+    },
+    {
+      "id": "minictx_v2",
+      "role": "contextual_ood_evaluation",
+      "source": "https://huggingface.co/datasets/l3lab/miniCTX-v2",
+      "upstream": "https://github.com/cmu-l3/minictx-eval",
+      "version_pin": "HF revision and project commits required",
+      "license": "pending per-project/transitive audit",
+      "status": "planned_blocked_on_license",
+      "reason": "Avalia prova com contexto novo e longo de projetos reais."
+    },
+    {
+      "id": "putnambench",
+      "role": "final_stress_test_only",
+      "source": "https://github.com/trishullab/PutnamBench",
+      "version_pin": "commit required; record answer/no-answer variant",
+      "license": "repository license audit required",
+      "status": "planned_blocked_on_license",
+      "reason": "Teto de dificuldade; nunca usar para busca das 100 hipóteses."
+    },
+    {
+      "id": "lean_workbook",
+      "role": "training_only_quarantine",
+      "source": "https://huggingface.co/datasets/internlm/Lean-Workbook",
+      "version_pin": "HF revision required",
+      "published_size": "99.1 MB",
+      "license": "Apache-2.0",
+      "status": "optional_planned",
+      "reason": "Dados sintéticos úteis para pré-treino, nunca para evidência confirmatória; deduplicar contra avaliações."
+    }
+  ]
+}
+

@@ -1,0 +1,8 @@
+/home/iiii/PESSOAL-PROJETOS-ALEXANDRE/quantun-ia/.local/runs/lean/LTP-00/20260915T182954Z/scratch/SMOKE-024-WRONG_TACTIC/Candidate.lean:5:2: error: Type mismatch
+  0
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  ∀ (p q r : Prop), (p → q) → (q → r) → p → r
+of sort `Prop`
+'ltp_target' depends on axioms: [sorryAx]

@@ -1,0 +1,19 @@
+{
+  "cases_total": 107,
+  "expected_accept": 36,
+  "expected_reject": 71,
+  "accepted": 36,
+  "rejected": 71,
+  "lean_calls": 71,
+  "wall_total_seconds": 297.309,
+  "wall_lean_p50_seconds": 4.05,
+  "wall_lean_p95_seconds": 5.723,
+  "peak_rss_max_bytes": 3452837888,
+  "reason_counts": {
+    "accept": 36,
+    "extra_axiom": 1,
+    "forbidden_token": 35,
+    "lean_error": 34,
+    "statement_hash_mismatch": 1
+  }
+}
