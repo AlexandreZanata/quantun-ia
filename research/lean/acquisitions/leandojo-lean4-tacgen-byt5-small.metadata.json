@@ -1,0 +1,60 @@
+{
+  "repo": "kaiyuy/leandojo-lean4-tacgen-byt5-small",
+  "sha": "67a2c53cc36186fe8539d0a342fc42c50edc68fd",
+  "lastModified": "2024-07-16T13:15:19.000Z",
+  "license": "mit",
+  "tags": [
+    "transformers",
+    "safetensors",
+    "t5",
+    "text2text-generation",
+    "license:mit",
+    "text-generation-inference",
+    "endpoints_compatible",
+    "deploy:azure",
+    "region:us"
+  ],
+  "downloads": 1934,
+  "files": [
+    {
+      "rfilename": ".gitattributes",
+      "size": 1519,
+      "sha256": null
+    },
+    {
+      "rfilename": "README.md",
+      "size": 1244,
+      "sha256": null
+    },
+    {
+      "rfilename": "added_tokens.json",
+      "size": 3018,
+      "sha256": null
+    },
+    {
+      "rfilename": "config.json",
+      "size": 837,
+      "sha256": null
+    },
+    {
+      "rfilename": "generation_config.json",
+      "size": 142,
+      "sha256": null
+    },
+    {
+      "rfilename": "model.safetensors",
+      "size": 1198571496,
+      "sha256": "769fc3b498785e2492b35da4ee3e92a9a48a386807f2885258d6a4340aa2473c"
+    },
+    {
+      "rfilename": "special_tokens_map.json",
+      "size": 3090,
+      "sha256": null
+    },
+    {
+      "rfilename": "tokenizer_config.json",
+      "size": 25571,
+      "sha256": null
+    }
+  ]
+}

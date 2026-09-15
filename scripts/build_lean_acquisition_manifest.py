@@ -141,6 +141,7 @@ def build_manifest(args: argparse.Namespace) -> dict[str, Any]:
         )
     return {
         "schema_version": 1,
+        "kind": "dataset",
         "id": args.id,
         "acquired_at": dt.datetime.now(dt.timezone.utc).isoformat(),
         "source": {

@@ -14,10 +14,14 @@ REQUIRED_HYPOTHESIS_FIELDS = {
     "id", "family_code", "family", "title", "intervention", "rationale",
     "falsification_gate", "cost_tier", "parameter_target", "status", "preregistered",
 }
-REQUIRED_ACQUISITION_FIELDS = {"id", "source", "version_pin", "license", "archive", "splits", "contamination_report"}
+REQUIRED_ACQUISITION_FIELDS = {"kind", "id", "source", "version_pin", "license"}
+REQUIRED_DATASET_FIELDS = {"archive", "splits", "contamination_report"}
+REQUIRED_WEIGHTS_FIELDS = {"files", "parameters", "checksums_verified", "local_path"}
 ACQUISITION_ARCHIVE_FIELDS = {"filename", "size_bytes", "md5_published", "md5_observed", "sha256_observed", "local_path"}
+ACQUISITION_KINDS = {"dataset", "weights"}
 MD5_HEX = re.compile(r"^[0-9a-f]{32}$")
 SHA256_HEX = re.compile(r"^[0-9a-f]{64}$")
+REVISION_HEX = re.compile(r"^[0-9a-f]{40}$")
 
 
 def load_json(name: str) -> dict:
@@ -34,6 +38,78 @@ def load_acquisitions() -> list[dict]:
     ]
 
 
+def _validate_dataset_acquisition(identifier: str, acquisition: dict) -> list[str]:
+    errors: list[str] = []
+    missing = REQUIRED_DATASET_FIELDS - set(acquisition)
+    if missing:
+        errors.append(f"aquisição {identifier}: campos de dataset ausentes {sorted(missing)}")
+        return errors
+    archive = acquisition["archive"]
+    archive_missing = ACQUISITION_ARCHIVE_FIELDS - set(archive)
+    if archive_missing:
+        errors.append(f"aquisição {identifier}: archive sem campos {sorted(archive_missing)}")
+        return errors
+    if archive["md5_published"] != archive["md5_observed"]:
+        errors.append(f"aquisição {identifier}: md5 divergente do publicado")
+    if archive.get("checksum_verified") is not True:
+        errors.append(f"aquisição {identifier}: checksum_verified deveria ser true")
+    if not MD5_HEX.match(archive["md5_observed"]):
+        errors.append(f"aquisição {identifier}: md5 observado inválido")
+    if not SHA256_HEX.match(archive["sha256_observed"]):
+        errors.append(f"aquisição {identifier}: sha256 observado inválido")
+    if not archive["local_path"].startswith(("data/raw/", ".local/")):
+        errors.append(f"aquisição {identifier}: dados devem ficar em data/raw/ ou .local/")
+    if not acquisition["splits"]:
+        errors.append(f"aquisição {identifier}: nenhum split registrado")
+    for split in acquisition["splits"]:
+        test_entry = split.get("test", {})
+        if test_entry.get("content_inspected") is not False:
+            errors.append(f"aquisição {identifier}: test de {split.get('name')} não deveria ser inspecionado")
+    report = acquisition["contamination_report"]
+    if report.get("sealed_sets_touched") != []:
+        errors.append(f"aquisição {identifier}: nenhum conjunto selado pode ter sido tocado")
+    return errors
+
+
+def _validate_weights_acquisition(identifier: str, acquisition: dict) -> list[str]:
+    errors: list[str] = []
+    missing = REQUIRED_WEIGHTS_FIELDS - set(acquisition)
+    if missing:
+        errors.append(f"aquisição {identifier}: campos de pesos ausentes {sorted(missing)}")
+        return errors
+    revision = acquisition["version_pin"].get("revision_sha", "")
+    if not REVISION_HEX.match(revision):
+        errors.append(f"aquisição {identifier}: revisão deve ser um commit sha de 40 hex")
+    if not acquisition["license"].get("id"):
+        errors.append(f"aquisição {identifier}: licença sem identificador")
+    if acquisition["checksums_verified"] is not True:
+        errors.append(f"aquisição {identifier}: checksums_verified deveria ser true")
+    files = acquisition["files"]
+    if not files:
+        errors.append(f"aquisição {identifier}: nenhum arquivo registrado")
+    lfs_files = [item for item in files if item.get("is_lfs")]
+    if not lfs_files:
+        errors.append(f"aquisição {identifier}: nenhum arquivo LFS verificado")
+    for item in files:
+        if not SHA256_HEX.match(item.get("sha256_observed", "")):
+            errors.append(f"aquisição {identifier}: sha256 inválido em {item.get('path')}")
+        if item.get("is_lfs"):
+            if item.get("lfs_sha256") != item.get("sha256_observed"):
+                errors.append(f"aquisição {identifier}: sha256 divergente do LFS em {item.get('path')}")
+            if item.get("checksum_match") is not True:
+                errors.append(f"aquisição {identifier}: checksum_match deveria ser true em {item.get('path')}")
+    parameters = acquisition["parameters"]
+    if parameters.get("stored_total", 0) <= 0 or parameters.get("active_total", 0) <= 0:
+        errors.append(f"aquisição {identifier}: recontagem de parâmetros vazia")
+    if not parameters.get("method"):
+        errors.append(f"aquisição {identifier}: método de recontagem ausente")
+    if not acquisition["local_path"].startswith(("data/raw/", ".local/")):
+        errors.append(f"aquisição {identifier}: dados devem ficar em data/raw/ ou .local/")
+    if acquisition["usage_policy"].get("sealed_tests_touched") is not False:
+        errors.append(f"aquisição {identifier}: nenhum conjunto selado pode ter sido tocado")
+    return errors
+
+
 def validate_acquisitions() -> list[str]:
     errors: list[str] = []
     for acquisition in load_acquisitions():
@@ -42,30 +118,14 @@ def validate_acquisitions() -> list[str]:
         if missing:
             errors.append(f"aquisição {identifier}: campos ausentes {sorted(missing)}")
             continue
-        archive = acquisition["archive"]
-        archive_missing = ACQUISITION_ARCHIVE_FIELDS - set(archive)
-        if archive_missing:
-            errors.append(f"aquisição {identifier}: archive sem campos {sorted(archive_missing)}")
+        kind = acquisition["kind"]
+        if kind not in ACQUISITION_KINDS:
+            errors.append(f"aquisição {identifier}: kind inválido: {kind}")
             continue
-        if archive["md5_published"] != archive["md5_observed"]:
-            errors.append(f"aquisição {identifier}: md5 divergente do publicado")
-        if archive.get("checksum_verified") is not True:
-            errors.append(f"aquisição {identifier}: checksum_verified deveria ser true")
-        if not MD5_HEX.match(archive["md5_observed"]):
-            errors.append(f"aquisição {identifier}: md5 observado inválido")
-        if not SHA256_HEX.match(archive["sha256_observed"]):
-            errors.append(f"aquisição {identifier}: sha256 observado inválido")
-        if not archive["local_path"].startswith(("data/raw/", ".local/")):
-            errors.append(f"aquisição {identifier}: dados devem ficar em data/raw/ ou .local/")
-        if not acquisition["splits"]:
-            errors.append(f"aquisição {identifier}: nenhum split registrado")
-        for split in acquisition["splits"]:
-            test_entry = split.get("test", {})
-            if test_entry.get("content_inspected") is not False:
-                errors.append(f"aquisição {identifier}: test de {split.get('name')} não deveria ser inspecionado")
-        report = acquisition["contamination_report"]
-        if report.get("sealed_sets_touched") != []:
-            errors.append(f"aquisição {identifier}: nenhum conjunto selado pode ter sido tocado")
+        if kind == "dataset":
+            errors.extend(_validate_dataset_acquisition(identifier, acquisition))
+        else:
+            errors.extend(_validate_weights_acquisition(identifier, acquisition))
     return errors
 
 

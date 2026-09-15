@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "kind": "weights",
+  "id": "reprover_tacgen_byt5_small",
+  "acquired_at": "2026-09-15T19:00:28.813874+00:00",
+  "source": {
+    "repo": "kaiyuy/leandojo-lean4-tacgen-byt5-small",
+    "url": "https://huggingface.co/kaiyuy/leandojo-lean4-tacgen-byt5-small",
+    "api_snapshot": "research/lean/acquisitions/leandojo-lean4-tacgen-byt5-small.metadata.json",
+    "api_response_sha256": "70e72b114c4b597fe564c173fb4e9fd901e2ae7e3b2a4093c9d1f0b142964b99"
+  },
+  "version_pin": {
+    "revision_sha": "67a2c53cc36186fe8539d0a342fc42c50edc68fd",
+    "last_modified": "2024-07-16T13:15:19.000Z",
+    "resolved_via": "Hugging Face API ?blobs=true"
+  },
+  "license": {
+    "id": "MIT",
+    "evidence": "cardData.license e tag license:* do repositório",
+    "source": "https://huggingface.co/kaiyuy/leandojo-lean4-tacgen-byt5-small"
+  },
+  "role": "gerador de táticas ReProver (baseline neural principal, alvo micro <=300M)",
+  "usage_policy": {
+    "training": false,
+    "publish": false,
+    "paid_service": false,
+    "sealed_tests_touched": false
+  },
+  "files": [
+    {
+      "path": ".gitattributes",
+      "size_bytes": 1519,
+      "sha256_observed": "11ad7efa24975ee4b0c3c3a38ed18737f0658a5f75a0a96787b576a78a023361",
+      "lfs_sha256": null,
+      "checksum_match": null,
+      "is_lfs": false
+    },
+    {
+      "path": "README.md",
+      "size_bytes": 1244,
+      "sha256_observed": "a510b601c1a1f33aa0a973dff8c4788e66b4225b332459430921e950259ff423",
+      "lfs_sha256": null,
+      "checksum_match": null,
+      "is_lfs": false
+    },
+    {
+      "path": "added_tokens.json",
+      "size_bytes": 3018,
+      "sha256_observed": "0004781309423057d33b9edf50d2669253d4347873ea33d4e7755cb866f23883",
+      "lfs_sha256": null,
+      "checksum_match": null,
+      "is_lfs": false
+    },
+    {
+      "path": "config.json",
+      "size_bytes": 837,
+      "sha256_observed": "a35ea72799d4b7ae9565dade9ea6c218f695891602027ed7cc53630e7fb2421f",
+      "lfs_sha256": null,
+      "checksum_match": null,
+      "is_lfs": false
+    },
+    {
+      "path": "generation_config.json",
+      "size_bytes": 142,
+      "sha256_observed": "5ccbbd87d3f2dd26185cc7307aa8dc5c5ed5ea7e701ac4c916bbb90c130eebc8",
+      "lfs_sha256": null,
+      "checksum_match": null,
+      "is_lfs": false
+    },
+    {
+      "path": "model.safetensors",
+      "size_bytes": 1198571496,
+      "sha256_observed": "769fc3b498785e2492b35da4ee3e92a9a48a386807f2885258d6a4340aa2473c",
+      "lfs_sha256": "769fc3b498785e2492b35da4ee3e92a9a48a386807f2885258d6a4340aa2473c",
+      "checksum_match": true,
+      "is_lfs": true
+    },
+    {
+      "path": "special_tokens_map.json",
+      "size_bytes": 3090,
+      "sha256_observed": "3c2572df5f4ec60a476e5d90a1f52a989f9eefbbf381d358924a44a648bf0edb",
+      "lfs_sha256": null,
+      "checksum_match": null,
+      "is_lfs": false
+    },
+    {
+      "path": "tokenizer_config.json",
+      "size_bytes": 25571,
+      "sha256_observed": "018b89e0a53eb05ff5eb9e0ed0b70961cdc678331b66c9d332022cffe6af9027",
+      "lfs_sha256": null,
+      "checksum_match": null,
+      "is_lfs": false
+    }
+  ],
+  "checksums_verified": true,
+  "parameters": {
+    "stored_total": 299637760,
+    "active_total": 299637760,
+    "tensor_count": 170,
+    "by_dtype": {
+      "F32": 299637760
+    },
+    "layout_consistent": true,
+    "method": "soma de shapes do header safetensors, sem carregar tensores",
+    "tied_word_embeddings": false,
+    "config": {
+      "architectures": [
+        "T5ForConditionalGeneration"
+      ],
+      "model_type": "t5",
+      "d_model": 1472,
+      "d_ff": 3584,
+      "num_layers": 12,
+      "num_decoder_layers": 4,
+      "num_heads": 6,
+      "vocab_size": 384,
+      "tie_word_embeddings": false,
+      "torch_dtype": "float32"
+    }
+  },
+  "local_path": "data/raw/reprover/leandojo-lean4-tacgen-byt5-small/67a2c53cc36186fe8539d0a342fc42c50edc68fd",
+  "status": "acquired_verified"
+}
