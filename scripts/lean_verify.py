@@ -123,12 +123,18 @@ def resolve_lean_context(project: Path = LEAN_PROJECT) -> LeanContext:
     lake = resolve_tool("lake")
     env = os.environ.copy()
     env["PATH"] = f"{elan_home() / 'bin'}:{env.get('PATH', '')}"
-    lean_path = _capture([lake, "env", "printenv", "LEAN_PATH"], project, env).strip().splitlines()
+    raw_path_lines = _capture([lake, "env", "printenv", "LEAN_PATH"], project, env).strip().splitlines()
     lean_bin_lines = _capture([lake, "env", "which", "lean"], project, env).strip().splitlines()
-    if not lean_path or not lean_bin_lines:
+    if not raw_path_lines or not lean_bin_lines:
         raise RuntimeError("não foi possível resolver LEAN_PATH/lean via lake")
+    entries = []
+    for entry in raw_path_lines[-1].split(":"):
+        if not entry:
+            continue
+        candidate = Path(entry)
+        entries.append(str((project / candidate).resolve()) if not candidate.is_absolute() else str(candidate))
     toolchain = (project / "lean-toolchain").read_text(encoding="utf-8").strip()
-    return LeanContext(lean_bin=lean_bin_lines[-1], lean_path=lean_path[-1], toolchain=toolchain)
+    return LeanContext(lean_bin=lean_bin_lines[-1], lean_path=":".join(entries), toolchain=toolchain)
 
 
 def strip_lean(text: str, drop_strings: bool) -> str:
@@ -394,6 +400,7 @@ def run_lean(
     timeout_seconds: float,
     memory_limit_bytes: int = DEFAULT_MEMORY_LIMIT_BYTES,
 ) -> LeanRun:
+    workdir = workdir.resolve()
     workdir.mkdir(parents=True, exist_ok=True)
     candidate = workdir / "Candidate.lean"
     candidate.write_text(source, encoding="utf-8")

@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "phase": "LTP-03",
+  "frozen_at": "2026-09-15T19:18:08Z",
+  "dataset": {
+    "id": "leandojo_benchmark_4",
+    "manifest_sha256": "48bcf682a86e8afd159e3a487b0b357a16b9d2a444d1508e84670ffbd332787c",
+    "splits": [
+      "random/val",
+      "novel_premises/val"
+    ],
+    "sealed": [
+      "random/test",
+      "novel_premises/test"
+    ],
+    "correction": "leandojo_benchmark_v5 (Zenodo 10114157) é Lean 3/mathlib3 e foi substituído por leandojo_benchmark_4 (Zenodo 12740403) para o alvo Lean 4; nenhum arquivo de test foi inspecionado."
+  },
+  "environments": {
+    "modern": {
+      "lean": "leanprover/lean4:v4.34.0",
+      "mathlib": "5ed2965256430c3649e86755f9576b54eca72435",
+      "project": "lean/"
+    },
+    "native": {
+      "lean": "leanprover/lean4:v4.10.0-rc1",
+      "mathlib": "29dcec074de168ac2bf835a77ef68bbe069194c5",
+      "project": "data/raw/mathlib4_src/"
+    }
+  },
+  "selection": {
+    "extraction": {
+      "rule": "primeiras 32 entradas com traced_tactics e extração de declaração bem-sucedida, em ordem de arquivo",
+      "per_split": 32
+    },
+    "bm25": {
+      "rule": "primeiras 50 provas com premissas anotadas, em ordem de arquivo, com todos os passos dentro delas",
+      "per_split": 50,
+      "amendment": "2026-09-15T19:22Z: 50 provas por split, antes de qualquer medição, para limitar custo de scoring."
+    },
+    "reprover": {
+      "rule": "primeiras 16 entradas extraídas, em ordem de arquivo",
+      "per_split": 16,
+      "amendment": "2026-09-15T19:22Z: 16 metas por split, antes de qualquer medição, para caber no orçamento de inferência em CPU."
+    },
+    "sampling_seed": null
+  },
+  "symbolic": {
+    "tactics": [
+      "simp",
+      "aesop",
+      "omega",
+      "linarith",
+      "nlinarith"
+    ],
+    "per_tactic_timeout_seconds": 30,
+    "max_verifier_calls_per_goal": 5,
+    "heartbeats": 200000,
+    "success": "declaração compila sem erro e sem metas abertas",
+    "goals_per_split": 16,
+    "environment_splits": [
+      [
+        "native",
+        "random"
+      ],
+      [
+        "native",
+        "novel_premises"
+      ]
+    ],
+    "amendment_1": "2026-09-15T19:22Z: subconjunto reduzido de 32 para 16 metas por ambiente/split, antes de qualquer medição, para caber no orçamento de CPU.",
+    "amendment_2": "2026-09-15T19:30Z, antes de qualquer medição válida: táticas medidas no ambiente nativo (dataset-faithful); o ambiente moderno vira medição separada de portabilidade porque imports de 2024 foram renomeados. As cinco táticas rodam na mesma chamada com nomes renomeados, cada uma limitada por maxHeartbeats 200000; o timeout de parede é backstop de 30s por tática (150s por chamada).",
+    "portability": {
+      "env": "modern",
+      "split": "random",
+      "goals": 16,
+      "method": "cabeçalho com imports substituídos por `import Mathlib` e prova `by sorry`; sucesso de elaboração da afirmação",
+      "note": "mede se a afirmação de 2024 ainda elabora no mathlib v4.34.0"
+    },
+    "statement_policy": "cabeçalho do arquivo original preservado; corpo de prova substituído pela tática candidata; nenhuma alteração na afirmação"
+  },
+  "bm25": {
+    "implementation": "ReProver: rank_bm25 BM25Okapi (k1=1.5, b=0.75) sobre premissas serializadas; tokenizador BPE Whitespace vocab 30000",
+    "tokenizer_training": {
+      "premises": 10000,
+      "states": 10000,
+      "note": "subconjunto determinístico dos primeiros itens, para limitar custo; divergência registrada"
+    },
+    "query": "state_before de cada passo",
+    "accessible_premises": "premissas do mesmo arquivo antes da posição mais fechamento transitivo de imports",
+    "metrics": [
+      "R@1",
+      "R@10",
+      "MRR"
+    ]
+  },
+  "reprover": {
+    "model": "kaiyuy/leandojo-lean4-tacgen-byt5-small",
+    "revision": "67a2c53cc36186fe8539d0a342fc42c50edc68fd",
+    "decoding": {
+      "num_beams": 1,
+      "do_sample": false,
+      "max_inp_seq_len": 2048,
+      "max_oup_seq_len": 512,
+      "length_penalty": 0.0,
+      "device": "cpu"
+    },
+    "input": "state_before do primeiro passo do traço",
+    "postprocessing": "remove_marks (<a> e </a>)",
+    "metrics": [
+      "exact_match_normalizado_no_primeiro_passo",
+      "tatica_valida_lean",
+      "prova_completa"
+    ],
+    "verification_environment": "native",
+    "verification_amendment": "2026-09-15T19:30Z, antes de qualquer medição: verificação no ambiente nativo (mesmo commit do dataset), onde os cabeçalhos compilam sem reescrita.",
+    "retrieval": "não usado (baseline sem recuperação); retriever-tacgen não adquirido",
+    "validity_rule": "tática válida = compila sem erro diferente de metas abertas; prova completa = compila sem erro algum"
+  },
+  "divergence": {
+    "published_target": "ReProver avalia random/test com Lean v4.10.0-rc1 e mathlib 29dcec07",
+    "our_target": "random/val e novel_premises/val (desenvolvimento), test selado",
+    "portability": "táticas simbólicas medidas nos dois ambientes para quantificar a divergência de versões",
+    "bm25_tokenizer": "treinado em subconjunto, não no corpus completo do ReProver"
+  },
+  "gate": "produzir números reproduzíveis para táticas simbólicas e BM25 e uma medicao quantificada do ReProver tacgen sem recuperação, com divergências explícitas",
+  "stop_rules": [
+    "se a extração de declaração falhar, registrar taxa e excluir o caso",
+    "se o ReProver não gerar ou verificar, registrar bloqueio quantitativo",
+    "não abrir test.json em nenhum momento"
+  ]
+}

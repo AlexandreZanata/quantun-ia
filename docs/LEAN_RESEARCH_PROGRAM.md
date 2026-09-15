@@ -82,7 +82,9 @@ O registro canônico está em `research/lean/baselines.json`.
 
 ## Dados abertos e papéis
 
-- LeanDojo Benchmark v5: treino e desenvolvimento de tática/recuperação.
+- LeanDojo Benchmark 4 (Lean 4, mathlib4 `29dcec07`): treino e desenvolvimento de
+  tática/recuperação. O antigo LeanDojo Benchmark v5 foi verificado como Lean 3 e
+  está superseded em `research/lean/datasets.json`.
 - miniF2F: validação de desenvolvimento e teste final selado.
 - ProofNet Lean 4: avaliação secundária de matemática universitária, somente após
   auditoria da licença da porta.

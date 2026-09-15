@@ -145,7 +145,7 @@ def build_manifest(args: argparse.Namespace) -> dict[str, Any]:
         "id": args.id,
         "acquired_at": dt.datetime.now(dt.timezone.utc).isoformat(),
         "source": {
-            "record": "https://zenodo.org/records/10114157",
+            "record": f"https://zenodo.org/records/{zenodo.get('id')}",
             "doi": zenodo.get("doi"),
             "concept_doi": zenodo.get("conceptdoi"),
             "api_snapshot": f"research/lean/acquisitions/{Path(args.metadata_snapshot_out).name}",

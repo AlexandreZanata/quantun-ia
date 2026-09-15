@@ -16,15 +16,29 @@
   "datasets": [
     {
       "id": "leandojo_benchmark_v5",
-      "role": "training_and_development",
+      "role": "superseded_by_leandojo_benchmark_4",
       "source": "https://zenodo.org/records/10114157",
       "upstream": "https://github.com/lean-dojo/LeanDojo",
       "version_pin": "Zenodo record 10114157; archive leandojo_benchmark_v5.tar.gz",
       "published_size": "47.3 MB",
       "published_checksum": "md5:4b256200618d4668b12a9cfe8c4df4d3",
       "license": "CC BY 2.0 (dataset paper); audit transitive source licenses",
-      "status": "planned",
-      "reason": "Traços de prova e recuperação extraídos de mathlib."
+      "status": "acquired_lean3_mismatch",
+      "lean_version": "Lean 3 / mathlib3 (commit 19c869ef, mathlib repo)",
+      "reason": "Verificado em LTP-01/LTP-03: o dataset é Lean 3 e não serve ao alvo Lean 4. Substituído por leandojo_benchmark_4."
+    },
+    {
+      "id": "leandojo_benchmark_4",
+      "role": "training_and_development",
+      "source": "https://zenodo.org/records/12740403",
+      "upstream": "https://github.com/lean-dojo/ReProver",
+      "version_pin": "Zenodo record 12740403; archive leandojo_benchmark_4.tar.gz; mathlib4 commit 29dcec074de168ac2bf835a77ef68bbe069194c5",
+      "published_size": "68.1 MB",
+      "published_checksum": "md5:25e1ee60cd8925b9d2e8673ddcc34b4c",
+      "license": "CC BY 2.0 (dataset paper); licenças transitivas embutidas",
+      "status": "acquired_verified",
+      "lean_version": "Lean 4 / mathlib4 commit 29dcec07 (toolchain v4.10.0-rc1)",
+      "reason": "Dataset Lean 4 dos baselines ReProver; teste permanece selado."
     },
     {
       "id": "minif2f",

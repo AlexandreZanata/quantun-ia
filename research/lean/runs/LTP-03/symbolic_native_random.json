@@ -1,0 +1,549 @@
+{
+  "summary": {
+    "mode": "portfolio",
+    "env": "native",
+    "split": "random",
+    "goals": 16,
+    "goals_closed_by_portfolio": 2,
+    "pass_at_1_by_tactic": {
+      "simp": 0.0625,
+      "aesop": 0.125,
+      "omega": 0.0,
+      "linarith": 0.0,
+      "nlinarith": 0.0
+    },
+    "portfolio_pass_at_5": 0.125,
+    "wall_total_seconds": 282.191,
+    "peak_rss_max_bytes": 2032128000
+  },
+  "results": [
+    {
+      "split": "random",
+      "env": "native",
+      "mode": "portfolio",
+      "full_name": "WithLp.prod_nnnorm_eq_add",
+      "statement_sha256": "d803a26ba81db73cc3d10a2c9ed5305df44293d1732ce43fcb186b8e1dee70a7",
+      "status": "lean_error",
+      "exit_code": 1,
+      "wall_seconds": 12.966,
+      "peak_rss_bytes": 1579266048,
+      "per_tactic": {
+        "simp": {
+          "start_line": 612,
+          "verdict": "error"
+        },
+        "aesop": {
+          "start_line": 615,
+          "verdict": "error"
+        },
+        "omega": {
+          "start_line": 618,
+          "verdict": "error"
+        },
+        "linarith": {
+          "start_line": 621,
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "start_line": 624,
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "random",
+      "env": "native",
+      "mode": "portfolio",
+      "full_name": "CategoryTheory.ShortComplex.isIso₂_of_shortExact_of_isIso₁₃",
+      "statement_sha256": "beda0fe55a2312153ef36a46984e7dfd191f6012f25fd5fa297da97b1fb52d2e",
+      "status": "lean_error",
+      "exit_code": 1,
+      "wall_seconds": 3.0,
+      "peak_rss_bytes": 1260920832,
+      "per_tactic": {
+        "simp": {
+          "start_line": 144,
+          "verdict": "error"
+        },
+        "aesop": {
+          "start_line": 147,
+          "verdict": "error"
+        },
+        "omega": {
+          "start_line": 150,
+          "verdict": "error"
+        },
+        "linarith": {
+          "start_line": 153,
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "start_line": 156,
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "random",
+      "env": "native",
+      "mode": "portfolio",
+      "full_name": "nhdsWithin_pi_univ_eq",
+      "statement_sha256": "b5ef711a7922548e15c9ec962f9f38cbbd3db880279da7a33abbac7b4e58f389",
+      "status": "lean_error",
+      "exit_code": 1,
+      "wall_seconds": 2.881,
+      "peak_rss_bytes": 998965248,
+      "per_tactic": {
+        "simp": {
+          "start_line": 328,
+          "verdict": "error"
+        },
+        "aesop": {
+          "start_line": 331,
+          "verdict": "error"
+        },
+        "omega": {
+          "start_line": 334,
+          "verdict": "error"
+        },
+        "linarith": {
+          "start_line": 337,
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "start_line": 340,
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "random",
+      "env": "native",
+      "mode": "portfolio",
+      "full_name": "mem_adjoin_of_smul_prime_pow_smul_of_minpoly_isEisensteinAt",
+      "statement_sha256": "910003dc540d7467c887e210f8e88ffa37600e2956895740684ba1cec8af3e35",
+      "status": "timeout",
+      "exit_code": -9,
+      "wall_seconds": 150.309,
+      "peak_rss_bytes": 2032128000,
+      "per_tactic": {
+        "simp": {
+          "start_line": 380,
+          "verdict": "timeout"
+        },
+        "aesop": {
+          "start_line": 385,
+          "verdict": "timeout"
+        },
+        "omega": {
+          "start_line": 390,
+          "verdict": "timeout"
+        },
+        "linarith": {
+          "start_line": 395,
+          "verdict": "timeout"
+        },
+        "nlinarith": {
+          "start_line": 400,
+          "verdict": "timeout"
+        }
+      }
+    },
+    {
+      "split": "random",
+      "env": "native",
+      "mode": "portfolio",
+      "full_name": "MvPolynomial.degrees_map_of_injective",
+      "statement_sha256": "513174c5eb44f077338bb22d929373952730ff003bb696f83c6dcae7dc512a8e",
+      "status": "lean_error",
+      "exit_code": 1,
+      "wall_seconds": 5.413,
+      "peak_rss_bytes": 1243566080,
+      "per_tactic": {
+        "simp": {
+          "start_line": 216,
+          "verdict": "error"
+        },
+        "aesop": {
+          "start_line": 219,
+          "verdict": "error"
+        },
+        "omega": {
+          "start_line": 222,
+          "verdict": "error"
+        },
+        "linarith": {
+          "start_line": 225,
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "start_line": 228,
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "random",
+      "env": "native",
+      "mode": "portfolio",
+      "full_name": "CategoryTheory.ShortComplex.SnakeInput.w₁₃_τ₁",
+      "statement_sha256": "492da15d14952e9a2940530f1dacab718df0fad05c3e04f57a41a558338b6639",
+      "status": "lean_error",
+      "exit_code": 1,
+      "wall_seconds": 5.028,
+      "peak_rss_bytes": 1275392000,
+      "per_tactic": {
+        "simp": {
+          "start_line": 126,
+          "verdict": "error"
+        },
+        "aesop": {
+          "start_line": 128,
+          "verdict": "closed"
+        },
+        "omega": {
+          "start_line": 130,
+          "verdict": "error"
+        },
+        "linarith": {
+          "start_line": 132,
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "start_line": 134,
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "random",
+      "env": "native",
+      "mode": "portfolio",
+      "full_name": "MeasureTheory.lintegral_nnnorm_condexpL2_le",
+      "statement_sha256": "fdfd23617b41327737c5773f23ec61bf5080d286f950475fa7475b4a6c6b9b9d",
+      "status": "lean_error",
+      "exit_code": 1,
+      "wall_seconds": 15.454,
+      "peak_rss_bytes": 1835233280,
+      "per_tactic": {
+        "simp": {
+          "start_line": 163,
+          "verdict": "error"
+        },
+        "aesop": {
+          "start_line": 166,
+          "verdict": "error"
+        },
+        "omega": {
+          "start_line": 169,
+          "verdict": "error"
+        },
+        "linarith": {
+          "start_line": 172,
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "start_line": 175,
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "random",
+      "env": "native",
+      "mode": "portfolio",
+      "full_name": "CliffordAlgebra.star_smul",
+      "statement_sha256": "86778a7e43580f4d2097396ae9f15d9abcff7f04ecc6d7a95cff3e03bc58fa45",
+      "status": "lean_error",
+      "exit_code": 1,
+      "wall_seconds": 4.358,
+      "peak_rss_bytes": 1472475136,
+      "per_tactic": {
+        "simp": {
+          "start_line": 59,
+          "verdict": "error"
+        },
+        "aesop": {
+          "start_line": 61,
+          "verdict": "error"
+        },
+        "omega": {
+          "start_line": 63,
+          "verdict": "error"
+        },
+        "linarith": {
+          "start_line": 65,
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "start_line": 67,
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "random",
+      "env": "native",
+      "mode": "portfolio",
+      "full_name": "LieSubmodule.coe_toSubmodule_mk",
+      "statement_sha256": "637039423ae4de9713161cc723b41e5e8fcaf8e4ef2eb0668cbc3974ad988aba",
+      "status": "lean_error",
+      "exit_code": 1,
+      "wall_seconds": 4.67,
+      "peak_rss_bytes": 1432494080,
+      "per_tactic": {
+        "simp": {
+          "start_line": 134,
+          "verdict": "closed"
+        },
+        "aesop": {
+          "start_line": 137,
+          "verdict": "closed"
+        },
+        "omega": {
+          "start_line": 140,
+          "verdict": "error"
+        },
+        "linarith": {
+          "start_line": 143,
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "start_line": 146,
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "random",
+      "env": "native",
+      "mode": "portfolio",
+      "full_name": "Complex.abs_im_div_abs_le_one",
+      "statement_sha256": "551a5dea1e137c84b83b67fa3ead52e228527b733c54e9a088aa2153851b84d3",
+      "status": "lean_error",
+      "exit_code": 1,
+      "wall_seconds": 5.891,
+      "peak_rss_bytes": 1280221184,
+      "per_tactic": {
+        "simp": {
+          "start_line": 239,
+          "verdict": "error"
+        },
+        "aesop": {
+          "start_line": 241,
+          "verdict": "error"
+        },
+        "omega": {
+          "start_line": 243,
+          "verdict": "error"
+        },
+        "linarith": {
+          "start_line": 245,
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "start_line": 247,
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "random",
+      "env": "native",
+      "mode": "portfolio",
+      "full_name": "NumberField.InfinitePlace.not_isReal_iff_isComplex",
+      "statement_sha256": "9d2c626f7c4126d3588527508d19ccf6510ea3896747883512e5c1646ba521cf",
+      "status": "lean_error",
+      "exit_code": 1,
+      "wall_seconds": 14.62,
+      "peak_rss_bytes": 2007347200,
+      "per_tactic": {
+        "simp": {
+          "start_line": 403,
+          "verdict": "error"
+        },
+        "aesop": {
+          "start_line": 405,
+          "verdict": "error"
+        },
+        "omega": {
+          "start_line": 407,
+          "verdict": "error"
+        },
+        "linarith": {
+          "start_line": 409,
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "start_line": 411,
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "random",
+      "env": "native",
+      "mode": "portfolio",
+      "full_name": "smul_finsum",
+      "statement_sha256": "d5fe3f15568010703ac3b674a9e8729012ca5834604202377f4ac875906e6f59",
+      "status": "lean_error",
+      "exit_code": 1,
+      "wall_seconds": 6.144,
+      "peak_rss_bytes": 980254720,
+      "per_tactic": {
+        "simp": {
+          "start_line": 342,
+          "verdict": "error"
+        },
+        "aesop": {
+          "start_line": 345,
+          "verdict": "error"
+        },
+        "omega": {
+          "start_line": 348,
+          "verdict": "error"
+        },
+        "linarith": {
+          "start_line": 351,
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "start_line": 354,
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "random",
+      "env": "native",
+      "mode": "portfolio",
+      "full_name": "MeasureTheory.tilted_apply_eq_ofReal_integral",
+      "statement_sha256": "754405d39788dd5496848af0a956806fb8509a4237bd5234256aa78629319f9e",
+      "status": "lean_error",
+      "exit_code": 1,
+      "wall_seconds": 4.567,
+      "peak_rss_bytes": 1814482944,
+      "per_tactic": {
+        "simp": {
+          "start_line": 116,
+          "verdict": "error"
+        },
+        "aesop": {
+          "start_line": 119,
+          "verdict": "error"
+        },
+        "omega": {
+          "start_line": 122,
+          "verdict": "error"
+        },
+        "linarith": {
+          "start_line": 125,
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "start_line": 128,
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "random",
+      "env": "native",
+      "mode": "portfolio",
+      "full_name": "nilpotencyClass_prod",
+      "statement_sha256": "7510d62ad9da6380c0644f243992950302f658affec233caa08ec1fd6ab0b606",
+      "status": "lean_error",
+      "exit_code": 1,
+      "wall_seconds": 17.603,
+      "peak_rss_bytes": 1405407232,
+      "per_tactic": {
+        "simp": {
+          "start_line": 731,
+          "verdict": "error"
+        },
+        "aesop": {
+          "start_line": 735,
+          "verdict": "error"
+        },
+        "omega": {
+          "start_line": 739,
+          "verdict": "error"
+        },
+        "linarith": {
+          "start_line": 743,
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "start_line": 747,
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "random",
+      "env": "native",
+      "mode": "portfolio",
+      "full_name": "Ideal.fg_ker_comp",
+      "statement_sha256": "901673a3238b6b6eb4d3d81a3e9f72731c32324a31169d652783b308a684d508",
+      "status": "lean_error",
+      "exit_code": 1,
+      "wall_seconds": 26.602,
+      "peak_rss_bytes": 1307369472,
+      "per_tactic": {
+        "simp": {
+          "start_line": 501,
+          "verdict": "error"
+        },
+        "aesop": {
+          "start_line": 505,
+          "verdict": "error"
+        },
+        "omega": {
+          "start_line": 509,
+          "verdict": "error"
+        },
+        "linarith": {
+          "start_line": 513,
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "start_line": 517,
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "random",
+      "env": "native",
+      "mode": "portfolio",
+      "full_name": "GromovHausdorff.one_le_maxVar",
+      "statement_sha256": "7747c8463f9bf7135ddfc4c3191fe783eb3006dfc47662b70cd7aa07f6a8335b",
+      "status": "lean_error",
+      "exit_code": 1,
+      "wall_seconds": 2.685,
+      "peak_rss_bytes": 1482338304,
+      "per_tactic": {
+        "simp": {
+          "start_line": 78,
+          "verdict": "error"
+        },
+        "aesop": {
+          "start_line": 82,
+          "verdict": "error"
+        },
+        "omega": {
+          "start_line": 86,
+          "verdict": "error"
+        },
+        "linarith": {
+          "start_line": 90,
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "start_line": 94,
+          "verdict": "error"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,549 @@
+{
+  "summary": {
+    "mode": "portfolio",
+    "env": "native",
+    "split": "novel_premises",
+    "goals": 16,
+    "goals_closed_by_portfolio": 2,
+    "pass_at_1_by_tactic": {
+      "simp": 0.0,
+      "aesop": 0.0625,
+      "omega": 0.0,
+      "linarith": 0.0,
+      "nlinarith": 0.0625
+    },
+    "portfolio_pass_at_5": 0.125,
+    "wall_total_seconds": 212.898,
+    "peak_rss_max_bytes": 1530150912
+  },
+  "results": [
+    {
+      "split": "novel_premises",
+      "env": "native",
+      "mode": "portfolio",
+      "full_name": "PrimeSpectrum.range_comap_of_surjective",
+      "statement_sha256": "3f71276c9b0c60813faa8af1bb8f23d9f68e606b13205315ef581bd8c644cea0",
+      "status": "lean_error",
+      "exit_code": 1,
+      "wall_seconds": 13.024,
+      "peak_rss_bytes": 1530150912,
+      "per_tactic": {
+        "simp": {
+          "start_line": 752,
+          "verdict": "error"
+        },
+        "aesop": {
+          "start_line": 755,
+          "verdict": "error"
+        },
+        "omega": {
+          "start_line": 758,
+          "verdict": "error"
+        },
+        "linarith": {
+          "start_line": 761,
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "start_line": 764,
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "novel_premises",
+      "env": "native",
+      "mode": "portfolio",
+      "full_name": "DirectSum.toAddMonoidAlgebra_mul",
+      "statement_sha256": "2d39b2d9ee80848089a7ad214b91d797283ee8c509145888f6144328fa854fea",
+      "status": "lean_error",
+      "exit_code": 1,
+      "wall_seconds": 5.563,
+      "peak_rss_bytes": 1206984704,
+      "per_tactic": {
+        "simp": {
+          "start_line": 183,
+          "verdict": "error"
+        },
+        "aesop": {
+          "start_line": 187,
+          "verdict": "error"
+        },
+        "omega": {
+          "start_line": 191,
+          "verdict": "error"
+        },
+        "linarith": {
+          "start_line": 195,
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "start_line": 199,
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "novel_premises",
+      "env": "native",
+      "mode": "portfolio",
+      "full_name": "Substring.Valid.isEmpty",
+      "statement_sha256": "5f73835f2cde8a0b2646bebc556538c81295198acedf1182c031ecbe8390739c",
+      "status": "lean_error",
+      "exit_code": 1,
+      "wall_seconds": 12.477,
+      "peak_rss_bytes": 420208640,
+      "per_tactic": {
+        "simp": {
+          "start_line": 962,
+          "verdict": "error"
+        },
+        "aesop": {
+          "start_line": 965,
+          "verdict": "error"
+        },
+        "omega": {
+          "start_line": 968,
+          "verdict": "error"
+        },
+        "linarith": {
+          "start_line": 971,
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "start_line": 974,
+          "verdict": "closed"
+        }
+      }
+    },
+    {
+      "split": "novel_premises",
+      "env": "native",
+      "mode": "portfolio",
+      "full_name": "IsSelfAdjoint.zpow",
+      "statement_sha256": "8381683a94d00f658a928b3fa3b2527abb16463c814d4f21c935f03219532cdf",
+      "status": "lean_error",
+      "exit_code": 1,
+      "wall_seconds": 2.889,
+      "peak_rss_bytes": 928681984,
+      "per_tactic": {
+        "simp": {
+          "start_line": 271,
+          "verdict": "error"
+        },
+        "aesop": {
+          "start_line": 273,
+          "verdict": "error"
+        },
+        "omega": {
+          "start_line": 275,
+          "verdict": "error"
+        },
+        "linarith": {
+          "start_line": 277,
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "start_line": 279,
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "novel_premises",
+      "env": "native",
+      "mode": "portfolio",
+      "full_name": "Finsupp.univ_sum_single_apply'",
+      "statement_sha256": "84b30728bbab5d91cd03e9c79c61dd287f04ec96fe0cc1f0555f6896cf6a9a73",
+      "status": "lean_error",
+      "exit_code": 1,
+      "wall_seconds": 17.263,
+      "peak_rss_bytes": 1056079872,
+      "per_tactic": {
+        "simp": {
+          "start_line": 474,
+          "verdict": "error"
+        },
+        "aesop": {
+          "start_line": 477,
+          "verdict": "error"
+        },
+        "omega": {
+          "start_line": 480,
+          "verdict": "error"
+        },
+        "linarith": {
+          "start_line": 483,
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "start_line": 486,
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "novel_premises",
+      "env": "native",
+      "mode": "portfolio",
+      "full_name": "Ring.DirectLimit.lift_unique",
+      "statement_sha256": "6af67c7fa5526d334eca562c8601389f63b67cb346bc0d62bf52fe3fe3c64f18",
+      "status": "lean_error",
+      "exit_code": 1,
+      "wall_seconds": 40.528,
+      "peak_rss_bytes": 1445613568,
+      "per_tactic": {
+        "simp": {
+          "start_line": 864,
+          "verdict": "error"
+        },
+        "aesop": {
+          "start_line": 867,
+          "verdict": "error"
+        },
+        "omega": {
+          "start_line": 870,
+          "verdict": "error"
+        },
+        "linarith": {
+          "start_line": 873,
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "start_line": 876,
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "novel_premises",
+      "env": "native",
+      "mode": "portfolio",
+      "full_name": "MonoidHom.comp_inv",
+      "statement_sha256": "16c2a81c395038d569085906008645e562c5f3c5792c28b0b5c7fd6360d39b66",
+      "status": "lean_error",
+      "exit_code": 1,
+      "wall_seconds": 1.773,
+      "peak_rss_bytes": 714076160,
+      "per_tactic": {
+        "simp": {
+          "start_line": 254,
+          "verdict": "error"
+        },
+        "aesop": {
+          "start_line": 256,
+          "verdict": "closed"
+        },
+        "omega": {
+          "start_line": 258,
+          "verdict": "error"
+        },
+        "linarith": {
+          "start_line": 260,
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "start_line": 262,
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "novel_premises",
+      "env": "native",
+      "mode": "portfolio",
+      "full_name": "AddCommGroup.DirectLimit.congr_symm_apply_of",
+      "statement_sha256": "b16ec957943236b12c6bbf663e1b0bf864e54ce83533f9788c6ef065cb881300",
+      "status": "lean_error",
+      "exit_code": 1,
+      "wall_seconds": 23.857,
+      "peak_rss_bytes": 1337311232,
+      "per_tactic": {
+        "simp": {
+          "start_line": 532,
+          "verdict": "error"
+        },
+        "aesop": {
+          "start_line": 538,
+          "verdict": "error"
+        },
+        "omega": {
+          "start_line": 544,
+          "verdict": "error"
+        },
+        "linarith": {
+          "start_line": 550,
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "start_line": 556,
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "novel_premises",
+      "env": "native",
+      "mode": "portfolio",
+      "full_name": "List.perm_merge",
+      "statement_sha256": "19f6d7f83b0ecf718b0d6f22b3c31c8c674f1ec8eeeb5f9e70788b63fe2d48e0",
+      "status": "lean_error",
+      "exit_code": 1,
+      "wall_seconds": 3.081,
+      "peak_rss_bytes": 395718656,
+      "per_tactic": {
+        "simp": {
+          "start_line": 708,
+          "verdict": "error"
+        },
+        "aesop": {
+          "start_line": 710,
+          "verdict": "error"
+        },
+        "omega": {
+          "start_line": 712,
+          "verdict": "error"
+        },
+        "linarith": {
+          "start_line": 714,
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "start_line": 716,
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "novel_premises",
+      "env": "native",
+      "mode": "portfolio",
+      "full_name": "NonUnitalSubring.unitization_range",
+      "statement_sha256": "cdda08129fbeb2a7813a6d32856f0cda40a4b3a5af7f2a0576387503bccaa8b4",
+      "status": "lean_error",
+      "exit_code": 1,
+      "wall_seconds": 44.917,
+      "peak_rss_bytes": 1324429312,
+      "per_tactic": {
+        "simp": {
+          "start_line": 290,
+          "verdict": "error"
+        },
+        "aesop": {
+          "start_line": 293,
+          "verdict": "error"
+        },
+        "omega": {
+          "start_line": 296,
+          "verdict": "error"
+        },
+        "linarith": {
+          "start_line": 299,
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "start_line": 302,
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "novel_premises",
+      "env": "native",
+      "mode": "portfolio",
+      "full_name": "HomologicalComplex.HomologySequence.quasiIso_τ₃",
+      "statement_sha256": "3f55b0d1895a20565c81d2438489ca2dc88d4b42acb447d42370fc272cda56b5",
+      "status": "lean_error",
+      "exit_code": 1,
+      "wall_seconds": 19.55,
+      "peak_rss_bytes": 1395662848,
+      "per_tactic": {
+        "simp": {
+          "start_line": 166,
+          "verdict": "error"
+        },
+        "aesop": {
+          "start_line": 169,
+          "verdict": "error"
+        },
+        "omega": {
+          "start_line": 172,
+          "verdict": "error"
+        },
+        "linarith": {
+          "start_line": 175,
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "start_line": 178,
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "novel_premises",
+      "env": "native",
+      "mode": "portfolio",
+      "full_name": "IsSl2Triple.HasPrimitiveVectorWith.mk'",
+      "statement_sha256": "261ba4ac86e71b82a1d05813bc434a16002b019e18d6d6cca001585dd60aca67",
+      "status": "lean_error",
+      "exit_code": 1,
+      "wall_seconds": 3.826,
+      "peak_rss_bytes": 1431715840,
+      "per_tactic": {
+        "simp": {
+          "start_line": 84,
+          "verdict": "error"
+        },
+        "aesop": {
+          "start_line": 93,
+          "verdict": "error"
+        },
+        "omega": {
+          "start_line": 102,
+          "verdict": "error"
+        },
+        "linarith": {
+          "start_line": 111,
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "start_line": 120,
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "novel_premises",
+      "env": "native",
+      "mode": "portfolio",
+      "full_name": "List.length_sigma",
+      "statement_sha256": "5969cd83116d370fe014695d24abe5c3db2cc734ebeaa99a7dbdcb7cc473e78f",
+      "status": "lean_error",
+      "exit_code": 1,
+      "wall_seconds": 5.52,
+      "peak_rss_bytes": 870998016,
+      "per_tactic": {
+        "simp": {
+          "start_line": 713,
+          "verdict": "error"
+        },
+        "aesop": {
+          "start_line": 716,
+          "verdict": "error"
+        },
+        "omega": {
+          "start_line": 719,
+          "verdict": "error"
+        },
+        "linarith": {
+          "start_line": 722,
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "start_line": 725,
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "novel_premises",
+      "env": "native",
+      "mode": "portfolio",
+      "full_name": "Batteries.RBNode.insert_toList_zoom",
+      "statement_sha256": "27e9f1cd7c6da0118c7c499b1a4f3a38de08b03a21fb88127e1b454af949600a",
+      "status": "lean_error",
+      "exit_code": 1,
+      "wall_seconds": 7.382,
+      "peak_rss_bytes": 423243776,
+      "per_tactic": {
+        "simp": {
+          "start_line": 745,
+          "verdict": "error"
+        },
+        "aesop": {
+          "start_line": 749,
+          "verdict": "error"
+        },
+        "omega": {
+          "start_line": 753,
+          "verdict": "error"
+        },
+        "linarith": {
+          "start_line": 757,
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "start_line": 761,
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "novel_premises",
+      "env": "native",
+      "mode": "portfolio",
+      "full_name": "min_mul_distrib'",
+      "statement_sha256": "897a1fa4ac0ab30b243b68b116831131ebd24bf0661dc8803e46427c34713a72",
+      "status": "lean_error",
+      "exit_code": 1,
+      "wall_seconds": 4.975,
+      "peak_rss_bytes": 736976896,
+      "per_tactic": {
+        "simp": {
+          "start_line": 356,
+          "verdict": "error"
+        },
+        "aesop": {
+          "start_line": 358,
+          "verdict": "error"
+        },
+        "omega": {
+          "start_line": 360,
+          "verdict": "error"
+        },
+        "linarith": {
+          "start_line": 362,
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "start_line": 364,
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "novel_premises",
+      "env": "native",
+      "mode": "portfolio",
+      "full_name": "MvPolynomial.totalDegree_pow",
+      "statement_sha256": "1454765b8b717fbd2a1290f30834ca982bd8e9d647e06e7495c140634aeca3b7",
+      "status": "lean_error",
+      "exit_code": 1,
+      "wall_seconds": 6.273,
+      "peak_rss_bytes": 1259741184,
+      "per_tactic": {
+        "simp": {
+          "start_line": 449,
+          "verdict": "error"
+        },
+        "aesop": {
+          "start_line": 452,
+          "verdict": "error"
+        },
+        "omega": {
+          "start_line": 455,
+          "verdict": "error"
+        },
+        "linarith": {
+          "start_line": 458,
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "start_line": 461,
+          "verdict": "error"
+        }
+      }
+    }
+  ]
+}

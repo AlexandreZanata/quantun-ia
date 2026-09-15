@@ -1,0 +1,17 @@
+{
+  "limit": 32,
+  "splits": [
+    {
+      "split": "random",
+      "attempts": 33,
+      "extracted": 32,
+      "failures": []
+    },
+    {
+      "split": "novel_premises",
+      "attempts": 33,
+      "extracted": 32,
+      "failures": []
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "summaries": [
+    {
+      "split": "random",
+      "proofs": 50,
+      "queries": 125,
+      "steps_without_positive": 65,
+      "R@1": 9.0032,
+      "R@10": 24.0997,
+      "R@32": 30.614,
+      "MRR": 0.2242
+    },
+    {
+      "split": "novel_premises",
+      "proofs": 50,
+      "queries": 154,
+      "steps_without_positive": 69,
+      "R@1": 2.132,
+      "R@10": 15.5442,
+      "R@32": 20.5568,
+      "MRR": 0.1199
+    }
+  ]
+}
