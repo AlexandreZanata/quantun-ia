@@ -1,5 +1,9 @@
 # Results — EXP 025 (Pima Generalization)
 
+> **Audit 2026-09-15:** retained as internal evidence of no quantum advantage.
+> This study used one holdout protocol and lacks the promised external
+> pre-registration and independent replication.
+
 **Run date:** 2026-06-18  
 **Profile:** publication, 30 seeds
 **Dataset:** pima_diabetes (OpenML id=37), full 768 samples, 30% holdout

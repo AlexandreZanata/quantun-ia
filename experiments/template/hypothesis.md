@@ -1,18 +1,38 @@
-# Hypothesis — EXP [number]
+# Cartão de pré-registro — EXP [ID]
 
-**Date:** ____
-**Author:** ____
+**Status:** draft — execução proibida
+**Data:** YYYY-MM-DD
+**Responsável científico:**
 
-## What I expect to happen
-[Write in clear English, no jargon]
+## Hipótese primária e falsificação
 
-## Why I expect this
-[Reasoning behind the hypothesis]
+- Hipótese:
+- Resultado que a refuta:
+- Desfecho primário:
+- Margem mínima relevante:
 
-## What would prove me wrong
-[Be specific: "if accuracy is X% lower than Y..."]
+## Dados e firewall
 
-## Metrics I will measure
-- [ ] Final accuracy
-- [ ] Convergence epoch
-- [ ] Training time
+- Dataset, versão, licença e SHA-256:
+- Split de desenvolvimento:
+- Split confirmatório selado:
+- Variáveis proibidas/leakage:
+
+## Comparações
+
+- Baseline forte:
+- Baseline pareada em parâmetros:
+- Controles negativos:
+
+## Estatística e orçamento
+
+- Teste, correção de multiplicidade e intervalo:
+- Análise de potência:
+- Seeds fixas:
+- Limites de CPU, GPU, QPU, tempo e disco:
+
+## Congelamento
+
+- SHA-256 deste cartão:
+- Data/hora anterior à primeira execução:
+- Aprovação humana:

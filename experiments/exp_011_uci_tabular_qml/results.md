@@ -1,5 +1,9 @@
 # Results — EXP 011 (UCI Tabular QML)
 
+> **Audit 2026-09-15:** retained as internal reproducible evidence of a negative
+> QML result. The historical “accepted” verdict below means the predeclared
+> comparison was resolved; it is not external confirmation or quantum advantage.
+
 **Run date:** 2026-06-17  
 **Profile:** ci, 10 seeds
 **Dataset:** breast_cancer (UCI), 30% holdout

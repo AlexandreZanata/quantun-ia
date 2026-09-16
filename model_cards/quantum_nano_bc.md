@@ -12,6 +12,11 @@ datasets:
 
 # QuantumNano-BC — Hybrid QML Nano Model
 
+> **AUDIT STATUS (2026-09-15): INTERNAL BASELINE ONLY.** This checkpoint is
+> preserved for reproducibility. It is not clinically validated, externally
+> confirmed, or evidence of quantum advantage; logistic regression scored higher
+> in the recorded 30-seed comparison.
+
 **Generated:** 2026-06-18  
 **Experiment:** `exp_024` (QuantumNano-BC flagship)  
 **Architecture:** `hybrid_sandwich` (4 qubits, 2 re-upload layers)  
@@ -54,6 +59,8 @@ python experiments/exp_024_quantum_nano_bc/run.py --profile publication
 - Nano parameter budget (~150–300 trainable parameters)
 - Single holdout protocol; no nested cross-validation
 - Results vary by seed list in `config/experiments.yaml`
+- External pre-registration promised by the historical protocol was not completed
+- No independent replication or real quantum hardware execution
 
 ## Citation
 

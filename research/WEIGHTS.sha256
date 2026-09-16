@@ -1,0 +1,16 @@
+# Active baseline retained from exp_024
+4568fe94c50137a676cebe9daefe4388a95e155d36accbb202bdc78a81c435b1  dist/serve_models/quantum_nano_bc/best.pt
+8831dedbb397ca372b5cc2b0e8f818268867f7cd8f916fd4a75f3d478c0eef0f  dist/serve_models/quantum_nano_bc/exports/torchscript/model.pt
+a570405343beca78d54bb388a891a4fcf581012b6b16e1dfbc40d7318deab7e6  dist/serve_models/quantum_nano_bc/scaler.joblib
+
+# Canonical archived checkpoints (local, recoverable; not active claims)
+f8aa5c616eace6dd989adfa6ec0c8cf3223880b2cfba6c336e78fae1d8332653  .local/archive/2026-09-15-research-reset/legacy_weights/large_nano_hybrid_higgs/best.pt
+c1baaebf9ed608d60ee0823b2f5160ea83a8d3e7af9c79a22f7a3217afa3cd71  .local/archive/2026-09-15-research-reset/legacy_weights/large_nano_mlp_acyd_maize/best.pt
+911fb9fa8fc60b139bab927ebde5347113357be7f2b328dce174d2b099adaa38  .local/archive/2026-09-15-research-reset/legacy_weights/large_nano_mlp_acyd_soy/best.pt
+8bfaf42b4e43585d5a94e2aff2a1850baba4b11514ed991bb895e67e6e85db45  .local/archive/2026-09-15-research-reset/legacy_weights/large_nano_mlp_gobug/best.pt
+feaae63df30f307c743f26d08aff2a86c4ce9231292b1499854a3c55c6fe6dce  .local/archive/2026-09-15-research-reset/legacy_weights/large_nano_mlp_higgs/best.pt
+f5c2ce371126fb316bdc3a6378e778a567c589dabcff45108e79693347fa15e4  .local/archive/2026-09-15-research-reset/legacy_weights/large_nano_mlp_nihr/best.pt
+af89bf96a12faa32c0fd33473c1a81e6d0732b66d4f5d990fd4dd9adc719bbd2  .local/archive/2026-09-15-research-reset/legacy_weights/large_nano_mlp_synthea/best.pt
+af89bf96a12faa32c0fd33473c1a81e6d0732b66d4f5d990fd4dd9adc719bbd2  .local/archive/2026-09-15-research-reset/legacy_weights/large_nano_mlp_synthea_calibrated/best.pt
+f60906b24fcf100cf1159011ea20e8b496f258a33e54fd0e9ef026dea71480f5  .local/archive/2026-09-15-research-reset/legacy_weights/nano_unet_cifar/model.pt
+15254726c09a0cd6a89c01598cb172989ed9dfbd7da84f77071f70424b031f49  .local/archive/2026-09-15-research-reset/legacy_weights/residual_nano_distill_acyd_maize/best.pt

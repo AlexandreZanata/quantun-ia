@@ -1,283 +1,53 @@
-name: CI
+name: Lean Research CI
 
 on:
   push:
     branches: [main, master, develop]
   pull_request:
     branches: [main, master, develop]
-  schedule:
-    # Weekly integration smoke — catch dependency drift (Phase 18b ops)
-    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 concurrency:
-  group: ci-${{ github.ref }}
+  group: lean-research-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  lint:
-    name: Lint
+  formal-research-gate:
+    name: Formal Research Gate
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      PYTHONUNBUFFERED: "1"
+      LEAN_NUM_THREADS: "1"
+
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout frozen research state
+        uses: actions/checkout@v7
 
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: "3.12"
-          cache: pip
 
-      - name: Install dependencies
-        run: |
-          pip install ruff
-          pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
-          pip install -r requirements.lock
+      - name: Install lightweight test runner
+        run: python -m pip install --disable-pip-version-check pytest==9.0.3
 
-      - name: Run ruff
-        run: ruff check src/ tests/ scripts/
+      - name: Validate hypotheses, acquisitions and verifier unit tests
+        run: make PYTHON=python check
 
-  typecheck:
-    name: Type Check (mypy)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
+      - name: Set up pinned Lean and mathlib
+        uses: leanprover/lean-action@v1
         with:
-          python-version: "3.12"
-          cache: pip
+          lake-package-directory: lean
+          auto-config: "false"
+          build: "true"
+          test: "false"
+          lint: "false"
+          mk_all-check: "false"
+          use-mathlib-cache: "true"
 
-      - name: Install dependencies
-        run: |
-          pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
-          pip install -r requirements-dev.txt
-          pip install types-PyYAML
-
-      - name: Run mypy
-        run: mypy src/training src/quantum
-
-  security-audit:
-    name: pip-audit
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
-          cache: pip
-
-      - name: Install pip-audit
-        run: pip install pip-audit
-
-      - name: Audit dependencies
-        run: pip-audit -r requirements.lock
-
-  test:
-    name: Unit Tests
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
-          cache: pip
-
-      - name: Install PyTorch (CPU)
-        run: pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
-
-      - name: Install dependencies
-        run: pip install -r requirements-dev.txt
-
-      - name: Run tests with coverage
-        env:
-          MLFLOW_DISABLE: "1"
-        run: |
-          mkdir -p logs
-          pytest tests/ \
-            --ignore=tests/real \
-            -m "not real" \
-            --cov=src \
-            --cov-report=xml \
-            --cov-report=term-missing \
-            --cov-fail-under=80 \
-            -q
-
-      - name: Upload coverage
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: coverage.xml
-
-  experiment-smoke:
-    name: Experiment Smoke (CI profile)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
-          cache: pip
-
-      - name: Install PyTorch (CPU)
-        run: pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
-
-      - name: Install dependencies
-        run: pip install -r requirements-dev.txt
-
-      - name: Run integration smoke test
-        env:
-          MLFLOW_DISABLE: "1"
-        run: pytest tests/integration/ tests/contracts/ -m "not real" -q
-
-  e2e:
-    name: E2E (API + JWT + async jobs)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
-          cache: pip
-
-      - name: Install PyTorch (CPU)
-        run: pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
-
-      - name: Install dependencies
-        run: pip install -r requirements-dev.txt
-
-      - name: Run e2e tests
-        env:
-          MLFLOW_DISABLE: "1"
-        run: pytest tests/e2e/ -v
-
-  docker-test:
-    name: Docker Test Suite
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v4
-
-      - name: Build test image
-        run: docker compose -f docker-compose.test.yml build test
-
-      - name: Run tests in Docker
-        run: docker compose -f docker-compose.test.yml run --rm test
-
-      - name: Run lint in Docker
-        run: docker compose -f docker-compose.test.yml run --rm lint
-
-  smoke-import:
-    name: Smoke Import Check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
-          cache: pip
-
-      - name: Install PyTorch (CPU)
-        run: pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
-
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.lock
-          pip install pytest
-
-      - name: Verify core imports
-        run: |
-          python -c "import pennylane; print('PennyLane:', pennylane.__version__)"
-          python -c "import torch; print('PyTorch:', torch.__version__)"
-          python -c "import streamlit; print('Streamlit OK')"
-          python -m pytest tests/smoke/ -v
-
-  packaging:
-    name: Editable Install
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
-          cache: pip
-
-      - name: Install PyTorch (CPU)
-        run: pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
-
-      - name: Install package editable
-        run: pip install -e ".[dev]" 2>/dev/null || pip install -e . && pip install -r requirements-dev.txt
-
-      - name: Verify entry point and CLI module
-        run: |
-          python -c "from importlib.metadata import entry_points; scripts = entry_points(group='console_scripts'); assert any(s.name == 'qml-run' for s in scripts)"
-          python -c "from scripts.cli import main; assert main([__import__('pathlib').Path('nope.py')]) == 1"
-
-  paper-build:
-    name: Paper Build (LaTeX)
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
-          cache: pip
-
-      - name: Install TeX Live
-        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends texlive-latex-base texlive-latex-recommended texlive-fonts-recommended texlive-bibtex-extra
-
-      - name: Install Python dependencies
-        run: |
-          pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
-          pip install -r requirements-dev.txt
-          pip install -e .
-
-      - name: Build paper PDF
-        env:
-          MLFLOW_DISABLE: "1"
-        run: |
-          mkdir -p logs
-          cp tests/contracts/fixtures/sample_experiments.jsonl logs/experiments.jsonl
-          make paper-build
-          make arxiv-bundle-sources
-
-  open-science-preflight:
-    name: Open Science Preflight (Zenodo readiness)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
-          cache: pip
-
-      - name: Install dependencies
-        run: |
-          pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
-          pip install -r requirements-dev.txt
-          pip install -e .
-
-      - name: Run open-science preflight
-        env:
-          MLFLOW_DISABLE: "1"
-        run: python scripts/open_science_preflight.py
+      - name: Run adversarial Lean kernel gate with clean replay
+        run: make PYTHON=python lean-gate

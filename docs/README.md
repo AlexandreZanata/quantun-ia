@@ -1,49 +1,18 @@
-# Documentation Index
+# Documentação ativa
 
-Welcome to the **Quantum-Inspired Micro ML Lab** documentation.
+- [`CI.md`](CI.md): gate único do GitHub Actions para a pesquisa Lean.
+- [`LEAN_RESEARCH_PROGRAM.md`](LEAN_RESEARCH_PROGRAM.md): programa ativo de
+  matemática formal, Lean, 100 hipóteses e gates.
+- [`RESEARCH_RESET.md`](RESEARCH_RESET.md): auditoria, decisões e arquivo.
+- [`PROTOCOL.md`](PROTOCOL.md): protocolo do legado QML retido.
+- [`../research/lean/hypotheses.json`](../research/lean/hypotheses.json):
+  registro executável das 100 hipóteses.
+- [`../research/lean/datasets.json`](../research/lean/datasets.json) e
+  [`../research/lean/baselines.json`](../research/lean/baselines.json):
+  filas auditáveis de aquisição e comparação.
+- [`../research/evidence_registry.json`](../research/evidence_registry.json):
+  evidências históricas QML mantidas.
 
-## Guides
-
-| Document | Description |
-|----------|-------------|
-| [Getting Started](getting-started.md) | Install, venv, Docker, dashboard, run all experiments |
-| [Architecture](architecture.md) | Code structure, module responsibilities, data flow |
-| [Experiments](experiments.md) | All 21 experiments — goals, ablations, known flags |
-| [Literature Review](literature_review.md) | Phase 4 barren plateau and adaptive LR context |
-| [Baselines](baselines.md) | Literature comparison for real-data experiments |
-| [Negative Results](negative_results.md) | Documented honest failures (exp_005, 007, 003, 009) |
-| [Reproducibility](reproducibility.md) | NeurIPS-style reproducibility checklist |
-| [Research Agenda](research_agenda.md) | 12-month falsifiable experiment roadmap |
-| [MicroQML Bench](microqml_bench.md) | Versioned benchmark suite v1 (Phase 17) |
-| [Compute Environment](compute_environment.md) | Hardware/software profile for publication numbers |
-| [Ethics & Data Use](ethics.md) | UCI/MNIST data statement and responsible use |
-| [Zenodo Release](zenodo.md) | DOI archival guide for v0.9.1+ |
-| [DVC Remote](dvc_remote.md) | Artifact remote setup and `dvc push` |
-| [Hypothesis Workflow](hypothesis-workflow.md) | Mandatory hypothesis-first discipline |
-| [Testing](testing.md) | Test pyramid, coverage thresholds, CI pipeline |
-| [Docker](docker.md) | Container services, Makefile targets, troubleshooting |
-
-## Quick Reference
-
-```bash
-# Local workflow
-source .venv/bin/activate
-pytest tests/ -v
-python experiments/exp_001_quantum_vs_classical/run.py
-make dashboard-local          # http://localhost:8501
-
-# Docker workflow
-make docker-build && make test && make experiment && make dashboard
-```
-
-## Conventions
-
-- **Language:** All code, comments, docs, and commit messages are in English
-- **Logs:** `logs/experiments.jsonl` is append-only — never delete entries
-- **Hypothesis:** Write `hypothesis.md` before every `run.py` execution
-- **Results:** Fill `results.md` after every experiment completes
-- **Config:** Hyperparameters in `config/experiments.yaml`, loaded via `src/training/config.py`
-- **Splits:** `src/data/splits.py` — stratified train/test before any preprocessing
-- **Holdout:** `src/training/holdout.py` — train on train, eval on test, multi-seed summary
-- **Seeds:** 10 seeds in `publication` profile for statistical rigor
-- **Citation:** Use [CITATION.cff](../CITATION.cff) when referencing this software
+Documentação histórica foi retirada do fluxo ativo porque misturava hipóteses,
+smokes, resultados negativos e alegações. Ela está preservada em
+`.local/archive/2026-09-15-research-reset/legacy_docs/` e no commit `9918975`.

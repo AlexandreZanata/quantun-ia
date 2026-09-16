@@ -1,5 +1,9 @@
 # Results — EXP 012 (MNIST PCA QML)
 
+> **Audit 2026-09-15:** retained as an internal encoding comparison. It has no
+> strong classical primary baseline, sealed confirmation, or independent
+> replication and therefore does not establish quantum advantage.
+
 **Run date:** 2026-06-17  
 **Profile:** publication, 10 seeds
 **Dataset:** MNIST 0 vs 1, PCA-8, 30% holdout

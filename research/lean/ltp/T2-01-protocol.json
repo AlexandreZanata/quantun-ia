@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "phase": "T2-01",
+  "frozen_at": "2026-09-16T15:10:00Z",
+  "authorization": "usuário autorizou até 6 h de GPU na RTX 4060, sem serviços pagos; orçamento desta fase limitado a 2 h de treino",
+  "question": {
+    "primary": "um provador nano (<=100M) atinge >=85% dos teoremas fechados pelo ReProver (~300M) com <=1/3 da memória de pesos, sob o mesmo protocolo de busca?",
+    "endpoints": [
+      "A: primeira tática fecha a meta (pass@1 por item, 32 itens de val)",
+      "B: busca best-first com k=4, profundidade <=2 e orçamento de 8 chamadas ao verificador por item (prova fechada)"
+    ],
+    "reference_memory": "ReProver fp32 = 1.198.571.496 bytes; 1/3 = 399.523.832 bytes"
+  },
+  "candidate": {
+    "architecture": "T5 encoder-decoder do zero, byte-level (tokenizador ByT5 do ReProver, vocab 384)",
+    "d_model": 640,
+    "d_ff": 1536,
+    "layers": [
+      6,
+      6
+    ],
+    "heads": 8,
+    "parameters_estimate": "55-70M (nano <=100M)",
+    "weights_fp32_bytes_estimate": "220-280 MB (<= 1/3 do ReProver)"
+  },
+  "data": {
+    "train": "LeanDojo 4 random/train.json; primeiros 120000 pares deterministicos estado->tatica (todos os passos, nao apenas o primeiro)",
+    "eval": "research/lean/runs/LTP-04/statements_v2.jsonl (16 por split), primeiro estado",
+    "test": "selado; aberto uma unica vez somente se o gate passar"
+  },
+  "retrieval": {
+    "decision": "BM25 corrigida nao integrada ao candidato nesta fase (pre-computacao de retrieval para 120k exemplos excede o orcamento); mantida como referencia medida",
+    "future": "integracao em T2-02 se o gate primario nao passar"
+  },
+  "compute_budget": {
+    "device": "GPU RTX 4060 8 GB",
+    "training_wall_minutes": 120,
+    "evaluation_wall_minutes": 90,
+    "no_paid_services": true
+  },
+  "protocol": {
+    "timeout_seconds": 60,
+    "fairness": [
+      "mesmos 32 itens de val",
+      "mesmo timeout",
+      "mesmo orcamento de chamadas por item e por sistema",
+      "mesmo ambiente nativo v4.10.0-rc1 + mathlib 29dcec07",
+      "mesma geracao k=4"
+    ],
+    "statistics": [
+      "McNemar exato por endpoint",
+      "bootstrap pareado sobre itens (10k)",
+      "Holm alfa 0,05 sobre os 2 endpoints"
+    ],
+    "memory_metric": "bytes de pesos fp32 contados localmente"
+  },
+  "gate": {
+    "success": "razao nano/ReProver >= 0,85 em provas fechadas no endpoint B com significancia no McNemar/Holm",
+    "memory": "pesos do nano <= 1/3 dos pesos do ReProver",
+    "passed": "success E memory",
+    "if_pass": "abrir uma unica vez o test selado (subconjunto congelado de LTP-09) e reportar pass@k final",
+    "if_fail": "registrar resultado negativo, nao abrir o test e encerrar"
+  },
+  "stop_rules": [
+    "nao reabrir o test sem gate",
+    "registrar resultados negativos e limitacoes",
+    "nao usar servicos pagos"
+  ],
+  "amendment": {
+    "at": "2026-09-16T15:35:00Z",
+    "before_any_endpoint_measurement": true,
+    "change": "endpoint B reduzido de 32 itens/budget 8 para 16 itens (8 por split)/budget 4 chamadas por item",
+    "reason": "512 chamadas ao verificador excederiam o teto de avaliacao de 90 min; 128 chamadas mantem o orcamento e a comparacao pareada"
+  }
+}

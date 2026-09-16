@@ -16,6 +16,9 @@ Comece por:
 4. [`research/lean/baselines.json`](research/lean/baselines.json);
 5. `make lean-plan-check`.
 
+O CI ativo está documentado em [`docs/CI.md`](docs/CI.md) e executa um único
+gate formal, sem os pipelines antigos de QML, API, Docker, paper ou publicação.
+
 O Lean certifica cada prova, não a alegação de superioridade do modelo. Essa
 alegação continua sujeita a teste selado, comparação pareada, correção estatística
 e orçamento idêntico. A linha QML abaixo permanece como histórico validado do
@@ -55,7 +58,7 @@ quântica.
 O navegador contém apenas um monitor de evidências em modo leitura:
 
 ```bash
-make evidence-monitor
+streamlit run dashboard/app.py
 ```
 
 Os experimentos e pesos retirados do fluxo ativo estão preservados localmente em

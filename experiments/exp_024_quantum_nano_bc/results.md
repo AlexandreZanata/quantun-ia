@@ -1,5 +1,9 @@
 # Results — EXP 024 (QuantumNano-BC)
 
+> **Audit 2026-09-15:** retained as internal evidence of no quantum advantage.
+> The hybrid was significantly below logistic regression, and the promised
+> external pre-registration was not filed before this historical result.
+
 **Run date:** 2026-06-18  
 **Profile:** publication, 30 seeds
 **Dataset:** breast_cancer (UCI Wisconsin), full 569 samples, 30% holdout

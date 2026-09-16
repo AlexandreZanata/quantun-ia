@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import gc
 import json
+import math
 import time
 from pathlib import Path
 
@@ -25,17 +26,21 @@ TOKENIZER_DIR = ROOT / "data" / "raw" / "reprover" / "leandojo-lean4-tacgen-byt5
 IGNORE_INDEX = -100
 
 
-def load_pairs(limit: int) -> list[tuple[str, str]]:
+def load_pairs(limit: int, all_steps: bool = False) -> list[tuple[str, str]]:
     data = json.loads(TRAIN_FILE.read_text(encoding="utf-8"))
     pairs: list[tuple[str, str]] = []
     for entry in data:
         tactics = entry.get("traced_tactics") or []
         if not tactics:
             continue
-        state = tactics[0].get("state_before", "")
-        tactic = tactics[0].get("tactic", "")
-        if state and tactic:
-            pairs.append((state, tactic))
+        steps = tactics if all_steps else tactics[:1]
+        for tactic in steps:
+            state = tactic.get("state_before", "")
+            text = tactic.get("tactic", "")
+            if state and text:
+                pairs.append((state, text))
+                if len(pairs) >= limit:
+                    break
         if len(pairs) >= limit:
             break
     del data
@@ -92,6 +97,13 @@ def main() -> int:
     parser.add_argument("--lr", type=float, default=3e-4)
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--max-steps", type=int, default=0)
+    parser.add_argument("--all-steps", action="store_true")
+    parser.add_argument("--accum", type=int, default=1)
+    parser.add_argument("--d-model", type=int, default=512)
+    parser.add_argument("--d-ff", type=int, default=1024)
+    parser.add_argument("--layers", type=int, default=4)
+    parser.add_argument("--decoder-layers", type=int, default=4)
+    parser.add_argument("--heads", type=int, default=8)
     parser.add_argument("--out", required=True)
     args = parser.parse_args()
 
@@ -101,12 +113,12 @@ def main() -> int:
     vocab_size = len(tokenizer)
     config = T5Config(
         vocab_size=vocab_size,
-        d_model=512,
-        d_ff=1024,
-        d_kv=64,
-        num_layers=4,
-        num_decoder_layers=4,
-        num_heads=8,
+        d_model=args.d_model,
+        d_ff=args.d_ff,
+        d_kv=args.d_model // args.heads,
+        num_layers=args.layers,
+        num_decoder_layers=args.decoder_layers,
+        num_heads=args.heads,
         decoder_start_token_id=tokenizer.pad_token_id,
         eos_token_id=tokenizer.eos_token_id,
         pad_token_id=tokenizer.pad_token_id,
@@ -114,7 +126,7 @@ def main() -> int:
     model = T5ForConditionalGeneration(config).to(device)
     parameters = sum(parameter.numel() for parameter in model.parameters())
     weight_bytes = sum(parameter.numel() * parameter.element_size() for parameter in model.parameters())
-    pairs = load_pairs(args.examples)
+    pairs = load_pairs(args.examples, all_steps=args.all_steps)
     dataset = TacticDataset(pairs, tokenizer, args.max_input, args.max_target)
     loader = DataLoader(
         dataset,
@@ -129,24 +141,32 @@ def main() -> int:
     started = time.monotonic()
     losses = []
     step = 0
+    micro = 0
     model.train()
-    total_steps = len(loader) * args.epochs
+    total_steps = math.ceil(len(loader) / args.accum) * args.epochs
+    optimizer.zero_grad()
     for _ in range(args.epochs):
         for batch in loader:
             batch = {key: value.to(device) for key, value in batch.items()}
             outputs = model(**batch)
-            loss = outputs.loss
+            loss = outputs.loss / args.accum
             loss.backward()
-            optimizer.step()
-            optimizer.zero_grad()
-            losses.append(loss.item())
-            step += 1
-            if step % 50 == 0 or step == total_steps:
-                print(f"passo {step}/{total_steps} loss {sum(losses[-50:]) / len(losses[-50:]):.4f}", flush=True)
-            if args.max_steps and step >= args.max_steps:
-                break
+            losses.append(outputs.loss.item())
+            micro += 1
+            if micro % args.accum == 0:
+                optimizer.step()
+                optimizer.zero_grad()
+                step += 1
+                if step % 50 == 0 or step == total_steps:
+                    print(f"passo {step}/{total_steps} loss {sum(losses[-50:]) / len(losses[-50:]):.4f}", flush=True)
+                if args.max_steps and step >= args.max_steps:
+                    break
         if args.max_steps and step >= args.max_steps:
             break
+    if micro % args.accum:
+        optimizer.step()
+        optimizer.zero_grad()
+        step += 1
     wall = time.monotonic() - started
     model_dir = Path(args.model_dir)
     model_dir.mkdir(parents=True, exist_ok=True)

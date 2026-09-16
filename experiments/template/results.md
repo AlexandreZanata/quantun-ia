@@ -1,13 +1,26 @@
-# Results — EXP [number]
+# Resultado confirmatório — EXP [ID]
 
-## What happened
-[Objective outcome]
+## Proveniência
 
-## Comparison with hypothesis
-[Were you right? Wrong? Why?]
+- Hash do pré-registro:
+- Hashes dos dados e código:
+- Ambiente e hardware:
+- Comando e seeds:
 
-## Unexpected finding
-[The most surprising thing you discovered]
+## Desfecho primário
 
-## Suggested next experiment
-[What does this make you want to test next?]
+- Estimativa e intervalo de confiança:
+- Tamanho de efeito:
+- p-valor corrigido:
+- Gate: PASS / FAIL
+
+## Controles, recursos e falhas
+
+- Controles negativos:
+- Tempo, memória, parâmetros e shots:
+- Runs excluídas e motivo pré-definido:
+
+## Decisão e limitações
+
+Resultado negativo ou inconclusivo é uma conclusão válida. Não incluir análise
+pós-hoc como confirmatória.
