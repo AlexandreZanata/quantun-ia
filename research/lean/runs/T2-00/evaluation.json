@@ -1,0 +1,301 @@
+{
+  "summary": {
+    "phase": "T2-00",
+    "device": "cuda",
+    "items": 32,
+    "nano": {
+      "parameters": 21179904,
+      "weights_bytes": 84719616,
+      "closed": 0,
+      "valid_incomplete": 3,
+      "invalid": 29,
+      "spurious_sorry": 0
+    },
+    "reprover": {
+      "parameters": 299637760,
+      "weights_bytes": 1198551040,
+      "closed": 1,
+      "valid_incomplete": 9,
+      "invalid": 22
+    },
+    "paired": {
+      "nano_only": 0,
+      "reprover_only": 1,
+      "mcnemar_p": 1.0,
+      "difference_ci": [
+        -0.09375,
+        0.0
+      ]
+    },
+    "ratio_nano_over_reprover": 0.0,
+    "gate": {
+      "ratio_ok": false,
+      "memory_ok": true,
+      "passed": false
+    },
+    "verifier_calls": 64,
+    "wall_seconds": {
+      "nano": 114.238,
+      "reprover": 100.412
+    },
+    "peak_vram_bytes": 1384189952
+  },
+  "items": [
+    {
+      "split": "random",
+      "full_name": "WithLp.prod_nnnorm_eq_add",
+      "nano_tactic": "rw [← comp_ineq_ine_ine_ine_ine_ine_ine_ine_ine_ine_ine_ine_in",
+      "reprover_tactic": "rw [← ENNReal.rpow_mul, ← ENNReal.rpow_mul, ← ENNReal.rpow",
+      "nano": "invalid",
+      "reprover": "invalid"
+    },
+    {
+      "split": "random",
+      "full_name": "CategoryTheory.ShortComplex.isIso₂_of_shortExact_of_isIso₁₃",
+      "nano_tactic": "rw [← comp_ineq_ine_ine_ine_ine_ine_ine_ine_ine_ine_ine_ine_in",
+      "reprover_tactic": "dsimp",
+      "nano": "invalid",
+      "reprover": "invalid"
+    },
+    {
+      "split": "random",
+      "full_name": "nhdsWithin_pi_univ_eq",
+      "nano_tactic": "rw [← comp_ineq_ine_ine_ine_ine_ine_ine_ine_ine_ine_ine_ine_in",
+      "reprover_tactic": "simp [nhdsWithin, nhds_pi, Filter.pi_eq_iInf_isClosed]",
+      "nano": "invalid",
+      "reprover": "valid_incomplete"
+    },
+    {
+      "split": "random",
+      "full_name": "mem_adjoin_of_smul_prime_pow_smul_of_minpoly_isEisensteinAt",
+      "nano_tactic": "rw [← comp_ineq_ineq_ineq_ineq_ine_ine_ine_ine_ine_ine_ine_ine",
+      "reprover_tactic": "rw [← smul_eq_mul, ← smul_eq_mul, ← smul_eq_mul, ← smul_",
+      "nano": "invalid",
+      "reprover": "invalid"
+    },
+    {
+      "split": "random",
+      "full_name": "MvPolynomial.degrees_map_of_injective",
+      "nano_tactic": "rw [← comp_mul_ineq_ineq_ineq_ineq_ineq_ineq_ineq_ineq_ineq_in",
+      "reprover_tactic": "rw [degrees_map_of_injective _ hf, Multiset.count_map_eq_count' ",
+      "nano": "invalid",
+      "reprover": "invalid"
+    },
+    {
+      "split": "random",
+      "full_name": "CategoryTheory.ShortComplex.SnakeInput.w₁₃_τ₁",
+      "nano_tactic": "rw [← comp_ineq_ine_ine_ine_ine_ine_ine_ine_ine_ine_ine_ine_in",
+      "reprover_tactic": "rw [← comp_τ₁, S.w₂₃, zero_τ₁]",
+      "nano": "invalid",
+      "reprover": "invalid"
+    },
+    {
+      "split": "random",
+      "full_name": "MeasureTheory.lintegral_nnnorm_condexpL2_le",
+      "nano_tactic": "rw [← comp_ineq_ine_ine_ine_ine_ine_ine_ine_ine_ine_ine_ine_in",
+      "reprover_tactic": "rw [← lintegral_condexpL2_le_of_measure_ne_top hm hs hμs f]",
+      "nano": "invalid",
+      "reprover": "invalid"
+    },
+    {
+      "split": "random",
+      "full_name": "CliffordAlgebra.star_smul",
+      "nano_tactic": "rw [← comp_ineq_ineq_ineq_ineq_ineq_ineq_ineq_ine_ine_ine_ine_",
+      "reprover_tactic": "rw [star_smul, star_smul, star_smul, star_smul, star_smul, star_",
+      "nano": "invalid",
+      "reprover": "invalid"
+    },
+    {
+      "split": "random",
+      "full_name": "LieSubmodule.coe_toSubmodule_mk",
+      "nano_tactic": "rw [← comp_ineq_ineq_ineq_ineq_ineq_ineq_ineq_ineq_ineq_ineq_i",
+      "reprover_tactic": "simp",
+      "nano": "invalid",
+      "reprover": "closed"
+    },
+    {
+      "split": "random",
+      "full_name": "NumberField.InfinitePlace.not_isReal_iff_isComplex",
+      "nano_tactic": "rw [← comp_ineq_ineq_ineq_ine_ine_ine_ine_ine_ine_ine_ine_ine_",
+      "reprover_tactic": "simp [InfinitePlace.IsComplex]",
+      "nano": "invalid",
+      "reprover": "valid_incomplete"
+    },
+    {
+      "split": "random",
+      "full_name": "smul_finsum",
+      "nano_tactic": "rw [← comp_ineq_ine_ine_ine_ine_ine_ine_ine_ine_ine_ine_ine_in",
+      "reprover_tactic": "simp only [← smul_assoc, ← smul_assoc, ← smul_assoc, smul_",
+      "nano": "valid_incomplete",
+      "reprover": "valid_incomplete"
+    },
+    {
+      "split": "random",
+      "full_name": "MeasureTheory.tilted_apply_eq_ofReal_integral",
+      "nano_tactic": "rw [← comp_ineq_ine_ine_ine_ine_ine_ine_ine_ine_ine_ine_ine_in",
+      "reprover_tactic": "simp [tilted_apply' _ s]",
+      "nano": "invalid",
+      "reprover": "invalid"
+    },
+    {
+      "split": "random",
+      "full_name": "nilpotencyClass_prod",
+      "nano_tactic": "rw [← comp_ineq_ine_ine_ine_ine_ine_ine_ine_ine_ine_ine_ine_in",
+      "reprover_tactic": "rw [← le_max_iff, nilpotencyClass_le_of_isNilpotent G₁, ← ",
+      "nano": "invalid",
+      "reprover": "invalid"
+    },
+    {
+      "split": "random",
+      "full_name": "Ideal.fg_ker_comp",
+      "nano_tactic": "rw [← comp_ineq_ineq_ineq_ineq_ineq_ineq_ineq_ine_ine_ine_ine_",
+      "reprover_tactic": "rw [RingHom.ker_eq_comap_bot_of_surjective hsur]",
+      "nano": "invalid",
+      "reprover": "invalid"
+    },
+    {
+      "split": "random",
+      "full_name": "sup_right_comm",
+      "nano_tactic": "rw [← comp_ineq_ine_ine_ine_ine_ine_ine_ine_ine_ine_ine_ine_in",
+      "reprover_tactic": "simp_rw [sup_sup_sup_comm, sup_sup_sup_comm]",
+      "nano": "invalid",
+      "reprover": "invalid"
+    },
+    {
+      "split": "random",
+      "full_name": "Polynomial.lt_natDegree_of_mem_eraseLead_support",
+      "nano_tactic": "rw [← comp_ineq_ineq_ineq_ineq_ineq_ineq_ineq_ineq_ineq_ineq_i",
+      "reprover_tactic": "rw [mem_eraseLead] at h",
+      "nano": "invalid",
+      "reprover": "invalid"
+    },
+    {
+      "split": "novel_premises",
+      "full_name": "PrimeSpectrum.range_comap_of_surjective",
+      "nano_tactic": "rw [← comp_ineq_ineq_ineq_ineq_ineq_ineq_ineq_ineq_ineq_ineq_i",
+      "reprover_tactic": "rw [← Set.image_univ, ← Set.image_univ, ← Set.image_univ, ",
+      "nano": "invalid",
+      "reprover": "invalid"
+    },
+    {
+      "split": "novel_premises",
+      "full_name": "DirectSum.toAddMonoidAlgebra_mul",
+      "nano_tactic": "rw [← comp_ineq_ineq_ineq_ineq_ineq_ineq_ineq_ineq_ineq_ineq_i",
+      "reprover_tactic": "simp only [AddMonoidHom.map_mul, toAddMonoidHom_mul, AddMonoidHo",
+      "nano": "invalid",
+      "reprover": "invalid"
+    },
+    {
+      "split": "novel_premises",
+      "full_name": "IsSelfAdjoint.zpow",
+      "nano_tactic": "rw [← comp_ineq_ineq_ineq_ineq_ineq_ineq_ineq_ineq_ineq_ineq_i",
+      "reprover_tactic": "rw [IsSelfAdjoint, star_zpow]",
+      "nano": "invalid",
+      "reprover": "invalid"
+    },
+    {
+      "split": "novel_premises",
+      "full_name": "Finsupp.univ_sum_single_apply'",
+      "nano_tactic": "rw [← comp_ineq_ine_ine_ine_ine_ine_ine_ine_ine_ine_ine_ine_in",
+      "reprover_tactic": "simp [single_apply]",
+      "nano": "valid_incomplete",
+      "reprover": "valid_incomplete"
+    },
+    {
+      "split": "novel_premises",
+      "full_name": "Ring.DirectLimit.lift_unique",
+      "nano_tactic": "rw [← comp_ineq_ineq_ineq_ineq_ineq_ineq_ineq_ineq_ineq_ineq_i",
+      "reprover_tactic": "simp only [comp_apply, of_f]",
+      "nano": "invalid",
+      "reprover": "invalid"
+    },
+    {
+      "split": "novel_premises",
+      "full_name": "MonoidHom.comp_inv",
+      "nano_tactic": "rw [← comp_ineq_ineq_ineq_ineq_ineq_ineq_ineq_ineq_ineq_ineq_i",
+      "reprover_tactic": "ext",
+      "nano": "invalid",
+      "reprover": "valid_incomplete"
+    },
+    {
+      "split": "novel_premises",
+      "full_name": "AddCommGroup.DirectLimit.congr_symm_apply_of",
+      "nano_tactic": "rw [← comp_ineq_ineq_ineq_ineq_ineq_ineq_ine_ine_ine_ine_ine_i",
+      "reprover_tactic": "simp [congr, of]",
+      "nano": "invalid",
+      "reprover": "valid_incomplete"
+    },
+    {
+      "split": "novel_premises",
+      "full_name": "List.perm_merge",
+      "nano_tactic": "rw [← comp_ineq_ine_ine_ine_ine_ine_ine_ine_ine_ine_ine_ine_in",
+      "reprover_tactic": "simp",
+      "nano": "invalid",
+      "reprover": "invalid"
+    },
+    {
+      "split": "novel_premises",
+      "full_name": "NonUnitalSubring.unitization_range",
+      "nano_tactic": "rw [← comp_ineq_ine_ine_ine_ine_ine_ine_ine_ine_ine_ine_ine_in",
+      "reprover_tactic": "rw [unitization, AddSubgroup.closure_eq_closure, AddSubgroup.clo",
+      "nano": "invalid",
+      "reprover": "invalid"
+    },
+    {
+      "split": "novel_premises",
+      "full_name": "HomologicalComplex.HomologySequence.quasiIso_τ₃",
+      "nano_tactic": "rw [← comp_ineq_ine_ine_ine_ine_ine_ine_ine_ine_ine_ine_ine_in",
+      "reprover_tactic": "rw [quasiIso_iff]",
+      "nano": "invalid",
+      "reprover": "valid_incomplete"
+    },
+    {
+      "split": "novel_premises",
+      "full_name": "List.length_sigma",
+      "nano_tactic": "rw [← comp_ineq_ine_ine_ine_ine_ine_ine_ine_ine_ine_ine_ine_in",
+      "reprover_tactic": "simp [length_sigma, sum_map_sum_sigma']",
+      "nano": "valid_incomplete",
+      "reprover": "valid_incomplete"
+    },
+    {
+      "split": "novel_premises",
+      "full_name": "Batteries.RBNode.insert_toList_zoom",
+      "nano_tactic": "rw [← comp_ineq_ine_ine_ine_ine_ine_ine_ine_ine_ine_ine_ine_in",
+      "reprover_tactic": "simp [insert, ht.toList, e]",
+      "nano": "invalid",
+      "reprover": "valid_incomplete"
+    },
+    {
+      "split": "novel_premises",
+      "full_name": "min_mul_distrib'",
+      "nano_tactic": "rw [← comp_ineq_ineq_ineq_ineq_ineq_ineq_ineq_ineq_ineq_ineq_i",
+      "reprover_tactic": "simp [mul_comm]",
+      "nano": "invalid",
+      "reprover": "invalid"
+    },
+    {
+      "split": "novel_premises",
+      "full_name": "MvPolynomial.totalDegree_pow",
+      "nano_tactic": "rw [← comp_ineq_ineq_ineq_ineq_ineq_ineq_ineq_ineq_ineq_ineq_i",
+      "reprover_tactic": "rw [totalDegree_pow']",
+      "nano": "invalid",
+      "reprover": "invalid"
+    },
+    {
+      "split": "novel_premises",
+      "full_name": "MvPolynomial.expand_bind₁",
+      "nano_tactic": "rw [← comp_ineq_ineq_ineq_ineq_ineq_ineq_ineq_ine_ine_ine_ine_",
+      "reprover_tactic": "simp only [bind₁_apply, expand_apply, expand_apply]",
+      "nano": "invalid",
+      "reprover": "invalid"
+    },
+    {
+      "split": "novel_premises",
+      "full_name": "AlgebraicGeometry.quasiSeparatedSpace_of_quasiSeparated",
+      "nano_tactic": "rw [← comp_ineq_ine_ine_ine_ine_ine_ine_ine_ine_ine_ine_ine_in",
+      "reprover_tactic": "rw [quasiSeparated_eq_affine'] at hY ⊢",
+      "nano": "invalid",
+      "reprover": "invalid"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "phase": "T2-00",
+  "device": "cuda",
+  "examples": 20000,
+  "epochs": 1,
+  "steps": 1250,
+  "final_loss_mean_50": 2.3591,
+  "loss_first_50": 3.9084,
+  "parameters": 21179904,
+  "weights_fp32_bytes": 84719616,
+  "wall_seconds": 326.06,
+  "peak_vram_bytes": 3226405888,
+  "model_dir": ".local/runs/lean/T2-00/model",
+  "seed": 0
+}

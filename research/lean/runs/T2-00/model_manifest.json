@@ -1,0 +1,36 @@
+{
+  "phase": "T2-00",
+  "kind": "trained_weights",
+  "model": "nano T5 from scratch (byte-level ByT5 tokenizer)",
+  "parameters": 21179904,
+  "weights_fp32_bytes": 84719616,
+  "local_path": ".local/runs/lean/T2-00/model",
+  "files": {
+    "added_tokens.json": {
+      "size_bytes": 3018,
+      "sha256": "0004781309423057d33b9edf50d2669253d4347873ea33d4e7755cb866f23883"
+    },
+    "config.json": {
+      "size_bytes": 675,
+      "sha256": "207ea24322693b49e02246116e1813ce9208b0ee47988824b3cf6433e25cfd4d"
+    },
+    "generation_config.json": {
+      "size_bytes": 142,
+      "sha256": "8145d7eecabff8e16a9876617a6d52728e9b8fbe24c426e6bf9ebbd6bfb87737"
+    },
+    "model.safetensors": {
+      "size_bytes": 84730000,
+      "sha256": "726ab84d211e03ff9fd18b906c3e818a27c2d33db574640b2883ff80eb7f7377"
+    },
+    "special_tokens_map.json": {
+      "size_bytes": 3090,
+      "sha256": "3c2572df5f4ec60a476e5d90a1f52a989f9eefbbf381d358924a44a648bf0edb"
+    },
+    "tokenizer_config.json": {
+      "size_bytes": 25571,
+      "sha256": "018b89e0a53eb05ff5eb9e0ed0b70961cdc678331b66c9d332022cffe6af9027"
+    }
+  },
+  "training": "research/lean/runs/T2-00/training.json",
+  "evaluation": "research/lean/runs/T2-00/evaluation.json"
+}

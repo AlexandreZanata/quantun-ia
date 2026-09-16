@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "phase": "T2-00",
+  "frozen_at": "2026-09-16T14:05:00Z",
+  "authorization": "usuário autorizou treino T2 nesta sessão; sem serviços pagos",
+  "question": {
+    "primary": "um provador nano (<=100M parâmetros totais) atinge >=85% dos teoremas resolvidos pelo ReProver (~300M) com <=1/3 da memória de pesos?",
+    "secondary": "o nano atinge não-inferioridade pratica em táticas de primeiro passo com <=400 MB de pesos?",
+    "reference_baseline": "ReProver tacgen 299.637.760 parâmetros, pesos fp32 = 1.198.571.496 bytes; 1/3 = 399.523.832 bytes"
+  },
+  "candidate": {
+    "architecture": "seq2seq T5 (encoder-decoder) treinado do zero, byte-level (tokenizador ByT5 do ReProver, vocab 384)",
+    "d_model": 512,
+    "d_ff": 1024,
+    "layers": [4, 4],
+    "heads": 8,
+    "parameters_estimate": "35-45M (nano <=100M)",
+    "weights_fp32_bytes_estimate": "140-180 MB (<= 1/3 dos 1,2 GB do ReProver)",
+    "training": "teacher forcing, AdamW, lr 3e-4, batch 16, 1 época"
+  },
+  "data": {
+    "train": "LeanDojo Benchmark 4 random/train.json; primeiros 20000 exemplos deterministicos com traced_tactics; entrada = state_before, alvo = primeira tática",
+    "val_eval": "research/lean/runs/LTP-04/statements_v2.jsonl (16 teoremas por split) com first_state e decl_prefix",
+    "test": "selado; somente abrir se o gate de confirmacao passar"
+  },
+  "compute_budget": {
+    "device": "GPU RTX 4060 8 GB (CPU como fallback documentado)",
+    "training_wall_minutes": 60,
+    "evaluation_wall_minutes": 30,
+    "no_paid_services": true
+  },
+  "protocol": {
+    "timeout_seconds": 60,
+    "pass_k": "pass@1 por passo; portfólio pass@5 quando aplicável",
+    "verifier_calls": "reportados por linha e por item",
+    "fairness": ["mesmos itens de val", "mesmo timeout", "mesmo ambiente nativo v4.10.0-rc1 + mathlib 29dcec07", "mesma contagem de chamadas"],
+    "statistics": ["bootstrap pareado sobre itens (10k)", "McNemar exato", "Holm alfa 0,05"],
+    "memory_metric": "bytes de pesos fp32 contados localmente"
+  },
+  "gate": {
+    "nano_confirmation": "razão de sucesso do nano >= 85% do ReProver nos mesmos itens E pesos <= 1/3 do ReProver, com significância após Holm",
+    "if_pass": "abrir uma unica vez o test selado random/test (subconjunto congelado de LTP-09 pode ser reusado somente para os itens ja abertos)",
+    "if_fail": "registrar resultado negativo, nao abrir o test e encerrar"
+  },
+  "stop_rules": [
+    "nao reabrir o test selado sem gate",
+    "registrar resultados negativos e limitacoes",
+    "nao usar servicos pagos"
+  ]
+}
