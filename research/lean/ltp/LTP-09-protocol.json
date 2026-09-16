@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "phase": "LTP-09",
+  "frozen_at": "2026-09-16T08:55:00Z",
+  "opening": {
+    "split": "random/test.json",
+    "single_opening": true,
+    "reopen_allowed": false,
+    "sealed_output": ".local/sealed/LTP-09/",
+    "versioned_artifacts": "somente agregados, hashes e decisão",
+    "test_sha256_before": "9f84ac4cbd5ea9031ab335d172e7a5b1873e4ac773721e60cb1a4cc5b4e2a0ae",
+    "manifest_expected": "conferir contra research/lean/acquisitions/leandojo_benchmark_4.json",
+    "untouched_split": "novel_premises/test.json (permanece selado para LTP-10)"
+  },
+  "subset": {
+    "rule": "primeiros 16 teoremas com traços e extração de declaração by-style, em ordem de arquivo",
+    "size": 16,
+    "deterministic": true
+  },
+  "finalists": {
+    "LH-070": "hash textual e semântico determinístico e detecção de mutações no test",
+    "LH-069": "replay limpo duplo de provas originais do mathlib no test",
+    "LH-026": "taxa de acerto de cache canônico dentro do split selado (5 seeds)"
+  },
+  "reference_lines": {
+    "symbolic": "simp, aesop, omega, linarith, nlinarith em modo single, 60 s por tática, early stop no primeiro sucesso",
+    "reprover_tacgen": "greedy, max_inp 2048, max_oup 512, sem recuperação, verificação no ambiente nativo"
+  },
+  "fairness": {
+    "environment": "Lean v4.10.0-rc1 + mathlib 29dcec07 (nativo)",
+    "timeout_seconds": 60,
+    "statement_hash": "sha256 canônico do prefixo da declaração",
+    "verifier_calls": "reportados por linha"
+  },
+  "budget": {
+    "max_verifier_calls": 400,
+    "max_wall_minutes": 60,
+    "no_training": true,
+    "no_paid_services": true
+  },
+  "metrics_to_report": ["pass@k (k explícito)", "chamadas ao verificador", "tempo de parede", "pico de RAM", "teoremas resolvidos exclusivamente por linha"],
+  "stop_rules": [
+    "não reabrir random/test.json após o subconjunto selado",
+    "não consultar novel_premises/test.json nesta fase",
+    "registrar resultados negativos sem apagar"
+  ]
+}

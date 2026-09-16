@@ -216,7 +216,7 @@ def rename_declaration(declaration: str, new_name: str) -> str:
     while start < len(declaration) and declaration[start].isspace():
         start += 1
     end = start
-    while end < len(declaration) and (declaration[end].isalnum() or declaration[end] in "._'!"):
+    while end < len(declaration) and (declaration[end].isalnum() or declaration[end] in "._'!?"):
         end += 1
     if end == start:
         return declaration

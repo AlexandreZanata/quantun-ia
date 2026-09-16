@@ -179,3 +179,9 @@ def test_ltp05_goal_tokens_and_filter():
     assert "n" in tokens and "1" in tokens
     inverted = {"Nat": {1, 2}, "n": {2, 3}, "Other": {4}}
     assert filter_candidates(tokens, inverted) == {2, 3}
+
+
+def test_rename_declaration_handles_question_mark_names():
+    renamed = rename_declaration("theorem Heap.WF.tail? (h : True) : True := by trivial", "ltp_target")
+    assert renamed.startswith("theorem ltp_target ")
+    assert "tail?" not in renamed

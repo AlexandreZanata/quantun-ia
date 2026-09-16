@@ -1,0 +1,54 @@
+{
+  "phase": "LTP-09",
+  "finalists": [
+    "LH-070",
+    "LH-069",
+    "LH-026"
+  ],
+  "sealed_split": "random/test.json",
+  "untouched_split": "novel_premises/test.json",
+  "metrics": {
+    "opening": {
+      "test_file": "random/test.json",
+      "test_sha256_before": "9f84ac4cbd5ea9031ab335d172e7a5b1873e4ac773721e60cb1a4cc5b4e2a0ae",
+      "manifest_sha256": "9f84ac4cbd5ea9031ab335d172e7a5b1873e4ac773721e60cb1a4cc5b4e2a0ae",
+      "hash_matches_manifest": true,
+      "attempts": 17,
+      "subset_size": 16,
+      "opened_at": "2026-09-16T12:32:36Z",
+      "subset_sha256": "2ccaf1aa19bc9f041f0d98d305c8dfd5334da3a7d6c7a7e66592fee60266b12d"
+    },
+    "LH-070": {
+      "statements": 16,
+      "semantic_deterministic": 15,
+      "mutations_tested": 3,
+      "mutations_detected_textually": 3
+    },
+    "LH-026": {
+      "steps": 48,
+      "cache_hits": 30,
+      "accesses": 240,
+      "hit_rate": 0.125
+    },
+    "LH-069": {
+      "cases": 16,
+      "accepted": 14,
+      "identical_across_passes": 16
+    },
+    "reference_symbolic": {
+      "goals": 16,
+      "portfolio_solved": 1,
+      "verifier_calls": 77,
+      "wall_seconds": 352.922
+    },
+    "reference_reprover_tacgen": {
+      "goals": 16,
+      "pass_at_1": 1,
+      "verifier_calls": 16,
+      "wall_seconds": 75.083
+    },
+    "wall_seconds": 814.902,
+    "peak_rss_bytes": 1827504128
+  },
+  "no_reopen": true
+}

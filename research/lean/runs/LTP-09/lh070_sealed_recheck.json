@@ -1,0 +1,103 @@
+{
+  "statements": 16,
+  "hashable": 16,
+  "deterministic": 16,
+  "rows": [
+    {
+      "index": 0,
+      "hashable": true,
+      "deterministic": true,
+      "status": "ok"
+    },
+    {
+      "index": 1,
+      "hashable": true,
+      "deterministic": true,
+      "status": "ok"
+    },
+    {
+      "index": 2,
+      "hashable": true,
+      "deterministic": true,
+      "status": "ok"
+    },
+    {
+      "index": 3,
+      "hashable": true,
+      "deterministic": true,
+      "status": "ok"
+    },
+    {
+      "index": 4,
+      "hashable": true,
+      "deterministic": true,
+      "status": "ok"
+    },
+    {
+      "index": 5,
+      "hashable": true,
+      "deterministic": true,
+      "status": "ok"
+    },
+    {
+      "index": 6,
+      "hashable": true,
+      "deterministic": true,
+      "status": "ok"
+    },
+    {
+      "index": 7,
+      "hashable": true,
+      "deterministic": true,
+      "status": "lean_error"
+    },
+    {
+      "index": 8,
+      "hashable": true,
+      "deterministic": true,
+      "status": "ok"
+    },
+    {
+      "index": 9,
+      "hashable": true,
+      "deterministic": true,
+      "status": "ok"
+    },
+    {
+      "index": 10,
+      "hashable": true,
+      "deterministic": true,
+      "status": "ok"
+    },
+    {
+      "index": 11,
+      "hashable": true,
+      "deterministic": true,
+      "status": "ok"
+    },
+    {
+      "index": 12,
+      "hashable": true,
+      "deterministic": true,
+      "status": "ok"
+    },
+    {
+      "index": 13,
+      "hashable": true,
+      "deterministic": true,
+      "status": "lean_error"
+    },
+    {
+      "index": 14,
+      "hashable": true,
+      "deterministic": true,
+      "status": "ok"
+    },
+    {
+      "index": 15,
+      "hashable": true,
+      "deterministic": true,
+      "status": "ok"
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "goals": 16,
+  "symbolic": {
+    "solved": 1,
+    "per_goal": {
+      "CategoryTheory.Equivalence.invFunIdAssoc_hom_app": false,
+      "ENNReal.le_rpow_one_div_iff": false,
+      "Combinatorics.Line.apply_of_ne_none": false,
+      "CancelDenoms.cancel_factors_lt": false,
+      "Batteries.BinomialHeap.Imp.Heap.WF.tail?": false,
+      "Ideal.span_singleton_eq_span_singleton": false,
+      "MeasureTheory.OuterMeasure.comap_ofFunction": false,
+      "IsGroupHom.inv_ker_one'": false,
+      "Convex.thickening": false,
+      "NNReal.le_inv_iff_mul_le": false,
+      "MeasureTheory.integrable_of_intervalIntegral_norm_bounded": false,
+      "IntermediateField.separable_of_mem_isSeparable": false,
+      "CochainComplex.mk'_d_1_0": false,
+      "Equiv.Perm.prod_comp'": false,
+      "Finmap.erase_toFinmap": true,
+      "Filter.HasBasis.to_hasBasis'": false
+    }
+  },
+  "tacgen": {
+    "solved": 1,
+    "per_goal": {
+      "CategoryTheory.Equivalence.invFunIdAssoc_hom_app": true,
+      "ENNReal.le_rpow_one_div_iff": false,
+      "Combinatorics.Line.apply_of_ne_none": false,
+      "CancelDenoms.cancel_factors_lt": false,
+      "Batteries.BinomialHeap.Imp.Heap.WF.tail?": false,
+      "Ideal.span_singleton_eq_span_singleton": false,
+      "MeasureTheory.OuterMeasure.comap_ofFunction": false,
+      "IsGroupHom.inv_ker_one'": false,
+      "Convex.thickening": false,
+      "NNReal.le_inv_iff_mul_le": false,
+      "MeasureTheory.integrable_of_intervalIntegral_norm_bounded": false,
+      "IntermediateField.separable_of_mem_isSeparable": false,
+      "CochainComplex.mk'_d_1_0": false,
+      "Equiv.Perm.prod_comp'": false,
+      "Finmap.erase_toFinmap": false,
+      "Filter.HasBasis.to_hasBasis'": false
+    }
+  },
+  "exclusive_symbolic": [
+    "Finmap.erase_toFinmap"
+  ],
+  "exclusive_tacgen": [
+    "CategoryTheory.Equivalence.invFunIdAssoc_hom_app"
+  ],
+  "solved_by_both": []
+}
