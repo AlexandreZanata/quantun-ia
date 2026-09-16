@@ -1980,13 +1980,13 @@
       "parameter_target": "nano<=100M",
       "status": "inconclusive",
       "preregistered": false,
-      "evidence": "research/lean/ltp/LTP-06.md",
-      "result": "refutada em conjuntos homogêneos (trivial e val); não refutada na união medida",
+      "evidence": "research/lean/ltp/LTP-10.md",
+      "result": "corrigido em LTP-10: modelo fecha 21/32 no smoke; roteador não refutado em trivial e união, refutado no val",
       "microtest": {
         "phase": "LTP-06",
         "status": "inconclusive",
         "gate": "overhead ou erros de roteamento reduzirem eficiência",
-        "summary": "{\"union_efficiency_router\": 4.4673, \"union_efficiency_model\": 4.178}"
+        "summary": "ver erratum de pareamento de estados em LTP-10"
       }
     },
     {

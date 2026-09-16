@@ -120,3 +120,21 @@ teste selados, não treine modelos caros e não use serviços pagos. Registre tu
 em research/lean/ltp/LTP-06.md e atualize o status das hipóteses apenas com
 evidência; pare antes de LTP-07.
 ```
+
+## Errata (registrada em LTP-10)
+
+O pareamento entre estados de prova e teoremas no smoke32 estava deslocado em
+um índice: o marcador `dbg_trace` era lido do stdout, mas o estado o precedia,
+de modo que o modelo recebia o estado do teorema seguinte. Correção: parser
+unificado que aceita marcadores no stdout ou no stderr e associa cada bloco ao
+seu marcador. Medição corrigida em `research/lean/runs/LTP-10/`:
+
+| Conjunto | Antes (LTP-05) | Corrigido (LTP-10) |
+| --- | --- | --- |
+| smoke32: modelo direto | 19/32 fechadas | **21/32 fechadas** |
+| smoke32: veredito do roteador | refutada | **não refutada** (27,0 vs 22,4 por 100 s) |
+| val: veredito do roteador | refutada | refutada (inalterado) |
+| união: veredito do roteador | não refutada | não refutada (4,47 vs 4,15) |
+
+Os artefatos originais do LTP-05 permanecem preservados; os números acima são a
+referência.

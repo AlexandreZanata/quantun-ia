@@ -49,22 +49,36 @@ def smoke_states(args: argparse.Namespace) -> int:
         parts.append("  sorry")
     context = resolve_lean_context(MODERN)
     run = run_lean("\n".join(parts) + "\n", Path(args.workdir), context, 300.0, MEMORY_LIMIT)
-    states: dict[str, str] = {}
-    buffer: list[str] = []
-    pending_index = None
+    stdout_markers: list[str] = []
+    blocks: list[list[str]] = []
+    current: list[str] = []
     for line in run.stdout.splitlines():
         match = re.search(rf"{MARKER}(\d+)", line)
         if match:
-            if pending_index is not None:
-                states[pending_index] = "\n".join(buffer).strip()
-            pending_index = match.group(1)
-            buffer = []
+            if current:
+                blocks.append(current)
+                current = []
+            if line.strip() == f"{MARKER}{match.group(1)}":
+                stdout_markers.append(match.group(1))
             continue
         if line.startswith("/") or line.startswith("warning:") or line.startswith("Note:"):
+            if current:
+                blocks.append(current)
+                current = []
             continue
-        buffer.append(line)
-    if pending_index is not None:
-        states[pending_index] = "\n".join(buffer).strip()
+        current.append(line)
+    if current:
+        blocks.append(current)
+    markers = stdout_markers or [
+        match.group(1)
+        for line in run.stderr.splitlines()
+        if (match := re.search(rf"{MARKER}(\d+)", line))
+    ]
+    states = {
+        markers[index]: "\n".join(block).strip()
+        for index, block in enumerate(blocks)
+        if index < len(markers)
+    }
     payload = {
         "status": run.status,
         "states": states,

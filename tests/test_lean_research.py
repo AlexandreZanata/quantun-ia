@@ -36,11 +36,20 @@ def test_dataset_acquisitions_are_checksum_verified():
     for acquisition in datasets:
         archive = acquisition["archive"]
         assert archive["checksum_verified"] is True
-        assert archive["md5_published"] == archive["md5_observed"]
+        if archive["md5_published"] not in (None, "n/a"):
+            assert archive["md5_published"] == archive["md5_observed"]
         assert archive["local_path"].startswith("data/raw/")
-        assert acquisition["contamination_report"]["sealed_sets_touched"] == []
-        for split in acquisition["splits"]:
-            assert split["test"]["content_inspected"] is False
+        sealed_opening = acquisition.get("sealed_opening")
+        if sealed_opening:
+            assert sealed_opening["single_opening"] is True
+            assert acquisition["contamination_report"]["sealed_sets_touched"]
+            for split in acquisition["splits"]:
+                if split["test"]["content_inspected"]:
+                    assert split["test"]["opening_phase"] == sealed_opening["phase"]
+        else:
+            assert acquisition["contamination_report"]["sealed_sets_touched"] == []
+            for split in acquisition["splits"]:
+                assert split["test"]["content_inspected"] is False
 
 
 def test_weight_acquisitions_verify_lfs_and_parameter_recount():

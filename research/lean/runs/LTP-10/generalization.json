@@ -1,0 +1,74 @@
+{
+  "opening": {
+    "opened_at": "2026-09-16T13:14:30Z",
+    "proofnet_file_sha256": "cffeb0fcc279a578a803ce7fd3e2583d688d0a3f1e0cdc38c96ff53a46270139",
+    "proofnet_entries": 24,
+    "minictx_file_sha256": "3aecd340e0a8bfaa07638f9ed4ed715543449713344400372311042ca32c2200",
+    "minictx_entries": 12,
+    "proofnet_subset_sha256": "55ce78c242bfd360ea9eb9dec547099e672cdc90ca4c0725c50782d1b4fc4312",
+    "minictx_subset_sha256": "9b856b86488e8665225855b5d6bcce2be39d402adac390a03fa87b6b77d5570d",
+    "putnambench": "não adquirido: sem licença (stress test reservado)",
+    "minictx_other_projects": "bloqueado: ambientes por projeto necessários"
+  },
+  "proofnet": {
+    "sampled": 24,
+    "portable": 24,
+    "portability_rate": 1.0,
+    "reference_goals": 12,
+    "symbolic": {
+      "portfolio_pass_at_5": 0,
+      "verifier_calls": 60,
+      "wall_seconds": 85.668
+    },
+    "tacgen": {
+      "pass_at_1": 0,
+      "verifier_calls": 12,
+      "wall_seconds": 38.703,
+      "per_goal": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    "exclusive_symbolic": [],
+    "exclusive_tacgen": []
+  },
+  "minictx_mathlib": {
+    "sampled": 12,
+    "portable": 1,
+    "portability_rate": 0.0833,
+    "reference_goals": 1,
+    "symbolic": {
+      "portfolio_pass_at_5": 0,
+      "verifier_calls": 5,
+      "wall_seconds": 54.814
+    },
+    "tacgen": {
+      "pass_at_1": 0,
+      "verifier_calls": 0,
+      "wall_seconds": 0.0,
+      "per_goal": [
+        false
+      ]
+    },
+    "exclusive_symbolic": [],
+    "exclusive_tacgen": []
+  },
+  "wall_seconds": 249.863,
+  "peak_rss_bytes": 1857212416,
+  "program_final": {
+    "funnel": "100 hipóteses → 8 confirmadas (Holm) → 3 finalistas no teste selado",
+    "sealed_benchmark4": "LH-070 16/16, LH-069 16/16, LH-026 12,5%",
+    "generalization": "ProofNet e miniCTX(mathlib) avaliados com portabilidade medida; projetos externos e PutnamBench bloqueados",
+    "no_trained_prover": true
+  }
+}

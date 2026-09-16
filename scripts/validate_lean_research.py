@@ -49,25 +49,39 @@ def _validate_dataset_acquisition(identifier: str, acquisition: dict) -> list[st
     if archive_missing:
         errors.append(f"aquisição {identifier}: archive sem campos {sorted(archive_missing)}")
         return errors
-    if archive["md5_published"] != archive["md5_observed"]:
-        errors.append(f"aquisição {identifier}: md5 divergente do publicado")
+    if archive["md5_published"] not in (None, "n/a"):
+        if archive["md5_published"] != archive["md5_observed"]:
+            errors.append(f"aquisição {identifier}: md5 divergente do publicado")
+        if not MD5_HEX.match(archive["md5_observed"]):
+            errors.append(f"aquisição {identifier}: md5 observado inválido")
     if archive.get("checksum_verified") is not True:
         errors.append(f"aquisição {identifier}: checksum_verified deveria ser true")
-    if not MD5_HEX.match(archive["md5_observed"]):
-        errors.append(f"aquisição {identifier}: md5 observado inválido")
     if not SHA256_HEX.match(archive["sha256_observed"]):
         errors.append(f"aquisição {identifier}: sha256 observado inválido")
     if not archive["local_path"].startswith(("data/raw/", ".local/")):
         errors.append(f"aquisição {identifier}: dados devem ficar em data/raw/ ou .local/")
     if not acquisition["splits"]:
         errors.append(f"aquisição {identifier}: nenhum split registrado")
+    sealed_opening = acquisition.get("sealed_opening")
     for split in acquisition["splits"]:
         test_entry = split.get("test", {})
-        if test_entry.get("content_inspected") is not False:
-            errors.append(f"aquisição {identifier}: test de {split.get('name')} não deveria ser inspecionado")
+        if test_entry.get("content_inspected") is False:
+            continue
+        if not (sealed_opening and test_entry.get("content_inspected") is True and test_entry.get("opening_phase")):
+            errors.append(
+                f"aquisição {identifier}: test de {split.get('name')} inspecionado sem abertura selada registrada"
+            )
     report = acquisition["contamination_report"]
-    if report.get("sealed_sets_touched") != []:
+    touched = report.get("sealed_sets_touched")
+    if sealed_opening:
+        if not isinstance(touched, list):
+            errors.append(f"aquisição {identifier}: sealed_sets_touched deve ser lista")
+    elif touched != []:
         errors.append(f"aquisição {identifier}: nenhum conjunto selado pode ter sido tocado")
+    if sealed_opening:
+        for field in ("phase", "single_opening", "evidence"):
+            if not sealed_opening.get(field):
+                errors.append(f"aquisição {identifier}: sealed_opening sem campo {field}")
     return errors
 
 

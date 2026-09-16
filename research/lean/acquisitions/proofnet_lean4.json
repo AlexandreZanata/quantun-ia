@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "kind": "dataset",
+  "id": "proofnet_lean4",
+  "acquired_at": "2026-09-16T09:10:00Z",
+  "source": {
+    "record": "https://github.com/rahul3613/ProofNet-lean4",
+    "upstream": "https://github.com/zhangir-azerbayev/ProofNet",
+    "commit": "6deae98b3895",
+    "api_response_sha256": null
+  },
+  "version_pin": {
+    "git_commit": "6deae98b3895",
+    "lean_toolchain": "leanprover/lean4:v4.20.0",
+    "mathlib": "v4.20.0",
+    "dataset_file": "proofnet_lean4.jsonl",
+    "dataset_file_sha256": "cffeb0fcc279a578a803ce7fd3e2583d688d0a3f1e0cdc38c96ff53a46270139"
+  },
+  "license": {
+    "id": "MIT",
+    "evidence": "LICENSE no repositório (SPDX MIT via API do GitHub)",
+    "source": "https://github.com/rahul3613/ProofNet-lean4/blob/main/LICENSE"
+  },
+  "archive": {
+    "filename": "proofnet_lean4_6deae98b.tar.gz",
+    "size_bytes": 2466456,
+    "md5_published": "dba1fbabc62acdf078435b7549fcb4f7",
+    "md5_observed": "dba1fbabc62acdf078435b7549fcb4f7",
+    "sha256_observed": "227cd13418356c4b22251eaedc41c686d0011efee03a096d2a14f29a4ae1149f",
+    "checksum_verified": true,
+    "local_path": "data/raw/proofnet4/proofnet_lean4_6deae98b.tar.gz",
+    "note": "upstream não publica checksum; verificação por commit pinado + sha256 local"
+  },
+  "extracted_root": "data/raw/proofnet4/ProofNet-lean4-6deae98b3895",
+  "splits": [
+    {
+      "name": "proofnet_formal",
+      "role": "sealed_evaluation",
+      "test": {
+        "path": "proofnet_lean4.jsonl",
+        "sha256": "cffeb0fcc279a578a803ce7fd3e2583d688d0a3f1e0cdc38c96ff53a46270139",
+        "content_inspected": true,
+        "opening_phase": "LTP-10"
+      }
+    }
+  ],
+  "contamination_report": {
+    "version": 1,
+    "method": "aquisição pinada por commit, licença MIT auditada e abertura única registrada em LTP-10",
+    "sealed_sets_touched": [
+      "proofnet_formal"
+    ],
+    "cross_benchmark": [],
+    "open_items": [
+      "avaliação de generalização depende do mathlib v4.20.0 ou de portabilidade medida"
+    ]
+  },
+  "sealed_opening": {
+    "phase": "LTP-10",
+    "single_opening": true,
+    "evidence": "research/lean/ltp/LTP-10.md"
+  },
+  "status": "acquired_verified"
+}

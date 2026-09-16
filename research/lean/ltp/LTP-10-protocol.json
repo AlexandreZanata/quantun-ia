@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "phase": "LTP-10",
+  "frozen_at": "2026-09-16T09:15:00Z",
+  "datasets": {
+    "proofnet_lean4": {"sample": 24, "reference_cap": 12, "opening": "single", "sealed_copy": ".local/sealed/LTP-10/"},
+    "minictx_v2_mathlib_test": {"sample": 12, "reference_cap": 6, "opening": "single", "sealed_copy": ".local/sealed/LTP-10/"},
+    "minictx_outros_projetos": {"status": "blocked", "reason": "exigem ambientes próprios por projeto (ConNF, FLT, HepLean, Seymour, carleson, foundation)"},
+    "putnambench": {"status": "blocked_on_license", "reason": "repositório sem licença detectada pela API do GitHub; não adquirido, stress test reservado"}
+  },
+  "environment": {
+    "lean": "leanprover/lean4:v4.10.0-rc1",
+    "mathlib": "29dcec074de168ac2bf835a77ef68bbe069194c5",
+    "timeout_seconds": 60,
+    "notes": "ProofNet mira mathlib v4.20.0; portabilidade medida no ambiente nativo antes das linhas de referência"
+  },
+  "protocol": {
+    "symbolic": "simp, aesop, omega, linarith, nlinarith em modo single com early stop; pass@5 no portfólio",
+    "tacgen": "ReProver tacgen sem recuperação, greedy, k=1, verificação no Lean nativo",
+    "fairness": ["afirmações hasheadas", "timeout 60 s", "contagem de chamadas", "mesmo hardware"],
+    "metrics": ["taxa de portabilidade", "pass@k", "chamadas ao verificador", "tempo de parede", "pico de RSS", "resolvidos exclusivos"]
+  },
+  "stop_rules": [
+    "abrir cada jsonl selado uma única vez",
+    "não reabrir após o resultado",
+    "registrar resultados negativos sem apagar"
+  ]
+}

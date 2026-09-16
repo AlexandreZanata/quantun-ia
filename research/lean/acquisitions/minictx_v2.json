@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "kind": "dataset",
+  "id": "minictx_v2",
+  "acquired_at": "2026-09-16T09:12:00Z",
+  "source": {
+    "record": "https://huggingface.co/datasets/l3lab/miniCTX-v2",
+    "upstream": "https://github.com/cmu-l3/minictx-eval",
+    "revision": "91bd27f994c6fd6e3e1a85e7ad01c4ee0e6a01de"
+  },
+  "version_pin": {
+    "hf_revision": "91bd27f994c6fd6e3e1a85e7ad01c4ee0e6a01de",
+    "last_modified": "2025-07-22T06:00:50Z"
+  },
+  "license": {
+    "id": "Apache-2.0",
+    "evidence": "cardData.license=apache-2.0 e LICENSE embutido (sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30)",
+    "source": "https://huggingface.co/datasets/l3lab/miniCTX-v2",
+    "transitive_note": "cada projeto (ConNF, FLT, HepLean, Seymour, carleson, foundation) tem licença própria; avaliar por projeto antes de uso confirmatório"
+  },
+  "archive": {
+    "filename": "minictx-v2-rev-91bd27f9",
+    "size_bytes": 7746828,
+    "md5_published": "n/a",
+    "md5_observed": "n/a",
+    "sha256_observed": "a77f86da1231c48c1819349caad3abcc2c93bf451289effe2fea12923039a26a",
+    "checksum_verified": true,
+    "local_path": "data/raw/minictx2",
+    "note": "arquivos individuais verificados por sha256; HF não publica md5"
+  },
+  "splits": [
+    {
+      "name": "minictx_test",
+      "role": "sealed_evaluation",
+      "test": {
+        "path": "minictx-test/",
+        "sha256": null,
+        "content_inspected": true,
+        "opening_phase": "LTP-10"
+      }
+    }
+  ],
+  "files": [
+    {
+      "path": "LICENSE",
+      "size_bytes": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "path": "README.md",
+      "size_bytes": 6547,
+      "sha256": "45859979685b55e05bddc694fcbc9a2dc6b8a888c53df3fe6da0b076f33446c0"
+    },
+    {
+      "path": "minictx-test/ConNF.jsonl",
+      "size_bytes": 451457,
+      "sha256": "7cf4dd07e1997e4e8e2e486ffbf760f8d593e41497821baf95e7ce6e2e8305e7"
+    },
+    {
+      "path": "minictx-test/FLT.jsonl",
+      "size_bytes": 149756,
+      "sha256": "5fd8665b18e7058363a13dcd64421b9abac5d6574c9716d823a5178991ef8765"
+    },
+    {
+      "path": "minictx-test/HepLean.jsonl",
+      "size_bytes": 612707,
+      "sha256": "2882ad856f196ddd751193620a655ec4cbcb2817b1bbb6565df1b3eb8262b004"
+    },
+    {
+      "path": "minictx-test/Seymour.jsonl",
+      "size_bytes": 391317,
+      "sha256": "cd633b6c605e2bba9b19c773ba3a4af8cb9ac5f4d095fda793c4372e2cf73839"
+    },
+    {
+      "path": "minictx-test/carleson.jsonl",
+      "size_bytes": 1448208,
+      "sha256": "4ba11573051f10a1ac17ec464a7e985c492021dfff446794ae04087683362667"
+    },
+    {
+      "path": "minictx-test/foundation.jsonl",
+      "size_bytes": 310047,
+      "sha256": "aef8a62bd2e907aa6e087ffb3e9472b87a23c677f62e71bebc7450360322dc31"
+    },
+    {
+      "path": "minictx-test/mathlib.jsonl",
+      "size_bytes": 693783,
+      "sha256": "3aecd340e0a8bfaa07638f9ed4ed715543449713344400372311042ca32c2200"
+    },
+    {
+      "path": "minictx-valid/ConNF.jsonl",
+      "size_bytes": 574574,
+      "sha256": "df48eba850b55b2cbc2dabccac09e2cd60ca107490619b53dcf0350eb36d5f95"
+    },
+    {
+      "path": "minictx-valid/FLT.jsonl",
+      "size_bytes": 110458,
+      "sha256": "a681854b3596e87fe811ea200e81f3639684e9ae12edfdc7f7c9054789ecc62c"
+    },
+    {
+      "path": "minictx-valid/HepLean.jsonl",
+      "size_bytes": 655506,
+      "sha256": "3a80d34edc29770e3dd38875c88372c87c292c00d7d178351a17da5d4b79b689"
+    },
+    {
+      "path": "minictx-valid/Seymour.jsonl",
+      "size_bytes": 413501,
+      "sha256": "5f1ca3dd9098783e97f66c832e5be243c70daba614c9099485a8e66c75390c9b"
+    },
+    {
+      "path": "minictx-valid/carleson.jsonl",
+      "size_bytes": 917520,
+      "sha256": "bd3ca06ad0689153b6b755d974ff26ebc4ff79c08b503c54a7bc3dfb1b2e84c5"
+    },
+    {
+      "path": "minictx-valid/foundation.jsonl",
+      "size_bytes": 311487,
+      "sha256": "4556501b86bcb46353fc11db789475a81a1b1b778460babcdae7ddae0aa97713"
+    },
+    {
+      "path": "minictx-valid/mathlib.jsonl",
+      "size_bytes": 688602,
+      "sha256": "e7d8bd963feddb48d768c9c3dfd05c23df4d2de3b4380fd895ab3d23ee8d8461"
+    }
+  ],
+  "contamination_report": {
+    "version": 1,
+    "method": "revisão HF pinada, licença Apache-2.0 auditada, abertura única por projeto em LTP-10",
+    "sealed_sets_touched": [
+      "minictx_test"
+    ],
+    "cross_benchmark": [],
+    "open_items": [
+      "projetos além de mathlib exigem ambientes próprios; avaliação de generalização parcial"
+    ]
+  },
+  "sealed_opening": {
+    "phase": "LTP-10",
+    "single_opening": true,
+    "evidence": "research/lean/ltp/LTP-10.md"
+  },
+  "status": "acquired_verified"
+}

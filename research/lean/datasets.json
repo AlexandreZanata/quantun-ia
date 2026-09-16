@@ -54,29 +54,29 @@
       "role": "secondary_sealed_evaluation",
       "source": "https://github.com/rahul3613/ProofNet-lean4",
       "upstream": "https://github.com/zhangir-azerbayev/ProofNet",
-      "version_pin": "commit required at acquisition",
-      "license": "pending explicit audit of Lean 4 port; original repository MIT",
-      "status": "planned_blocked_on_license",
-      "reason": "Matemática universitária; usar apenas a porta Lean 4 pinada."
+      "version_pin": "commit 6deae98b3895; lean-toolchain v4.20.0; mathlib v4.20.0",
+      "license": "MIT auditada (LICENSE no repositório)",
+      "status": "acquired_verified",
+      "reason": "Formalizações de ProofNet portadas para Lean 4; aberto uma única vez em LTP-10."
     },
     {
       "id": "minictx_v2",
       "role": "contextual_ood_evaluation",
       "source": "https://huggingface.co/datasets/l3lab/miniCTX-v2",
       "upstream": "https://github.com/cmu-l3/minictx-eval",
-      "version_pin": "HF revision and project commits required",
-      "license": "pending per-project/transitive audit",
-      "status": "planned_blocked_on_license",
-      "reason": "Avalia prova com contexto novo e longo de projetos reais."
+      "version_pin": "HF revision 91bd27f994c6fd6e3e1a85e7ad01c4ee0e6a01de",
+      "license": "Apache-2.0 auditada; projetos transitivos exigem auditoria por projeto",
+      "status": "acquired_verified",
+      "reason": "Contexto de projeto para OOD; avaliado apenas o projeto mathlib em LTP-10."
     },
     {
       "id": "putnambench",
       "role": "final_stress_test_only",
       "source": "https://github.com/trishullab/PutnamBench",
       "version_pin": "commit required; record answer/no-answer variant",
-      "license": "repository license audit required",
-      "status": "planned_blocked_on_license",
-      "reason": "Teto de dificuldade; nunca usar para busca das 100 hipóteses."
+      "license": "nenhuma licença detectada pela API do GitHub em 2026-09-16",
+      "status": "blocked_on_license",
+      "reason": "Bloqueado: sem licença explícita; não adquirido. Stress test reservado."
     },
     {
       "id": "lean_workbook",
@@ -90,4 +90,3 @@
     }
   ]
 }
-
