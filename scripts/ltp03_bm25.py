@@ -67,10 +67,17 @@ def locate_premise(premises: list[dict[str, Any]], by_path: dict[str, list[int]]
 
 def transitive_closure(imports: dict[str, list[str]], known_paths: set[str]) -> dict[str, set[str]]:
     module_to_path = {path[: -len(".lean")].replace("/", "."): path for path in known_paths}
-    graph = {
-        path: [module_to_path[name] for name in import_list if name in module_to_path]
-        for path, import_list in imports.items()
-    }
+    graph: dict[str, list[str]] = {}
+    for path, import_list in imports.items():
+        targets = []
+        for name in import_list:
+            if name in known_paths:
+                targets.append(name)
+                continue
+            mapped = module_to_path.get(name)
+            if mapped is not None:
+                targets.append(mapped)
+        graph[path] = targets
     memo: dict[str, set[str]] = {}
 
     def visit(node: str, stack: set[str]) -> set[str]:

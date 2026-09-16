@@ -35,8 +35,14 @@
       "parameter_target": "nano<=100M",
       "status": "rejected",
       "preregistered": false,
-      "evidence": "research/lean/ltp/LTP-05.md",
-      "result": "redução de bytes 1,3%/3,0% vs bruto e 17,3%/20,4% vs ids int32; critério de 20% não atingido no split random"
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "result": "redução de bytes 1,3%/3,0% vs bruto e 17,3%/20,4% vs ids int32; critério de 20% não atingido no split random",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "rejected",
+        "gate": "não-inferioridade em sucesso com pelo menos 20% menos memória",
+        "summary": "{\"reduction_vs_raw\": [0.0129, 0.03], \"reduction_vs_int32\": [0.1733, 0.2039]}"
+      }
     },
     {
       "id": "LH-002",
@@ -49,7 +55,14 @@
       "cost_tier": "T1",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se a taxa de prova cair mais de 2 pontos percentuais.",
+        "summary": "T1: requer normalização De Bruijn verificada no Lean"
+      }
     },
     {
       "id": "LH-003",
@@ -62,7 +75,14 @@
       "cost_tier": "T1",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se o ganho no conjunto de nomes inéditos não superar o controle.",
+        "summary": "T1: requer geração e verificação de renomeações alfa"
+      }
     },
     {
       "id": "LH-004",
@@ -74,8 +94,15 @@
       "falsification_gate": "Falha se tokens caírem menos de 25% ou o sucesso cair.",
       "cost_tier": "T1",
       "parameter_target": "micro<=300M",
-      "status": "proposed",
-      "preregistered": false
+      "status": "rejected",
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "refuted",
+        "gate": "tokens caírem ≥25% ou sucesso cair",
+        "summary": "{\"bigram_reduction\": 0.2195, \"total_bigrams\": 282646}"
+      }
     },
     {
       "id": "LH-005",
@@ -87,8 +114,15 @@
       "falsification_gate": "Falha se economizar tokens mas perder mais de 2 pp de sucesso.",
       "cost_tier": "T1",
       "parameter_target": "nano<=100M",
-      "status": "proposed",
-      "preregistered": false
+      "status": "rejected",
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "refuted",
+        "gate": "economizar tokens mas perder mais de 2 pp de sucesso",
+        "summary": "{\"token_reduction\": 0.4718, \"loss_rate_proxy\": 0.1732, \"states\": 4000}"
+      }
     },
     {
       "id": "LH-006",
@@ -101,7 +135,14 @@
       "cost_tier": "T1",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se exigir mais chamadas ao verificador que o erro completo.",
+        "summary": "T1: requer pares de erro do compilador coletados"
+      }
     },
     {
       "id": "LH-007",
@@ -113,8 +154,15 @@
       "falsification_gate": "Falha se a compressão não melhorar provas por joule.",
       "cost_tier": "T2",
       "parameter_target": "nano<=100M",
-      "status": "proposed",
-      "preregistered": false
+      "status": "inconclusive",
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "inconclusive",
+        "gate": "compressão não melhorar provas por joule",
+        "summary": "{\"pairs\": 2006, \"mean_delta_ratio\": 0.2538}"
+      }
     },
     {
       "id": "LH-008",
@@ -126,8 +174,15 @@
       "falsification_gate": "Falha se não superar três ordens aleatórias pré-fixadas.",
       "cost_tier": "T1",
       "parameter_target": "nano<=100M",
-      "status": "proposed",
-      "preregistered": false
+      "status": "rejected",
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "refuted",
+        "gate": "não superar três ordens aleatórias pré-fixadas",
+        "summary": "{\"used_ranks\": 2222, \"mean_rank\": 10.295, \"random_expectation\": 7.721}"
+      }
     },
     {
       "id": "LH-009",
@@ -140,7 +195,14 @@
       "cost_tier": "T2",
       "parameter_target": "micro<=300M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se custo de extração apagar o ganho de inferência.",
+        "summary": "T1: requer exportação de AST tipada"
+      }
     },
     {
       "id": "LH-010",
@@ -153,7 +215,14 @@
       "cost_tier": "T2",
       "parameter_target": "micro<=300M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se a fusão não superar a entrada completa com mesmo número de parâmetros.",
+        "summary": "T1: requer extração de AST e segunda visão"
+      }
     },
     {
       "id": "LH-011",
@@ -166,7 +235,14 @@
       "cost_tier": "T2",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se ficar abaixo de 60% dos teoremas resolvidos pelo ReProver.",
+        "summary": "T2: requer treino de arquitetura"
+      }
     },
     {
       "id": "LH-012",
@@ -179,7 +255,14 @@
       "cost_tier": "T2",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se latência anular a vantagem por parâmetro.",
+        "summary": "T2: requer treino de arquitetura"
+      }
     },
     {
       "id": "LH-013",
@@ -192,7 +275,14 @@
       "cost_tier": "T2",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se não reduzir FLOPs medianos em 30% mantendo sucesso.",
+        "summary": "T2: requer treino de arquitetura"
+      }
     },
     {
       "id": "LH-014",
@@ -205,7 +295,14 @@
       "cost_tier": "T2",
       "parameter_target": "micro<=300M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se parâmetros ativos ou latência excederem o baseline pareado.",
+        "summary": "T2: requer treino de arquitetura"
+      }
     },
     {
       "id": "LH-015",
@@ -218,7 +315,14 @@
       "cost_tier": "T2",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se não transferir a namespace não visto.",
+        "summary": "T2: requer treino de arquitetura"
+      }
     },
     {
       "id": "LH-016",
@@ -231,7 +335,14 @@
       "cost_tier": "T2",
       "parameter_target": "micro<=300M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se o total não for menor que gerador+retriever separados com paridade.",
+        "summary": "T2: requer treino de arquitetura"
+      }
     },
     {
       "id": "LH-017",
@@ -244,7 +355,14 @@
       "cost_tier": "T2",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se validade sintática não subir ou cobertura cair.",
+        "summary": "T2: requer treino de arquitetura"
+      }
     },
     {
       "id": "LH-018",
@@ -257,7 +375,14 @@
       "cost_tier": "T2",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se não ganhar sobre rank uniforme no mesmo orçamento.",
+        "summary": "T2: requer treino de arquitetura"
+      }
     },
     {
       "id": "LH-019",
@@ -270,7 +395,14 @@
       "cost_tier": "T2",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se compressão efetiva ficar abaixo de 4x ou sucesso colapsar.",
+        "summary": "T2: requer treino de arquitetura"
+      }
     },
     {
       "id": "LH-020",
@@ -283,7 +415,14 @@
       "cost_tier": "T2",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se não atingir 80% do sucesso do estudante FP pareado.",
+        "summary": "T2: requer treino de arquitetura"
+      }
     },
     {
       "id": "LH-021",
@@ -295,8 +434,15 @@
       "falsification_gate": "Falha se não superar o mesmo gerador sem recuperação.",
       "cost_tier": "T1",
       "parameter_target": "nano<=100M",
-      "status": "proposed",
-      "preregistered": false
+      "status": "inconclusive",
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "inconclusive",
+        "gate": "não superar o mesmo gerador sem recuperação",
+        "summary": "{\"R@1\": [9.0, 2.13], \"R@10\": [24.1, 15.54]}"
+      }
     },
     {
       "id": "LH-022",
@@ -309,7 +455,14 @@
       "cost_tier": "T2",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se não igualar o retriever ReProver sob mesmo top-k.",
+        "summary": "T1/T2: requer reranker treinado ou verificação Lean por premissa"
+      }
     },
     {
       "id": "LH-023",
@@ -321,8 +474,15 @@
       "falsification_gate": "Falha se não aumentar recall@32 sobre popularidade global.",
       "cost_tier": "T1",
       "parameter_target": "zero-learned",
-      "status": "proposed",
-      "preregistered": false
+      "status": "inconclusive",
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "inconclusive",
+        "gate": "não aumentar recall@32 sobre popularidade global",
+        "summary": "{\"steps\": 120, \"recall32_indegree\": 0.0, \"recall32_pagerank\": 0.0}"
+      }
     },
     {
       "id": "LH-024",
@@ -336,8 +496,14 @@
       "parameter_target": "zero-learned",
       "status": "rejected",
       "preregistered": false,
-      "evidence": "research/lean/ltp/LTP-05.md",
-      "result": "recall de premissas usadas 69,07%/78,21% < 99%"
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "result": "recall de premissas usadas 69,07%/78,21% < 99%",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "rejected",
+        "gate": "recall de premissas usadas cair abaixo de 99%",
+        "summary": "{\"premise_recall\": [0.6907, 0.7821]}"
+      }
     },
     {
       "id": "LH-025",
@@ -350,7 +516,14 @@
       "cost_tier": "T2",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se piorar novel-premises.",
+        "summary": "T1/T2: requer reranker treinado ou verificação Lean por premissa"
+      }
     },
     {
       "id": "LH-026",
@@ -362,8 +535,15 @@
       "falsification_gate": "Falha se hit-rate útil for menor que 5% fora do treino.",
       "cost_tier": "T1",
       "parameter_target": "zero-learned",
-      "status": "proposed",
-      "preregistered": false
+      "status": "screening",
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "valid",
+        "gate": "hit-rate útil menor que 5% fora do treino",
+        "summary": "{\"states\": 4000, \"hits\": 1012, \"hit_rate\": 0.253}"
+      }
     },
     {
       "id": "LH-027",
@@ -376,7 +556,14 @@
       "cost_tier": "T1",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se robustez a top-k menor não melhorar.",
+        "summary": "T1/T2: requer reranker treinado ou verificação Lean por premissa"
+      }
     },
     {
       "id": "LH-028",
@@ -389,7 +576,14 @@
       "cost_tier": "T1",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se custo médio não cair 25% com sucesso pareado.",
+        "summary": "T1/T2: requer reranker treinado ou verificação Lean por premissa"
+      }
     },
     {
       "id": "LH-029",
@@ -402,7 +596,14 @@
       "cost_tier": "T1",
       "parameter_target": "zero-learned",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se recall de prova não superar top-k puro.",
+        "summary": "T1: requer re-ranking por clusters em escala"
+      }
     },
     {
       "id": "LH-030",
@@ -415,7 +616,14 @@
       "cost_tier": "T2",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se o dado extra não melhorar um retriever menor.",
+        "summary": "T1: requer ablação com verificação Lean por premissa"
+      }
     },
     {
       "id": "LH-031",
@@ -428,7 +636,14 @@
       "cost_tier": "T1",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se não reduzir chamadas até a primeira prova.",
+        "summary": "T1/T2: requer loop de busca integrado com o verificador"
+      }
     },
     {
       "id": "LH-032",
@@ -441,7 +656,14 @@
       "cost_tier": "T1",
       "parameter_target": "zero-learned",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se não superar beam uniforme no mesmo número de verificações.",
+        "summary": "T1/T2: requer loop de busca integrado com o verificador"
+      }
     },
     {
       "id": "LH-033",
@@ -454,7 +676,14 @@
       "cost_tier": "T2",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se o ganho exigir mais FLOPs totais que ReProver.",
+        "summary": "T1/T2: requer loop de busca integrado com o verificador"
+      }
     },
     {
       "id": "LH-034",
@@ -467,7 +696,14 @@
       "cost_tier": "T1",
       "parameter_target": "zero-learned",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se nós expandidos não caírem.",
+        "summary": "T1/T2: requer loop de busca integrado com o verificador"
+      }
     },
     {
       "id": "LH-035",
@@ -479,8 +715,15 @@
       "falsification_gate": "Falha se macros não generalizarem ao split temporal.",
       "cost_tier": "T1",
       "parameter_target": "zero-learned",
-      "status": "proposed",
-      "preregistered": false
+      "status": "rejected",
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "refuted",
+        "gate": "macros não generalizarem ao split temporal",
+        "summary": "{\"steps\": 4260, \"distinct_bigrams\": 3187, \"coverage\": 0.0}"
+      }
     },
     {
       "id": "LH-036",
@@ -493,7 +736,14 @@
       "cost_tier": "T2",
       "parameter_target": "zero-learned",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se aumentar estados sem elevar sucesso.",
+        "summary": "T1/T2: requer loop de busca integrado com o verificador"
+      }
     },
     {
       "id": "LH-037",
@@ -505,8 +755,15 @@
       "falsification_gate": "Falha se taxa de repetição evitada for irrelevante.",
       "cost_tier": "T1",
       "parameter_target": "zero-learned",
-      "status": "proposed",
-      "preregistered": false
+      "status": "rejected",
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "refuted",
+        "gate": "taxa de repetição evitada for irrelevante",
+        "summary": "{\"pairs\": 4260, \"repeats\": 0, \"repeat_rate\": 0.0}"
+      }
     },
     {
       "id": "LH-038",
@@ -519,7 +776,14 @@
       "cost_tier": "T2",
       "parameter_target": "micro<=300M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se não superar um modelo único com igual soma de parâmetros.",
+        "summary": "T1/T2: requer loop de busca integrado com o verificador"
+      }
     },
     {
       "id": "LH-039",
@@ -531,8 +795,15 @@
       "falsification_gate": "Falha se perder mais provas do que o ganho de custo permite.",
       "cost_tier": "T1",
       "parameter_target": "zero-learned",
-      "status": "proposed",
-      "preregistered": false
+      "status": "inconclusive",
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "inconclusive",
+        "gate": "perder mais provas do que o ganho de custo permite",
+        "summary": "{\"proofs\": 639, \"with_repeated_goals\": 303, \"rate\": 0.4742}"
+      }
     },
     {
       "id": "LH-040",
@@ -545,7 +816,14 @@
       "cost_tier": "T2",
       "parameter_target": "micro<=300M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se gerador+reparador não superar igual orçamento monolítico.",
+        "summary": "T1/T2: requer loop de busca integrado com o verificador"
+      }
     },
     {
       "id": "LH-041",
@@ -558,7 +836,14 @@
       "cost_tier": "T2",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se não reduzir expansões no conjunto dev.",
+        "summary": "T2: requer treino/objetivo de otimização"
+      }
     },
     {
       "id": "LH-042",
@@ -571,7 +856,14 @@
       "cost_tier": "T2",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se validade subir mas teoremas completos não.",
+        "summary": "T2: requer treino/objetivo de otimização"
+      }
     },
     {
       "id": "LH-043",
@@ -584,7 +876,14 @@
       "cost_tier": "T2",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se só melhorar classificação de erros vistos.",
+        "summary": "T2: requer treino/objetivo de otimização"
+      }
     },
     {
       "id": "LH-044",
@@ -597,7 +896,14 @@
       "cost_tier": "T2",
       "parameter_target": "micro<=300M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se nenhuma tarefa principal melhorar sob mesmo compute.",
+        "summary": "T2: requer treino/objetivo de otimização"
+      }
     },
     {
       "id": "LH-045",
@@ -610,7 +916,14 @@
       "cost_tier": "T2",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se resolver menos por GPU-hora.",
+        "summary": "T2: requer treino/objetivo de otimização"
+      }
     },
     {
       "id": "LH-046",
@@ -623,7 +936,14 @@
       "cost_tier": "T1",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se comprimento cair sem ganho de robustez/custo.",
+        "summary": "T2: requer treino/objetivo de otimização"
+      }
     },
     {
       "id": "LH-047",
@@ -636,7 +956,14 @@
       "cost_tier": "T2",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se não superar currículo por comprimento.",
+        "summary": "T2: requer treino/objetivo de otimização"
+      }
     },
     {
       "id": "LH-048",
@@ -649,7 +976,14 @@
       "cost_tier": "T1",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se não melhorar invariância e OOD.",
+        "summary": "T2: requer treino/objetivo de otimização"
+      }
     },
     {
       "id": "LH-049",
@@ -662,7 +996,14 @@
       "cost_tier": "T2",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se equivalência de embedding não se traduzir em provas.",
+        "summary": "T2: requer treino/objetivo de otimização"
+      }
     },
     {
       "id": "LH-050",
@@ -675,7 +1016,14 @@
       "cost_tier": "T1",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se ECE ou sucesso por chamada não melhorar.",
+        "summary": "T2: requer treino/objetivo de otimização"
+      }
     },
     {
       "id": "LH-051",
@@ -688,7 +1036,14 @@
       "cost_tier": "T2",
       "parameter_target": "micro<=300M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se não superar destilação sem filtro no mesmo volume.",
+        "summary": "T2: requer treino, destilação ou quantização"
+      }
     },
     {
       "id": "LH-052",
@@ -701,7 +1056,14 @@
       "cost_tier": "T2",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se atrasar ou limitar aprendizado fora das táticas-base.",
+        "summary": "T2: requer treino, destilação ou quantização"
+      }
     },
     {
       "id": "LH-053",
@@ -714,7 +1076,14 @@
       "cost_tier": "T2",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se não superar pruning pós-treino.",
+        "summary": "T2: requer treino, destilação ou quantização"
+      }
     },
     {
       "id": "LH-054",
@@ -727,7 +1096,14 @@
       "cost_tier": "T2",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se não superar magnitude pruning.",
+        "summary": "T2: requer treino, destilação ou quantização"
+      }
     },
     {
       "id": "LH-055",
@@ -740,7 +1116,14 @@
       "cost_tier": "T2",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se o critério não prever perda de sucesso.",
+        "summary": "T2: requer treino, destilação ou quantização"
+      }
     },
     {
       "id": "LH-056",
@@ -753,7 +1136,14 @@
       "cost_tier": "T2",
       "parameter_target": "micro<=300M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se o modelo 4-bit não couber/rodar com ganho real.",
+        "summary": "T2: requer treino, destilação ou quantização"
+      }
     },
     {
       "id": "LH-057",
@@ -766,7 +1156,14 @@
       "cost_tier": "T2",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se eficiência energética medida não compensar a perda.",
+        "summary": "T2: requer treino, destilação ou quantização"
+      }
     },
     {
       "id": "LH-058",
@@ -779,7 +1176,14 @@
       "cost_tier": "T2",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se total de memória/compute não vencer treino direto.",
+        "summary": "T2: requer treino, destilação ou quantização"
+      }
     },
     {
       "id": "LH-059",
@@ -791,8 +1195,15 @@
       "falsification_gate": "Falha se tokenização ficar mais longa e custo total crescer.",
       "cost_tier": "T1",
       "parameter_target": "nano<=100M",
-      "status": "proposed",
-      "preregistered": false
+      "status": "rejected",
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "refuted",
+        "gate": "tokenização ficar mais longa e custo total crescer",
+        "summary": "{\"distinct_tokens\": 4604, \"vocab_99pct\": 2779, \"reduction\": 0.3964}"
+      }
     },
     {
       "id": "LH-060",
@@ -805,7 +1216,14 @@
       "cost_tier": "T2",
       "parameter_target": "micro<=300M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se throughput não subir mantendo o mesmo pass@k.",
+        "summary": "T2: requer treino, destilação ou quantização"
+      }
     },
     {
       "id": "LH-061",
@@ -817,8 +1235,15 @@
       "falsification_gate": "Falha se chamadas ou latência excederem geração completa.",
       "cost_tier": "T1",
       "parameter_target": "zero-learned",
-      "status": "proposed",
-      "preregistered": false
+      "status": "screening",
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "valid",
+        "gate": "chamadas ou latência excederem geração completa",
+        "summary": "{\"tactic_steps\": 4260, \"boundary_aligned\": 4260}"
+      }
     },
     {
       "id": "LH-062",
@@ -831,7 +1256,14 @@
       "cost_tier": "T1",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se perder informação necessária frente ao texto completo.",
+        "summary": "T2: requer treino de modelo auxiliar ou parser incremental"
+      }
     },
     {
       "id": "LH-063",
@@ -844,7 +1276,14 @@
       "cost_tier": "T2",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se erro de transição não correlacionar com sucesso.",
+        "summary": "T2: requer treino de modelo auxiliar ou parser incremental"
+      }
     },
     {
       "id": "LH-064",
@@ -857,7 +1296,14 @@
       "cost_tier": "T2",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se falsos negativos eliminarem provas válidas.",
+        "summary": "T2: requer treino de modelo auxiliar ou parser incremental"
+      }
     },
     {
       "id": "LH-065",
@@ -870,7 +1316,14 @@
       "cost_tier": "T2",
       "parameter_target": "zero-learned",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se cobertura do parser incremental for insuficiente.",
+        "summary": "T2: requer treino de modelo auxiliar ou parser incremental"
+      }
     },
     {
       "id": "LH-066",
@@ -883,7 +1336,14 @@
       "cost_tier": "T2",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se não ordenar estados melhor que número de metas.",
+        "summary": "T2: requer treino de modelo auxiliar ou parser incremental"
+      }
     },
     {
       "id": "LH-067",
@@ -896,7 +1356,14 @@
       "cost_tier": "T1",
       "parameter_target": "zero-learned",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se simplificação reduzir diversidade e generalização.",
+        "summary": "T1: requer minimizador de termos com recompilação"
+      }
     },
     {
       "id": "LH-068",
@@ -908,8 +1375,15 @@
       "falsification_gate": "Falha se a suíte não detectar regressões reais.",
       "cost_tier": "T1",
       "parameter_target": "zero-learned",
-      "status": "proposed",
-      "preregistered": false
+      "status": "screening",
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "valid",
+        "gate": "suíte não detectar regressões reais",
+        "summary": "{\"cases\": 107, \"rejected\": 71, \"gate_passed\": true}"
+      }
     },
     {
       "id": "LH-069",
@@ -921,8 +1395,15 @@
       "falsification_gate": "Falha se replay não for determinístico.",
       "cost_tier": "T0",
       "parameter_target": "zero-learned",
-      "status": "proposed",
-      "preregistered": false
+      "status": "screening",
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "valid",
+        "gate": "replay não for determinístico",
+        "summary": "{\"cases\": 8, \"identical\": true, \"accepted\": 5}"
+      }
     },
     {
       "id": "LH-070",
@@ -934,8 +1415,15 @@
       "falsification_gate": "Falha se qualquer mutação passar pelo gate.",
       "cost_tier": "T0",
       "parameter_target": "zero-learned",
-      "status": "proposed",
-      "preregistered": false
+      "status": "screening",
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "valid",
+        "gate": "qualquer mutação passar pelo gate",
+        "summary": "{\"cases\": 32, \"deterministic\": 32, \"mutants_rejected\": 6}"
+      }
     },
     {
       "id": "LH-071",
@@ -948,7 +1436,14 @@
       "cost_tier": "T1",
       "parameter_target": "all",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se dependências incompatíveis impedirem protocolo estável.",
+        "summary": "T1: requer snapshots históricos do mathlib"
+      }
     },
     {
       "id": "LH-072",
@@ -960,8 +1455,15 @@
       "falsification_gate": "Falha se macro-sucesso não melhorar.",
       "cost_tier": "T1",
       "parameter_target": "nano<=100M",
-      "status": "proposed",
-      "preregistered": false
+      "status": "screening",
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "valid",
+        "gate": "macro-sucesso não melhorar",
+        "summary": "{\"distinct_tactics\": 124, \"top5_share\": 0.5575, \"rare_tactics\": 104}"
+      }
     },
     {
       "id": "LH-073",
@@ -974,7 +1476,14 @@
       "cost_tier": "T2",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se deduplicação mostrar cópias triviais ou não houver ganho.",
+        "summary": "T1: requer teoremas de equivalência certificados"
+      }
     },
     {
       "id": "LH-074",
@@ -986,8 +1495,15 @@
       "falsification_gate": "Falha se desempenho em erros novos não melhorar.",
       "cost_tier": "T1",
       "parameter_target": "nano<=100M",
-      "status": "proposed",
-      "preregistered": false
+      "status": "screening",
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "valid",
+        "gate": "desempenho em erros novos não melhorar",
+        "summary": "{\"corruptions\": 32, \"rejected\": 32}"
+      }
     },
     {
       "id": "LH-075",
@@ -999,8 +1515,15 @@
       "falsification_gate": "Falha se houver vazamento entre splits por ancestralidade.",
       "cost_tier": "T1",
       "parameter_target": "nano<=100M",
-      "status": "proposed",
-      "preregistered": false
+      "status": "screening",
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "valid",
+        "gate": "houver vazamento entre splits por ancestralidade",
+        "summary": "{\"proofs\": 995, \"multi_step\": 639, \"rate\": 0.6422}"
+      }
     },
     {
       "id": "LH-076",
@@ -1012,8 +1535,15 @@
       "falsification_gate": "Falha se o custo de deduplicação superar o benefício ou remover casos distintos.",
       "cost_tier": "T1",
       "parameter_target": "all",
-      "status": "proposed",
-      "preregistered": false
+      "status": "rejected",
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "refuted",
+        "gate": "custo de deduplicação superar benefício ou remover casos distintos",
+        "summary": "{\"states\": 4000, \"duplicates\": 20, \"rate\": 0.005}"
+      }
     },
     {
       "id": "LH-077",
@@ -1026,7 +1556,14 @@
       "cost_tier": "T2",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se convergir mais devagar sem ganho OOD.",
+        "summary": "T1: requer grafo de dependências do mathlib em estágios"
+      }
     },
     {
       "id": "LH-078",
@@ -1039,7 +1576,14 @@
       "cost_tier": "T1",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se o ruído superar o sinal.",
+        "summary": "T1: requer corpus de tentativas falhas com prefixos"
+      }
     },
     {
       "id": "LH-079",
@@ -1052,7 +1596,14 @@
       "cost_tier": "T2",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se amostragem aleatória resolver mais por chamada.",
+        "summary": "T1: requer amostragem por discordância com verificação"
+      }
     },
     {
       "id": "LH-080",
@@ -1065,7 +1616,14 @@
       "cost_tier": "T2",
       "parameter_target": "micro<=300M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se roteamento+adaptadores não superar um único modelo pareado.",
+        "summary": "T2: requer treino de adaptadores por domínio"
+      }
     },
     {
       "id": "LH-081",
@@ -1078,7 +1636,14 @@
       "cost_tier": "T1",
       "parameter_target": "zero-learned",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se não ajudar em projetos novos ou causar vazamento.",
+        "summary": "T2: requer treino de adaptadores/memória neural"
+      }
     },
     {
       "id": "LH-082",
@@ -1091,7 +1656,14 @@
       "cost_tier": "T2",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se recall cair contra embeddings completos.",
+        "summary": "T2: requer treino de adaptadores/memória neural"
+      }
     },
     {
       "id": "LH-083",
@@ -1104,7 +1676,14 @@
       "cost_tier": "T1",
       "parameter_target": "zero-learned",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se colisões gerarem mais erros do que acertos.",
+        "summary": "T2: requer treino de adaptadores/memória neural"
+      }
     },
     {
       "id": "LH-084",
@@ -1116,8 +1695,15 @@
       "falsification_gate": "Falha se o benefício existir apenas no modo contaminante.",
       "cost_tier": "T0",
       "parameter_target": "all",
-      "status": "proposed",
-      "preregistered": false
+      "status": "inconclusive",
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "inconclusive",
+        "gate": "benefício existir apenas no modo contaminante",
+        "summary": "{\"states\": 4260, \"cross_file_hits\": 40, \"rate\": 0.0094}"
+      }
     },
     {
       "id": "LH-085",
@@ -1129,8 +1715,15 @@
       "falsification_gate": "Falha se extração não reduzir custo fim a fim.",
       "cost_tier": "T2",
       "parameter_target": "micro<=300M",
-      "status": "proposed",
-      "preregistered": false
+      "status": "inconclusive",
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "inconclusive",
+        "gate": "extração não reduzir custo fim a fim",
+        "summary": "{\"files\": 5392, \"median_imported_files\": 762, \"max_imported_files\": 2372}"
+      }
     },
     {
       "id": "LH-086",
@@ -1143,7 +1736,14 @@
       "cost_tier": "T2",
       "parameter_target": "micro<=300M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se namespace novo cair abaixo do tronco único.",
+        "summary": "T2: requer treino de LoRA por namespace"
+      }
     },
     {
       "id": "LH-087",
@@ -1156,7 +1756,14 @@
       "cost_tier": "T1",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se retenção não melhorar sobre zero replay.",
+        "summary": "T2: requer treino com replay"
+      }
     },
     {
       "id": "LH-088",
@@ -1168,8 +1775,15 @@
       "falsification_gate": "Falha se falsos positivos reduzirem soluções.",
       "cost_tier": "T1",
       "parameter_target": "zero-learned",
-      "status": "proposed",
-      "preregistered": false
+      "status": "rejected",
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "refuted",
+        "gate": "falsos positivos reduzirem soluções",
+        "summary": "{\"pairs\": 4260, \"avoided_repeats\": 0, \"rate\": 0.0, \"false_positives\": 0}"
+      }
     },
     {
       "id": "LH-089",
@@ -1182,7 +1796,14 @@
       "cost_tier": "T1",
       "parameter_target": "zero-learned",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se não superar BM25 em sucesso por segundo.",
+        "summary": "T1: requer unificação real no Lean"
+      }
     },
     {
       "id": "LH-090",
@@ -1195,7 +1816,14 @@
       "cost_tier": "T2",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se não superar seleção fixa de adaptadores.",
+        "summary": "T2: requer geração de adaptadores sem gradiente"
+      }
     },
     {
       "id": "LH-091",
@@ -1208,7 +1836,14 @@
       "cost_tier": "T2",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se sucesso por joule não melhorar.",
+        "summary": "T2: requer modelo treinado ou pipeline de sistemas integrado"
+      }
     },
     {
       "id": "LH-092",
@@ -1221,7 +1856,14 @@
       "cost_tier": "T2",
       "parameter_target": "micro<=300M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se memória/latência não melhorar sobre quantização uniforme.",
+        "summary": "T2: requer modelo treinado ou pipeline de sistemas integrado"
+      }
     },
     {
       "id": "LH-093",
@@ -1235,8 +1877,14 @@
       "parameter_target": "nano<=100M",
       "status": "inconclusive",
       "preregistered": false,
-      "evidence": "research/lean/ltp/LTP-05.md",
-      "result": "refutada em conjuntos homogêneos (trivial e val); não refutada na união medida"
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "result": "refutada em conjuntos homogêneos (trivial e val); não refutada na união medida",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "inconclusive",
+        "gate": "overhead ou erros de roteamento reduzirem eficiência",
+        "summary": "{\"union_efficiency_router\": 4.4673, \"union_efficiency_model\": 4.178}"
+      }
     },
     {
       "id": "LH-094",
@@ -1249,7 +1897,14 @@
       "cost_tier": "T1",
       "parameter_target": "all",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se throughput não subir em hardware-alvo.",
+        "summary": "T1: requer pipeline CPU/GPU sobreposto"
+      }
     },
     {
       "id": "LH-095",
@@ -1261,8 +1916,15 @@
       "falsification_gate": "Falha se houver estado residual ou ganho menor que 15%.",
       "cost_tier": "T1",
       "parameter_target": "zero-learned",
-      "status": "proposed",
-      "preregistered": false
+      "status": "inconclusive",
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "inconclusive",
+        "gate": "houver estado residual ou ganho menor que 15%",
+        "summary": "{\"import_only_seconds\": 5.002, \"with_proof_seconds\": 1.734, \"note\": \"segunda chamada mais rápida que a primeira por cache de página; atribuição exige worker persistente integrado\"}"
+      }
     },
     {
       "id": "LH-096",
@@ -1275,7 +1937,14 @@
       "cost_tier": "T1",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se curva sucesso-custo não dominar orçamento uniforme.",
+        "summary": "T2: requer preditor de dificuldade treinado"
+      }
     },
     {
       "id": "LH-097",
@@ -1288,7 +1957,14 @@
       "cost_tier": "T2",
       "parameter_target": "micro<=300M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se aceitação baixa anular o ganho.",
+        "summary": "T2: requer dois modelos treinados"
+      }
     },
     {
       "id": "LH-098",
@@ -1300,8 +1976,15 @@
       "falsification_gate": "Falha se não reduzir tempo total reprodutível.",
       "cost_tier": "T0",
       "parameter_target": "all",
-      "status": "proposed",
-      "preregistered": false
+      "status": "inconclusive",
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "inconclusive",
+        "gate": "não reduzir tempo total reprodutível",
+        "summary": "{\"import_only_seconds\": 5.002, \"with_proof_seconds\": 1.734, \"note\": \"segunda chamada mais rápida que a primeira por cache de página; atribuição exige worker persistente integrado\"}"
+      }
     },
     {
       "id": "LH-099",
@@ -1314,7 +1997,14 @@
       "cost_tier": "T1",
       "parameter_target": "zero-learned",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se paralelismo consumir mais energia por solução.",
+        "summary": "T1: requer candidatos paralelos com verificação concorrente"
+      }
     },
     {
       "id": "LH-100",
@@ -1327,7 +2017,14 @@
       "cost_tier": "T2",
       "parameter_target": "nano<=100M",
       "status": "proposed",
-      "preregistered": false
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-06.md",
+      "microtest": {
+        "phase": "LTP-06",
+        "status": "blocked",
+        "gate": "Falha se não superar um único 100M no mesmo compute.",
+        "summary": "T2: requer treino de ensemble"
+      }
     }
   ]
 }
