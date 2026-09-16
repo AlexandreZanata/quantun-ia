@@ -4,12 +4,16 @@ from scripts.lean_verify import (
     DEFAULT_ADVERSARIAL,
     DEFAULT_SMOKE,
     LeanContext,
+    build_semantic_source,
     build_source,
+    canonical_type_sha256,
     evaluate_results,
     load_suites,
     materialize_cases,
     normalize_statement,
     parse_axioms,
+    parse_canonical_type,
+    rename_declaration,
     run_lean,
     run_pass,
     scan_forbidden,
@@ -17,6 +21,7 @@ from scripts.lean_verify import (
     validate_adversarial,
     validate_smoke,
 )
+from scripts.ltp04_replay import mutate_declaration as mutate_replay
 
 ROOT = Path(__file__).resolve().parents[1]
 FORBIDDEN = load_suites(DEFAULT_SMOKE, DEFAULT_ADVERSARIAL)[0]["policy"]["forbidden_tokens"]
@@ -86,6 +91,45 @@ def test_case_materialization_covers_valid_mutations_and_specials():
     assert len(ids) == len(cases)
     assert any(case.tampered_statement for case in cases)
     assert any(case.preamble for case in cases)
+
+
+def test_rename_declaration_keeps_example_and_renames_theorems():
+    renamed = rename_declaration("theorem foo.bar (n : Nat) : n + 0 = n := by", "ltp_target")
+    assert renamed.startswith("theorem ltp_target ")
+    assert rename_declaration("example : True := by trivial", "ltp_target").startswith("example")
+
+
+def test_semantic_source_and_canonical_type_parsing():
+    source = build_semantic_source("import Mathlib\n", "lemma foo (n : Nat) : n + 0 = n := by")
+    assert "#check @ltp_target" in source
+    assert "set_option pp.all true" in source
+    assert "lemma ltp_target" in source
+    stdout = "warning: declaration uses 'sorry'\nltp_target : ∀ (n : ℕ),\n  @Eq ℕ n n\n"
+    canonical = parse_canonical_type(stdout)
+    assert canonical == "∀ (n : ℕ), @Eq ℕ n n"
+    assert canonical_type_sha256(canonical) == canonical_type_sha256(canonical)
+    assert parse_canonical_type("nada") is None
+
+
+def test_with_options_inserts_after_imports():
+    from scripts.lean_verify import with_options
+
+    header = "import Mathlib.Algebra\nimport Mathlib.Order\n\n@[simp]\n"
+    prepared = with_options(header, ["set_option autoImplicit false"])
+    assert prepared.index("Mathlib.Order") < prepared.index("set_option autoImplicit false")
+    assert prepared.index("set_option autoImplicit false") < prepared.index("@[simp]")
+    source = build_semantic_source("import Mathlib\n\nopen Foo in\n", "theorem a : True := by")
+    assert source.index("set_option autoImplicit false") < source.index("open Foo in")
+    assert "set_option pp.all true" in source
+
+
+def test_mutate_declaration_changes_statement_text():
+    original = "theorem foo (n : Nat) : n + 0 = n := by"
+    mutated = mutate_replay(original)
+    assert mutated is not None
+    text, label = mutated
+    assert text != original
+    assert label in ("numeral_0_to_1", "le_to_lt", "add_to_mul")
 
 
 def test_run_pass_preserves_run_metadata(tmp_path):

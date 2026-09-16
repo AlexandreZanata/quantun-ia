@@ -28,9 +28,6 @@ def normalize(text: str) -> str:
 
 
 def split_declaration(declaration: str) -> tuple[str, str] | None:
-    match = PROOF_BY.search(declaration)
-    if match:
-        return declaration[: match.end()], declaration[match.end() :]
     depth = 0
     index = 0
     while index < len(declaration) - 1:
@@ -40,7 +37,11 @@ def split_declaration(declaration: str) -> tuple[str, str] | None:
         elif char in ")]}⟩":
             depth -= 1
         elif char == ":" and declaration[index + 1] == "=" and depth == 0:
-            return declaration[: index + 2], declaration[index + 2 :]
+            remainder = declaration[index + 2 :]
+            if re.match(r"\s*by\b", remainder):
+                match = re.match(r"\s*by\b", remainder)
+                return declaration[: index + 2] + match.group(0), remainder[match.end() :]
+            return None
         index += 1
     return None
 

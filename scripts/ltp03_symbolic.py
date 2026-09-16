@@ -19,7 +19,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from scripts.lean_verify import resolve_lean_context, run_lean  # noqa: E402
+from scripts.lean_verify import resolve_lean_context, run_lean, strip_to_additive, with_options  # noqa: E402
 
 ENVIRONMENTS = {
     "modern": ROOT / "lean",
@@ -51,11 +51,13 @@ def replace_imports(header: str) -> str:
 
 
 def portfolio_source(record: dict) -> tuple[str, list[tuple[str, int, int]]]:
-    parts = [record["header"]]
-    if not parts[0].endswith("\n"):
-        parts[0] += "\n"
-    parts.append("set_option autoImplicit false\n")
-    parts.append(f"set_option maxHeartbeats {HEARTBEATS}\n")
+    header = record["header"]
+    if not header.endswith("\n"):
+        header += "\n"
+    options = [f"set_option maxHeartbeats {HEARTBEATS}"]
+    if record["file_path"].startswith("Mathlib/"):
+        options.insert(0, "set_option autoImplicit false")
+    parts = [with_options(strip_to_additive(header), options)]
     ranges: list[tuple[str, int, int]] = []
     for tactic in TACTICS:
         declaration = rename_declaration(record["decl_prefix"], f"ltp_try_{tactic}")
@@ -109,6 +111,51 @@ def run_mode(args) -> int:
     run_dir.mkdir(parents=True, exist_ok=True)
     results = []
     for index, record in enumerate(selected):
+        if args.mode == "single":
+            header = record["header"]
+            if not header.endswith("\n"):
+                header += "\n"
+            options = ["set_option maxHeartbeats " + str(HEARTBEATS)]
+            if record["file_path"].startswith("Mathlib/"):
+                options.insert(0, "set_option autoImplicit false")
+            base = with_options(strip_to_additive(header), options) + record["decl_prefix"]
+            entry = {
+                "split": args.split,
+                "env": args.env,
+                "mode": args.mode,
+                "full_name": record["full_name"],
+                "statement_sha256": record["statement_sha256"],
+                "status": None,
+                "exit_code": None,
+                "wall_seconds": 0.0,
+                "peak_rss_bytes": 0,
+                "per_tactic": {},
+            }
+            for tactic in TACTICS:
+                source = base + "\n  " + tactic + "\n"
+                run = run_lean(source, run_dir / "scratch" / f"{index:02d}_{tactic}", context, args.timeout, MEMORY_LIMIT)
+                if run.status == "ok":
+                    verdict = "closed"
+                elif run.status in ("timeout", "memory_limit"):
+                    verdict = run.status
+                else:
+                    verdict = "error"
+                entry["per_tactic"][tactic] = {"verdict": verdict}
+                entry["wall_seconds"] += run.wall_seconds
+                entry["peak_rss_bytes"] = max(entry["peak_rss_bytes"], run.peak_rss_bytes)
+                if verdict == "closed":
+                    entry["status"] = "ok"
+                    break
+            if entry["status"] is None:
+                entry["status"] = "lean_error"
+            entry["wall_seconds"] = round(entry["wall_seconds"], 3)
+            results.append(entry)
+            print(
+                f"[single {args.env}/{args.split}] {index + 1}/{len(selected)} "
+                f"{record['full_name'][:45]} {entry['per_tactic']}",
+                flush=True,
+            )
+            continue
         if args.mode == "portfolio":
             source, ranges = portfolio_source(record)
             timeout = args.timeout * len(TACTICS)
@@ -153,11 +200,15 @@ def run_mode(args) -> int:
             f"{record['full_name'][:45]} {entry['status']} {run.wall_seconds:.1f}s",
             flush=True,
         )
-    if args.mode == "portfolio":
+    if args.mode in ("portfolio", "single"):
         by_tactic = {
             tactic: {
-                "attempts": len(results),
-                "closed": sum(1 for item in results if item["per_tactic"][tactic]["verdict"] == "closed"),
+                "attempts": sum(1 for item in results if tactic in item["per_tactic"]),
+                "closed": sum(
+                    1
+                    for item in results
+                    if item["per_tactic"].get(tactic, {}).get("verdict") == "closed"
+                ),
             }
             for tactic in TACTICS
         }
@@ -173,9 +224,12 @@ def run_mode(args) -> int:
             "goals": len(selected),
             "goals_closed_by_portfolio": goals_closed,
             "pass_at_1_by_tactic": {
-                tactic: round(by_tactic[tactic]["closed"] / len(results), 4) if results else 0.0
+                tactic: round(by_tactic[tactic]["closed"] / by_tactic[tactic]["attempts"], 4)
+                if by_tactic[tactic]["attempts"]
+                else None
                 for tactic in TACTICS
             },
+            "tactic_attempts": {tactic: by_tactic[tactic]["attempts"] for tactic in TACTICS},
             "portfolio_pass_at_5": round(goals_closed / len(results), 4) if results else 0.0,
             "wall_total_seconds": round(sum(item["wall_seconds"] for item in results), 3),
             "peak_rss_max_bytes": max((item["peak_rss_bytes"] for item in results), default=0),
@@ -204,7 +258,7 @@ def main() -> int:
     parser.add_argument("--statements", required=True)
     parser.add_argument("--env", choices=sorted(ENVIRONMENTS), required=True)
     parser.add_argument("--split", required=True)
-    parser.add_argument("--mode", choices=["portfolio", "portability"], required=True)
+    parser.add_argument("--mode", choices=["portfolio", "portability", "single"], required=True)
     parser.add_argument("--goals", type=int, default=16)
     parser.add_argument("--timeout", type=float, default=30.0)
     parser.add_argument("--out", required=True)

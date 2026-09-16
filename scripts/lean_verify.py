@@ -204,6 +204,78 @@ def statement_sha256(text: str) -> str:
     return hashlib.sha256(normalize_statement(text).encode("utf-8")).hexdigest()
 
 
+SEMANTIC_TARGET = "ltp_target"
+DECL_KEYWORD = re.compile(r"\b(theorem|lemma|example|instance|def)\b")
+
+
+def rename_declaration(declaration: str, new_name: str) -> str:
+    keyword = DECL_KEYWORD.search(declaration)
+    if keyword is None or keyword.group(1) == "example":
+        return declaration
+    start = keyword.end()
+    while start < len(declaration) and declaration[start].isspace():
+        start += 1
+    end = start
+    while end < len(declaration) and (declaration[end].isalnum() or declaration[end] in "._'!"):
+        end += 1
+    if end == start:
+        return declaration
+    return declaration[:start] + new_name + declaration[end:]
+
+
+TO_ADDITIVE_LINE = re.compile(r"^\s*@\[[^\]]*to_additive[^\]]*\]\s*$", re.MULTILINE)
+
+
+def strip_to_additive(header: str) -> str:
+    return TO_ADDITIVE_LINE.sub("", header)
+
+
+def with_options(header: str, options: list[str]) -> str:
+    lines = header.splitlines(keepends=True)
+    insert_at = 0
+    for index, line in enumerate(lines):
+        stripped = line.strip()
+        if stripped.startswith(("import ", "public import ", "import all ")) or stripped == "prelude":
+            insert_at = index + 1
+    options_text = "".join(option + "\n" for option in options)
+    return "".join(lines[:insert_at]) + options_text + "".join(lines[insert_at:])
+
+
+def build_semantic_source(
+    header: str,
+    decl_prefix: str,
+    target: str = SEMANTIC_TARGET,
+    auto_implicit_false: bool = True,
+) -> str:
+    declaration = rename_declaration(decl_prefix, target)
+    separator = "" if header.endswith("\n") else "\n"
+    options = ["set_option autoImplicit false"] if auto_implicit_false else []
+    prepared = with_options(strip_to_additive(header) + separator, options)
+    if not prepared.endswith("\n"):
+        prepared += "\n"
+    return (
+        prepared
+        + declaration
+        + "\n  sorry\n"
+        + "set_option pp.all true\n"
+        + f"#check @{target}\n"
+    )
+
+
+def parse_canonical_type(stdout: str, target: str = SEMANTIC_TARGET) -> str | None:
+    pattern = re.compile(rf"@?([\w.']*\.)?{re.escape(target)}(\.\{{[^}}]*\}})?\s*:\s*")
+    matches = list(pattern.finditer(stdout))
+    if not matches:
+        return None
+    remainder = stdout[matches[-1].end():]
+    canonical = re.sub(r"\s+", " ", remainder).strip()
+    return canonical or None
+
+
+def canonical_type_sha256(canonical: str) -> str:
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+
+
 def file_sha256(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as handle:

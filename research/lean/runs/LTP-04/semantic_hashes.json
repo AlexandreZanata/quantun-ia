@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "source": "research/lean/runs/LTP-04/statements_v2.jsonl",
+  "hashes": {
+    "WithLp.prod_nnnorm_eq_add": {
+      "split": "random",
+      "statement_sha256": "d803a26ba81db73cc3d10a2c9ed5305df44293d1732ce43fcb186b8e1dee70a7",
+      "semantic_sha256": "d34700340b66a22f310e2002601867d390af18e1773a6fd0de0fba181d2db4e9"
+    },
+    "CategoryTheory.ShortComplex.isIso\u2082_of_shortExact_of_isIso\u2081\u2083": {
+      "split": "random",
+      "statement_sha256": "beda0fe55a2312153ef36a46984e7dfd191f6012f25fd5fa297da97b1fb52d2e",
+      "semantic_sha256": "454a49619f76bacabcc047f39aa96183cd56453063feb4924779f25da8fd4edf"
+    },
+    "nhdsWithin_pi_univ_eq": {
+      "split": "random",
+      "statement_sha256": "b5ef711a7922548e15c9ec962f9f38cbbd3db880279da7a33abbac7b4e58f389",
+      "semantic_sha256": "88923b8404a213aa5cdc425d1e74698f5b9328eef44f37ed19aca54e4888d0e8"
+    },
+    "mem_adjoin_of_smul_prime_pow_smul_of_minpoly_isEisensteinAt": {
+      "split": "random",
+      "statement_sha256": "910003dc540d7467c887e210f8e88ffa37600e2956895740684ba1cec8af3e35",
+      "semantic_sha256": "8aba607f0fe6af0a061d0d374af38b40227bcf908b39169201b8287e3e96e68e"
+    },
+    "MvPolynomial.degrees_map_of_injective": {
+      "split": "random",
+      "statement_sha256": "513174c5eb44f077338bb22d929373952730ff003bb696f83c6dcae7dc512a8e",
+      "semantic_sha256": "382b9f137661cd5abd923ebc74d0db24cf0b0aae0fefd98915ca671be20e6ee7"
+    },
+    "CategoryTheory.ShortComplex.SnakeInput.w\u2081\u2083_\u03c4\u2081": {
+      "split": "random",
+      "statement_sha256": "492da15d14952e9a2940530f1dacab718df0fad05c3e04f57a41a558338b6639",
+      "semantic_sha256": "619f16d3742e218d43bb8a4b150e9a00d7cf8ac10c65e3af0481485a9b085b25"
+    },
+    "MeasureTheory.lintegral_nnnorm_condexpL2_le": {
+      "split": "random",
+      "statement_sha256": "fdfd23617b41327737c5773f23ec61bf5080d286f950475fa7475b4a6c6b9b9d",
+      "semantic_sha256": "0e9a93bb89ca16aaa02cd76fcf41eaabedb313037150ce6541a47a69b55eca4b"
+    },
+    "CliffordAlgebra.star_smul": {
+      "split": "random",
+      "statement_sha256": "86778a7e43580f4d2097396ae9f15d9abcff7f04ecc6d7a95cff3e03bc58fa45",
+      "semantic_sha256": "99b2db5d83b5b87194870af204c5a5d9aff1c26bd916fb4bea9911938538ec1b"
+    },
+    "LieSubmodule.coe_toSubmodule_mk": {
+      "split": "random",
+      "statement_sha256": "637039423ae4de9713161cc723b41e5e8fcaf8e4ef2eb0668cbc3974ad988aba",
+      "semantic_sha256": "3aac620c2cf975a8bb5b688bad6f11cdef41dd21176543c7d4b585ea57fac7c8"
+    },
+    "NumberField.InfinitePlace.not_isReal_iff_isComplex": {
+      "split": "random",
+      "statement_sha256": "9d2c626f7c4126d3588527508d19ccf6510ea3896747883512e5c1646ba521cf",
+      "semantic_sha256": "f1b734bca0181f07c998177f740980b963147d4088e98092219dc92a36e54e78"
+    },
+    "smul_finsum": {
+      "split": "random",
+      "statement_sha256": "d5fe3f15568010703ac3b674a9e8729012ca5834604202377f4ac875906e6f59",
+      "semantic_sha256": "981c1b1f121ec14c4a6f22c33098d97a3d6539fce499a12137c718828695102c"
+    },
+    "MeasureTheory.tilted_apply_eq_ofReal_integral": {
+      "split": "random",
+      "statement_sha256": "754405d39788dd5496848af0a956806fb8509a4237bd5234256aa78629319f9e",
+      "semantic_sha256": "844b33fd22b09b15cce386e05bf9d6a49bdad63554b34e6ec53494475cb7b9c8"
+    },
+    "nilpotencyClass_prod": {
+      "split": "random",
+      "statement_sha256": "7510d62ad9da6380c0644f243992950302f658affec233caa08ec1fd6ab0b606",
+      "semantic_sha256": "21c2f4a9ea5d1c17461f61f4787f6c31fcfad94123ddf4303d08e082b8088d8e"
+    },
+    "Ideal.fg_ker_comp": {
+      "split": "random",
+      "statement_sha256": "901673a3238b6b6eb4d3d81a3e9f72731c32324a31169d652783b308a684d508",
+      "semantic_sha256": "c21374cce5adb0361907ee5c6d6fd4197fe695cdf74796cf91c506c57bf3600a"
+    },
+    "sup_right_comm": {
+      "split": "random",
+      "statement_sha256": "91eb27ce37924d1067618dde88dbb7d8fae52b5f7dac3feb0e4d89965972e017",
+      "semantic_sha256": "a6ee931ec9ce34c0df66aa54beab43b31fc67a6f46143e35019709e27386232c"
+    },
+    "Polynomial.lt_natDegree_of_mem_eraseLead_support": {
+      "split": "random",
+      "statement_sha256": "fdcd29afbccd3e046bd62658e57b6451e49abfb0872e938bc78d0f41fb527759",
+      "semantic_sha256": "feeabe4f3c1e109c1e34f2c66f90e9c3a67a79c7a69cf2901e9a50442b5da33d"
+    },
+    "PrimeSpectrum.range_comap_of_surjective": {
+      "split": "novel_premises",
+      "statement_sha256": "3f71276c9b0c60813faa8af1bb8f23d9f68e606b13205315ef581bd8c644cea0",
+      "semantic_sha256": "f90be90e8e95c3f8349195a5a439720302686d2af57a52e4eff4a3757b744d81"
+    },
+    "DirectSum.toAddMonoidAlgebra_mul": {
+      "split": "novel_premises",
+      "statement_sha256": "2d39b2d9ee80848089a7ad214b91d797283ee8c509145888f6144328fa854fea",
+      "semantic_sha256": "55a183c87e98b0dd83e623a4067b50c84017fedc9b0f7343e87db6ce58ec84d1"
+    },
+    "IsSelfAdjoint.zpow": {
+      "split": "novel_premises",
+      "statement_sha256": "8381683a94d00f658a928b3fa3b2527abb16463c814d4f21c935f03219532cdf",
+      "semantic_sha256": "36ae6097ab5d9d5c5e74b16ddddc02489efaf03a935ffac21c7af2d80483e12d"
+    },
+    "Finsupp.univ_sum_single_apply'": {
+      "split": "novel_premises",
+      "statement_sha256": "84b30728bbab5d91cd03e9c79c61dd287f04ec96fe0cc1f0555f6896cf6a9a73",
+      "semantic_sha256": "c2cf0fbcb6ed9eb8732114e1a1e818fdf569a234e0e2a1d9b25e7d4f152516c9"
+    },
+    "Ring.DirectLimit.lift_unique": {
+      "split": "novel_premises",
+      "statement_sha256": "6af67c7fa5526d334eca562c8601389f63b67cb346bc0d62bf52fe3fe3c64f18",
+      "semantic_sha256": "b76995a587d9af71b79cf88b46870059ae7e35caeebf955d6b3d4b2924f293bc"
+    },
+    "MonoidHom.comp_inv": {
+      "split": "novel_premises",
+      "statement_sha256": "16c2a81c395038d569085906008645e562c5f3c5792c28b0b5c7fd6360d39b66",
+      "semantic_sha256": "8280f0ac9310a874d7f6577302c662399f85eb1f1900a25aac50f78b77e48105"
+    },
+    "AddCommGroup.DirectLimit.congr_symm_apply_of": {
+      "split": "novel_premises",
+      "statement_sha256": "b16ec957943236b12c6bbf663e1b0bf864e54ce83533f9788c6ef065cb881300",
+      "semantic_sha256": "c1c82078c73351c3baec985db9cd378e3a02cb36e9f40a878f1e170ead4e84ab"
+    },
+    "List.perm_merge": {
+      "split": "novel_premises",
+      "statement_sha256": "19f6d7f83b0ecf718b0d6f22b3c31c8c674f1ec8eeeb5f9e70788b63fe2d48e0",
+      "semantic_sha256": "5b238867cc835841135bd9b1f9dd3af28fa9d8bf1b5e8b95980b050f7f2db51d"
+    },
+    "NonUnitalSubring.unitization_range": {
+      "split": "novel_premises",
+      "statement_sha256": "cdda08129fbeb2a7813a6d32856f0cda40a4b3a5af7f2a0576387503bccaa8b4",
+      "semantic_sha256": "f0d2d2cf232772eeae1945f3b6c386e398f79bbab72148f14ed4d06c99108939"
+    },
+    "HomologicalComplex.HomologySequence.quasiIso_\u03c4\u2083": {
+      "split": "novel_premises",
+      "statement_sha256": "3f55b0d1895a20565c81d2438489ca2dc88d4b42acb447d42370fc272cda56b5",
+      "semantic_sha256": "7ec39582e546626cb38973bf38087f4b27b2a61aeff199deded5dea1e6a97eb7"
+    },
+    "List.length_sigma": {
+      "split": "novel_premises",
+      "statement_sha256": "5969cd83116d370fe014695d24abe5c3db2cc734ebeaa99a7dbdcb7cc473e78f",
+      "semantic_sha256": "79060748072f55acc9838aa73f756a98bcf506c00ef581bfda13dc15df441ba0"
+    },
+    "Batteries.RBNode.insert_toList_zoom": {
+      "split": "novel_premises",
+      "statement_sha256": "27e9f1cd7c6da0118c7c499b1a4f3a38de08b03a21fb88127e1b454af949600a",
+      "semantic_sha256": "a3bc0bc16f85e548d60d647f7a1d0af654e3e167289aff6926fb6ad827f692e1"
+    },
+    "min_mul_distrib'": {
+      "split": "novel_premises",
+      "statement_sha256": "897a1fa4ac0ab30b243b68b116831131ebd24bf0661dc8803e46427c34713a72",
+      "semantic_sha256": "a2bd38ee9eed8c938f1d6c053e0842aeb07f771f22056e82235712a05b129830"
+    },
+    "MvPolynomial.totalDegree_pow": {
+      "split": "novel_premises",
+      "statement_sha256": "1454765b8b717fbd2a1290f30834ca982bd8e9d647e06e7495c140634aeca3b7",
+      "semantic_sha256": "bb780bd883dc62ecf219e79b4ba55aba4b7d1d317feb7935942716d7e92ffd7a"
+    },
+    "MvPolynomial.expand_bind\u2081": {
+      "split": "novel_premises",
+      "statement_sha256": "64d4803d88c6952f107c9810d5e88f9d14ad9151df59e6fc028922c2cbc1992b",
+      "semantic_sha256": "4f46a413998d92eef94367b1474b4f48a8a166b945326132395728eea6a04cdf"
+    },
+    "AlgebraicGeometry.quasiSeparatedSpace_of_quasiSeparated": {
+      "split": "novel_premises",
+      "statement_sha256": "8663de8396101446229c72fcd14f4b20d49a8ff1781a9f5856c23be2d1b497d4",
+      "semantic_sha256": "f71ed4972f96cfe32ca901a7f9b2cb5dfa218a4336e02eef1f137684f44323f5"
+    }
+  }
+}

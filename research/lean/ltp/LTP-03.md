@@ -162,6 +162,25 @@ geração usou `sorry`. Tempo total: 216,7 s de geração e 243,1 s de verifica�
 - Toda comparação futura contra LeanDojo/ReProver deve usar o ambiente nativo
   `v4.10.0-rc1 + 29dcec07` para satisfazer o `fairness_lock`.
 
+## Errata (registrada em LTP-04)
+
+Durante LTP-04 foram encontrados dois defeitos no ferramental desta fase:
+
+1. **Extração**: declarações em estilo termo/equações (`calc`, casamento por
+   padrões) foram cortadas no primeiro `:=` de nível zero, gerando afirmações
+   truncadas. A extração corrigida aceita apenas provas `:= by` e exclui 6 casos
+   em `random` e 2 em `novel_premises` (taxa de exclusão 6/39 e 2/35).
+2. **Template**: as opções `autoImplicit`/`maxHeartbeats` eram inseridas
+   imediatamente antes da declaração, quebrando cabeçalhos terminados em
+   `open ... in` ou em atributos como `@[aesop safe apply]`. As opções passaram a
+   ser inseridas logo após os imports.
+
+Consequência: as tabelas de **táticas simbólicas** e a **verificação do ReProver**
+desta página ficam superseded pelos números corrigidos de
+`research/lean/runs/LTP-04/` (ver `LTP-04.md`), calculados sobre a extração v2.
+O BM25 não é afetado (não usa extração). Os artefatos originais permanecem
+preservados em `research/lean/runs/LTP-03/`.
+
 ## Decisão
 
 Gate aprovado. LTP-03 encerrada. A próxima fase (LTP-04, LH-070 e LH-069) **não**

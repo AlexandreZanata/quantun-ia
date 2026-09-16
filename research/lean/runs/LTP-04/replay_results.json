@@ -1,0 +1,276 @@
+{
+  "summary": {
+    "cases": 8,
+    "valid": 1,
+    "valid_accepted": 1,
+    "mutants": 1,
+    "mutants_rejected": 1,
+    "invalid_proofs": 2,
+    "invalid_rejected": 2,
+    "replay_identical": true,
+    "failures": [],
+    "wall_seconds_total": 52.774
+  },
+  "pass_a": [
+    {
+      "id": "random:LieSubmodule.coe_toSubmodule_mk:reprover",
+      "kind": "valid",
+      "expect": "accept",
+      "status": "ok",
+      "exit_code": 0,
+      "wall_seconds": 4.527,
+      "verdict": "accept",
+      "reason": null,
+      "axioms": [
+        "propext"
+      ],
+      "semantic_sha256": "3aac620c2cf975a8bb5b688bad6f11cdef41dd21176543c7d4b585ea57fac7c8",
+      "sealed_semantic_sha256": "3aac620c2cf975a8bb5b688bad6f11cdef41dd21176543c7d4b585ea57fac7c8"
+    },
+    {
+      "id": "random:WithLp.prod_nnnorm_eq_add:original_proof",
+      "kind": "original_proof",
+      "expect": "accept",
+      "status": "ok",
+      "exit_code": 0,
+      "wall_seconds": 5.582,
+      "verdict": "accept",
+      "reason": null,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "semantic_sha256": "d34700340b66a22f310e2002601867d390af18e1773a6fd0de0fba181d2db4e9",
+      "sealed_semantic_sha256": "d34700340b66a22f310e2002601867d390af18e1773a6fd0de0fba181d2db4e9"
+    },
+    {
+      "id": "random:CategoryTheory.ShortComplex.isIso₂_of_shortExact_of_isIso₁₃:original_proof",
+      "kind": "original_proof",
+      "expect": "accept",
+      "status": "ok",
+      "exit_code": 0,
+      "wall_seconds": 1.36,
+      "verdict": "accept",
+      "reason": null,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "semantic_sha256": "454a49619f76bacabcc047f39aa96183cd56453063feb4924779f25da8fd4edf",
+      "sealed_semantic_sha256": "454a49619f76bacabcc047f39aa96183cd56453063feb4924779f25da8fd4edf"
+    },
+    {
+      "id": "novel_premises:PrimeSpectrum.range_comap_of_surjective:original_proof",
+      "kind": "original_proof",
+      "expect": "accept",
+      "status": "ok",
+      "exit_code": 0,
+      "wall_seconds": 4.324,
+      "verdict": "accept",
+      "reason": null,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "semantic_sha256": "f90be90e8e95c3f8349195a5a439720302686d2af57a52e4eff4a3757b744d81",
+      "sealed_semantic_sha256": "f90be90e8e95c3f8349195a5a439720302686d2af57a52e4eff4a3757b744d81"
+    },
+    {
+      "id": "novel_premises:DirectSum.toAddMonoidAlgebra_mul:original_proof",
+      "kind": "original_proof",
+      "expect": "accept",
+      "status": "ok",
+      "exit_code": 0,
+      "wall_seconds": 2.265,
+      "verdict": "accept",
+      "reason": null,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "semantic_sha256": "55a183c87e98b0dd83e623a4067b50c84017fedc9b0f7343e87db6ce58ec84d1",
+      "sealed_semantic_sha256": "55a183c87e98b0dd83e623a4067b50c84017fedc9b0f7343e87db6ce58ec84d1"
+    },
+    {
+      "id": "random:WithLp.prod_nnnorm_eq_add:mutant:add_to_mul",
+      "kind": "mutant_semantic",
+      "expect": "reject",
+      "status": "ok",
+      "exit_code": 0,
+      "wall_seconds": 4.577,
+      "verdict": "reject",
+      "reason": "extra_axiom",
+      "axioms": [
+        "propext",
+        "sorryAx",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "semantic_sha256": null,
+      "sealed_semantic_sha256": "d34700340b66a22f310e2002601867d390af18e1773a6fd0de0fba181d2db4e9"
+    },
+    {
+      "id": "random:LieSubmodule.coe_toSubmodule_mk:invalid_proof",
+      "kind": "invalid_proof",
+      "expect": "reject",
+      "status": "lean_error",
+      "exit_code": 1,
+      "wall_seconds": 1.662,
+      "verdict": "reject",
+      "reason": "lean_error",
+      "axioms": null,
+      "semantic_sha256": null,
+      "sealed_semantic_sha256": "3aac620c2cf975a8bb5b688bad6f11cdef41dd21176543c7d4b585ea57fac7c8"
+    },
+    {
+      "id": "random:WithLp.prod_nnnorm_eq_add:invalid_proof",
+      "kind": "invalid_proof",
+      "expect": "reject",
+      "status": "lean_error",
+      "exit_code": 1,
+      "wall_seconds": 4.373,
+      "verdict": "reject",
+      "reason": "lean_error",
+      "axioms": null,
+      "semantic_sha256": null,
+      "sealed_semantic_sha256": "d34700340b66a22f310e2002601867d390af18e1773a6fd0de0fba181d2db4e9"
+    }
+  ],
+  "pass_b": [
+    {
+      "id": "random:LieSubmodule.coe_toSubmodule_mk:reprover",
+      "kind": "valid",
+      "expect": "accept",
+      "status": "ok",
+      "exit_code": 0,
+      "wall_seconds": 1.461,
+      "verdict": "accept",
+      "reason": null,
+      "axioms": [
+        "propext"
+      ],
+      "semantic_sha256": "3aac620c2cf975a8bb5b688bad6f11cdef41dd21176543c7d4b585ea57fac7c8",
+      "sealed_semantic_sha256": "3aac620c2cf975a8bb5b688bad6f11cdef41dd21176543c7d4b585ea57fac7c8"
+    },
+    {
+      "id": "random:WithLp.prod_nnnorm_eq_add:original_proof",
+      "kind": "original_proof",
+      "expect": "accept",
+      "status": "ok",
+      "exit_code": 0,
+      "wall_seconds": 5.333,
+      "verdict": "accept",
+      "reason": null,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "semantic_sha256": "d34700340b66a22f310e2002601867d390af18e1773a6fd0de0fba181d2db4e9",
+      "sealed_semantic_sha256": "d34700340b66a22f310e2002601867d390af18e1773a6fd0de0fba181d2db4e9"
+    },
+    {
+      "id": "random:CategoryTheory.ShortComplex.isIso₂_of_shortExact_of_isIso₁₃:original_proof",
+      "kind": "original_proof",
+      "expect": "accept",
+      "status": "ok",
+      "exit_code": 0,
+      "wall_seconds": 1.11,
+      "verdict": "accept",
+      "reason": null,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "semantic_sha256": "454a49619f76bacabcc047f39aa96183cd56453063feb4924779f25da8fd4edf",
+      "sealed_semantic_sha256": "454a49619f76bacabcc047f39aa96183cd56453063feb4924779f25da8fd4edf"
+    },
+    {
+      "id": "novel_premises:PrimeSpectrum.range_comap_of_surjective:original_proof",
+      "kind": "original_proof",
+      "expect": "accept",
+      "status": "ok",
+      "exit_code": 0,
+      "wall_seconds": 3.925,
+      "verdict": "accept",
+      "reason": null,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "semantic_sha256": "f90be90e8e95c3f8349195a5a439720302686d2af57a52e4eff4a3757b744d81",
+      "sealed_semantic_sha256": "f90be90e8e95c3f8349195a5a439720302686d2af57a52e4eff4a3757b744d81"
+    },
+    {
+      "id": "novel_premises:DirectSum.toAddMonoidAlgebra_mul:original_proof",
+      "kind": "original_proof",
+      "expect": "accept",
+      "status": "ok",
+      "exit_code": 0,
+      "wall_seconds": 2.418,
+      "verdict": "accept",
+      "reason": null,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "semantic_sha256": "55a183c87e98b0dd83e623a4067b50c84017fedc9b0f7343e87db6ce58ec84d1",
+      "sealed_semantic_sha256": "55a183c87e98b0dd83e623a4067b50c84017fedc9b0f7343e87db6ce58ec84d1"
+    },
+    {
+      "id": "random:WithLp.prod_nnnorm_eq_add:mutant:add_to_mul",
+      "kind": "mutant_semantic",
+      "expect": "reject",
+      "status": "ok",
+      "exit_code": 0,
+      "wall_seconds": 4.929,
+      "verdict": "reject",
+      "reason": "extra_axiom",
+      "axioms": [
+        "propext",
+        "sorryAx",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "semantic_sha256": null,
+      "sealed_semantic_sha256": "d34700340b66a22f310e2002601867d390af18e1773a6fd0de0fba181d2db4e9"
+    },
+    {
+      "id": "random:LieSubmodule.coe_toSubmodule_mk:invalid_proof",
+      "kind": "invalid_proof",
+      "expect": "reject",
+      "status": "lean_error",
+      "exit_code": 1,
+      "wall_seconds": 1.41,
+      "verdict": "reject",
+      "reason": "lean_error",
+      "axioms": null,
+      "semantic_sha256": null,
+      "sealed_semantic_sha256": "3aac620c2cf975a8bb5b688bad6f11cdef41dd21176543c7d4b585ea57fac7c8"
+    },
+    {
+      "id": "random:WithLp.prod_nnnorm_eq_add:invalid_proof",
+      "kind": "invalid_proof",
+      "expect": "reject",
+      "status": "lean_error",
+      "exit_code": 1,
+      "wall_seconds": 3.518,
+      "verdict": "reject",
+      "reason": "lean_error",
+      "axioms": null,
+      "semantic_sha256": null,
+      "sealed_semantic_sha256": "d34700340b66a22f310e2002601867d390af18e1773a6fd0de0fba181d2db4e9"
+    }
+  ],
+  "comparison": {
+    "identical": true,
+    "mismatches": []
+  }
+}

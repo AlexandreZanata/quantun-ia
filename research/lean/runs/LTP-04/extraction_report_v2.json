@@ -1,0 +1,51 @@
+{
+  "limit": 32,
+  "splits": [
+    {
+      "split": "random",
+      "attempts": 39,
+      "extracted": 32,
+      "failures": [
+        {
+          "full_name": "Complex.abs_im_div_abs_le_one",
+          "reason": "marcador de prova ausente"
+        },
+        {
+          "full_name": "GromovHausdorff.one_le_maxVar",
+          "reason": "marcador de prova ausente"
+        },
+        {
+          "full_name": "spectrum.singleton_add_eq",
+          "reason": "marcador de prova ausente"
+        },
+        {
+          "full_name": "exists_prime_addOrderOf_dvd_card",
+          "reason": "marcador de prova ausente"
+        },
+        {
+          "full_name": "gc_exterior_interior",
+          "reason": "marcador de prova ausente"
+        },
+        {
+          "full_name": "Disjoint.left_le_of_le_sup_left",
+          "reason": "marcador de prova ausente"
+        }
+      ]
+    },
+    {
+      "split": "novel_premises",
+      "attempts": 35,
+      "extracted": 32,
+      "failures": [
+        {
+          "full_name": "Substring.Valid.isEmpty",
+          "reason": "marcador de prova ausente"
+        },
+        {
+          "full_name": "IsSl2Triple.HasPrimitiveVectorWith.mk'",
+          "reason": "marcador de prova ausente"
+        }
+      ]
+    }
+  ]
+}

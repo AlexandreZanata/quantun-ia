@@ -1,0 +1,252 @@
+{
+  "summary": {
+    "mode": "single",
+    "env": "native",
+    "split": "novel_premises",
+    "goals": 8,
+    "goals_closed_by_portfolio": 0,
+    "pass_at_1_by_tactic": {
+      "simp": 0.0,
+      "aesop": 0.0,
+      "omega": 0.0,
+      "linarith": 0.0,
+      "nlinarith": 0.0
+    },
+    "tactic_attempts": {
+      "simp": 8,
+      "aesop": 8,
+      "omega": 8,
+      "linarith": 8,
+      "nlinarith": 8
+    },
+    "portfolio_pass_at_5": 0.0,
+    "wall_total_seconds": 233.563,
+    "peak_rss_max_bytes": 1521065984
+  },
+  "results": [
+    {
+      "split": "novel_premises",
+      "env": "native",
+      "mode": "single",
+      "full_name": "PrimeSpectrum.range_comap_of_surjective",
+      "statement_sha256": "3f71276c9b0c60813faa8af1bb8f23d9f68e606b13205315ef581bd8c644cea0",
+      "status": "lean_error",
+      "exit_code": null,
+      "wall_seconds": 19.677,
+      "peak_rss_bytes": 1521065984,
+      "per_tactic": {
+        "simp": {
+          "verdict": "error"
+        },
+        "aesop": {
+          "verdict": "error"
+        },
+        "omega": {
+          "verdict": "error"
+        },
+        "linarith": {
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "novel_premises",
+      "env": "native",
+      "mode": "single",
+      "full_name": "DirectSum.toAddMonoidAlgebra_mul",
+      "statement_sha256": "2d39b2d9ee80848089a7ad214b91d797283ee8c509145888f6144328fa854fea",
+      "status": "lean_error",
+      "exit_code": null,
+      "wall_seconds": 12.135,
+      "peak_rss_bytes": 1193775104,
+      "per_tactic": {
+        "simp": {
+          "verdict": "error"
+        },
+        "aesop": {
+          "verdict": "error"
+        },
+        "omega": {
+          "verdict": "error"
+        },
+        "linarith": {
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "novel_premises",
+      "env": "native",
+      "mode": "single",
+      "full_name": "IsSelfAdjoint.zpow",
+      "statement_sha256": "8381683a94d00f658a928b3fa3b2527abb16463c814d4f21c935f03219532cdf",
+      "status": "lean_error",
+      "exit_code": null,
+      "wall_seconds": 7.612,
+      "peak_rss_bytes": 918507520,
+      "per_tactic": {
+        "simp": {
+          "verdict": "error"
+        },
+        "aesop": {
+          "verdict": "error"
+        },
+        "omega": {
+          "verdict": "error"
+        },
+        "linarith": {
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "novel_premises",
+      "env": "native",
+      "mode": "single",
+      "full_name": "Finsupp.univ_sum_single_apply'",
+      "statement_sha256": "84b30728bbab5d91cd03e9c79c61dd287f04ec96fe0cc1f0555f6896cf6a9a73",
+      "status": "lean_error",
+      "exit_code": null,
+      "wall_seconds": 28.63,
+      "peak_rss_bytes": 1039532032,
+      "per_tactic": {
+        "simp": {
+          "verdict": "error"
+        },
+        "aesop": {
+          "verdict": "error"
+        },
+        "omega": {
+          "verdict": "error"
+        },
+        "linarith": {
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "novel_premises",
+      "env": "native",
+      "mode": "single",
+      "full_name": "Ring.DirectLimit.lift_unique",
+      "statement_sha256": "6af67c7fa5526d334eca562c8601389f63b67cb346bc0d62bf52fe3fe3c64f18",
+      "status": "lean_error",
+      "exit_code": null,
+      "wall_seconds": 89.356,
+      "peak_rss_bytes": 1436979200,
+      "per_tactic": {
+        "simp": {
+          "verdict": "error"
+        },
+        "aesop": {
+          "verdict": "error"
+        },
+        "omega": {
+          "verdict": "error"
+        },
+        "linarith": {
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "novel_premises",
+      "env": "native",
+      "mode": "single",
+      "full_name": "MonoidHom.comp_inv",
+      "statement_sha256": "16c2a81c395038d569085906008645e562c5f3c5792c28b0b5c7fd6360d39b66",
+      "status": "lean_error",
+      "exit_code": null,
+      "wall_seconds": 4.64,
+      "peak_rss_bytes": 703676416,
+      "per_tactic": {
+        "simp": {
+          "verdict": "error"
+        },
+        "aesop": {
+          "verdict": "error"
+        },
+        "omega": {
+          "verdict": "error"
+        },
+        "linarith": {
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "novel_premises",
+      "env": "native",
+      "mode": "single",
+      "full_name": "AddCommGroup.DirectLimit.congr_symm_apply_of",
+      "statement_sha256": "b16ec957943236b12c6bbf663e1b0bf864e54ce83533f9788c6ef065cb881300",
+      "status": "lean_error",
+      "exit_code": null,
+      "wall_seconds": 60.741,
+      "peak_rss_bytes": 1325473792,
+      "per_tactic": {
+        "simp": {
+          "verdict": "error"
+        },
+        "aesop": {
+          "verdict": "error"
+        },
+        "omega": {
+          "verdict": "error"
+        },
+        "linarith": {
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "novel_premises",
+      "env": "native",
+      "mode": "single",
+      "full_name": "List.perm_merge",
+      "statement_sha256": "19f6d7f83b0ecf718b0d6f22b3c31c8c674f1ec8eeeb5f9e70788b63fe2d48e0",
+      "status": "lean_error",
+      "exit_code": null,
+      "wall_seconds": 10.772,
+      "peak_rss_bytes": 390451200,
+      "per_tactic": {
+        "simp": {
+          "verdict": "error"
+        },
+        "aesop": {
+          "verdict": "error"
+        },
+        "omega": {
+          "verdict": "error"
+        },
+        "linarith": {
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "verdict": "error"
+        }
+      }
+    }
+  ]
+}

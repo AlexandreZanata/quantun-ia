@@ -1,0 +1,270 @@
+{
+  "summary": {
+    "cases": 28,
+    "dropped_term_mode": 4,
+    "changed": 3,
+    "by_split": {
+      "random": {
+        "goals": 14,
+        "closed": 1,
+        "valid_incomplete": 3,
+        "invalid": 10
+      },
+      "novel_premises": {
+        "goals": 14,
+        "closed": 0,
+        "valid_incomplete": 6,
+        "invalid": 8
+      }
+    },
+    "wall_seconds_total": 87.336
+  },
+  "cases": [
+    {
+      "split": "random",
+      "full_name": "WithLp.prod_nnnorm_eq_add",
+      "original_verdict": "invalid",
+      "corrected_verdict": "invalid",
+      "changed": false,
+      "wall_seconds": 3.668
+    },
+    {
+      "split": "random",
+      "full_name": "CategoryTheory.ShortComplex.isIso₂_of_shortExact_of_isIso₁₃",
+      "original_verdict": "invalid",
+      "corrected_verdict": "invalid",
+      "changed": false,
+      "wall_seconds": 0.856
+    },
+    {
+      "split": "random",
+      "full_name": "nhdsWithin_pi_univ_eq",
+      "original_verdict": "valid_incomplete",
+      "corrected_verdict": "valid_incomplete",
+      "changed": false,
+      "wall_seconds": 1.458
+    },
+    {
+      "split": "random",
+      "full_name": "mem_adjoin_of_smul_prime_pow_smul_of_minpoly_isEisensteinAt",
+      "original_verdict": "invalid",
+      "corrected_verdict": "invalid",
+      "changed": false,
+      "wall_seconds": 5.376
+    },
+    {
+      "split": "random",
+      "full_name": "MvPolynomial.degrees_map_of_injective",
+      "original_verdict": "invalid",
+      "corrected_verdict": "invalid",
+      "changed": false,
+      "wall_seconds": 1.31
+    },
+    {
+      "split": "random",
+      "full_name": "CategoryTheory.ShortComplex.SnakeInput.w₁₃_τ₁",
+      "original_verdict": "invalid",
+      "corrected_verdict": "invalid",
+      "changed": false,
+      "wall_seconds": 1.257
+    },
+    {
+      "split": "random",
+      "full_name": "MeasureTheory.lintegral_nnnorm_condexpL2_le",
+      "original_verdict": "invalid",
+      "corrected_verdict": "invalid",
+      "changed": false,
+      "wall_seconds": 3.517
+    },
+    {
+      "split": "random",
+      "full_name": "CliffordAlgebra.star_smul",
+      "original_verdict": "invalid",
+      "corrected_verdict": "invalid",
+      "changed": false,
+      "wall_seconds": 1.208
+    },
+    {
+      "split": "random",
+      "full_name": "LieSubmodule.coe_toSubmodule_mk",
+      "original_verdict": "closed",
+      "corrected_verdict": "closed",
+      "changed": false,
+      "wall_seconds": 1.358
+    },
+    {
+      "split": "random",
+      "full_name": "NumberField.InfinitePlace.not_isReal_iff_isComplex",
+      "original_verdict": "valid_incomplete",
+      "corrected_verdict": "valid_incomplete",
+      "changed": false,
+      "wall_seconds": 4.37
+    },
+    {
+      "split": "random",
+      "full_name": "smul_finsum",
+      "original_verdict": "invalid",
+      "corrected_verdict": "valid_incomplete",
+      "changed": true,
+      "wall_seconds": 1.257
+    },
+    {
+      "split": "random",
+      "full_name": "MeasureTheory.tilted_apply_eq_ofReal_integral",
+      "original_verdict": "invalid",
+      "corrected_verdict": "invalid",
+      "changed": false,
+      "wall_seconds": 1.408
+    },
+    {
+      "split": "random",
+      "full_name": "nilpotencyClass_prod",
+      "original_verdict": "invalid",
+      "corrected_verdict": "invalid",
+      "changed": false,
+      "wall_seconds": 4.072
+    },
+    {
+      "split": "random",
+      "full_name": "Ideal.fg_ker_comp",
+      "original_verdict": "invalid",
+      "corrected_verdict": "invalid",
+      "changed": false,
+      "wall_seconds": 6.681
+    },
+    {
+      "split": "novel_premises",
+      "full_name": "PrimeSpectrum.range_comap_of_surjective",
+      "original_verdict": "invalid",
+      "corrected_verdict": "invalid",
+      "changed": false,
+      "wall_seconds": 3.015
+    },
+    {
+      "split": "novel_premises",
+      "full_name": "DirectSum.toAddMonoidAlgebra_mul",
+      "original_verdict": "invalid",
+      "corrected_verdict": "invalid",
+      "changed": false,
+      "wall_seconds": 1.76
+    },
+    {
+      "split": "novel_premises",
+      "full_name": "IsSelfAdjoint.zpow",
+      "original_verdict": "invalid",
+      "corrected_verdict": "invalid",
+      "changed": false,
+      "wall_seconds": 1.057
+    },
+    {
+      "split": "novel_premises",
+      "full_name": "Finsupp.univ_sum_single_apply'",
+      "original_verdict": "invalid",
+      "corrected_verdict": "valid_incomplete",
+      "changed": true,
+      "wall_seconds": 4.019
+    },
+    {
+      "split": "novel_premises",
+      "full_name": "Ring.DirectLimit.lift_unique",
+      "original_verdict": "invalid",
+      "corrected_verdict": "invalid",
+      "changed": false,
+      "wall_seconds": 12.656
+    },
+    {
+      "split": "novel_premises",
+      "full_name": "MonoidHom.comp_inv",
+      "original_verdict": "valid_incomplete",
+      "corrected_verdict": "valid_incomplete",
+      "changed": false,
+      "wall_seconds": 0.654
+    },
+    {
+      "split": "novel_premises",
+      "full_name": "AddCommGroup.DirectLimit.congr_symm_apply_of",
+      "original_verdict": "valid_incomplete",
+      "corrected_verdict": "valid_incomplete",
+      "changed": false,
+      "wall_seconds": 8.387
+    },
+    {
+      "split": "novel_premises",
+      "full_name": "List.perm_merge",
+      "original_verdict": "invalid",
+      "corrected_verdict": "invalid",
+      "changed": false,
+      "wall_seconds": 1.358
+    },
+    {
+      "split": "novel_premises",
+      "full_name": "NonUnitalSubring.unitization_range",
+      "original_verdict": "invalid",
+      "corrected_verdict": "invalid",
+      "changed": false,
+      "wall_seconds": 4.873
+    },
+    {
+      "split": "novel_premises",
+      "full_name": "HomologicalComplex.HomologySequence.quasiIso_τ₃",
+      "original_verdict": "valid_incomplete",
+      "corrected_verdict": "valid_incomplete",
+      "changed": false,
+      "wall_seconds": 3.768
+    },
+    {
+      "split": "novel_premises",
+      "full_name": "List.length_sigma",
+      "original_verdict": "invalid",
+      "corrected_verdict": "valid_incomplete",
+      "changed": true,
+      "wall_seconds": 1.81
+    },
+    {
+      "split": "novel_premises",
+      "full_name": "Batteries.RBNode.insert_toList_zoom",
+      "original_verdict": "valid_incomplete",
+      "corrected_verdict": "valid_incomplete",
+      "changed": false,
+      "wall_seconds": 3.216
+    },
+    {
+      "split": "novel_premises",
+      "full_name": "min_mul_distrib'",
+      "original_verdict": "invalid",
+      "corrected_verdict": "invalid",
+      "changed": false,
+      "wall_seconds": 0.856
+    },
+    {
+      "split": "novel_premises",
+      "full_name": "MvPolynomial.totalDegree_pow",
+      "original_verdict": "invalid",
+      "corrected_verdict": "invalid",
+      "changed": false,
+      "wall_seconds": 2.111
+    }
+  ],
+  "dropped": [
+    {
+      "split": "random",
+      "full_name": "Complex.abs_im_div_abs_le_one",
+      "reason": "declaração term-mode excluída"
+    },
+    {
+      "split": "random",
+      "full_name": "GromovHausdorff.one_le_maxVar",
+      "reason": "declaração term-mode excluída"
+    },
+    {
+      "split": "novel_premises",
+      "full_name": "Substring.Valid.isEmpty",
+      "reason": "declaração term-mode excluída"
+    },
+    {
+      "split": "novel_premises",
+      "full_name": "IsSl2Triple.HasPrimitiveVectorWith.mk'",
+      "reason": "declaração term-mode excluída"
+    }
+  ]
+}

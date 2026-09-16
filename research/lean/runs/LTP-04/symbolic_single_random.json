@@ -1,0 +1,252 @@
+{
+  "summary": {
+    "mode": "single",
+    "env": "native",
+    "split": "random",
+    "goals": 8,
+    "goals_closed_by_portfolio": 0,
+    "pass_at_1_by_tactic": {
+      "simp": 0.0,
+      "aesop": 0.0,
+      "omega": 0.0,
+      "linarith": 0.0,
+      "nlinarith": 0.0
+    },
+    "tactic_attempts": {
+      "simp": 8,
+      "aesop": 8,
+      "omega": 8,
+      "linarith": 8,
+      "nlinarith": 8
+    },
+    "portfolio_pass_at_5": 0.0,
+    "wall_total_seconds": 137.175,
+    "peak_rss_max_bytes": 1862164480
+  },
+  "results": [
+    {
+      "split": "random",
+      "env": "native",
+      "mode": "single",
+      "full_name": "WithLp.prod_nnnorm_eq_add",
+      "statement_sha256": "d803a26ba81db73cc3d10a2c9ed5305df44293d1732ce43fcb186b8e1dee70a7",
+      "status": "lean_error",
+      "exit_code": null,
+      "wall_seconds": 20.326,
+      "peak_rss_bytes": 1566584832,
+      "per_tactic": {
+        "simp": {
+          "verdict": "error"
+        },
+        "aesop": {
+          "verdict": "error"
+        },
+        "omega": {
+          "verdict": "error"
+        },
+        "linarith": {
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "random",
+      "env": "native",
+      "mode": "single",
+      "full_name": "CategoryTheory.ShortComplex.isIso₂_of_shortExact_of_isIso₁₃",
+      "statement_sha256": "beda0fe55a2312153ef36a46984e7dfd191f6012f25fd5fa297da97b1fb52d2e",
+      "status": "lean_error",
+      "exit_code": null,
+      "wall_seconds": 5.041,
+      "peak_rss_bytes": 1241419776,
+      "per_tactic": {
+        "simp": {
+          "verdict": "error"
+        },
+        "aesop": {
+          "verdict": "error"
+        },
+        "omega": {
+          "verdict": "error"
+        },
+        "linarith": {
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "random",
+      "env": "native",
+      "mode": "single",
+      "full_name": "nhdsWithin_pi_univ_eq",
+      "statement_sha256": "b5ef711a7922548e15c9ec962f9f38cbbd3db880279da7a33abbac7b4e58f389",
+      "status": "lean_error",
+      "exit_code": null,
+      "wall_seconds": 8.56,
+      "peak_rss_bytes": 987123712,
+      "per_tactic": {
+        "simp": {
+          "verdict": "error"
+        },
+        "aesop": {
+          "verdict": "error"
+        },
+        "omega": {
+          "verdict": "error"
+        },
+        "linarith": {
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "random",
+      "env": "native",
+      "mode": "single",
+      "full_name": "mem_adjoin_of_smul_prime_pow_smul_of_minpoly_isEisensteinAt",
+      "statement_sha256": "910003dc540d7467c887e210f8e88ffa37600e2956895740684ba1cec8af3e35",
+      "status": "lean_error",
+      "exit_code": null,
+      "wall_seconds": 55.717,
+      "peak_rss_bytes": 1862164480,
+      "per_tactic": {
+        "simp": {
+          "verdict": "error"
+        },
+        "aesop": {
+          "verdict": "timeout"
+        },
+        "omega": {
+          "verdict": "error"
+        },
+        "linarith": {
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "random",
+      "env": "native",
+      "mode": "single",
+      "full_name": "MvPolynomial.degrees_map_of_injective",
+      "statement_sha256": "513174c5eb44f077338bb22d929373952730ff003bb696f83c6dcae7dc512a8e",
+      "status": "lean_error",
+      "exit_code": null,
+      "wall_seconds": 8.16,
+      "peak_rss_bytes": 1229508608,
+      "per_tactic": {
+        "simp": {
+          "verdict": "error"
+        },
+        "aesop": {
+          "verdict": "error"
+        },
+        "omega": {
+          "verdict": "error"
+        },
+        "linarith": {
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "random",
+      "env": "native",
+      "mode": "single",
+      "full_name": "CategoryTheory.ShortComplex.SnakeInput.w₁₃_τ₁",
+      "statement_sha256": "492da15d14952e9a2940530f1dacab718df0fad05c3e04f57a41a558338b6639",
+      "status": "lean_error",
+      "exit_code": null,
+      "wall_seconds": 8.161,
+      "peak_rss_bytes": 1264865280,
+      "per_tactic": {
+        "simp": {
+          "verdict": "error"
+        },
+        "aesop": {
+          "verdict": "error"
+        },
+        "omega": {
+          "verdict": "error"
+        },
+        "linarith": {
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "random",
+      "env": "native",
+      "mode": "single",
+      "full_name": "MeasureTheory.lintegral_nnnorm_condexpL2_le",
+      "statement_sha256": "fdfd23617b41327737c5773f23ec61bf5080d286f950475fa7475b4a6c6b9b9d",
+      "status": "lean_error",
+      "exit_code": null,
+      "wall_seconds": 23.604,
+      "peak_rss_bytes": 1827840000,
+      "per_tactic": {
+        "simp": {
+          "verdict": "error"
+        },
+        "aesop": {
+          "verdict": "error"
+        },
+        "omega": {
+          "verdict": "error"
+        },
+        "linarith": {
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "verdict": "error"
+        }
+      }
+    },
+    {
+      "split": "random",
+      "env": "native",
+      "mode": "single",
+      "full_name": "CliffordAlgebra.star_smul",
+      "statement_sha256": "86778a7e43580f4d2097396ae9f15d9abcff7f04ecc6d7a95cff3e03bc58fa45",
+      "status": "lean_error",
+      "exit_code": null,
+      "wall_seconds": 7.606,
+      "peak_rss_bytes": 1458147328,
+      "per_tactic": {
+        "simp": {
+          "verdict": "error"
+        },
+        "aesop": {
+          "verdict": "error"
+        },
+        "omega": {
+          "verdict": "error"
+        },
+        "linarith": {
+          "verdict": "error"
+        },
+        "nlinarith": {
+          "verdict": "error"
+        }
+      }
+    }
+  ]
+}
