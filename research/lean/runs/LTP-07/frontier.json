@@ -1,0 +1,643 @@
+{
+  "phase": "LTP-07",
+  "criteria": {
+    "eligibility": "microteste valid (gate T0/T1 passado)",
+    "axes": [
+      "sucesso Lean (margem sobre o gate)",
+      "classe de custo",
+      "parâmetros",
+      "novidade"
+    ],
+    "dominance": "≥ em todos os eixos e > em pelo menos um, avaliada apenas dentro da mesma classe de capacidade; mecanismos complementares não competem",
+    "cap": 30
+  },
+  "candidates": [
+    {
+      "id": "LH-026",
+      "title": "Cache por assinatura de objetivo",
+      "family_code": "RET",
+      "quality_margin": 5.06,
+      "cost_class": "negligible",
+      "cost_rank": 0,
+      "cost_note": "hash canônico do objetivo em CPU",
+      "parameters_rank": 0,
+      "novelty": "cache determinístico de objetivos, zero parâmetros",
+      "capability_class": "objective_cache",
+      "metrics": {
+        "states": 4000,
+        "hits": 1012,
+        "hit_rate": 0.253
+      },
+      "gate": "hit-rate útil menor que 5% fora do treino"
+    },
+    {
+      "id": "LH-061",
+      "title": "Compilação por fronteira sintática",
+      "family_code": "FBK",
+      "quality_margin": 1.0,
+      "cost_class": "verification_bound",
+      "cost_rank": 2,
+      "cost_note": "uma chamada ao verificador por fim de tática",
+      "parameters_rank": 0,
+      "novelty": "verificação em fronteiras sintáticas, zero parâmetros",
+      "capability_class": "syntax_boundary",
+      "metrics": {
+        "tactic_steps": 4260,
+        "boundary_aligned": 4260
+      },
+      "gate": "chamadas ou latência excederem geração completa"
+    },
+    {
+      "id": "LH-068",
+      "title": "Microteoremas de regressão",
+      "family_code": "FBK",
+      "quality_margin": 1.0,
+      "cost_class": "offline",
+      "cost_rank": 1,
+      "cost_note": "suíte de regressão executada no CI",
+      "parameters_rank": 0,
+      "novelty": "regressão formal permanente, zero parâmetros",
+      "capability_class": "regression_suite",
+      "metrics": {
+        "cases": 107,
+        "rejected": 71,
+        "gate_passed": true
+      },
+      "gate": "suíte não detectar regressões reais"
+    },
+    {
+      "id": "LH-069",
+      "title": "Reexecução em ambiente limpo",
+      "family_code": "FBK",
+      "quality_margin": 1.0,
+      "cost_class": "verification_bound",
+      "cost_rank": 2,
+      "cost_note": "recompilação limpa por prova aceita",
+      "parameters_rank": 0,
+      "novelty": "replay limpo determinístico, zero parâmetros",
+      "capability_class": "clean_replay",
+      "metrics": {
+        "cases": 8,
+        "identical": true,
+        "accepted": 5
+      },
+      "gate": "replay não for determinístico"
+    },
+    {
+      "id": "LH-070",
+      "title": "Hash imutável da afirmação",
+      "family_code": "FBK",
+      "quality_margin": 1.0,
+      "cost_class": "verification_bound",
+      "cost_rank": 2,
+      "cost_note": "elaboração do tipo por afirmação",
+      "parameters_rank": 0,
+      "novelty": "hash semântico imutável da afirmação, zero parâmetros",
+      "capability_class": "statement_hash",
+      "metrics": {
+        "cases": 32,
+        "deterministic": 32,
+        "mutants_rejected": 6
+      },
+      "gate": "qualquer mutação passar pelo gate"
+    },
+    {
+      "id": "LH-072",
+      "title": "Superamostragem de táticas raras",
+      "family_code": "DAT",
+      "quality_margin": 1.0,
+      "cost_class": "offline",
+      "cost_rank": 1,
+      "cost_note": "reponderação de dados no treino",
+      "parameters_rank": 1,
+      "novelty": "correção de desbalanceamento de táticas raras",
+      "capability_class": "data_rebalancing",
+      "metrics": {
+        "distinct_tactics": 124,
+        "top5_share": 0.5575,
+        "rare_tactics": 104
+      },
+      "gate": "macro-sucesso não melhorar"
+    },
+    {
+      "id": "LH-074",
+      "title": "Corrupções mínimas de prova",
+      "family_code": "DAT",
+      "quality_margin": 1.0,
+      "cost_class": "offline",
+      "cost_rank": 1,
+      "cost_note": "geração de corrupções por prova",
+      "parameters_rank": 1,
+      "novelty": "negativos mínimos com rótulo de erro",
+      "capability_class": "corruption_negatives",
+      "metrics": {
+        "corruptions": 32,
+        "rejected": 32
+      },
+      "gate": "desempenho em erros novos não melhorar"
+    },
+    {
+      "id": "LH-075",
+      "title": "Mineração de subteoremas",
+      "family_code": "DAT",
+      "quality_margin": 2.14,
+      "cost_class": "offline",
+      "cost_rank": 1,
+      "cost_note": "mineração de submetas em traços",
+      "parameters_rank": 1,
+      "novelty": "expansão de currículo por submetas verificadas",
+      "capability_class": "subtheorem_mining",
+      "metrics": {
+        "proofs": 995,
+        "multi_step": 639,
+        "rate": 0.6422
+      },
+      "gate": "houver vazamento entre splits por ancestralidade"
+    }
+  ],
+  "dominance_pairs": [],
+  "frontier": [
+    "LH-026",
+    "LH-068",
+    "LH-072",
+    "LH-074",
+    "LH-075",
+    "LH-061",
+    "LH-069",
+    "LH-070"
+  ],
+  "promoted": [
+    "LH-026",
+    "LH-068",
+    "LH-072",
+    "LH-074",
+    "LH-075",
+    "LH-061",
+    "LH-069",
+    "LH-070"
+  ],
+  "promoted_count": 8,
+  "not_promoted": [
+    {
+      "id": "LH-001",
+      "status": "rejected",
+      "reason": "medido em LTP-05; sucesso pleno exigiria T2"
+    },
+    {
+      "id": "LH-002",
+      "status": "blocked",
+      "reason": "T1: requer normalização De Bruijn verificada no Lean"
+    },
+    {
+      "id": "LH-003",
+      "status": "blocked",
+      "reason": "T1: requer geração e verificação de renomeações alfa"
+    },
+    {
+      "id": "LH-004",
+      "status": "refuted",
+      "reason": "proxy de compressão por repetição de subexpressões; sucesso exige T2"
+    },
+    {
+      "id": "LH-005",
+      "status": "refuted",
+      "reason": "perda medida por referência da tática humana a hipótese descartada"
+    },
+    {
+      "id": "LH-006",
+      "status": "blocked",
+      "reason": "T1: requer pares de erro do compilador coletados"
+    },
+    {
+      "id": "LH-007",
+      "status": "inconclusive",
+      "reason": "redundância medida; ganho fim a fim exige T2"
+    },
+    {
+      "id": "LH-008",
+      "status": "refuted",
+      "reason": "posição da hipótese citada pela tática humana vs ordem aleatória"
+    },
+    {
+      "id": "LH-009",
+      "status": "blocked",
+      "reason": "T1: requer exportação de AST tipada"
+    },
+    {
+      "id": "LH-010",
+      "status": "blocked",
+      "reason": "T1: requer extração de AST e segunda visão"
+    },
+    {
+      "id": "LH-011",
+      "status": "blocked",
+      "reason": "T2: requer treino de arquitetura"
+    },
+    {
+      "id": "LH-012",
+      "status": "blocked",
+      "reason": "T2: requer treino de arquitetura"
+    },
+    {
+      "id": "LH-013",
+      "status": "blocked",
+      "reason": "T2: requer treino de arquitetura"
+    },
+    {
+      "id": "LH-014",
+      "status": "blocked",
+      "reason": "T2: requer treino de arquitetura"
+    },
+    {
+      "id": "LH-015",
+      "status": "blocked",
+      "reason": "T2: requer treino de arquitetura"
+    },
+    {
+      "id": "LH-016",
+      "status": "blocked",
+      "reason": "T2: requer treino de arquitetura"
+    },
+    {
+      "id": "LH-017",
+      "status": "blocked",
+      "reason": "T2: requer treino de arquitetura"
+    },
+    {
+      "id": "LH-018",
+      "status": "blocked",
+      "reason": "T2: requer treino de arquitetura"
+    },
+    {
+      "id": "LH-019",
+      "status": "blocked",
+      "reason": "T2: requer treino de arquitetura"
+    },
+    {
+      "id": "LH-020",
+      "status": "blocked",
+      "reason": "T2: requer treino de arquitetura"
+    },
+    {
+      "id": "LH-021",
+      "status": "inconclusive",
+      "reason": "BM25 medido em LTP-03; comparação fim a fim exige gerador integrado"
+    },
+    {
+      "id": "LH-022",
+      "status": "blocked",
+      "reason": "T1/T2: requer reranker treinado ou verificação Lean por premissa"
+    },
+    {
+      "id": "LH-023",
+      "status": "inconclusive",
+      "reason": "ranking por arquivo é grosseiro demais; reexecutar por premissa com popularidade individual"
+    },
+    {
+      "id": "LH-024",
+      "status": "rejected",
+      "reason": "medido em LTP-05"
+    },
+    {
+      "id": "LH-025",
+      "status": "blocked",
+      "reason": "T1/T2: requer reranker treinado ou verificação Lean por premissa"
+    },
+    {
+      "id": "LH-027",
+      "status": "blocked",
+      "reason": "T1/T2: requer reranker treinado ou verificação Lean por premissa"
+    },
+    {
+      "id": "LH-028",
+      "status": "blocked",
+      "reason": "T1/T2: requer reranker treinado ou verificação Lean por premissa"
+    },
+    {
+      "id": "LH-029",
+      "status": "blocked",
+      "reason": "T1: requer re-ranking por clusters em escala"
+    },
+    {
+      "id": "LH-030",
+      "status": "blocked",
+      "reason": "T1: requer ablação com verificação Lean por premissa"
+    },
+    {
+      "id": "LH-031",
+      "status": "blocked",
+      "reason": "T1/T2: requer loop de busca integrado com o verificador"
+    },
+    {
+      "id": "LH-032",
+      "status": "blocked",
+      "reason": "T1/T2: requer loop de busca integrado com o verificador"
+    },
+    {
+      "id": "LH-033",
+      "status": "blocked",
+      "reason": "T1/T2: requer loop de busca integrado com o verificador"
+    },
+    {
+      "id": "LH-034",
+      "status": "blocked",
+      "reason": "T1/T2: requer loop de busca integrado com o verificador"
+    },
+    {
+      "id": "LH-035",
+      "status": "refuted",
+      "reason": "cobertura de bigramas frequentes de táticas"
+    },
+    {
+      "id": "LH-036",
+      "status": "blocked",
+      "reason": "T1/T2: requer loop de busca integrado com o verificador"
+    },
+    {
+      "id": "LH-037",
+      "status": "refuted",
+      "reason": "pares estado-tática repetidos dentro de val"
+    },
+    {
+      "id": "LH-038",
+      "status": "blocked",
+      "reason": "T1/T2: requer loop de busca integrado com o verificador"
+    },
+    {
+      "id": "LH-039",
+      "status": "inconclusive",
+      "reason": "proxy de estagnação; efeito em busca exige loop integrado"
+    },
+    {
+      "id": "LH-040",
+      "status": "blocked",
+      "reason": "T1/T2: requer loop de busca integrado com o verificador"
+    },
+    {
+      "id": "LH-041",
+      "status": "blocked",
+      "reason": "T2: requer treino/objetivo de otimização"
+    },
+    {
+      "id": "LH-042",
+      "status": "blocked",
+      "reason": "T2: requer treino/objetivo de otimização"
+    },
+    {
+      "id": "LH-043",
+      "status": "blocked",
+      "reason": "T2: requer treino/objetivo de otimização"
+    },
+    {
+      "id": "LH-044",
+      "status": "blocked",
+      "reason": "T2: requer treino/objetivo de otimização"
+    },
+    {
+      "id": "LH-045",
+      "status": "blocked",
+      "reason": "T2: requer treino/objetivo de otimização"
+    },
+    {
+      "id": "LH-046",
+      "status": "blocked",
+      "reason": "T2: requer treino/objetivo de otimização"
+    },
+    {
+      "id": "LH-047",
+      "status": "blocked",
+      "reason": "T2: requer treino/objetivo de otimização"
+    },
+    {
+      "id": "LH-048",
+      "status": "blocked",
+      "reason": "T2: requer treino/objetivo de otimização"
+    },
+    {
+      "id": "LH-049",
+      "status": "blocked",
+      "reason": "T2: requer treino/objetivo de otimização"
+    },
+    {
+      "id": "LH-050",
+      "status": "blocked",
+      "reason": "T2: requer treino/objetivo de otimização"
+    },
+    {
+      "id": "LH-051",
+      "status": "blocked",
+      "reason": "T2: requer treino, destilação ou quantização"
+    },
+    {
+      "id": "LH-052",
+      "status": "blocked",
+      "reason": "T2: requer treino, destilação ou quantização"
+    },
+    {
+      "id": "LH-053",
+      "status": "blocked",
+      "reason": "T2: requer treino, destilação ou quantização"
+    },
+    {
+      "id": "LH-054",
+      "status": "blocked",
+      "reason": "T2: requer treino, destilação ou quantização"
+    },
+    {
+      "id": "LH-055",
+      "status": "blocked",
+      "reason": "T2: requer treino, destilação ou quantização"
+    },
+    {
+      "id": "LH-056",
+      "status": "blocked",
+      "reason": "T2: requer treino, destilação ou quantização"
+    },
+    {
+      "id": "LH-057",
+      "status": "blocked",
+      "reason": "T2: requer treino, destilação ou quantização"
+    },
+    {
+      "id": "LH-058",
+      "status": "blocked",
+      "reason": "T2: requer treino, destilação ou quantização"
+    },
+    {
+      "id": "LH-059",
+      "status": "refuted",
+      "reason": "vocabulário mínimo para 99% das ocorrências"
+    },
+    {
+      "id": "LH-060",
+      "status": "blocked",
+      "reason": "T2: requer treino, destilação ou quantização"
+    },
+    {
+      "id": "LH-062",
+      "status": "blocked",
+      "reason": "T2: requer treino de modelo auxiliar ou parser incremental"
+    },
+    {
+      "id": "LH-063",
+      "status": "blocked",
+      "reason": "T2: requer treino de modelo auxiliar ou parser incremental"
+    },
+    {
+      "id": "LH-064",
+      "status": "blocked",
+      "reason": "T2: requer treino de modelo auxiliar ou parser incremental"
+    },
+    {
+      "id": "LH-065",
+      "status": "blocked",
+      "reason": "T2: requer treino de modelo auxiliar ou parser incremental"
+    },
+    {
+      "id": "LH-066",
+      "status": "blocked",
+      "reason": "T2: requer treino de modelo auxiliar ou parser incremental"
+    },
+    {
+      "id": "LH-067",
+      "status": "blocked",
+      "reason": "T1: requer minimizador de termos com recompilação"
+    },
+    {
+      "id": "LH-071",
+      "status": "blocked",
+      "reason": "T1: requer snapshots históricos do mathlib"
+    },
+    {
+      "id": "LH-073",
+      "status": "blocked",
+      "reason": "T1: requer teoremas de equivalência certificados"
+    },
+    {
+      "id": "LH-076",
+      "status": "refuted",
+      "reason": "deduplicação alfa-normalizada por normalização canônica"
+    },
+    {
+      "id": "LH-077",
+      "status": "blocked",
+      "reason": "T1: requer grafo de dependências do mathlib em estágios"
+    },
+    {
+      "id": "LH-078",
+      "status": "blocked",
+      "reason": "T1: requer corpus de tentativas falhas com prefixos"
+    },
+    {
+      "id": "LH-079",
+      "status": "blocked",
+      "reason": "T1: requer amostragem por discordância com verificação"
+    },
+    {
+      "id": "LH-080",
+      "status": "blocked",
+      "reason": "T2: requer treino de adaptadores por domínio"
+    },
+    {
+      "id": "LH-081",
+      "status": "blocked",
+      "reason": "T2: requer treino de adaptadores/memória neural"
+    },
+    {
+      "id": "LH-082",
+      "status": "blocked",
+      "reason": "T2: requer treino de adaptadores/memória neural"
+    },
+    {
+      "id": "LH-083",
+      "status": "blocked",
+      "reason": "T2: requer treino de adaptadores/memória neural"
+    },
+    {
+      "id": "LH-084",
+      "status": "inconclusive",
+      "reason": "objetivos repetidos entre arquivos indicam risco de contaminação transdutiva"
+    },
+    {
+      "id": "LH-085",
+      "status": "inconclusive",
+      "reason": "tamanho do fechamento de imports como proxy de contexto em grafo"
+    },
+    {
+      "id": "LH-086",
+      "status": "blocked",
+      "reason": "T2: requer treino de LoRA por namespace"
+    },
+    {
+      "id": "LH-087",
+      "status": "blocked",
+      "reason": "T2: requer treino com replay"
+    },
+    {
+      "id": "LH-088",
+      "status": "refuted",
+      "reason": "memória exata como limite superior do filtro Bloom"
+    },
+    {
+      "id": "LH-089",
+      "status": "blocked",
+      "reason": "T1: requer unificação real no Lean"
+    },
+    {
+      "id": "LH-090",
+      "status": "blocked",
+      "reason": "T2: requer geração de adaptadores sem gradiente"
+    },
+    {
+      "id": "LH-091",
+      "status": "blocked",
+      "reason": "T2: requer modelo treinado ou pipeline de sistemas integrado"
+    },
+    {
+      "id": "LH-092",
+      "status": "blocked",
+      "reason": "T2: requer modelo treinado ou pipeline de sistemas integrado"
+    },
+    {
+      "id": "LH-093",
+      "status": "inconclusive",
+      "reason": "refutada em conjuntos homogêneos; medida em LTP-05"
+    },
+    {
+      "id": "LH-094",
+      "status": "blocked",
+      "reason": "T1: requer pipeline CPU/GPU sobreposto"
+    },
+    {
+      "id": "LH-095",
+      "status": "inconclusive",
+      "reason": "medição de import instável sob cache; quantificação requer pipeline de workers (T2)"
+    },
+    {
+      "id": "LH-096",
+      "status": "blocked",
+      "reason": "T2: requer preditor de dificuldade treinado"
+    },
+    {
+      "id": "LH-097",
+      "status": "blocked",
+      "reason": "T2: requer dois modelos treinados"
+    },
+    {
+      "id": "LH-098",
+      "status": "inconclusive",
+      "reason": "mesma medição de overhead de import aplicada a cache de imports tokenizados"
+    },
+    {
+      "id": "LH-099",
+      "status": "blocked",
+      "reason": "T1: requer candidatos paralelos com verificação concorrente"
+    },
+    {
+      "id": "LH-100",
+      "status": "blocked",
+      "reason": "T2: requer treino de ensemble"
+    }
+  ],
+  "notes": "somente 8 hipóteses passaram no T0/T1; o teto de 30 não foi atingido e 73 bloqueios/9 inconclusões ficam preservados"
+}

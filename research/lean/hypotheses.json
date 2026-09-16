@@ -535,7 +535,7 @@
       "falsification_gate": "Falha se hit-rate útil for menor que 5% fora do treino.",
       "cost_tier": "T1",
       "parameter_target": "zero-learned",
-      "status": "screening",
+      "status": "promoted",
       "preregistered": false,
       "evidence": "research/lean/ltp/LTP-06.md",
       "microtest": {
@@ -543,6 +543,11 @@
         "status": "valid",
         "gate": "hit-rate útil menor que 5% fora do treino",
         "summary": "{\"states\": 4000, \"hits\": 1012, \"hit_rate\": 0.253}"
+      },
+      "promotion": {
+        "phase": "LTP-07",
+        "frontier": true,
+        "evidence": "research/lean/ltp/LTP-07.md"
       }
     },
     {
@@ -1235,7 +1240,7 @@
       "falsification_gate": "Falha se chamadas ou latência excederem geração completa.",
       "cost_tier": "T1",
       "parameter_target": "zero-learned",
-      "status": "screening",
+      "status": "promoted",
       "preregistered": false,
       "evidence": "research/lean/ltp/LTP-06.md",
       "microtest": {
@@ -1243,6 +1248,11 @@
         "status": "valid",
         "gate": "chamadas ou latência excederem geração completa",
         "summary": "{\"tactic_steps\": 4260, \"boundary_aligned\": 4260}"
+      },
+      "promotion": {
+        "phase": "LTP-07",
+        "frontier": true,
+        "evidence": "research/lean/ltp/LTP-07.md"
       }
     },
     {
@@ -1375,7 +1385,7 @@
       "falsification_gate": "Falha se a suíte não detectar regressões reais.",
       "cost_tier": "T1",
       "parameter_target": "zero-learned",
-      "status": "screening",
+      "status": "promoted",
       "preregistered": false,
       "evidence": "research/lean/ltp/LTP-06.md",
       "microtest": {
@@ -1383,6 +1393,11 @@
         "status": "valid",
         "gate": "suíte não detectar regressões reais",
         "summary": "{\"cases\": 107, \"rejected\": 71, \"gate_passed\": true}"
+      },
+      "promotion": {
+        "phase": "LTP-07",
+        "frontier": true,
+        "evidence": "research/lean/ltp/LTP-07.md"
       }
     },
     {
@@ -1395,7 +1410,7 @@
       "falsification_gate": "Falha se replay não for determinístico.",
       "cost_tier": "T0",
       "parameter_target": "zero-learned",
-      "status": "screening",
+      "status": "promoted",
       "preregistered": false,
       "evidence": "research/lean/ltp/LTP-06.md",
       "microtest": {
@@ -1403,6 +1418,11 @@
         "status": "valid",
         "gate": "replay não for determinístico",
         "summary": "{\"cases\": 8, \"identical\": true, \"accepted\": 5}"
+      },
+      "promotion": {
+        "phase": "LTP-07",
+        "frontier": true,
+        "evidence": "research/lean/ltp/LTP-07.md"
       }
     },
     {
@@ -1415,7 +1435,7 @@
       "falsification_gate": "Falha se qualquer mutação passar pelo gate.",
       "cost_tier": "T0",
       "parameter_target": "zero-learned",
-      "status": "screening",
+      "status": "promoted",
       "preregistered": false,
       "evidence": "research/lean/ltp/LTP-06.md",
       "microtest": {
@@ -1423,6 +1443,11 @@
         "status": "valid",
         "gate": "qualquer mutação passar pelo gate",
         "summary": "{\"cases\": 32, \"deterministic\": 32, \"mutants_rejected\": 6}"
+      },
+      "promotion": {
+        "phase": "LTP-07",
+        "frontier": true,
+        "evidence": "research/lean/ltp/LTP-07.md"
       }
     },
     {
@@ -1455,7 +1480,7 @@
       "falsification_gate": "Falha se macro-sucesso não melhorar.",
       "cost_tier": "T1",
       "parameter_target": "nano<=100M",
-      "status": "screening",
+      "status": "promoted",
       "preregistered": false,
       "evidence": "research/lean/ltp/LTP-06.md",
       "microtest": {
@@ -1463,6 +1488,11 @@
         "status": "valid",
         "gate": "macro-sucesso não melhorar",
         "summary": "{\"distinct_tactics\": 124, \"top5_share\": 0.5575, \"rare_tactics\": 104}"
+      },
+      "promotion": {
+        "phase": "LTP-07",
+        "frontier": true,
+        "evidence": "research/lean/ltp/LTP-07.md"
       }
     },
     {
@@ -1495,7 +1525,7 @@
       "falsification_gate": "Falha se desempenho em erros novos não melhorar.",
       "cost_tier": "T1",
       "parameter_target": "nano<=100M",
-      "status": "screening",
+      "status": "promoted",
       "preregistered": false,
       "evidence": "research/lean/ltp/LTP-06.md",
       "microtest": {
@@ -1503,6 +1533,11 @@
         "status": "valid",
         "gate": "desempenho em erros novos não melhorar",
         "summary": "{\"corruptions\": 32, \"rejected\": 32}"
+      },
+      "promotion": {
+        "phase": "LTP-07",
+        "frontier": true,
+        "evidence": "research/lean/ltp/LTP-07.md"
       }
     },
     {
@@ -1515,7 +1550,7 @@
       "falsification_gate": "Falha se houver vazamento entre splits por ancestralidade.",
       "cost_tier": "T1",
       "parameter_target": "nano<=100M",
-      "status": "screening",
+      "status": "promoted",
       "preregistered": false,
       "evidence": "research/lean/ltp/LTP-06.md",
       "microtest": {
@@ -1523,6 +1558,11 @@
         "status": "valid",
         "gate": "houver vazamento entre splits por ancestralidade",
         "summary": "{\"proofs\": 995, \"multi_step\": 639, \"rate\": 0.6422}"
+      },
+      "promotion": {
+        "phase": "LTP-07",
+        "frontier": true,
+        "evidence": "research/lean/ltp/LTP-07.md"
       }
     },
     {
