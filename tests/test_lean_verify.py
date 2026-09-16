@@ -160,3 +160,22 @@ def test_evaluate_results_detects_expectation_and_reason_mismatch():
     assert evaluate_results([wrong_reason])["passed"] is False
     wrong_verdict = dict(good, verdict="accept")
     assert evaluate_results([wrong_verdict])["passed"] is False
+
+
+def test_ltp05_normalize_state_is_idempotent_and_compact():
+    from scripts.ltp05_canonical_bytes import normalize_state
+
+    raw = "  x : Nat  \r\n\n\n  ⊢   x + 0 = x  \n"
+    canonical = normalize_state(raw)
+    assert canonical == "x : Nat\n⊢ x + 0 = x"
+    assert normalize_state(canonical) == canonical
+
+
+def test_ltp05_goal_tokens_and_filter():
+    from scripts.ltp05_type_filter import filter_candidates, goal_tokens
+
+    state = "n : Nat\nh : n = 0\n⊢ n + 1 = 1"
+    tokens = goal_tokens(state)
+    assert "n" in tokens and "1" in tokens
+    inverted = {"Nat": {1, 2}, "n": {2, 3}, "Other": {4}}
+    assert filter_candidates(tokens, inverted) == {2, 3}

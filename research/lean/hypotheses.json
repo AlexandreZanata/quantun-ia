@@ -33,8 +33,10 @@
       "falsification_gate": "Falha se não atingir não-inferioridade em sucesso com pelo menos 20% menos memória.",
       "cost_tier": "T1",
       "parameter_target": "nano<=100M",
-      "status": "proposed",
-      "preregistered": false
+      "status": "rejected",
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-05.md",
+      "result": "redução de bytes 1,3%/3,0% vs bruto e 17,3%/20,4% vs ids int32; critério de 20% não atingido no split random"
     },
     {
       "id": "LH-002",
@@ -332,8 +334,10 @@
       "falsification_gate": "Falha se recall de premissas usadas cair abaixo de 99%.",
       "cost_tier": "T1",
       "parameter_target": "zero-learned",
-      "status": "proposed",
-      "preregistered": false
+      "status": "rejected",
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-05.md",
+      "result": "recall de premissas usadas 69,07%/78,21% < 99%"
     },
     {
       "id": "LH-025",
@@ -1229,8 +1233,10 @@
       "falsification_gate": "Falha se overhead ou erros de roteamento reduzirem eficiência.",
       "cost_tier": "T1",
       "parameter_target": "nano<=100M",
-      "status": "proposed",
-      "preregistered": false
+      "status": "inconclusive",
+      "preregistered": false,
+      "evidence": "research/lean/ltp/LTP-05.md",
+      "result": "refutada em conjuntos homogêneos (trivial e val); não refutada na união medida"
     },
     {
       "id": "LH-094",
@@ -1325,4 +1331,3 @@
     }
   ]
 }
-

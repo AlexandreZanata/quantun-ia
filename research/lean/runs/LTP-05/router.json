@@ -1,0 +1,57 @@
+{
+  "hypothesis": "LH-093",
+  "gate": "falha se overhead ou erros de roteamento reduzirem eficiência",
+  "cost_model": "custos medidos: simbólicas no LTP-00/LTP-04, modelo no LTP-03/LTP-04 e smoke-model",
+  "sets": {
+    "trivial_smoke32": {
+      "direct_model": {
+        "solved": 19,
+        "cost": 42.016,
+        "efficiency": 45.2209
+      },
+      "router": {
+        "solved": 32,
+        "cost": 118.432,
+        "efficiency": 27.0197
+      },
+      "overhead_seconds": 76.416
+    },
+    "hard_val": {
+      "direct_model": {
+        "solved": 1,
+        "cost": 436.679,
+        "efficiency": 0.229
+      },
+      "router": {
+        "solved": 1,
+        "cost": 807.417,
+        "efficiency": 0.1239
+      },
+      "overhead_seconds": 370.738
+    },
+    "union": {
+      "direct_model": {
+        "solved": 20,
+        "cost": 478.695,
+        "efficiency": 4.178
+      },
+      "router": {
+        "solved": 33,
+        "cost": 738.701,
+        "efficiency": 4.4673
+      },
+      "overhead_seconds": 260.006
+    }
+  },
+  "verdicts": {
+    "trivial_smoke32": "refutada neste subconjunto",
+    "hard_val": "refutada neste subconjunto",
+    "union": "não refutada"
+  },
+  "inputs": {
+    "trivial_symbolic_source": "research/lean/runs/LTP-00/results.json (32 provas válidas)",
+    "hard_symbolic_source": "research/lean/runs/LTP-04/symbolic_single_*.json",
+    "hard_model_source": "research/lean/runs/LTP-03/reprover_tacgen.json + LTP-04/reprover_recheck.json",
+    "trivial_model_source": "research/lean/runs/LTP-05/smoke_model.json"
+  }
+}

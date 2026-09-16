@@ -1,0 +1,27 @@
+{
+  "hypothesis": "LH-024",
+  "gate": "falha se recall de premissas usadas cair abaixo de 99%",
+  "method": "filtro aproximado por interseção de identificadores entre objetivo e código da premissa",
+  "results": [
+    {
+      "split": "random",
+      "proofs": 20,
+      "steps": 48,
+      "premise_recall": 0.6907,
+      "steps_with_full_recall": 30,
+      "mean_candidates": 57112.0,
+      "corpus_size": 180973,
+      "mean_reduction": 0.6844
+    },
+    {
+      "split": "novel_premises",
+      "proofs": 20,
+      "steps": 53,
+      "premise_recall": 0.7821,
+      "steps_with_full_recall": 38,
+      "mean_candidates": 53228.6,
+      "corpus_size": 180973,
+      "mean_reduction": 0.7059
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "hypothesis": "LH-001",
+  "gate": "não-inferioridade em sucesso com pelo menos 20% menos memória",
+  "t0_criterion": "redução de memória >= 20% com normalização determinística e idempotente",
+  "success_criterion_status": "pendente T2: exige treino para medir não-inferioridade de sucesso",
+  "results": [
+    {
+      "split": "random",
+      "states": 2000,
+      "raw_bytes": 772978,
+      "canonical_bytes": 762989,
+      "reduction_vs_raw": 0.0129,
+      "bytes_per_state_raw": 386.49,
+      "bytes_per_state_canonical": 381.49,
+      "token_count": 230742,
+      "token_int32_bytes": 922968,
+      "reduction_vs_token_int32": 0.1733,
+      "idempotent": 2000,
+      "sample_sha256": "73bad037c640a33a8e5b6b80be907aaeaddbdca4ceb249d7a3e83fc24e36b10e"
+    },
+    {
+      "split": "novel_premises",
+      "states": 2000,
+      "raw_bytes": 1011409,
+      "canonical_bytes": 981050,
+      "reduction_vs_raw": 0.03,
+      "bytes_per_state_raw": 505.7,
+      "bytes_per_state_canonical": 490.52,
+      "token_count": 308092,
+      "token_int32_bytes": 1232368,
+      "reduction_vs_token_int32": 0.2039,
+      "idempotent": 2000,
+      "sample_sha256": "52ea319b4c472de35d909dffea9a1251559ed76894a6032a2684e01232b956e3"
+    }
+  ]
+}
