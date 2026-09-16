@@ -104,6 +104,28 @@ def resolve_tool(name: str) -> str:
     raise FileNotFoundError(f"ferramenta não encontrada: {name}")
 
 
+_NETWORK_NAMESPACE_SUPPORT: bool | None = None
+
+
+def network_namespace_supported() -> bool:
+    global _NETWORK_NAMESPACE_SUPPORT
+    if _NETWORK_NAMESPACE_SUPPORT is None:
+        _NETWORK_NAMESPACE_SUPPORT = False
+        unshare = shutil.which("unshare")
+        if unshare and os.environ.get("LTP_NO_NETNS", "0") != "1":
+            try:
+                probe = subprocess.run(
+                    [unshare, "-rn", "true"],
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                    timeout=10,
+                )
+            except (OSError, subprocess.TimeoutExpired):
+                probe = None
+            _NETWORK_NAMESPACE_SUPPORT = probe is not None and probe.returncode == 0
+    return _NETWORK_NAMESPACE_SUPPORT
+
+
 def _capture(command: list[str], cwd: Path, env: dict[str, str]) -> str:
     result = subprocess.run(
         command,
@@ -478,7 +500,7 @@ def run_lean(
     candidate.write_text(source, encoding="utf-8")
     unshare = shutil.which("unshare")
     command: list[str] = []
-    if unshare and os.environ.get("LTP_NO_NETNS", "0") != "1":
+    if network_namespace_supported() and unshare:
         command.extend([unshare, "-rn"])
     command.extend([context.lean_bin, str(candidate)])
     child_env = {
@@ -791,7 +813,7 @@ def collect_environment() -> dict[str, Any]:
             "mathlib": mathlib_pin,
         },
         "program_registries_sha256": registries,
-        "network_namespace_isolation": bool(shutil.which("unshare")) and os.environ.get("LTP_NO_NETNS", "0") != "1",
+        "network_namespace_isolation": network_namespace_supported(),
     }
 
 
@@ -853,7 +875,7 @@ def run_gate(args: argparse.Namespace) -> int:
             "target_name": TARGET_NAME,
             "lean": {"toolchain": context.toolchain, "lean_bin": context.lean_bin},
             "sandbox": {
-                "network_namespace": bool(shutil.which("unshare")) and os.environ.get("LTP_NO_NETNS", "0") != "1",
+                "network_namespace": network_namespace_supported(),
                 "memory_limit_bytes": args.memory_limit_bytes,
                 "cpu_limit_grace_seconds": CPU_LIMIT_GRACE_SECONDS,
             },
